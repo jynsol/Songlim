@@ -604,7 +604,68 @@ function openManualTaste(){openDirectEntry('onboarding')}
 
 // 상세 화면에 자동완성 메타데이터 표시
 function renderDetail(){const x=contents.find(c=>c.id===state.detailId);if(!x){$('detailBody').innerHTML='<div class="note">콘텐츠를 찾을 수 없습니다.</div>';return}let primary='';if(x.status==='interested')primary=`<button class="btn" onclick="startFromDetail(${x.id})">경험 시작하기</button>`;else if(x.status==='in_progress')primary=`<button class="btn" onclick="go('today')">오늘의 경험으로 이동</button>`;else if(x.status==='experienced')primary=`<button class="btn secondary" onclick="openRating(${x.id})">${x.rating?'평가 수정':'평가하기'}</button>`;$('detailBody').innerHTML=`<div class="cover detailCover ${coverClass(x.type)}">${typeLabel(x.type)} COVER</div><h1 class="hero" style="margin-top:16px">${esc(x.title)}</h1><p>${esc(x.creator)}</p><div class="detailMeta"><div class="line"><span>유형</span><b>${typeLabel(x.type)}</b></div>${x.year?`<div class="line"><span>연도</span><b>${esc(x.year)}</b></div>`:''}${x.extra?`<div class="line"><span>기본 정보</span><b>${esc(x.extra)}</b></div>`:''}<div class="line"><span>최초 저장 출처</span><b>${esc(x.source||'직접 입력')}</b></div>${x.provider?`<div class="line"><span>메타데이터</span><b>${esc(x.provider)}</b></div>`:''}${x.providerId?`<div class="line"><span>외부 식별자</span><b>${esc(x.providerId)}</b></div>`:''}<div class="line"><span>현재 상태</span><b>${statusLabel(x.status)}</b></div>${x.completed?`<div class="line"><span>완료일</span><b>${esc(x.completed)}</b></div>`:''}${x.status==='experienced'?`<div class="line"><span>내 평가</span><b>${x.rating?x.rating+' / 5':'평가 없음'}</b></div>`:''}</div><div class="detailActions">${primary}<button class="btn text" onclick="deleteCurrentContent()">삭제</button></div>`}
-function init(){renderOnboarding();setupForestDrag();renderScraps();renderForest();renderAllForest()}
+
+// ===== Notion 212권 데이터 적용 안정화 패치 =====
+function cleanNotionText(v){return String(v||'').replace(/\s*\(https:\/\/app\.notion\.com\/[^)]*\)/g,'').replace(/\s*,\s*/g,' · ').trim()}
+function ensureNotionContents(){
+  // 기존 Notion 주입분을 모두 제거한 뒤 현재 notionBooks에서 정확히 한 번 다시 구성한다.
+  contents=contents.filter(x=>x.source!=='Notion 독서목록');
+  notionBooks.forEach((b,idx)=>{
+    const mapped=b.status==='Finished'?'experienced':b.status==='Going'?'in_progress':b.status==='Want to Read'?'interested':'interested';
+    contents.push({
+      id:nextId++,type:'book',title:b.title,creator:b.creator,status:mapped,
+      source:'Notion 독서목록',saved:200000-idx,
+      completed:b.completed||undefined,rating:b.rating||undefined,
+      growth:mapped==='experienced'?4:(mapped==='in_progress'?1:undefined),
+      year:b.year||undefined,extra:cleanNotionText(b.genre||''),provider:'Notion QA 원본',providerId:b.id,
+      workKey:'book:'+normSeed(b.title)+':'+normSeed(b.creator)
+    });
+  });
+}
+function catalogSearch(q,type='all'){
+  const n=norm(q); if(n.length<2)return[];
+  const pool=[]; const seen=new Set();
+  // 실제 Notion 212권을 검색 우선 데이터로 직접 사용
+  notionBooks.forEach(b=>{
+    const x={key:'notion-'+b.id.toLowerCase(),type:'book',title:b.title,creator:b.creator,year:b.year||'',extra:cleanNotionText(b.genre||''),provider:'Notion QA 원본 · API 연동 전',providerId:b.id,workKey:'book:'+normSeed(b.title)+':'+normSeed(b.creator)};
+    const key=x.type+'|'+norm(x.title)+'|'+norm(x.creator); if(!seen.has(key)){seen.add(key);pool.push(x)}
+  });
+  providerCatalog.forEach(x=>{const key=x.type+'|'+norm(x.title)+'|'+norm(x.creator);if(!seen.has(key)){seen.add(key);pool.push(x)}});
+  return pool.filter(x=>type==='all'||x.type===type).map(x=>{
+    const tn=norm(x.title),cn=norm(x.creator),en=norm(x.extra);let score=0;
+    if(tn===n)score+=120; else if(tn.startsWith(n))score+=95; else if(tn.includes(n))score+=85; else if(n.includes(tn))score+=65;
+    if(cn===n)score+=90; else if(cn.includes(n))score+=60;
+    if(en.includes(n))score+=10;
+    return {x,score};
+  }).filter(v=>v.score>0).sort((a,b)=>b.score-a.score||a.x.title.localeCompare(b.x.title,'ko')).slice(0,8).map(v=>v.x)
+}
+function renderScraps(){
+ const q=norm($('searchInput')?.value||'');
+ const arr=[...contents].filter(x=>x.status!=='dislike')
+  .filter(x=>state.statusFilter==='all'||x.status===state.statusFilter)
+  .filter(x=>state.typeFilter==='all'||x.type===state.typeFilter)
+  .filter(x=>!q||norm(x.title).includes(q)||norm(x.creator).includes(q))
+  .sort((a,b)=>(b.saved||0)-(a.saved||0));
+ const notionCount=arr.filter(x=>x.source==='Notion 독서목록').length;
+ const info=(state.typeFilter==='book'||state.typeFilter==='all')?`<div class="small" style="margin:10px 0">현재 ${arr.length}개${notionCount?` · Notion 독서목록 ${notionCount}권 포함`:''}</div>`:'';
+ $('scrapList').innerHTML=info+(arr.length?arr.map(x=>contentCard(x,'scrap')).join(''):'<div class="note">조건에 맞는 스크랩이 없습니다.</div>')
+}
+function renderDirectResults(){
+ const input=$('directSearchInput'),box=$('directResults'),hint=$('directSearchHint');if(!input||!box)return;
+ const q=input.value.trim();if(q.length<2){box.innerHTML='';if(hint)hint.textContent='두 글자 이상 입력하면 후보를 찾습니다. · 실제 Notion 독서목록 212권 포함';return}
+ const rows=catalogSearch(q,state.directType);
+ if(hint)hint.textContent=rows.length?`${rows.length}개의 후보 · 실제 독서목록 기준 결과입니다.`:'일치하는 후보가 없습니다. 다른 제목이나 저자 이름으로 검색해보세요.';
+ box.innerHTML=rows.length?rows.map(x=>candidateRowHTML(x,`selectDirectCandidate('${x.key}')`)).join(''):'<div class="emptySearch">검색 결과가 없습니다.</div>'
+}
+function catalogByKey(key){
+ if(String(key).startsWith('notion-')){
+   const id=String(key).slice(7).toUpperCase(); const b=notionBooks.find(x=>x.id===id);
+   if(b)return {key,type:'book',title:b.title,creator:b.creator,year:b.year||'',extra:cleanNotionText(b.genre||''),provider:'Notion QA 원본 · API 연동 전',providerId:b.id,workKey:'book:'+normSeed(b.title)+':'+normSeed(b.creator)};
+ }
+ return providerCatalog.find(x=>x.key===key)
+}
+function init(){ensureNotionContents();renderOnboarding();setupForestDrag();renderScraps();renderForest();renderAllForest()}
+
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 </script>
 </body>
