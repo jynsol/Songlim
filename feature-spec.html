@@ -957,7 +957,7 @@ section[id]{scroll-margin-top:20px!important}
 <div><b>1. 진입</b><span>로그인/회원가입 → 10개 직접 선택 또는 저장 콘텐츠 가져오기 → 금주의 추천</span></div>
 <div><b>2. 저장</b><span>외부 공유 또는 이미지 가져오기 → AI 인식 → 중복 확인 → 관심의 씨앗 저장</span></div>
 <div><b>3. 경험</b><span>송림 추천 수락 또는 경험 전 스크랩에서 직접 1개 선택 → 책/음반/영화별 경험 동작</span></div>
-<div><b>4. 기록</b><span>완료 → 선택 평가 → 큰 나무 → 나의 숲/전체 숲에 동일 기록 반영</span></div>
+<div><b>4. 기록</b><span>완료 → 선택 평가 → 올해의 숲 반영 · 월간 기록 집계 · 연도 종료 후 지난 숲에 보존</span></div>
 </div>
 <div class="overview-tabs"><b>하단 탭</b><span>금주의 추천</span><span>나의 숲</span><span>스크랩</span><span>MY</span></div>
 </section><div class="canvas"><section class="board dev-common" id="dev-common">
@@ -970,16 +970,21 @@ section[id]{scroll-margin-top:20px!important}
 <h3>1. 핵심 데이터</h3>
 <table><tr><td><b>MVP 콘텐츠 범위</b></td><td>BOOK / ALBUM / MOVIE. 화면 표기는 책 / 음반 / 영화로 통일한다. TRACK은 음반의 오늘의 곡에서만 사용하는 하위 단위다.</td></tr>
 <tr><td><b>Content</b></td><td>콘텐츠 원본 엔티티. type = BOOK / ALBUM / MOVIE. TRACK은 ALBUM의 ‘오늘의 곡’에서만 사용하는 하위 단위.</td></tr>
-<tr><td><b>UserContent</b></td><td>사용자와 콘텐츠의 관계. status = INTERESTED / IN_PROGRESS / EXPERIENCED / DISLIKE. 온보딩의 건너뛰기는 저장하지 않는다. 스크랩·금주의 추천·나의 숲·완료 기록은 모두 동일한 UserContent를 참조하며, 화면별로 별도 콘텐츠/완료 레코드를 복제하지 않는다.</td></tr>
+<tr><td><b>UserContent</b></td><td>사용자와 콘텐츠의 관계. status = INTERESTED / IN_PROGRESS / EXPERIENCED / DISLIKE. 온보딩의 건너뛰기는 저장하지 않는다. 스크랩·금주의 추천·나의 숲·완료 기록은 모두 동일한 UserContent를 참조하며, 화면별로 별도 콘텐츠/완료 레코드를 복제하지 않는다. 관심 저장 이력은 <strong>save_count / first_saved_at / last_saved_at</strong>으로 관리한다.</td></tr>
 <tr><td><b>현재 추천</b></td><td>사용자가 경험을 시작한 콘텐츠 1개. 별도 추천 콘텐츠를 새로 생성하지 않고 UserContent의 경험 전 콘텐츠를 사용한다.</td></tr>
 <tr><td><b>성장 상태</b></td><td>씨앗 → 싹 → 덤불 → 나무 → 큰 나무. 책의 ‘오늘 독서 완료’와 음반의 일일 경험 기록으로는 나무까지만 성장하며, 큰 나무는 콘텐츠별 최종 감상 완료 액션에서만 가능.</td></tr>
+<tr><td><b>기간별 기록 기준</b></td><td>월간·연간 기록의 기간은 사용자 로컬 날짜를 기준으로 한다. <strong>월간 저장 콘텐츠 수</strong>는 해당 월에 counted SaveEvent가 1회 이상 발생한 고유 content_id 수, <strong>월간/연간 경험 수</strong>는 해당 기간에 completed_at이 존재하는 EXPERIENCED 고유 content_id 수로 집계한다. 반복 저장 횟수 자체는 별도 관심 강도 신호로 유지한다.</td></tr>
+<tr><td><b>숲의 연도 귀속</b></td><td>완료 콘텐츠는 completed_at의 연도에 귀속한다. 현재 IN_PROGRESS 콘텐츠는 현재 연도의 ‘올해의 숲’에 성장 중 개체로 임시 표시하며, 과거 연도의 ‘지난 숲’에는 완료된 콘텐츠만 남긴다.</td></tr>
+<tr><td><b>연도별 숲 테마</b></td><td>MVP에서는 연도마다 하나의 기본 숲 디자인을 사용하고 같은 연도의 사용자는 동일한 기본 테마를 본다. 책·음반·영화 비율이나 사용자 행동 데이터에 따라 숲 테마·배경·개체 디자인이 달라지는 기능은 포함하지 않는다.</td></tr>
+
 </table>
 <h3>2. 상태 전이</h3>
 <table>
 <tr><td><b>관심 표시 / 외부 저장</b></td><td>INTERESTED(경험 전)</td></tr>
+<tr><td><b>동일 콘텐츠 반복 저장</b></td><td>새 UserContent를 만들지 않고 <strong>save_count +1</strong>, last_saved_at 갱신. 기존 상태는 유지한다. 동일 IMPORT Batch 안에서 화면 겹침 등으로 같은 콘텐츠가 여러 번 검출된 경우에는 1회만 계산한다.</td></tr>
 <tr><td><b>경험 시작하기</b></td><td>INTERESTED → IN_PROGRESS · 성장 상태 씨앗 생성</td></tr>
 <tr><td><b>오늘의 경험 기록</b></td><td>책·음반만 적용한다. 사용자 로컬 날짜 기준 하루 최대 1회 성장하며 씨앗 → 싹 → 덤불 → 나무까지만 진행한다. 영화는 일일 성장 단계를 두지 않는다.</td></tr>
-<tr><td><b>최종 감상 완료</b></td><td>책 ‘이 책 감상 완료’ / 음반 ‘이 앨범 감상 완료’ / 영화 ‘이 작품 감상 완료’. 현재 성장 단계와 관계없이 EXPERIENCED + 큰 나무 처리 후 나의 숲 완료 기록에 저장한다.</td></tr>
+<tr><td><b>최종 감상 완료</b></td><td>책 ‘이 책 감상 완료’ / 음반 ‘이 앨범 감상 완료’ / 영화 ‘이 작품 감상 완료’. 현재 성장 단계와 관계없이 EXPERIENCED + 큰 나무로 처리하고 completed_at을 기록한다. 해당 완료 기록은 현재 연도 ‘올해의 숲’과 선택 월의 ‘월간 기록’에 즉시 반영되며, 연도가 바뀌면 해당 연도의 ‘지난 숲’에서 계속 열람할 수 있다.</td></tr>
 <tr><td><b>평가</b></td><td>완료 후 1~5점 선택 입력. 건너뛸 수 있고 완료 기록 상세에서 나중에 입력/수정 가능.</td></tr>
 </table>
 <h3>3. 콘텐츠 유형별 경험 로직</h3>
@@ -989,9 +994,19 @@ section[id]{scroll-margin-top:20px!important}
 <tr><td><b>영화</b></td><td>책·음반과 달리 일일 성장 단계를 두지 않는다. 행동은 ① ‘보러가기’ ② ‘이 작품 감상 완료’로 구성한다. ‘보러가기’는 OTT 등 외부 시청처 또는 검색 페이지로 연결한다. 영화를 다 본 뒤 ‘이 작품 감상 완료’를 누르면 바로 EXPERIENCED + 큰 나무로 완료한다.</td></tr>
 <tr><td><b>최종 완료 버튼</b></td><td>콘텐츠 유형에 따라 문구를 구분한다. 책은 ‘이 책 감상 완료’, 음반은 ‘이 앨범 감상 완료’, 영화는 ‘이 작품 감상 완료’를 사용한다. 실행 시 현재 성장 단계와 관계없이 EXPERIENCED + 큰 나무로 처리한다.</td></tr>
 </table>
+<h3>3.1 반복 저장 신호</h3>
+<div class="routebox">
+<div><span>표시</span><b>스크랩 카드·콘텐츠 상세·금주의 추천 이유에 ‘n번 저장’을 사용한다.</b></div>
+<div><span>우선순위</span><b>추천과 ‘내가 직접 고르기’, 스크랩 기본 정렬은 save_count DESC → last_saved_at DESC.</b></div>
+<div><span>의미</span><b>한 번 저장한 것은 관심, 반복 저장한 것은 더 강한 관심으로 해석한다.</b></div>
+<div><span>중복 예외</span><b>같은 IMPORT Batch 안의 화면 겹침·중복 검출은 1회만 계산하고, 서로 다른 시점의 의도적 저장은 각각 1회로 계산한다.</b></div>
+<div><span>기간 집계</span><b>월간 상단의 ‘저장한 콘텐츠’ 숫자는 같은 콘텐츠를 여러 번 저장해도 고유 콘텐츠 1개로 센다. 반복 저장 횟수는 ‘가장 많이 저장한 콘텐츠’와 추천 우선순위 계산에 별도로 사용한다.</b></div>
+</div>
 <h3>4. 금주의 추천 규칙</h3>
 <ul>
 <li>후보는 사용자가 직접 관심을 표시하거나 저장한 INTERESTED 콘텐츠만 사용한다.</li>
+<li><strong>기본 후보 우선순위는 save_count 높은 순 → last_saved_at 최근 순</strong>으로 한다. 한 번 저장한 것은 관심, 반복 저장한 것은 더 강한 관심 신호로 해석한다.</li>
+<li>추천 카드에는 반복 저장된 콘텐츠라면 <strong>“이 콘텐츠를 n번 저장했어요”</strong>를 노출해 추천 이유를 사용자가 이해할 수 있게 한다.</li>
 <li>사용자가 저장하지 않은 새 콘텐츠를 송림이 임의로 추천하지 않는다.</li>
 <li>‘이번에는 넘기기’는 현재 후보를 해당 추천 세션에서 제외하고 다음 후보 1개를 보여주는 동작이다. 같은 세션에서 넘긴 후보는 반복 노출하지 않는다. 남은 후보가 없으면 ‘이번 추천은 여기까지’ 상태와 ‘처음부터 다시 보기’를 제공한다. 후보가 1개뿐이면 넘기기를 노출하지 않는다.</li>
 <li>경험을 시작하면 해당 콘텐츠가 현재 경험 콘텐츠가 되며 나의 숲에도 성장 중 상태로 표시한다.</li>
@@ -1000,7 +1015,7 @@ section[id]{scroll-margin-top:20px!important}
 <h3>5. 공통 예외 처리</h3>
 <ul>
 <li>공유 콘텐츠 자동 인식 신뢰도가 낮거나 정보가 부족하면 사용자 확인/수정 화면으로 보낸다.</li>
-<li>동일 콘텐츠가 이미 저장되어 있으면 새 항목을 중복 생성하지 않고 기존 UserContent에 연결한다.</li>
+<li>동일 콘텐츠가 이미 저장되어 있으면 새 항목을 중복 생성하지 않고 기존 UserContent에 연결하며, <strong>새로운 의도적 저장 행동 1회로 save_count를 증가</strong>시킨다. 단, 같은 IMPORT Batch 안의 중복 검출은 1회만 계산한다.</li>
 <li>오늘의 경험을 같은 날 반복 입력해도 성장 상태는 추가로 증가하지 않는다.</li>
 <li>추천 후보가 없으면 빈 상태를 보여주고 스크랩 추가를 안내한다.</li>
 <li>온보딩은 최소 응답 기준 충족 후 바로 종료할 수 있으며, 별도 완료 화면 없이 금주의 추천으로 이동한다.</li>
@@ -1234,7 +1249,7 @@ section[id]{scroll-margin-top:20px!important}
 <table>
 <tr><td><span class="specnum">1</span></td><td><b>건수 표시</b><br/>사진에서 찾은 유효 콘텐츠 수와 선택 수를 표시한다. 한 이미지의 여러 작품을 개별 항목으로 다룬다.</td></tr>
 <tr><td><span class="specnum">2</span></td><td><b>항목별 확인</b><br/>고신뢰 후보는 기본 선택 상태로 두고, 확인이 필요한 항목만 후보 교체를 요구한다. 잘못 찾은 항목은 제외 가능하다. 같은 콘텐츠가 여러 장에서 반복 검출되면 한 항목으로 합친다.</td></tr>
-<tr><td><span class="specnum">3</span></td><td><b>일괄 저장</b><br/>확정 항목을 UserContent로 저장한다. 장바구니·찜 목록·저장 화면에서 가져온 항목의 기본 상태는 INTERESTED이며, 이미 존재하는 동일 content_id는 중복 생성하지 않는다. 기존 EXPERIENCED 상태도 되돌리지 않는다.</td></tr>
+<tr><td><span class="specnum">3</span></td><td><b>일괄 저장</b><br/>확정 항목을 UserContent로 저장한다. 장바구니·찜 목록·저장 화면에서 가져온 항목의 기본 상태는 INTERESTED다. 이미 존재하는 동일 content_id는 중복 생성하지 않고 <strong>해당 가져오기 행동을 save_count에 1회 추가</strong>하며 기존 상태는 유지한다. 같은 IMPORT Batch 안에서 동일 콘텐츠가 여러 이미지에 겹쳐 검출된 경우에는 1회만 계산한다.</td></tr>
 <tr><td><span class="specnum">4</span></td><td><b>온보딩 반영</b><br/>온보딩 중 저장한 유효 항목은 초기 취향 신호 수에 합산한다. 직접 선택과 혼합 가능하다.</td></tr>
 <tr><td></td><td><b>이후 사용</b><br/>가져오기는 온보딩 전용 기능이 아니다. SCRAP-01의 + 저장에서 언제든 다시 실행할 수 있다.</td></tr>
 </table>
@@ -1344,7 +1359,7 @@ section[id]{scroll-margin-top:20px!important}
 </div>
 <table>
 <tr><td><span class="specnum">1</span></td><td><b>대상</b><br/>사용자의 INTERESTED 콘텐츠만 보여준다. 이미 경험 중이거나 경험 완료한 콘텐츠는 기본 목록에서 제외한다.</td></tr>
-<tr><td><span class="specnum">2</span></td><td><b>필터·검색</b><br/>전체 / 책 / 음반 / 영화 필터와 제목·저자/아티스트/감독 검색을 제공한다. 최근 저장순을 기본으로 한다.</td></tr>
+<tr><td><span class="specnum">2</span></td><td><b>필터·검색·정렬</b><br/>전체 / 책 / 음반 / 영화 필터와 제목·저자/아티스트/감독 검색을 제공한다. <strong>기본 정렬은 save_count 높은 순 → last_saved_at 최근 순</strong>이다. 각 항목에 ‘n번 저장’을 표시해 직접 선택할 때도 반복 관심을 확인할 수 있게 한다.</td></tr>
 <tr><td><span class="specnum">3</span></td><td><b>선택</b><br/>콘텐츠를 선택하면 이번 주 활성 경험으로 전환하고 TODAY-01로 돌아간다. 추천 출처가 아니라 사용자 직접 선택이라는 이벤트를 별도 기록한다.</td></tr>
 <tr><td></td><td><b>빈 상태</b><br/>경험 전 콘텐츠가 없으면 ‘스크랩에 관심 콘텐츠를 먼저 저장해보세요’와 함께 사진 가져오기 / 직접 검색 안내를 제공한다.</td></tr>
 </table>
@@ -1359,7 +1374,7 @@ section[id]{scroll-margin-top:20px!important}
 <div class="appbar">스크랩　　　　　　　　　+ 저장</div>
 <div class="screenbody withtabs"><div class="uirow"><span class="num">0</span>+ 저장 · 사진으로 가져오기 / 직접 검색</div>
 <div class="lineitem"><span class="num">1</span>경험 상태 · 콘텐츠 유형 필터</div>
-<div class="lineitem"><span class="num">2</span>검색 · 최근 저장순</div>
+<div class="lineitem"><span class="num">2</span>검색 · 많이 저장한 순</div>
 <div class="lineitem"><span class="num">3</span>저장한 콘텐츠 목록 · 현재 상태 · 평가</div>
 </div>
 <div class="tabbar"><div class="tab"><span class="tabicon">□</span>금주의 추천</div><div class="tab"><span class="tabicon">□</span>나의 숲</div><div class="tab active"><span class="tabicon">□</span>스크랩</div><div class="tab"><span class="tabicon">□</span>MY</div></div><div class="homebar"></div>
@@ -1370,7 +1385,7 @@ section[id]{scroll-margin-top:20px!important}
 <div><span>ENTRY</span><b>하단탭 &gt; 스크랩 · 외부 공유 저장 완료 후 ‘스크랩 보기’ · IMPORT-02 저장 완료</b></div>
 <div><span>NEXT / EXIT</span><b>+ 저장 → 저장 방식 선택(사진 가져오기 / 직접 검색) · 콘텐츠 탭 → SCRAP-02 · 하단탭으로 최상위 화면 이동</b></div>
 <div><span>NAVIGATION</span><b>하단 탭 유지</b></div>
-</div><table><tr><td><span class="specnum">1</span></td><td><b>필터</b><br/>경험 상태는 전체 / 경험 전 / 경험 중 / 경험 완료, 콘텐츠 유형은 전체 / 책 / 음반 / 영화로 제공하며 함께 적용할 수 있다. TRACK 필터는 제공하지 않는다.</td></tr><tr><td><span class="specnum">2</span></td><td><b>검색·정렬</b><br/>제목과 저자/아티스트/감독으로 검색하며 기본 정렬은 최근 저장순이다.</td></tr><tr><td><span class="specnum">3</span></td><td><b>목록</b><br/>외부 공유, 이미지 가져오기, 온보딩 직접 선택, 직접 검색으로 생성된 동일 UserContent를 한 목록에 표시한다. 상태는 경험 전 / 경험 중 / 경험 완료로 통일하고, 완료 항목은 평가가 있으면 ‘내 평가 n/5’, 없으면 ‘평가 없음’을 표시한다. 선택 시 SCRAP-02로 이동한다.</td></tr><tr><td></td><td><b>빈 상태</b><br/>저장 콘텐츠가 없거나 필터 결과가 없으면 해당 빈 상태를 표시한다.</td></tr><tr><td><span class="specnum">4</span></td><td><b>+ 저장</b><br/>
+</div><table><tr><td><span class="specnum">1</span></td><td><b>필터</b><br/>경험 상태는 전체 / 경험 전 / 경험 중 / 경험 완료, 콘텐츠 유형은 전체 / 책 / 음반 / 영화로 제공하며 함께 적용할 수 있다. TRACK 필터는 제공하지 않는다.</td></tr><tr><td><span class="specnum">2</span></td><td><b>검색·정렬</b><br/>제목과 저자/아티스트/감독으로 검색한다. <strong>기본 정렬은 save_count 높은 순 → last_saved_at 최근 순</strong>으로 하며, 사용자는 ‘최근 저장순’으로도 바꿀 수 있다.</td></tr><tr><td><span class="specnum">3</span></td><td><b>목록</b><br/>외부 공유, 이미지 가져오기, 온보딩 직접 선택, 직접 검색으로 생성된 동일 UserContent를 한 목록에 표시한다. 각 카드에 <strong>‘n번 저장’</strong>을 함께 표시한다. 상태는 경험 전 / 경험 중 / 경험 완료로 통일하고, 완료 항목은 평가가 있으면 ‘내 평가 n/5’, 없으면 ‘평가 없음’을 표시한다. 선택 시 SCRAP-02로 이동한다.</td></tr><tr><td></td><td><b>빈 상태</b><br/>저장 콘텐츠가 없거나 필터 결과가 없으면 해당 빈 상태를 표시한다.</td></tr><tr><td><span class="specnum">4</span></td><td><b>+ 저장</b><br/>
 앱 내부에서 ‘+ 저장’을 누르면 <strong>사진으로 가져오기</strong>와 <strong>직접 검색</strong>을 제공한다.
 외부 앱에서 발견한 새 콘텐츠는 OS 공유 → 송림 경로를 계속 핵심 저장 방식으로 사용하며, 앱 내부에는 ‘다른 앱에서 공유해 저장할 수 있어요’ 안내를 보조 제공한다.</td></tr></table>
 </div>
@@ -1395,7 +1410,7 @@ section[id]{scroll-margin-top:20px!important}
 <div><span>ENTRY</span><b>SCRAP-01 콘텐츠 선택 · TODAY 화면의 콘텐츠 전체 보기 · SHARE-02 저장 완료</b></div>
 <div><span>NEXT / EXIT</span><b>경험 시작 → TODAY-01 · 뒤로 → 직전 화면 · 수정 → SHARE-03</b></div>
 <div><span>NAVIGATION</span><b>하단 탭 유지</b></div>
-</div><table><tr><td><span class="specnum">1</span></td><td><b>콘텐츠 정보</b><br/>정규화된 BOOK / ALBUM / MOVIE 정보, 최초 저장 출처, 현재 UserContent 상태와 완료 평가를 한 상세 영역에서 표시한다.</td></tr><tr><td><span class="specnum">2</span></td><td><b>경험 시작</b><br/>INTERESTED 콘텐츠에서 시작할 수 있다. 기존 활성 경험이 있으면 교체 확인을 거친다.</td></tr><tr><td><span class="specnum">3</span></td><td><b>수정·삭제</b><br/>AI 인식 정보가 틀리면 수정하고, 삭제 시 사용자 관심 데이터만 삭제하며 canonical content 자체 삭제와 구분한다.</td></tr></table>
+</div><table><tr><td><span class="specnum">1</span></td><td><b>콘텐츠 정보</b><br/>정규화된 BOOK / ALBUM / MOVIE 정보, 최초 저장 출처, <strong>총 저장 횟수(save_count)</strong>, 현재 UserContent 상태와 완료 평가를 한 상세 영역에서 표시한다.</td></tr><tr><td><span class="specnum">2</span></td><td><b>경험 시작</b><br/>INTERESTED 콘텐츠에서 시작할 수 있다. 기존 활성 경험이 있으면 교체 확인을 거친다.</td></tr><tr><td><span class="specnum">3</span></td><td><b>수정·삭제</b><br/>AI 인식 정보가 틀리면 수정하고, 삭제 시 사용자 관심 데이터만 삭제하며 canonical content 자체 삭제와 구분한다.</td></tr></table>
 </div>
 </div>
 </section>
@@ -1440,7 +1455,7 @@ section[id]{scroll-margin-top:20px!important}
 <div><span>ENTRY</span><b>SHARE-01 인식 성공</b></div>
 <div><span>NEXT / EXIT</span><b>저장 완료 → 원래 앱 복귀 또는 SCRAP-02 · 이미 저장됨 → 기존 SCRAP-02</b></div>
 <div><span>NAVIGATION</span><b>하단 탭 없음 · 집중형/인증 흐름</b></div>
-</div><table><tr><td><span class="specnum">1</span></td><td><b>인식 결과</b><br/>인식한 canonical content와 유형을 확인한다.</td></tr><tr><td><span class="specnum">2</span></td><td><b>저장 결과</b><br/>신규 UserContent는 INTERESTED로 저장한다. 같은 content_id가 있으면 중복 생성하지 않고 기존 데이터에 연결하며, 이미 EXPERIENCED라면 상태를 되돌리지 않는다. 저장 후 상세 또는 이전 앱으로 돌아간다.</td></tr></table>
+</div><table><tr><td><span class="specnum">1</span></td><td><b>인식 결과</b><br/>인식한 canonical content와 유형을 확인한다.</td></tr><tr><td><span class="specnum">2</span></td><td><b>저장 결과</b><br/>신규 UserContent는 INTERESTED로 저장하고 save_count=1로 시작한다. 같은 content_id가 있으면 중복 생성하지 않고 기존 데이터에 연결하며, <strong>이번 공유를 새로운 저장 1회로 기록해 save_count +1</strong>한다. 이미 EXPERIENCED라면 상태를 되돌리지 않는다. 저장 후 상세 또는 이전 앱으로 돌아간다.</td></tr></table>
 </div>
 </div>
 </section>
@@ -1466,46 +1481,142 @@ section[id]{scroll-margin-top:20px!important}
 </div>
 </div>
 </section>
+
 <section class="board" id="forest">
-<header><div><b>FOREST-01</b> · 나의 숲</div><h2>나의 숲 메인</h2></header>
+<header><div><b>FOREST-01</b> · 나의 숲</div><h2>올해의 숲</h2></header>
 <div class="content">
 <div class="wire"><div class="phone">
 <div class="status">9:41 <span>●●●</span></div>
-<div class="appbar">나의 숲 메인</div>
+<div class="appbar">나의 숲</div>
 <div class="screenbody withtabs">
-<div class="media"><span class="num">1</span><span>나의 숲 · 현재 금주의 콘텐츠부터 시작<br/>최근 최대 10개 개별 개체 · 사용자 위치</span></div>
-<div class="lineitem"><span class="num">2</span>도서 · 음반 · 영화 완료 수 / 전체 숲 보기</div>
-<div class="lineitem"><span class="num">3</span>최근 기록</div>
+<div class="lineitem"><span class="num">1</span>올해의 숲 · 월간 기록 · 지난 숲</div>
+<div class="lineitem"><span class="num">2</span>2026 · 저장 34 · 경험 13</div>
+<div class="media"><span class="num">3</span><span>2026 올해의 숲<br/>올해 경험 기록 전체 · 사용자 위치 · 작은 환경 애니메이션</span></div>
+<div class="lineitem"><span class="num">4</span>책 4 · 음반 6 · 영화 3 / 올해의 숲 공유</div>
 </div>
 <div class="tabbar"><div class="tab"><span class="tabicon">□</span>금주의 추천</div><div class="tab active"><span class="tabicon">□</span>나의 숲</div><div class="tab"><span class="tabicon">□</span>스크랩</div><div class="tab"><span class="tabicon">□</span>MY</div></div><div class="homebar"></div>
 </div></div>
 <div class="definition">
 <div class="meta"><span>SCREEN ID</span><b>FOREST-01</b></div>
 <div class="routebox">
-<div><span>ENTRY</span><b>하단탭 &gt; 나의 숲</b></div>
-<div><span>NEXT / EXIT</span><b>숲의 개체 또는 최근 기록 선택 → SCRAP-02 · 전체 숲 보기 → FOREST-03 · 하단탭으로 최상위 화면 이동</b></div>
-<div><span>NAVIGATION</span><b>하단 탭 유지</b></div>
-</div><table><tr><td><span class="specnum">1</span></td><td><b>나의 숲</b><br/>숲을 열면 현재 금주의 콘텐츠가 첫 기준점에 오고 왼쪽은 비워둔다. 오른쪽으로 최근 최대 10개 개별 개체를 배치하며, 드래그/스와이프 또는 ‹ › 버튼으로 이전·다음 개체 위치로 이동한다. 현재 위치는 작은 점으로 표시하고, 해당 개체 위에 제목과 저자/아티스트/감독을 표시한다. 이전 완료 기록은 배경 숲의 밀도로 누적되며 전체 완료 경험이 늘수록 환경 동물 수도 증가한다.</td></tr><tr><td><span class="specnum">2</span></td><td><b>완료 수·전체 숲</b><br/>동일 UserContent 중 EXPERIENCED인 BOOK / ALBUM / MOVIE 수를 실시간 집계한다. 요약 행 전체를 FOREST-03 전체 숲 보기 진입로로 사용한다.</td></tr><tr><td><span class="specnum">3</span></td><td><b>최근 기록</b><br/>최근 경험 중·완료 기록을 스크랩과 동일한 카드 형식으로 표시하며 선택 시 동일 UserContent의 SCRAP-02로 이동한다.</td></tr></table>
+<div><span>ENTRY</span><b>하단탭 &gt; 나의 숲 · 기본 진입</b></div>
+<div><span>NEXT / EXIT</span><b>월간 기록 → FOREST-02 · 지난 숲 → FOREST-03 · 숲 개체 선택 → SCRAP-02 · 공유 → OS Share Sheet</b></div>
+<div><span>NAVIGATION</span><b>하단 탭 유지 · 나의 숲 내부 기간 탭 유지</b></div>
+</div>
+<table>
+<tr><td><span class="specnum">1</span></td><td><b>기간 탭</b><br/>나의 숲 내부를 <strong>올해의 숲 / 월간 기록 / 지난 숲</strong>으로 구분한다. 하단 탭의 ‘나의 숲’을 누르면 기본적으로 현재 연도의 올해의 숲을 연다. ‘전체 숲’이라는 용어는 사용하지 않는다.</td></tr>
+<tr><td><span class="specnum">2</span></td><td><b>올해 요약</b><br/>현재 연도에 저장한 고유 콘텐츠 수와 경험 완료 수를 함께 보여준다. 저장 수는 해당 연도에 counted SaveEvent가 1회 이상 발생한 고유 content_id 수, 경험 수는 해당 연도 completed_at 기준 EXPERIENCED 수다. 두 수치는 사용자의 한 해를 돌아보기 위한 요약이며 동일 집단의 전환율로 직접 계산하지 않는다.</td></tr>
+<tr><td><span class="specnum">3</span></td><td><b>올해의 숲 탐색</b><br/>현재 연도에 완료한 모든 콘텐츠와 현재 IN_PROGRESS 콘텐츠를 2D 가로 스크롤 공간에 표시한다. <strong>최근 10개 제한을 두지 않는다.</strong> 완료 콘텐츠는 큰 나무, 경험 중 콘텐츠는 현재 성장 단계의 씨앗/싹/덤불/나무로 표시한다. 사용자는 드래그/스와이프 또는 ‹ › 이동으로 숲을 돌아다니고, 작은 사용자 위치 표시가 현재 탐색 위치를 나타낸다.</td></tr>
+<tr><td><span class="specnum">4</span></td><td><b>콘텐츠 개체</b><br/>개체에 제목과 저자/아티스트/감독을 최소 표시하며 선택하면 동일 UserContent의 SCRAP-02로 이동한다. 경험 완료일과 평가는 콘텐츠 상세에서 확인·수정한다.</td></tr>
+<tr><td><span class="specnum">5</span></td><td><b>연도별 디자인·작은 애니메이션</b><br/>현재 연도의 기본 숲 디자인을 적용한다. 새·토끼·개구리 등 작은 환경 애니메이션은 분위기 연출용으로만 사용하며 <strong>경험 수·카테고리 비율·평가·저장 횟수에 따라 종류나 수가 변하지 않는다.</strong> 레벨·퀘스트·수집 보상·아이템은 MVP에 포함하지 않는다.</td></tr>
+<tr><td><span class="specnum">6</span></td><td><b>연간 공유</b><br/>현재 연도의 숲 이미지와 연도, 저장한 고유 콘텐츠 수, 경험 완료 수, 책/음반/영화별 완료 수를 기반으로 공유용 이미지를 생성하고 OS Share Sheet로 전달한다. 앱 화면 캡처를 그대로 공유하지 않고 공유용 레이아웃을 별도로 사용한다.</td></tr>
+<tr><td></td><td><b>빈 상태</b><br/>현재 연도에 경험 중/완료 콘텐츠가 없으면 빈 숲과 함께 ‘저장한 콘텐츠에서 하나 골라 시작하기’ 진입을 제공한다. 저장 수가 0이면 스크랩 저장/가져오기 경로도 함께 제공한다.</td></tr>
+</table>
 </div>
 </div>
 </section>
+
 <section class="board">
-<header><div><b>FOREST-03</b> · 나의 숲</div><h2>전체 숲 보기</h2></header>
+<header><div><b>FOREST-02</b> · 나의 숲</div><h2>월간 기록</h2></header>
 <div class="content">
 <div class="wire"><div class="phone">
 <div class="status">9:41 <span>●●●</span></div>
-<div class="appbar">전체 숲</div>
+<div class="appbar">월간 기록</div>
 <div class="screenbody withtabs">
-<div class="lineitem"><span class="num">1</span>총 경험 수 · 전체 / 도서 / 음반 / 영화 필터</div>
-<div class="media"><span class="num">2</span><span>완료 콘텐츠 큰 나무 전체</span></div>
+<div class="lineitem"><span class="num">1</span>올해의 숲 · 월간 기록 · 지난 숲</div>
+<div class="lineitem"><span class="num">2</span>‹ 2026년 9월 ›</div>
+<div class="uirow"><span class="num">3</span>저장한 콘텐츠 34 · 경험한 콘텐츠 13</div>
+<div class="lineitem"><span class="num">4</span>책 4 · 음반 6 · 영화 3</div>
+<div class="media"><span class="num">5</span><span>1주 · 2주 · 3주 · 4주<br/>주차별 경험 수 간단 그래프</span></div>
+<div class="lineitem"><span class="num">6</span>가장 많이 저장 · 저장해두다 드디어 경험</div>
+<div class="lineitem"><span class="num">7</span>이번 달 경험 콘텐츠 · 월간 공유</div>
+</div>
+<div class="tabbar"><div class="tab"><span class="tabicon">□</span>금주의 추천</div><div class="tab active"><span class="tabicon">□</span>나의 숲</div><div class="tab"><span class="tabicon">□</span>스크랩</div><div class="tab"><span class="tabicon">□</span>MY</div></div><div class="homebar"></div>
+</div></div>
+<div class="definition">
+<div class="meta"><span>SCREEN ID</span><b>FOREST-02</b></div>
+<div class="routebox">
+<div><span>ENTRY</span><b>FOREST-01/03 내부 탭 &gt; 월간 기록</b></div>
+<div><span>NEXT / EXIT</span><b>콘텐츠 선택 → SCRAP-02 · 올해의 숲 → FOREST-01 · 지난 숲 → FOREST-03 · 공유 → OS Share Sheet</b></div>
+<div><span>NAVIGATION</span><b>하단 탭 유지 · 나의 숲 내부 기간 탭 유지</b></div>
+</div>
+<table>
+<tr><td><span class="specnum">1</span></td><td><b>월 선택</b><br/>현재 월을 기본으로 하고 ‹ ›로 이전/다음 월을 이동한다. 가입 이전 월 또는 기록이 전혀 없는 월은 빈 기록 상태로 표시한다. 미래 월로는 이동하지 않는다.</td></tr>
+<tr><td><span class="specnum">2</span></td><td><b>저장 / 경험 요약</b><br/>선택 월의 <strong>저장한 고유 콘텐츠 수</strong>와 <strong>경험 완료 콘텐츠 수</strong>를 가장 먼저 보여준다. 반복 저장한 같은 콘텐츠는 저장 고유 수에서 1개로 세며, 반복 횟수는 별도 관심 신호로 유지한다. 저장 수와 완료 수는 같은 달의 활동 리캡이며 두 수치를 단순 전환율로 표기하지 않는다.</td></tr>
+<tr><td><span class="specnum">3</span></td><td><b>카테고리 요약</b><br/>completed_at이 선택 월에 속하는 EXPERIENCED 콘텐츠를 책 / 음반 / 영화로 나누어 완료 수를 표시한다.</td></tr>
+<tr><td><span class="specnum">4</span></td><td><b>주차별 그래프</b><br/>선택 월의 경험 완료 수를 주차 단위로 묶어 간단한 막대 그래프로 보여준다. MVP에서는 경험 완료 수 1개 지표만 표시하고 복잡한 다중 지표 대시보드는 만들지 않는다.</td></tr>
+<tr><td><span class="specnum">5</span></td><td><b>가장 많이 저장한 콘텐츠</b><br/>선택 월 안에서 counted SaveEvent가 가장 많이 발생한 content_id 1개를 보여준다. 동률이면 해당 월의 마지막 저장 시점이 최근인 항목을 우선한다. 카드에는 ‘이번 달 n번 저장’을 표시한다.</td></tr>
+<tr><td><span class="specnum">6</span></td><td><b>저장 → 경험 사례</b><br/>선택 월에 완료된 콘텐츠 중 완료 전까지 2회 이상 저장된 항목이 있으면 ‘여러 번 저장해두다 이번 달 경험한 콘텐츠’로 1개를 보여준다. 여러 개면 완료 전 저장 횟수가 높은 항목을 우선한다. 해당 항목이 없으면 이 영역은 숨긴다.</td></tr>
+<tr><td><span class="specnum">7</span></td><td><b>이번 달 경험 콘텐츠</b><br/>선택 월 completed_at 기준 완료 콘텐츠를 표지/커버 중심 목록으로 보여준다. 선택 시 SCRAP-02로 이동한다.</td></tr>
+<tr><td><span class="specnum">8</span></td><td><b>월간 공유</b><br/>선택 월, ‘저장한 콘텐츠 n개 · 경험한 콘텐츠 n개’, 책/음반/영화 완료 수와 선택 가능한 대표 하이라이트 1개를 사용해 공유용 이미지를 생성한다. 핵심 문구는 <strong>“이번 달 이만큼 저장했고, 이만큼 경험했어요”</strong>에 맞추고 OS Share Sheet로 전달한다.</td></tr>
+<tr><td></td><td><b>표현 원칙</b><br/>월간 기록은 숲으로 반복 시각화하지 않는다. 숫자·간단한 그래프·콘텐츠를 빠르게 읽는 리캡 화면으로 한정한다.</td></tr>
+</table>
+</div>
+</div>
+</section>
+
+<section class="board">
+<header><div><b>FOREST-03</b> · 나의 숲</div><h2>지난 숲</h2></header>
+<div class="content">
+<div class="wire"><div class="phone">
+<div class="status">9:41 <span>●●●</span></div>
+<div class="appbar">지난 숲</div>
+<div class="screenbody withtabs">
+<div class="lineitem"><span class="num">1</span>올해의 숲 · 월간 기록 · 지난 숲</div>
+<div class="uirow"><span class="num">2</span>2025 나의 숲 · 경험 62 · 책 31 / 음반 19 / 영화 12</div>
+<div class="uirow"><span class="num">3</span>2024 나의 숲 · 경험 48 · 책 25 / 음반 11 / 영화 12</div>
 </div>
 <div class="tabbar"><div class="tab"><span class="tabicon">□</span>금주의 추천</div><div class="tab active"><span class="tabicon">□</span>나의 숲</div><div class="tab"><span class="tabicon">□</span>스크랩</div><div class="tab"><span class="tabicon">□</span>MY</div></div><div class="homebar"></div>
 </div></div>
 <div class="definition">
 <div class="meta"><span>SCREEN ID</span><b>FOREST-03</b></div>
-<div class="routebox"><div><span>ENTRY</span><b>FOREST-01 &gt; 완료 수 요약 행 / 전체 숲 보기</b></div><div><span>NEXT / EXIT</span><b>개별 나무 선택 → SCRAP-02 · 뒤로 → FOREST-01</b></div><div><span>NAVIGATION</span><b>하단 탭 유지</b></div></div>
-<table><tr><td><span class="specnum">1</span></td><td><b>집계·필터</b><br/>EXPERIENCED UserContent 기준으로 총 경험 수와 도서/음반/영화별 수를 실시간 집계하고 전체 / 도서 / 음반 / 영화 필터를 제공한다.</td></tr><tr><td><span class="specnum">2</span></td><td><b>전체 기록</b><br/>완료 콘텐츠 1개를 큰 나무 1그루로 표시한다. 나무를 선택하면 동일 UserContent의 SCRAP-02로 이동하며 완료일과 평가를 확인·수정할 수 있다.</td></tr><tr><td></td><td><b>범위</b><br/>별도 게임 맵이나 수집 시스템이 아니라 누적 경험 기록을 확인하는 화면으로 한정한다.</td></tr></table>
-</div></div></section>
+<div class="routebox">
+<div><span>ENTRY</span><b>FOREST-01/02 내부 탭 &gt; 지난 숲</b></div>
+<div><span>NEXT / EXIT</span><b>연도 선택 → FOREST-04 · 올해의 숲 → FOREST-01 · 월간 기록 → FOREST-02</b></div>
+<div><span>NAVIGATION</span><b>하단 탭 유지 · 나의 숲 내부 기간 탭 유지</b></div>
+</div>
+<table>
+<tr><td><span class="specnum">1</span></td><td><b>연도 목록</b><br/>현재 연도 이전에 완료 기록이 1개 이상 존재하는 연도를 최신순으로 표시한다. 각 연도에는 연간 경험 완료 수와 책/음반/영화별 완료 수, 해당 연도 숲의 미리보기를 보여준다.</td></tr>
+<tr><td><span class="specnum">2</span></td><td><b>과거 기록 열람</b><br/>지난 연도의 숲 기록은 무료로 다시 볼 수 있다. 연도 카드 선택 시 FOREST-04에서 그 해의 완성된 숲을 직접 돌아본다.</td></tr>
+<tr><td><span class="specnum">3</span></td><td><b>연도별 테마 보존</b><br/>각 연도 숲은 해당 연도에 배정된 기본 디자인으로 다시 표시한다. 앱의 최신 기본 디자인으로 과거 숲을 자동 치환하지 않는다.</td></tr>
+<tr><td></td><td><b>빈 상태</b><br/>이전 연도 완료 기록이 없으면 ‘지난 숲은 내년부터 생겨요’ 정도의 짧은 안내만 표시하고 올해의 숲/월간 기록으로 이동할 수 있게 한다.</td></tr>
+</table>
+</div>
+</div>
+</section>
+
+<section class="board">
+<header><div><b>FOREST-04</b> · 나의 숲</div><h2>지난 연도의 숲 보기</h2></header>
+<div class="content">
+<div class="wire"><div class="phone">
+<div class="status">9:41 <span>●●●</span></div>
+<div class="appbar">2025 나의 숲</div>
+<div class="screenbody withtabs">
+<div class="lineitem"><span class="num">1</span>‹ 지난 숲 · 2025 ›</div>
+<div class="lineitem"><span class="num">2</span>저장 81 · 경험 62 · 책 31 / 음반 19 / 영화 12</div>
+<div class="media"><span class="num">3</span><span>2025 기본 숲 디자인<br/>그 해 완료 콘텐츠 전체 · 사용자 위치 · 작은 환경 애니메이션</span></div>
+<div class="lineitem"><span class="num">4</span>2025 나의 숲 공유</div>
+</div>
+<div class="tabbar"><div class="tab"><span class="tabicon">□</span>금주의 추천</div><div class="tab active"><span class="tabicon">□</span>나의 숲</div><div class="tab"><span class="tabicon">□</span>스크랩</div><div class="tab"><span class="tabicon">□</span>MY</div></div><div class="homebar"></div>
+</div></div>
+<div class="definition">
+<div class="meta"><span>SCREEN ID</span><b>FOREST-04</b></div>
+<div class="routebox">
+<div><span>ENTRY</span><b>FOREST-03 &gt; 연도 카드 선택</b></div>
+<div><span>NEXT / EXIT</span><b>개체 선택 → SCRAP-02 · 공유 → OS Share Sheet · 뒤로 → FOREST-03</b></div>
+<div><span>NAVIGATION</span><b>하단 탭 유지</b></div>
+</div>
+<table>
+<tr><td><span class="specnum">1</span></td><td><b>과거 연간 숲</b><br/>선택 연도 completed_at 기준 EXPERIENCED 콘텐츠 전체를 큰 나무로 표시한다. 과거 연도에는 IN_PROGRESS 개체를 남기지 않는다. 사용자는 현재 숲과 동일하게 가로로 움직이며 콘텐츠 개체를 선택할 수 있다.</td></tr>
+<tr><td><span class="specnum">2</span></td><td><b>연간 요약</b><br/>선택 연도의 저장한 고유 콘텐츠 수, 경험 완료 수, 책/음반/영화별 완료 수를 함께 보여준다. 저장 수와 경험 수는 연간 회고 정보이며 직접 전환율로 표기하지 않는다.</td></tr>
+<tr><td><span class="specnum">3</span></td><td><b>디자인·애니메이션</b><br/>해당 연도에 정해진 기본 숲 디자인과 작은 환경 애니메이션을 사용한다. 데이터에 따라 디자인이 변화하지 않는다.</td></tr>
+<tr><td><span class="specnum">4</span></td><td><b>연간 공유</b><br/>선택 연도의 숲 이미지, 연도, 저장 고유 수, 경험 완료 수와 카테고리별 완료 수를 공유용 이미지로 생성한다. 사용자는 과거 연도의 숲도 다시 공유할 수 있다.</td></tr>
+<tr><td></td><td><b>MVP 이후 BM</b><br/><strong>지난 숲 기록 자체의 열람은 무료로 유지한다.</strong> 과거 연도의 숲 디자인을 현재 연도 숲이나 공유 카드에 다시 적용하는 기능은 2단계 이후 선택형 꾸미기 기능으로 두며, ‘도토리’로 이용하는 BM을 검토한다. MVP에는 테마 구매·도토리 결제·테마 변경 기능을 넣지 않는다.</td></tr>
+</table>
+</div>
+</div>
+</section>
+
 <section class="board" id="my">
 <header><div><b>MY-01</b> · MY</div><h2>마이페이지</h2></header>
 <div class="content">
@@ -1559,7 +1670,12 @@ section[id]{scroll-margin-top:20px!important}
 <li>책 ‘이 책 감상 완료’, 음반 ‘이 앨범 감상 완료’, 영화 ‘이 작품 감상 완료’를 실행하면 현재 단계와 관계없이 큰 나무가 된다.</li>
 <li>영화는 중간 성장 단계를 두지 않는다.</li>
 <li>완료 후 1~5점 평가는 선택 사항이며 성장 단계와 별개로 저장한다.</li>
-<li><strong>선택 출처 기록:</strong> 송림 추천 수락 / 사용자 직접 선택을 구분해 저장한다. 저장→경험 시작률뿐 아니라 추천 수락률과 직접 선택률을 함께 본다.</li></ul></div></section>
+<li><strong>선택 출처 기록:</strong> 송림 추천 수락 / 사용자 직접 선택을 구분해 저장한다. 저장→경험 시작률뿐 아니라 추천 수락률과 직접 선택률을 함께 본다.</li>
+<li><strong>올해의 숲:</strong> 현재 연도 완료 콘텐츠 전체와 현재 IN_PROGRESS 콘텐츠를 직접 탐색할 수 있게 표시하며 최근 n개 제한을 두지 않는다.</li>
+<li><strong>월간 기록:</strong> 숲을 반복 생성하지 않고 저장 고유 수·경험 완료 수·주차별 경험 수·콘텐츠 하이라이트로 회고한다.</li>
+<li><strong>지난 숲:</strong> 과거 연도에는 해당 연도 완료 콘텐츠와 그 해 기본 숲 디자인을 보존해 다시 볼 수 있게 한다.</li>
+<li><strong>환경 연출:</strong> 새·토끼·개구리 등 작은 애니메이션은 고정/랜덤 환경 연출이며 경험 수·카테고리 비율·평가·저장 횟수에 반응하지 않는다.</li>
+<li><strong>MVP 제외:</strong> 데이터 반응형 숲, 개인별 생성형 테마, 레벨·퀘스트·아이템·수집 보상, 도토리 구매/테마 구매 기능.</li></ul></div></section>
 <script>
 document.addEventListener('DOMContentLoaded',function(){
   document.querySelectorAll('.docnav a[href^="#"]').forEach(function(link){
