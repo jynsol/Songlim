@@ -957,7 +957,7 @@ section[id]{scroll-margin-top:20px!important}
 <div><b>1. 진입</b><span>로그인/회원가입 → 10개 직접 선택 또는 저장 콘텐츠 가져오기 → 금주의 추천</span></div>
 <div><b>2. 저장</b><span>외부 공유 또는 이미지 가져오기 → AI 인식 → 중복 확인 → 관심의 씨앗 저장</span></div>
 <div><b>3. 경험</b><span>송림 추천 수락 또는 경험 전 스크랩에서 직접 1개 선택 → 책/음반/영화별 경험 동작</span></div>
-<div><b>4. 기록</b><span>완료 → 선택 평가 → 올해의 숲 반영 · 월간 기록 집계 · 연도 종료 후 지난 숲에 보존</span></div>
+<div><b>4. 기록</b><span>완료 → 올해의 숲 반영 · 월간 리캡 · 지난 숲 이미지 보존 · 자세한 연간 데이터는 리포트</span></div>
 </div>
 <div class="overview-tabs"><b>하단 탭</b><span>금주의 추천</span><span>나의 숲</span><span>스크랩</span><span>MY</span></div>
 </section><div class="canvas"><section class="board dev-common" id="dev-common">
@@ -976,6 +976,7 @@ section[id]{scroll-margin-top:20px!important}
 <tr><td><b>기간별 기록 기준</b></td><td>월간·연간 기록의 기간은 사용자 로컬 날짜를 기준으로 한다. <strong>월간 저장 콘텐츠 수</strong>는 해당 월에 counted SaveEvent가 1회 이상 발생한 고유 content_id 수, <strong>월간/연간 경험 수</strong>는 해당 기간에 completed_at이 존재하는 EXPERIENCED 고유 content_id 수로 집계한다. 반복 저장 횟수 자체는 별도 관심 강도 신호로 유지한다.</td></tr>
 <tr><td><b>숲의 연도 귀속</b></td><td>완료 콘텐츠는 completed_at의 연도에 귀속한다. 현재 IN_PROGRESS 콘텐츠는 현재 연도의 ‘올해의 숲’에 성장 중 개체로 임시 표시하며, 과거 연도의 ‘지난 숲’에는 완료된 콘텐츠만 남긴다.</td></tr>
 <tr><td><b>연도별 숲 테마</b></td><td>MVP에서는 연도마다 하나의 기본 숲 디자인을 사용하고 같은 연도의 사용자는 동일한 기본 테마를 본다. 책·음반·영화 비율이나 사용자 행동 데이터에 따라 숲 테마·배경·개체 디자인이 달라지는 기능은 포함하지 않는다.</td></tr>
+<tr><td><b>과거 숲 스냅샷</b></td><td>연도 종료 후 지난 숲을 재현할 수 있도록 <strong>forest_year / forest_theme_id / theme_version</strong>을 보존한다. 과거 숲은 이후 테마 업데이트에 따라 자동 변경하지 않는다. 대표 이미지는 필요 시 서버에서 재생성할 수 있지만 동일 theme_version을 사용해야 한다.</td></tr>
 
 </table>
 <h3>2. 상태 전이</h3>
@@ -1490,9 +1491,9 @@ section[id]{scroll-margin-top:20px!important}
 <div class="appbar">나의 숲</div>
 <div class="screenbody withtabs">
 <div class="lineitem"><span class="num">1</span>올해의 숲 · 월간 기록 · 지난 숲</div>
-<div class="lineitem"><span class="num">2</span>2026 · 저장 34 · 경험 13</div>
+<div class="lineitem"><span class="num">2</span>2026 · 13개의 경험</div>
 <div class="media"><span class="num">3</span><span>2026 올해의 숲<br/>올해 경험 기록 전체 · 사용자 위치 · 작은 환경 애니메이션</span></div>
-<div class="lineitem"><span class="num">4</span>책 4 · 음반 6 · 영화 3 / 올해의 숲 공유</div>
+<div class="lineitem"><span class="num">4</span>올해 기록 보기 · 올해의 숲 공유</div>
 </div>
 <div class="tabbar"><div class="tab"><span class="tabicon">□</span>금주의 추천</div><div class="tab active"><span class="tabicon">□</span>나의 숲</div><div class="tab"><span class="tabicon">□</span>스크랩</div><div class="tab"><span class="tabicon">□</span>MY</div></div><div class="homebar"></div>
 </div></div>
@@ -1505,11 +1506,11 @@ section[id]{scroll-margin-top:20px!important}
 </div>
 <table>
 <tr><td><span class="specnum">1</span></td><td><b>기간 탭</b><br/>나의 숲 내부를 <strong>올해의 숲 / 월간 기록 / 지난 숲</strong>으로 구분한다. 하단 탭의 ‘나의 숲’을 누르면 기본적으로 현재 연도의 올해의 숲을 연다. ‘전체 숲’이라는 용어는 사용하지 않는다.</td></tr>
-<tr><td><span class="specnum">2</span></td><td><b>올해 요약</b><br/>현재 연도에 저장한 고유 콘텐츠 수와 경험 완료 수를 함께 보여준다. 저장 수는 해당 연도에 counted SaveEvent가 1회 이상 발생한 고유 content_id 수, 경험 수는 해당 연도 completed_at 기준 EXPERIENCED 수다. 두 수치는 사용자의 한 해를 돌아보기 위한 요약이며 동일 집단의 전환율로 직접 계산하지 않는다.</td></tr>
+<tr><td><span class="specnum">2</span></td><td><b>올해 요약</b><br/>숲 자체가 먼저 보이도록 숫자는 최소화한다. 상단에는 현재 연도와 <strong>‘n개의 경험’</strong> 정도만 표시한다. 저장 수·카테고리별 상세 수치·월별 추이는 ‘올해 기록 보기’에서 확인한다.</td></tr>
 <tr><td><span class="specnum">3</span></td><td><b>올해의 숲 탐색</b><br/>현재 연도에 완료한 모든 콘텐츠와 현재 IN_PROGRESS 콘텐츠를 2D 가로 스크롤 공간에 표시한다. <strong>최근 10개 제한을 두지 않는다.</strong> 완료 콘텐츠는 큰 나무, 경험 중 콘텐츠는 현재 성장 단계의 씨앗/싹/덤불/나무로 표시한다. 사용자는 드래그/스와이프 또는 ‹ › 이동으로 숲을 돌아다니고, 작은 사용자 위치 표시가 현재 탐색 위치를 나타낸다.</td></tr>
 <tr><td><span class="specnum">4</span></td><td><b>콘텐츠 개체</b><br/>개체에 제목과 저자/아티스트/감독을 최소 표시하며 선택하면 동일 UserContent의 SCRAP-02로 이동한다. 경험 완료일과 평가는 콘텐츠 상세에서 확인·수정한다.</td></tr>
 <tr><td><span class="specnum">5</span></td><td><b>연도별 디자인·작은 애니메이션</b><br/>현재 연도의 기본 숲 디자인을 적용한다. 새·토끼·개구리 등 작은 환경 애니메이션은 분위기 연출용으로만 사용하며 <strong>경험 수·카테고리 비율·평가·저장 횟수에 따라 종류나 수가 변하지 않는다.</strong> 레벨·퀘스트·수집 보상·아이템은 MVP에 포함하지 않는다.</td></tr>
-<tr><td><span class="specnum">6</span></td><td><b>연간 공유</b><br/>현재 연도의 숲 이미지와 연도, 저장한 고유 콘텐츠 수, 경험 완료 수, 책/음반/영화별 완료 수를 기반으로 공유용 이미지를 생성하고 OS Share Sheet로 전달한다. 앱 화면 캡처를 그대로 공유하지 않고 공유용 레이아웃을 별도로 사용한다.</td></tr>
+<tr><td><span class="specnum">6</span></td><td><b>올해 기록 보기 / 연간 공유</b><br/>‘올해 기록 보기’는 FOREST-05 연간 리포트로 이동한다. 공유는 현재 연도의 숲 이미지와 연도, 경험 완료 수를 중심으로 공유용 이미지를 생성하고, 저장 수·카테고리별 수치는 보조 정보로만 사용한다. 앱 화면 캡처를 그대로 공유하지 않고 별도 공유 레이아웃을 사용한다.</td></tr>
 <tr><td></td><td><b>빈 상태</b><br/>현재 연도에 경험 중/완료 콘텐츠가 없으면 빈 숲과 함께 ‘저장한 콘텐츠에서 하나 골라 시작하기’ 진입을 제공한다. 저장 수가 0이면 스크랩 저장/가져오기 경로도 함께 제공한다.</td></tr>
 </table>
 </div>
@@ -1563,8 +1564,8 @@ section[id]{scroll-margin-top:20px!important}
 <div class="appbar">지난 숲</div>
 <div class="screenbody withtabs">
 <div class="lineitem"><span class="num">1</span>올해의 숲 · 월간 기록 · 지난 숲</div>
-<div class="uirow"><span class="num">2</span>2025 나의 숲 · 경험 62 · 책 31 / 음반 19 / 영화 12</div>
-<div class="uirow"><span class="num">3</span>2024 나의 숲 · 경험 48 · 책 25 / 음반 11 / 영화 12</div>
+<div class="media"><span class="num">2</span><span>2025 숲 이미지<br/>62개의 경험</span></div>
+<div class="media"><span class="num">3</span><span>2024 숲 이미지<br/>48개의 경험</span></div>
 </div>
 <div class="tabbar"><div class="tab"><span class="tabicon">□</span>금주의 추천</div><div class="tab active"><span class="tabicon">□</span>나의 숲</div><div class="tab"><span class="tabicon">□</span>스크랩</div><div class="tab"><span class="tabicon">□</span>MY</div></div><div class="homebar"></div>
 </div></div>
@@ -1576,8 +1577,8 @@ section[id]{scroll-margin-top:20px!important}
 <div><span>NAVIGATION</span><b>하단 탭 유지 · 나의 숲 내부 기간 탭 유지</b></div>
 </div>
 <table>
-<tr><td><span class="specnum">1</span></td><td><b>연도 목록</b><br/>현재 연도 이전에 완료 기록이 1개 이상 존재하는 연도를 최신순으로 표시한다. 각 연도에는 연간 경험 완료 수와 책/음반/영화별 완료 수, 해당 연도 숲의 미리보기를 보여준다.</td></tr>
-<tr><td><span class="specnum">2</span></td><td><b>과거 기록 열람</b><br/>지난 연도의 숲 기록은 무료로 다시 볼 수 있다. 연도 카드 선택 시 FOREST-04에서 그 해의 완성된 숲을 직접 돌아본다.</td></tr>
+<tr><td><span class="specnum">1</span></td><td><b>연도별 숲 갤러리</b><br/>현재 연도 이전에 완료 기록이 1개 이상 존재하는 연도를 최신순으로 표시한다. 각 연도는 <strong>해당 연도의 숲 이미지가 중심</strong>이 되며, 연도와 ‘n개의 경험’ 정도만 함께 보여준다. 책/음반/영화 상세 수치는 목록 화면에서 과하게 노출하지 않는다.</td></tr>
+<tr><td><span class="specnum">2</span></td><td><b>과거 기록 열람</b><br/>지난 연도의 숲 기록은 무료로 다시 볼 수 있다. 연도 카드를 선택하면 FOREST-04에서 그 해의 숲 이미지를 화면 중심으로 크게 감상한다. 과거 숲을 다시 ‘탐색 맵’처럼 돌아다니지는 않는다.</td></tr>
 <tr><td><span class="specnum">3</span></td><td><b>연도별 테마 보존</b><br/>각 연도 숲은 해당 연도에 배정된 기본 디자인으로 다시 표시한다. 앱의 최신 기본 디자인으로 과거 숲을 자동 치환하지 않는다.</td></tr>
 <tr><td></td><td><b>빈 상태</b><br/>이전 연도 완료 기록이 없으면 ‘지난 숲은 내년부터 생겨요’ 정도의 짧은 안내만 표시하고 올해의 숲/월간 기록으로 이동할 수 있게 한다.</td></tr>
 </table>
@@ -1585,17 +1586,18 @@ section[id]{scroll-margin-top:20px!important}
 </div>
 </section>
 
+
 <section class="board">
-<header><div><b>FOREST-04</b> · 나의 숲</div><h2>지난 연도의 숲 보기</h2></header>
+<header><div><b>FOREST-04</b> · 나의 숲</div><h2>지난 숲 상세</h2></header>
 <div class="content">
 <div class="wire"><div class="phone">
 <div class="status">9:41 <span>●●●</span></div>
 <div class="appbar">2025 나의 숲</div>
 <div class="screenbody withtabs">
-<div class="lineitem"><span class="num">1</span>‹ 지난 숲 · 2025 ›</div>
-<div class="lineitem"><span class="num">2</span>저장 81 · 경험 62 · 책 31 / 음반 19 / 영화 12</div>
-<div class="media"><span class="num">3</span><span>2025 기본 숲 디자인<br/>그 해 완료 콘텐츠 전체 · 사용자 위치 · 작은 환경 애니메이션</span></div>
-<div class="lineitem"><span class="num">4</span>2025 나의 숲 공유</div>
+<div class="media" style="height:250px"><span class="num">1</span><span>2025 숲 이미지<br/>화면 대부분을 사용하는 대표 이미지</span></div>
+<div class="uirow"><span class="num">2</span>62개의 경험</div>
+<div class="lineitem"><span class="num">3</span>책 31 · 음반 19 · 영화 12</div>
+<div class="lineitem"><span class="num">4</span>연간 리포트 · 공유하기</div>
 </div>
 <div class="tabbar"><div class="tab"><span class="tabicon">□</span>금주의 추천</div><div class="tab active"><span class="tabicon">□</span>나의 숲</div><div class="tab"><span class="tabicon">□</span>스크랩</div><div class="tab"><span class="tabicon">□</span>MY</div></div><div class="homebar"></div>
 </div></div>
@@ -1603,15 +1605,52 @@ section[id]{scroll-margin-top:20px!important}
 <div class="meta"><span>SCREEN ID</span><b>FOREST-04</b></div>
 <div class="routebox">
 <div><span>ENTRY</span><b>FOREST-03 &gt; 연도 카드 선택</b></div>
-<div><span>NEXT / EXIT</span><b>개체 선택 → SCRAP-02 · 공유 → OS Share Sheet · 뒤로 → FOREST-03</b></div>
+<div><span>NEXT / EXIT</span><b>연간 리포트 → FOREST-05 · 공유 → OS Share Sheet · 뒤로 → FOREST-03</b></div>
 <div><span>NAVIGATION</span><b>하단 탭 유지</b></div>
 </div>
 <table>
-<tr><td><span class="specnum">1</span></td><td><b>과거 연간 숲</b><br/>선택 연도 completed_at 기준 EXPERIENCED 콘텐츠 전체를 큰 나무로 표시한다. 과거 연도에는 IN_PROGRESS 개체를 남기지 않는다. 사용자는 현재 숲과 동일하게 가로로 움직이며 콘텐츠 개체를 선택할 수 있다.</td></tr>
-<tr><td><span class="specnum">2</span></td><td><b>연간 요약</b><br/>선택 연도의 저장한 고유 콘텐츠 수, 경험 완료 수, 책/음반/영화별 완료 수를 함께 보여준다. 저장 수와 경험 수는 연간 회고 정보이며 직접 전환율로 표기하지 않는다.</td></tr>
-<tr><td><span class="specnum">3</span></td><td><b>디자인·애니메이션</b><br/>해당 연도에 정해진 기본 숲 디자인과 작은 환경 애니메이션을 사용한다. 데이터에 따라 디자인이 변화하지 않는다.</td></tr>
-<tr><td><span class="specnum">4</span></td><td><b>연간 공유</b><br/>선택 연도의 숲 이미지, 연도, 저장 고유 수, 경험 완료 수와 카테고리별 완료 수를 공유용 이미지로 생성한다. 사용자는 과거 연도의 숲도 다시 공유할 수 있다.</td></tr>
-<tr><td></td><td><b>MVP 이후 BM</b><br/><strong>지난 숲 기록 자체의 열람은 무료로 유지한다.</strong> 과거 연도의 숲 디자인을 현재 연도 숲이나 공유 카드에 다시 적용하는 기능은 2단계 이후 선택형 꾸미기 기능으로 두며, ‘도토리’로 이용하는 BM을 검토한다. MVP에는 테마 구매·도토리 결제·테마 변경 기능을 넣지 않는다.</td></tr>
+<tr><td><span class="specnum">1</span></td><td><b>숲 이미지 중심</b><br/>선택 연도의 숲을 <strong>화면 대부분을 차지하는 대표 이미지</strong>로 보여준다. 지난 숲 상세에서는 개별 나무를 다시 탐색하거나 콘텐츠를 직접 선택하지 않는다. 과거의 한 해를 ‘한 장의 숲’으로 감상하는 화면으로 한정한다.</td></tr>
+<tr><td><span class="specnum">2</span></td><td><b>핵심 숫자</b><br/>대표 이미지 아래에는 연간 경험 완료 수를 가장 크게 보여주고, 책 / 음반 / 영화별 완료 수를 보조로 표시한다. 저장 수는 지난 숲 상세의 필수 노출값이 아니며 자세한 기록은 연간 리포트에서 확인한다.</td></tr>
+<tr><td><span class="specnum">3</span></td><td><b>연도별 디자인 보존</b><br/>해당 연도에 배정된 기본 숲 테마와 버전을 그대로 사용한다. 이후 서비스의 기본 디자인이 바뀌어도 과거 숲 이미지가 자동으로 최신 디자인으로 치환되지 않는다.</td></tr>
+<tr><td><span class="specnum">4</span></td><td><b>연간 리포트</b><br/>‘연간 리포트’를 누르면 FOREST-05에서 해당 연도의 저장·경험·월별 추이·콘텐츠 상세를 확인한다. 숲 감상과 데이터 읽기를 같은 화면에 섞지 않는다.</td></tr>
+<tr><td><span class="specnum">5</span></td><td><b>공유</b><br/>선택 연도의 숲 이미지, 연도, 경험 완료 수를 중심으로 공유용 이미지를 생성한다. 책/음반/영화별 완료 수는 보조 정보로 포함할 수 있다.</td></tr>
+<tr><td></td><td><b>MVP 이후 BM</b><br/><strong>지난 숲 기록 자체의 열람은 무료로 유지한다.</strong> 과거 연도의 숲 디자인을 현재 연도 숲이나 공유 카드에 다시 적용하는 기능은 2단계 이후 선택형 꾸미기 기능으로 두고 ‘도토리’로 이용하는 BM을 검토한다. MVP에는 테마 구매·도토리 결제·테마 변경 기능을 넣지 않는다.</td></tr>
+</table>
+</div>
+</div>
+</section>
+
+<section class="board">
+<header><div><b>FOREST-05</b> · 나의 숲</div><h2>연간 리포트</h2></header>
+<div class="content">
+<div class="wire"><div class="phone">
+<div class="status">9:41 <span>●●●</span></div>
+<div class="appbar">2025 연간 리포트</div>
+<div class="screenbody withtabs">
+<div class="uirow"><span class="num">1</span>저장한 콘텐츠 81 · 경험한 콘텐츠 62</div>
+<div class="lineitem"><span class="num">2</span>책 31 · 음반 19 · 영화 12</div>
+<div class="media"><span class="num">3</span><span>1월 · 2월 · … · 12월<br/>월별 경험 추이</span></div>
+<div class="lineitem"><span class="num">4</span>가장 많이 저장한 콘텐츠</div>
+<div class="lineitem"><span class="num">5</span>여러 번 저장하다 경험한 콘텐츠</div>
+<div class="lineitem"><span class="num">6</span>올해 경험한 콘텐츠 전체</div>
+</div>
+<div class="tabbar"><div class="tab"><span class="tabicon">□</span>금주의 추천</div><div class="tab active"><span class="tabicon">□</span>나의 숲</div><div class="tab"><span class="tabicon">□</span>스크랩</div><div class="tab"><span class="tabicon">□</span>MY</div></div><div class="homebar"></div>
+</div></div>
+<div class="definition">
+<div class="meta"><span>SCREEN ID</span><b>FOREST-05</b></div>
+<div class="routebox">
+<div><span>ENTRY</span><b>FOREST-01 올해 기록 보기 · FOREST-04 연간 리포트</b></div>
+<div><span>NEXT / EXIT</span><b>콘텐츠 선택 → SCRAP-02 · 뒤로 → 진입한 숲 화면</b></div>
+<div><span>NAVIGATION</span><b>하단 탭 유지</b></div>
+</div>
+<table>
+<tr><td><span class="specnum">1</span></td><td><b>연간 저장 / 경험 요약</b><br/>선택 연도에 counted SaveEvent가 1회 이상 발생한 <strong>고유 콘텐츠 수</strong>와 completed_at 기준 <strong>경험 완료 콘텐츠 수</strong>를 함께 표시한다. 같은 콘텐츠를 여러 번 저장해도 저장 고유 수에서는 1개로 센다.</td></tr>
+<tr><td><span class="specnum">2</span></td><td><b>카테고리 요약</b><br/>선택 연도 경험 완료 콘텐츠를 책 / 음반 / 영화로 나누어 완료 수를 표시한다.</td></tr>
+<tr><td><span class="specnum">3</span></td><td><b>월별 경험 추이</b><br/>1~12월 completed_at 기준 경험 완료 수를 월 단위로 보여준다. MVP에서는 단일 막대/선 그래프 1개로 한정한다.</td></tr>
+<tr><td><span class="specnum">4</span></td><td><b>가장 많이 저장한 콘텐츠</b><br/>선택 연도 안에서 counted SaveEvent가 가장 많이 발생한 content_id 1개를 보여준다. 동률이면 해당 연도 마지막 저장 시점이 최근인 항목을 우선한다.</td></tr>
+<tr><td><span class="specnum">5</span></td><td><b>저장 → 경험 사례</b><br/>선택 연도에 완료된 콘텐츠 중 완료 전에 2회 이상 저장된 항목이 있으면 대표 1개를 보여준다. 여러 개면 완료 전 저장 횟수가 높은 항목을 우선한다.</td></tr>
+<tr><td><span class="specnum">6</span></td><td><b>연간 경험 콘텐츠 목록</b><br/>선택 연도 completed_at 기준 완료 콘텐츠 전체를 표지/커버 중심으로 보여준다. 선택 시 SCRAP-02로 이동한다.</td></tr>
+<tr><td></td><td><b>현재 연도 지원</b><br/>현재 연도에서도 ‘올해 기록 보기’로 같은 리포트 화면을 사용할 수 있다. 이 경우 1월부터 현재 월까지만 집계하고 미래 월은 표시하지 않거나 0으로 고정하지 않는다.</td></tr>
 </table>
 </div>
 </div>
@@ -1673,7 +1712,7 @@ section[id]{scroll-margin-top:20px!important}
 <li><strong>선택 출처 기록:</strong> 송림 추천 수락 / 사용자 직접 선택을 구분해 저장한다. 저장→경험 시작률뿐 아니라 추천 수락률과 직접 선택률을 함께 본다.</li>
 <li><strong>올해의 숲:</strong> 현재 연도 완료 콘텐츠 전체와 현재 IN_PROGRESS 콘텐츠를 직접 탐색할 수 있게 표시하며 최근 n개 제한을 두지 않는다.</li>
 <li><strong>월간 기록:</strong> 숲을 반복 생성하지 않고 저장 고유 수·경험 완료 수·주차별 경험 수·콘텐츠 하이라이트로 회고한다.</li>
-<li><strong>지난 숲:</strong> 과거 연도에는 해당 연도 완료 콘텐츠와 그 해 기본 숲 디자인을 보존해 다시 볼 수 있게 한다.</li>
+<li><strong>지난 숲:</strong> 과거 연도에는 해당 연도의 기본 숲 디자인을 보존한 대표 이미지를 중심으로 보여주며, 개별 콘텐츠 탐색은 연간 리포트와 스크랩에서 제공한다.</li>
 <li><strong>환경 연출:</strong> 새·토끼·개구리 등 작은 애니메이션은 고정/랜덤 환경 연출이며 경험 수·카테고리 비율·평가·저장 횟수에 반응하지 않는다.</li>
 <li><strong>MVP 제외:</strong> 데이터 반응형 숲, 개인별 생성형 테마, 레벨·퀘스트·아이템·수집 보상, 도토리 구매/테마 구매 기능.</li></ul></div></section>
 <script>
