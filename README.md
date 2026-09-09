@@ -1,1 +1,2 @@
-Copyright (c) 2026 진선민. All rights reserved. 비영리 목적의 이용만 허용됩니다.
+Copyright (c) 2026 진선민. All rights reserved.
+본 저작물의 무단 전재, 복제, 배포 및 상업적 목적의 이용은 저작권법 등 관련 법령에 의해 엄격히 금지되며, 위반 시 법적 책임을 물을 수 있습니다.
