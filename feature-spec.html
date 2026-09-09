@@ -1121,7 +1121,16 @@ section[id]{scroll-margin-top:20px!important}
 <tr><td><b>숲의 연도 귀속</b></td><td>완료 콘텐츠는 completed_at의 연도에 귀속한다. 현재 IN_PROGRESS 콘텐츠는 현재 연도의 ‘올해의 숲’에 성장 중 개체로 임시 표시하며, 과거 연도의 숲 기록에는 완료된 콘텐츠만 남긴다.</td></tr>
 <tr><td><b>연도별 숲 테마</b></td><td>MVP에서는 연도마다 하나의 기본 숲 디자인을 사용하고 같은 연도의 사용자는 동일한 기본 테마를 본다. 책·음반·영화 비율이나 사용자 행동 데이터에 따라 숲 테마·배경·개체 디자인이 달라지는 기능은 포함하지 않는다.</td></tr>
 <tr><td><b>과거 숲 스냅샷</b></td><td>연도 종료 시 forest_year / forest_theme_id / theme_version과 숲 장면 asset 참조값을 보존한다. 과거 연도는 동일 theme_version으로 재현한다.</td></tr>
+<tr><td><b>연도 종료 전환</b></td><td>현재 연도 동안 FOREST-01은 좌우 탐색 전용이다. 연도 종료 시 해당 연도의 완료 콘텐츠를 기준으로 <strong>원근 표현이 없는 하나의 평면 2D 숲 일러스트 장면</strong>을 확정 asset으로 생성·보존한다. 이 확정 숲은 화면보다 큰 bounded 2D canvas이며, FOREST-04에서는 viewport로 일부 영역을 보거나 축소해 전체를 한 화면에 관망할 수 있다. 사용자는 <strong>한 손가락으로 상하좌우·대각선 방향으로 자유롭게 pan</strong>하고, <strong>두 손가락 pinch gesture로 zoom in / zoom out</strong>한다. 최소 축소 배율에서는 전체 canvas가 viewport 안에 들어오도록 fit-to-view하며, 확대·이동 중에도 canvas 경계를 넘어 빈 바깥 영역이 보이지 않도록 제한한다. 좌우 스냅·페이지 넘김은 제공하지 않는다.</td></tr>
 </table>
+<h3>1.1 나의 숲 · 연도 전환 최종 기준</h3>
+<div class="routebox">
+<div><span>현재 연도 · FOREST-01</span><b><strong>자라고 있는 진행형 숲.</strong> 개별 나무는 경험 중 우선·최근 완료순으로 최대 10개만 표시한다. 기존 나무는 유지하고 올해 전체 완료량에 따라 배경 이미지만 더 울창하게 교체한다. 사용자는 좌우로만 드래그/스와이프한다. 상하 이동과 zoom/pinch zoom은 사용하지 않는다.</b></div>
+<div><span>연도 종료</span><b>연도가 끝나는 시점에 그해의 완료 나무들을 <strong>하나의 큰 평면 2D 숲 일러스트</strong>로 재배치해 확정한다. 진행형 가로 숲을 그대로 길게 보관하는 것이 아니라, 완료 연도용 별도 2D canvas 장면으로 만든다.</b></div>
+<div><span>완료 연도 · FOREST-04</span><b>나무가 가로 한 줄로 이어지는 구조가 아니라 <strong>넓은 2D 평면 전체에 상하좌우로 배치된 한 장의 큰 일러스트</strong>다. 앞/뒤로 흐려지거나 작아지는 원근감, 소실점, 거리감에 따른 크기·농도·선명도 변화, parallax, 3D 깊이 표현은 사용하지 않는다.</b></div>
+<div><span>탐색 방식</span><b><strong>Free-pan + pinch zoom viewport (bounded 2D canvas).</strong> 화면은 큰 일러스트의 일부를 보여주는 viewport다. 사용자는 한 손가락으로 상하좌우·대각선 방향으로 자유롭게 pan하고, 두 손가락으로 pinch zoom in / zoom out한다. <strong>최소 축소 배율은 전체 숲이 한 화면에 들어오는 fit-to-view</strong>로 하며, 확대·이동 상태에서도 canvas 경계 밖의 빈 영역은 보이지 않도록 clamp한다.</b></div>
+<div><span>숲 기록 · FOREST-03</span><b><strong>현재 연도는 표시하지 않는다.</strong> 연도가 종료되어 위 방식으로 확정된 과거 숲만 최신순으로 보관·열람한다.</b></div>
+</div>
 <h3>2. 상태 전이</h3>
 <table>
 <tr><td><b>관심 표시 / 외부 저장</b></td><td>INTERESTED(경험 전)</td></tr>
@@ -1166,8 +1175,8 @@ section[id]{scroll-margin-top:20px!important}
 </ul>
 <div class="routebox">
 <div><span>날짜 기준</span><b>사용자 로컬 날짜 기준 1일 1회 성장</b></div>
-<div><span>나의 숲 표현</span><b>화면보다 큰 하나의 2D 숲 장면. 사용자는 하나의 큰 숲 이미지를 뷰포트로 들여다보듯 상하좌우로 드래그/스와이프하며 숲 전체를 감상한다. 경험 중 콘텐츠는 현재 성장 단계로, 완료 콘텐츠는 큰 나무 상태로 같은 숲 장면 안에 함께 표시한다.</b></div>
-<div><span>숲 범위</span><b>나의 숲은 실제 콘텐츠 경험의 누적을 보여주는 기록 시각화다. 별도의 사용자 캐릭터나 위치 이동 요소 없이, 사용자가 화면보다 큰 숲 장면 자체를 상하좌우로 탐색한다. 점프·레벨·아이템·도감·수집·보상·재화·퀘스트는 포함하지 않는다. 새·토끼·개구리 등 작은 동물은 숲의 환경 요소로 일부 방문에서 가볍게 랜덤 노출할 수 있다. 숲이 깊어질수록 숲에서 나타나는 애니메이션이 다양해진다. 동물은 수집·보상·성장 조건과 연결하지 않고 숲을 보는 재미를 더하는 비필수 연출로만 사용한다.</b></div>
+<div><span>나의 숲 표현</span><b>현재 연도의 ‘올해의 숲’은 가로로 이어지는 진행형 2D 숲 장면이며 사용자는 좌우로만 드래그/스와이프해 둘러본다. 연도가 종료되면 그해 숲을 <strong>원근·깊이·거리감에 따른 크기 변화가 없는 하나의 평면 2D 일러스트</strong>로 확정한다. ‘숲 기록 상세’에서는 이 큰 일러스트를 <strong>Free-pan + pinch zoom viewport (bounded 2D canvas)</strong> 방식으로 본다. 한 손가락으로 상하좌우·대각선 pan이 가능하고, 두 손가락 pinch로 확대·축소한다. 최소 축소 배율에서는 전체 canvas를 한 화면에 관망할 수 있도록 fit-to-view하며, 확대·이동 범위는 canvas 경계 안으로 제한한다.</b></div>
+<div><span>숲 범위</span><b>나의 숲은 실제 콘텐츠 경험의 누적을 보여주는 기록 시각화다. 별도의 사용자 캐릭터나 위치 이동 요소는 없다. 진행 중인 현재 연도 숲은 좌우 탐색만 사용한다. 연도 종료 후 확정되는 과거 숲은 <strong>원근법을 적용한 공간·3D 장면이 아니라, 나무와 환경 요소가 한 장의 큰 평면 일러스트 위에 배치된 2D canvas</strong>다. y축 위치에 따라 나무 크기·농도·선명도가 달라지는 원근 연출, parallax, 안개로 멀어지는 거리 표현을 기본 구조로 사용하지 않는다. 사용자는 이 평면 canvas를 viewport로 상하좌우·대각선 자유롭게 pan하고, 두 손가락 pinch로 확대·축소해 세부를 보거나 전체 숲을 한 화면에 관망한다. 점프·레벨·아이템·도감·수집·보상·재화·퀘스트는 포함하지 않는다. 새·토끼·개구리 등 작은 동물은 숲의 환경 요소로 일부 방문에서 가볍게 랜덤 노출할 수 있다. 숲이 깊어질수록 숲에서 나타나는 애니메이션이 다양해진다. 동물은 수집·보상·성장 조건과 연결하지 않고 숲을 보는 재미를 더하는 비필수 연출로만 사용한다.</b></div>
 <div><span>화면 용어</span><b>금주의 추천 / 오늘의 페이지 / 오늘의 곡 / 서점 페이지 / 오늘 독서 완료 / 이 책 감상 완료 / 이 곡 듣기 / 다음 곡 / 이 앨범 감상 완료 / 보러가기 / 이 작품 감상 완료</b></div>
 <div><span>내부 키</span><b>개발 구현 시 내부 enum·변수명은 자유롭게 사용하되 화면 문구와 분리</b></div>
 </div><h3>콘텐츠 유입 경로</h3><div class="routebox">
@@ -1302,12 +1311,12 @@ section[id]{scroll-margin-top:20px!important}
 <div class="definition">
 <div class="meta"><span>SCREEN ID</span><b>ONB-01</b></div>
 <div class="routebox">
-<div><span>ENTRY</span><b>신규 가입 완료 · 로그인 후 onboarding_completed = false</b></div>
+<div><span>ENTRY</span><b>신규 가입 완료 · 로그인 후 onboarding_completed = false · MY-01 ‘취향 데이터 더 입력하기’</b></div>
 <div><span>NEXT / EXIT</span><b>가져오기 → IMPORT-01 · 직접 선택 → ONB-02 · 진행 중 이탈 시 다음 진입에서 이어하기</b></div>
 <div><span>NAVIGATION</span><b>하단 탭 없음 · 집중형/인증 흐름</b></div>
 </div>
 <table>
-<tr><td><span class="specnum">1</span></td><td><b>안내</b><br/>저장한 콘텐츠 가져오기와 10개 직접 골라보기 두 경로를 제공한다. 서점 장바구니·찜 목록·SNS 저장 화면 등 기존 관심 데이터는 사진으로 가져올 수 있다.</td></tr>
+<tr><td><span class="specnum">1</span></td><td><b>안내</b><br/>저장한 콘텐츠 가져오기와 10개 직접 골라보기 두 경로를 제공한다. MY-01에서 진입한 경우에도 기존 응답과 진행 상태를 초기화하지 않고 추가 입력한다. 서점 장바구니·찜 목록·SNS 저장 화면 등 기존 관심 데이터는 사진으로 가져올 수 있다.</td></tr>
 <tr><td><span class="specnum">2</span></td><td><b>저장한 콘텐츠 가져오기</b><br/>사진 보관함/스크린샷 선택으로 IMPORT-01에 진입한다. 가져온 정상 매칭 항목은 기본 INTERESTED 신호로 저장한다.</td></tr>
 <tr><td><span class="specnum">3</span></td><td><b>10개 직접 골라보기</b><br/>ONB-02로 이동한다. 관심 있음 / 경험함 / 싫음 상태를 직접 선택한다.</td></tr>
 <tr><td><span class="specnum">4</span></td><td><b>혼합 허용</b><br/>직접 선택한 유효 응답과 가져오기에서 저장 확정한 콘텐츠를 합산해 초기 신호 수를 계산한다. 합산한 신호가 10개 이상이면 송림 시작 가능.</td></tr>
@@ -1633,7 +1642,7 @@ section[id]{scroll-margin-top:20px!important}
 </div>
 <div class="media forestbox" style="height:210px">
 <span class="num">2</span>
-<span>숲 영역<br/>상하좌우 탐색 · 경험 중/완료 나무 · 작은 환경 애니메이션</span>
+<span>숲 영역<br/>좌우 탐색 · 경험 중/완료 나무 · 작은 환경 애니메이션</span>
 </div>
 <div class="uirow summaryrow">
 <span class="num">3</span>책 · 음악 · 영화 완료 수
@@ -1653,8 +1662,8 @@ section[id]{scroll-margin-top:20px!important}
 </div>
 <table>
 <tr><td><span class="specnum">1</span></td><td><b>상단 탭</b><br/>하단 탭에서 ‘나의 숲’ 진입 시 기본으로 올해의 숲을 연다. 올해의 숲 / 월간 기록 / 숲 기록 탭으로 내부 화면을 전환한다.</td></tr>
-<tr><td><span class="specnum">2</span></td><td><b>올해의 숲 탐색</b><br/>현재 연도에 완료한 모든 콘텐츠와 현재 IN_PROGRESS 콘텐츠를 화면보다 큰 하나의 2D 숲 장면 안에 표시한다. 완료 콘텐츠는 큰 나무, 경험 중 콘텐츠는 현재 성장 단계의 씨앗/싹/덤불/나무로 표시한다. 사용자는 숲 이미지를 상하좌우로 드래그/스와이프해 장면을 탐색하며, 숲 개체 선택 시 해당 UserContent의 SCRAP-02로 이동한다. 새·토끼·개구리 등 작은 환경 애니메이션은 사용자 데이터와 무관하게 연출한다.</td></tr>
-<tr><td><span class="specnum">3</span></td><td><b>카테고리 요약</b><br/>현재 연도 기준 EXPERIENCED 콘텐츠 수를 책 / 음악 / 영화로 구분해 표시한다.</td></tr>
+<tr><td><span class="specnum">2</span></td><td><b>올해의 숲 탐색</b><br/>개별 콘텐츠 나무는 <strong>최대 10개</strong>만 표시한다. 현재 선택된 경험 중 콘텐츠를 맨 앞에 두고, 나머지 IN_PROGRESS 콘텐츠를 우선 배치한 뒤 남은 자리를 올해 최근 완료순으로 채운다. 경험 중 콘텐츠만 10개를 넘으면 현재 선택 항목 우선으로 10개까지만 표시한다. 나무의 기존 모양·성장 단계·선택 동작은 유지한다. 올해 전체 완료량에 따라 <strong>배경 이미지만 더 울창한 단계로 교체</strong>한다. 프로토타입 단계는 0~9개 / 10~29개 / 30~59개 / 60개 이상이며, 배경은 개별 콘텐츠에 연결되지 않는 장식 이미지다. 완료 콘텐츠는 큰 나무, 경험 중 콘텐츠는 현재 성장 단계의 씨앗/싹/덤불/나무로 표시한다. 현재 연도에는 세로 이동이나 확대·축소를 사용하지 않으며, 사용자는 숲을 <strong>좌우로만</strong> 드래그/스와이프해 둘러본다. 숲 개체 선택 시 해당 UserContent의 SCRAP-02로 이동한다. 새·토끼·개구리 등 작은 환경 애니메이션은 사용자 데이터와 무관하게 연출한다.</td></tr>
+<tr><td><span class="specnum">3</span></td><td><b>카테고리 요약</b><br/>현재 연도 기준 전체 EXPERIENCED 콘텐츠 수를 책 / 음악 / 영화로 구분해 표시한다. 나무 표시 한도 10개와 무관하게 올해 전체 완료 기록을 집계한다.</td></tr>
 <tr><td><span class="specnum">4</span></td><td><b>최근 본 콘텐츠</b><br/>최근 완료한 콘텐츠 1~2개를 표시한다. 작은 표지/커버, 제목, 저자·아티스트·감독 또는 콘텐츠 유형, 완료일을 표시하고 최근 완료 순으로 정렬한다. 항목 선택 시 SCRAP-02로 이동한다.</td></tr>
 <tr><td></td><td><b>빈 상태</b><br/>현재 연도에 경험 중/완료 콘텐츠가 없으면 빈 숲과 저장한 콘텐츠에서 경험을 시작하는 진입을 제공한다. 저장 콘텐츠도 없으면 스크랩 저장/가져오기 경로를 제공한다.</td></tr>
 </table>
@@ -1716,18 +1725,18 @@ section[id]{scroll-margin-top:20px!important}
 <div class="lineitem" style="text-align:center;padding-left:8px">
 <span class="num">1</span>올해의 숲　월간 기록　<strong>숲 기록</strong>
 </div>
-<div class="media" style="height:130px"><span class="num">2</span><span>2026<br/>숲 이미지<br/><small>49개의 경험</small></span></div>
-<div class="media" style="height:130px"><span class="num">3</span><span>2025<br/>숲 이미지<br/><small>62개의 경험</small></span></div>
+<div class="media" style="height:130px"><span class="num">2</span><span>2025<br/>완성된 숲 이미지<br/><small>62개의 경험</small></span></div>
+<div class="media" style="height:130px"><span class="num">3</span><span>2024<br/>완성된 숲 이미지<br/><small>48개의 경험</small></span></div>
 </div>
 <div class="tabbar"><div class="tab"><span class="tabicon">□</span>금주의 추천</div><div class="tab active"><span class="tabicon">□</span>나의 숲</div><div class="tab"><span class="tabicon">□</span>스크랩</div><div class="tab"><span class="tabicon">□</span>MY</div></div><div class="homebar"></div>
 </div></div>
 <div class="definition">
 <div class="meta"><span>SCREEN ID</span><b>FOREST-03</b></div>
-<div class="routebox"><div><span>ENTRY</span><b>FOREST-01/02 내부 탭 &gt; 숲 기록</b></div><div><span>NEXT / EXIT</span><b>연도 선택 → FOREST-04 · 올해의 숲 → FOREST-01 · 월간 기록 → FOREST-02</b></div><div><span>NAVIGATION</span><b>하단 탭 유지 · 나의 숲 내부 탭 유지</b></div></div>
+<div class="routebox"><div><span>ENTRY</span><b>FOREST-01/02 내부 탭 &gt; 숲 기록</b></div><div><span>NEXT / EXIT</span><b>종료된 연도 선택 → FOREST-04 · 올해의 숲 → FOREST-01 · 월간 기록 → FOREST-02</b></div><div><span>NAVIGATION</span><b>하단 탭 유지 · 나의 숲 내부 탭 유지</b></div></div>
 <table>
 <tr><td><span class="specnum">1</span></td><td><b>상단 탭</b><br/>올해의 숲 / 월간 기록 / 숲 기록 탭으로 내부 화면을 전환한다.</td></tr>
-<tr><td><span class="specnum">2</span></td><td><b>연도별 숲</b><br/>현재 연도를 포함해 완료 기록이 있는 연도를 최신순으로 표시한다. 각 항목에는 연도, 해당 연도의 숲 이미지, 총 경험 수를 표시한다.</td></tr>
-<tr><td><span class="specnum">3</span></td><td><b>연도 선택</b><br/>연도 항목 선택 시 FOREST-04로 이동한다. 해당 연도의 forest_theme_id / theme_version을 유지한다.</td></tr>
+<tr><td><span class="specnum">2</span></td><td><b>연도별 숲</b><br/><strong>숲 기록에는 현재 연도를 표시하지 않는다.</strong> 연도가 종료되어 확정된 과거 숲만 최신순으로 표시한다. 각 항목에는 연도, 완성된 숲 이미지, 해당 연도의 총 경험 수를 보여준다.</td></tr>
+<tr><td><span class="specnum">3</span></td><td><b>연도 선택</b><br/>종료된 연도 항목 선택 시 FOREST-04로 이동한다. 해당 연도의 forest_theme_id / theme_version과 확정 숲 장면 asset을 유지한다. 현재 진행 중인 숲은 FOREST-01에서만 확인한다.</td></tr>
 <tr><td></td><td><b>빈 상태</b><br/>완료 기록이 없으면 빈 상태 안내를 표시한다.</td></tr>
 </table>
 </div>
@@ -1741,7 +1750,7 @@ section[id]{scroll-margin-top:20px!important}
 <div class="appbar">2025 나의 숲</div>
 <div class="screenbody withtabs">
 <div class="media" style="height:330px">
-<span class="num">1</span><span>선택 연도 숲<br/>큰 숲 이미지를 상하좌우로 이동하며 감상</span>
+<span class="num">1</span><span>선택 연도 숲<br/>확정된 큰 숲 장면 · 상하좌우 드래그</span>
 </div>
 <div class="uirow"><span class="num">2</span><small>62개의 경험</small></div>
 </div>
@@ -1751,7 +1760,7 @@ section[id]{scroll-margin-top:20px!important}
 <div class="meta"><span>SCREEN ID</span><b>FOREST-04</b></div>
 <div class="routebox"><div><span>ENTRY</span><b>FOREST-03 &gt; 연도 선택</b></div><div><span>NEXT / EXIT</span><b>뒤로 → FOREST-03</b></div><div><span>NAVIGATION</span><b>하단 탭 유지</b></div></div>
 <table>
-<tr><td><span class="specnum">1</span></td><td><b>숲 감상</b><br/>선택 연도의 숲을 화면보다 큰 하나의 이미지로 열고, 화면은 그 장면의 일부를 보여주는 뷰포트로 사용한다. 사용자는 드래그/스와이프로 상하좌우를 자유롭게 이동하며 숲 전체를 감상한다. 해당 연도의 forest_theme_id / theme_version을 사용한다.</td></tr>
+<tr><td><span class="specnum">1</span></td><td><b>숲 감상 — Free-pan + pinch zoom viewport</b><br/>FOREST-04는 <strong>연도가 종료되어 확정된 과거 숲</strong>에만 사용한다. 선택 연도의 숲은 화면보다 훨씬 큰 <strong>하나의 평면 2D 일러스트 canvas</strong>다. 나무는 가로 한 줄로 이어지지 않고 <strong>canvas 전체에 상하좌우로 빽빽하게 배치</strong>한다. 앞/뒤로 흐려지거나 작아지는 원근감·소실점은 없으며, y축 위치나 화면 위치에 따라 크기·농도·선명도가 달라지는 원근법, parallax, 3D 깊이 표현을 사용하지 않는다. 화면은 이 canvas를 들여다보는 viewport다. 사용자는 <strong>한 손가락으로 상하좌우·대각선 방향으로 자유롭게 pan</strong>하고, <strong>두 손가락 pinch gesture로 zoom in / zoom out</strong>한다. 축소 한계에서는 <strong>전체 숲 canvas가 viewport 안에 모두 들어와 한 화면에서 전체 구성을 관망할 수 있는 fit-to-view</strong> 상태가 된다. 확대·이동 시에는 현재 배율을 기준으로 <strong>canvas 경계 안으로 이동 범위를 clamp</strong>하여 빈 바깥 영역이 보이지 않게 한다. 페이지 넘김·좌우 스냅 방식은 사용하지 않는다. 해당 연도의 forest_theme_id / theme_version과 확정된 숲 장면 asset을 사용한다.</td></tr>
 <tr><td><span class="specnum">2</span></td><td><b>총 경험 수</b><br/>숲 아래에 해당 연도의 EXPERIENCED 콘텐츠 총 수를 작게 표시한다.</td></tr>
 </table>
 </div>
@@ -1776,9 +1785,9 @@ section[id]{scroll-margin-top:20px!important}
 <div class="meta"><span>SCREEN ID</span><b>MY-01</b></div>
 <div class="routebox">
 <div><span>ENTRY</span><b>하단탭 &gt; MY</b></div>
-<div><span>NEXT / EXIT</span><b>알림/취향 데이터/계정 설정의 하위 화면 · 로그아웃 → AUTH-01</b></div>
+<div><span>NEXT / EXIT</span><b>취향 데이터 더 입력하기 → ONB-01 · 알림/계정 설정의 하위 화면 · 로그아웃 → AUTH-01</b></div>
 <div><span>NAVIGATION</span><b>하단 탭 유지</b></div>
-</div><table><tr><td><span class="specnum">1</span></td><td><b>프로필</b><br/>기본 계정 정보를 확인한다.</td></tr><tr><td><span class="specnum">2</span></td><td><b>알림</b><br/>오늘의 경험 알림을 ON/OFF한다.</td></tr><tr><td><span class="specnum">3</span></td><td><b>취향 데이터</b><br/>초기 온보딩 응답과 현재 관심 상태를 확인하고, 약 10개 응답 이후에도 취향 데이터를 추가로 보강할 수 있다.</td></tr><tr><td><span class="specnum">4</span></td><td><b>계정·데이터</b><br/>로그아웃·탈퇴 및 데이터 처리 정책을 제공한다.</td></tr><tr><td><span class="specnum">5</span></td><td><b>약관</b><br/>서비스 약관과 개인정보 관련 문서를 확인한다.</td></tr></table>
+</div><table><tr><td><span class="specnum">1</span></td><td><b>프로필</b><br/>기본 계정 정보를 확인한다.</td></tr><tr><td><span class="specnum">2</span></td><td><b>알림</b><br/>오늘의 경험 알림을 ON/OFF한다.</td></tr><tr><td><span class="specnum">3</span></td><td><b>취향 데이터 추가 입력</b><br/>마이페이지의 ‘취향 데이터 더 입력하기’를 누르면 중간 화면 없이 ONB-01로 바로 이동한다. 초기 온보딩에서 약 10개 응답을 완료한 이후에도 기존 데이터를 유지하면서 취향 데이터를 추가로 입력할 수 있다.</td></tr><tr><td><span class="specnum">4</span></td><td><b>계정·데이터</b><br/>로그아웃·탈퇴 및 데이터 처리 정책을 제공한다.</td></tr><tr><td><span class="specnum">5</span></td><td><b>약관</b><br/>서비스 약관과 개인정보 관련 문서를 확인한다.</td></tr></table>
 </div>
 </div>
 </section>
@@ -1813,7 +1822,7 @@ section[id]{scroll-margin-top:20px!important}
 <li><strong>선택 출처 기록:</strong> 송림 추천 수락 / 사용자 직접 선택을 구분해 저장한다. 저장→경험 시작률뿐 아니라 추천 수락률과 직접 선택률을 함께 본다.</li>
 <li>올해의 숲: 현재 연도 완료 콘텐츠 전체와 IN_PROGRESS 콘텐츠를 탐색하고, 책·음악·영화 완료 수와 최근 완료 콘텐츠 1~2개를 표시한다.</li>
 <li><strong>월간 기록:</strong> 숲을 반복 생성하지 않고 저장 고유 수·경험 완료 수·주차별 경험 수·콘텐츠 하이라이트로 회고한다.</li>
-<li>숲 기록: 현재 연도부터 과거 연도까지 연도별 숲 이미지와 총 경험 수를 최신순으로 표시한다. 연도 선택 시 해당 숲을 화면보다 큰 하나의 이미지로 열어 상하좌우로 이동하며 감상한다.</li>
+<li><strong>숲 기록:</strong> 현재 연도는 표시하지 않고, 종료되어 확정된 과거 연도 숲만 최신순으로 보여준다. 연도 종료 시 진행형 가로 숲의 완료 나무들을 <strong>가로 한 줄이 아닌 넓은 평면 전체에 상하좌우로 재배치한, 원근 없는 하나의 큰 2D 일러스트 canvas</strong>로 확정·보존한다. 이후 FOREST-04에서 <strong>Free-pan + pinch zoom viewport (bounded 2D canvas)</strong> 방식으로 탐색한다. 한 손가락으로 상하좌우·대각선 방향을 자유롭게 pan하고, 두 손가락 pinch로 zoom in / zoom out한다. 최소 축소 배율은 전체 숲을 한 화면에 관망하는 fit-to-view이며, 이동은 현재 배율의 canvas 경계 안으로 제한한다. 스냅·페이지 넘김은 사용하지 않는다.</li>
 <li><strong>환경 연출:</strong> 새·토끼·개구리 등 작은 애니메이션은 고정/랜덤 환경 연출이며 경험 수·카테고리 비율·평가·저장 횟수에 반응하지 않는다.</li>
 <li><strong>MVP 제외:</strong> 데이터 반응형 숲, 개인별 생성형 테마, 레벨·퀘스트·아이템·수집 보상, 도토리 구매/테마 구매 기능.</li></ul></div></section>
 <script>

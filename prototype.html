@@ -155,81 +155,164 @@ textarea:focus{border-color:#111;box-shadow:inset 0 0 0 1px #111}
 @media(max-width:700px){.entryChoice{grid-template-columns:1fr}.sourceExamples{margin-right:-18px;padding-right:18px}}
 </style>
 
-<style id="import-flow-20260909">
-.importGuide{margin:14px 0 10px;padding:12px 0;border-top:1px solid #bbb;border-bottom:1px solid #bbb}
-.importGuide b{display:block;font-size:14px;margin-bottom:4px}.importGuide span{display:block;font-size:12px;line-height:1.55;color:#666}
-.importPreviewGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:10px 0 14px}
-.importPreview{aspect-ratio:1/1.18;border:1px solid #aaa;background:#f6f6f4;overflow:hidden;position:relative}
-.importPreview img{width:100%;height:100%;object-fit:cover;display:block}
-.importPreview span{position:absolute;left:4px;bottom:4px;background:#fff;border:1px solid #aaa;padding:2px 4px;font-size:9px}
-.importHero{width:100%;max-height:245px;object-fit:contain;border:1px solid #aaa;background:#f7f7f5;display:block;margin:12px 0}
-.importResultHead{display:flex;justify-content:space-between;align-items:end;gap:12px;padding:14px 0 9px;border-bottom:1px solid #aaa}
-.importResultHead b{font-size:15px}.importResultHead span{font-size:10px;color:#777}
-.importCandidate{display:grid;grid-template-columns:24px 44px minmax(0,1fr);gap:9px;align-items:center;padding:12px 0;border-bottom:1px solid #ddd}
-.importCandidate input{width:18px;height:18px;margin:0}
-.importCandidate .miniThumb{width:44px;height:55px;border:1px solid #aaa;background:#f5f5f3;display:flex;align-items:center;justify-content:center;font-size:8px;color:#666}
-.importCandidate .miniThumb.album{height:44px}
-.importCandidate .candidateTitle{font-size:13px;font-weight:800;line-height:1.35}
-.importCandidate .candidateInfo{font-size:10.5px;color:#666;margin-top:2px;line-height:1.4}
-.importCandidate .candidateFlag{display:inline-block;margin-top:5px;border:1px solid #aaa;padding:2px 5px;font-size:9px;color:#555}
-.importCandidate .candidateFlag.need{border-color:#111;color:#111}
-.importSourceStrip{display:flex;gap:7px;overflow-x:auto;margin:10px 0 14px;scrollbar-width:none}
-.importSourceStrip::-webkit-scrollbar{display:none}
-.importSourceThumb{flex:0 0 72px;height:88px;border:1px solid #aaa;background:#f6f6f4;padding:0;overflow:hidden}
-.importSourceThumb img{width:100%;height:100%;object-fit:cover}
-.importSourceThumb.demo{display:flex;align-items:center;justify-content:center;text-align:center;font-size:9px;color:#666;padding:6px}
-.pickList{border-top:1px solid #aaa;margin-top:10px}
-.pickRow{width:100%;border:0;border-bottom:1px solid #ddd;background:#fff;padding:12px 0;display:flex;align-items:center;gap:10px;text-align:left}
-.pickRow .thumb{width:44px;height:55px}.pickRow.album .thumb{height:44px}
-.pickRow .pickAction{font-size:10px;font-weight:700;border:1px solid #999;padding:4px 6px;white-space:nowrap}
+<style id="function-definition-alignment-20260909-1719">
+/* 기능정의서 2026-09-09 기준 프로토타입 보강 */
+.onbRouteBlock{border-top:1px solid #bbb;margin:22px 0 14px}.onbRoute{width:100%;display:grid;grid-template-columns:1fr 22px;gap:4px 10px;text-align:left;border:0;border-bottom:1px solid #ccc;background:#fff;padding:17px 4px}.onbRoute b{font-size:15px}.onbRoute span{font-size:12px;line-height:1.5;color:#666}.onbRoute em{grid-column:2;grid-row:1/3;align-self:center;font-style:normal;font-size:22px;color:#777}.onbSubActions{border-top:1px solid #ddd;margin-top:16px;padding-top:10px}
+.importExamples{display:flex;gap:6px;overflow-x:auto;margin:16px 0 12px;scrollbar-width:none}.importExamples::-webkit-scrollbar{display:none}.importExamples span{flex:0 0 auto;border:1px solid #aaa;padding:6px 8px;font-size:10px;color:#555}.photoPicker{width:100%;height:172px;border:1px solid #999;background:#f7f7f5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;margin:8px 0 10px}.photoPicker .photoIcon{width:34px;height:34px;border:1px solid #999;display:flex;align-items:center;justify-content:center;font-size:20px;background:#fff}.photoPicker b{font-size:14px}.photoPicker small{font-size:11px;color:#777}.importSelectedInfo{padding:8px 0 10px;border-bottom:1px solid #ddd;margin-bottom:6px}.importReviewHead{display:flex;justify-content:space-between;align-items:center;padding:16px 0 10px;border-bottom:1px solid #111;font-size:13px}.importReviewHead span{font-size:11px;color:#666}.importReviewList{border-top:0;margin-bottom:14px}.importItem{display:grid;grid-template-columns:24px 48px minmax(0,1fr);gap:10px;align-items:center;padding:13px 0;border-bottom:1px solid #ddd}.importCheck{width:20px;height:20px;border:1px solid #999;background:#fff;display:flex;align-items:center;justify-content:center;font-size:12px}.importCheck.on{background:#111;color:#fff;border-color:#111}.importThumb{width:48px;height:58px;background:#f5f5f2;border:1px solid #aaa;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700}.importItem.album .importThumb{height:48px}.importItemBody{min-width:0}.importItemBody .title{font-size:13px}.importState{font-size:10px;color:#777;margin-top:4px}.importItemActions{display:flex;gap:10px;margin-top:6px}.importItemActions button{border:0;background:#fff;padding:0;font-size:10px;text-decoration:underline;color:#555}.importBottomActions{display:grid;grid-template-columns:1fr 1fr;gap:7px}.importBottomActions .btn{margin:0}
+.scrapSortRow{display:flex;align-items:center;justify-content:space-between;border-top:1px solid #ddd;padding:11px 0 5px;margin-top:7px}.sortButton{border:0;background:#fff;font-size:11px;color:#555;padding:4px 0}.saveCount{display:inline-block;font-size:10px;color:#555;margin-left:5px}.weeklyPickCount{font-size:10px;color:#555;margin-top:5px}
+.forestScreen{padding-left:18px!important;padding-right:18px!important}.forestTabs{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid #bbb;height:44px;margin:0}.forestTabs button{border:0;border-bottom:2px solid transparent;background:#fff;color:#777;font-size:12px;font-weight:650;padding:0}.forestTabs button.active{color:#111;border-bottom-color:#111;font-weight:800}.forestIntro{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;padding:15px 0 8px}.forestIntro b{font-size:15px}.forestIntro span{font-size:10px;color:#777;text-align:right}.forestFrame{margin-top:2px!important}.forestViewport{height:286px!important;background:linear-gradient(#fbfbfa,#f7f7f4)!important;border:1px solid #aaa!important;overflow-x:auto!important;overflow-y:hidden!important;touch-action:pan-x!important;cursor:grab!important}.forestViewport.dragging{cursor:grabbing!important}.forestWorld{height:284px!important;min-width:100%!important}.forestGround{bottom:36px!important;border-top-color:#8e8e8e!important}.forestTree{width:68px!important;height:115px!important;bottom:37px}.forestTree .shape{transform:translateX(-50%) scale(1.08)!important;transform-origin:center bottom!important}.forestTree.stage-big .shape{transform:translateX(-50%) scale(1.52)!important}.forestTree.stage-tree .shape{transform:translateX(-50%) scale(1.30)!important}.forestTree.stage-bush .shape{transform:translateX(-50%) scale(1.18)!important}.forestTree.active .shape{filter:none}.forestTree.active:after{content:"";position:absolute;left:50%;bottom:-5px;transform:translateX(-50%);width:18px;border-top:1px solid #111}.forestInfo{bottom:94px!important;min-width:118px!important;max-width:150px!important;font-size:9px!important;padding:5px 7px!important}.stage-seed .forestInfo{bottom:60px!important}.stage-sprout .forestInfo{bottom:71px!important}.stage-bush .forestInfo{bottom:74px!important}.stage-tree .forestInfo{bottom:89px!important}.forestAvatar{bottom:28px!important;width:14px!important;height:25px!important;background:transparent!important;border-radius:0!important;z-index:12!important}.forestAvatar:before{content:"";position:absolute;left:4px;top:0;width:6px;height:6px;border-radius:50%;background:#111}.forestAvatar:after{content:"";position:absolute;left:6px;top:7px;width:2px;height:13px;background:#111;box-shadow:-4px 9px 0 -0.5px #111,4px 9px 0 -0.5px #111}.forestEdge{display:none!important}.forestEmpty{position:absolute;inset:1px;z-index:19;background:rgba(250,250,248,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;font-size:12px;line-height:1.6;color:#666}.forestEmpty b{font-size:14px;color:#111;margin-bottom:5px}.forestSummaryRow{padding:13px 1px!important}.forestSummary{gap:7px!important}.forestSummary b{font-size:15px!important}.forestRecent{margin-top:13px!important}.forestRecent .card{margin:6px 0!important}.forestRecent .thumb{width:43px;height:55px}.forestRecent .thumb.album{height:43px}.forestRecent .title{font-size:13px!important}.forestRecent .meta{font-size:10.5px!important}
+.monthPicker{height:52px;display:grid;grid-template-columns:42px 1fr 42px;align-items:center;border-bottom:1px solid #ddd}.monthPicker button{height:100%;border:0;background:#fff;font-size:22px}.monthPicker b{text-align:center;font-size:14px}.monthPicker button:disabled{opacity:.22}.monthlyHeadline{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #bbb;padding:17px 0 15px}.monthlyHeadline>div{display:flex;flex-direction:column;align-items:center}.monthlyHeadline>div+div{border-left:1px solid #ddd}.monthlyHeadline b{font-size:27px;line-height:1}.monthlyHeadline span{font-size:10px;color:#777;margin-top:6px}.monthlyCategories{border-bottom:1px solid #ddd!important}.weekBars{padding:2px 0 9px;border-bottom:1px solid #ddd}.weekRow{display:grid;grid-template-columns:32px 1fr 20px;gap:8px;align-items:center;padding:6px 0;font-size:10px;color:#666}.weekTrack{height:8px;background:#ececea;position:relative}.weekFill{height:100%;background:#111;min-width:0}.weekValue{text-align:right;color:#111;font-weight:700}.monthRecord{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #ddd;background:#fff;text-align:left;width:100%;border-left:0;border-right:0;border-top:0}.monthRecord .thumb{width:42px;height:54px}.monthRecord .thumb.album{height:42px}.monthRecord .recordMeta{font-size:10px;color:#777;margin-top:3px}.monthRecord .grow{min-width:0}.forestYearList{border-top:1px solid #bbb;margin-top:15px}.yearCard{width:100%;border:0;border-bottom:1px solid #ccc;background:#fff;padding:15px 0;text-align:left;display:grid;grid-template-columns:88px 1fr 20px;gap:12px;align-items:center}.yearForestPreview{height:68px;background:#f7f7f5;border:1px solid #bbb;position:relative;overflow:hidden}.yearForestPreview:before{content:"";position:absolute;left:0;right:0;bottom:10px;border-top:1px solid #999}.yearForestPreview i{position:absolute;bottom:11px;width:3px;height:17px;background:#111}.yearForestPreview i:after{content:"";position:absolute;left:50%;bottom:10px;transform:translateX(-50%);width:20px;height:20px;background:#111;border-radius:50%}.yearForestPreview i:nth-child(1){left:14px}.yearForestPreview i:nth-child(2){left:39px;height:23px}.yearForestPreview i:nth-child(2):after{width:27px;height:27px}.yearForestPreview i:nth-child(3){left:69px;height:18px}.yearInfo b{font-size:17px}.yearInfo span{display:block;font-size:11px;color:#666;margin-top:4px}.yearDetailIntro{padding:15px 0 10px}.yearDetailIntro b{font-size:16px;display:block}.yearDetailIntro span{font-size:11px;color:#777}.yearForestViewport{height:430px!important}.yearForestViewport .forestWorld{height:428px!important}.yearForestFrame .forestGround{bottom:56px!important}.yearForestFrame .forestTree{bottom:57px!important}.yearTotal{padding:13px 0;border-bottom:1px solid #ddd;font-size:12px;color:#666}.animal{font-size:9px!important;color:#777!important}.animal.bird{transform:translateY(-55px)}
+@media(max-width:700px){.forestScreen{padding-left:16px!important;padding-right:16px!important}.forestViewport{height:278px!important}.forestWorld{height:276px!important}.yearForestViewport{height:410px!important}.yearForestViewport .forestWorld{height:408px!important}.forestTabs{margin-left:0;margin-right:0}.importBottomActions{grid-template-columns:1fr 1fr}}
 </style>
 
-
-<style id="forest-recap-20260909">
-/* 나의 숲 2차 개편: 올해의 숲 / 월간 기록 / 지난 숲 / 연간 리포트 */
-.forestSubnav{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid #cfcfcf;margin:0 0 12px}
-.forestSubnav button{border:0;background:#fff;padding:11px 2px 9px;font-size:11px;color:#777;border-bottom:2px solid transparent}
-.forestSubnav button.active{color:#111;font-weight:800;border-bottom-color:#111}
-.forestHeadline{padding:11px 0 4px;display:flex;align-items:end;justify-content:space-between;gap:12px}
-.forestHeadline .year{font-size:13px;font-weight:800}.forestHeadline .count{font-size:12px;color:#666}.forestHeadline .count b{font-size:19px;color:#111}
-.forestActions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:12px 0 2px}.forestActions .btn{margin:0;min-height:41px;font-size:12px}
-.forestHint{font-size:10.5px;color:#777;margin:7px 0 0;line-height:1.45}
-
-.monthNav{display:grid;grid-template-columns:38px 1fr 38px;align-items:center;border-bottom:1px solid #bbb;margin:2px 0 16px;padding-bottom:9px}
-.monthNav button{border:0;background:#fff;font-size:23px;padding:2px}.monthNav b{text-align:center;font-size:15px}
-.recapHero{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #999;border-bottom:1px solid #999;margin-bottom:14px}
-.recapMetric{padding:15px 8px 13px}.recapMetric+ .recapMetric{border-left:1px solid #ccc}.recapMetric span{display:block;font-size:10px;color:#777;margin-bottom:3px}.recapMetric b{font-size:26px;line-height:1}.recapMetric em{font-style:normal;font-size:11px;color:#555;margin-left:3px}
-.recapTypes{display:flex;gap:12px;border-bottom:1px solid #ddd;padding:0 0 12px;margin-bottom:18px;font-size:11px;color:#666}.recapTypes b{font-size:14px;color:#111;margin-left:2px}
-.weekChart{display:flex;height:112px;align-items:end;gap:11px;padding:8px 4px 3px;border-bottom:1px solid #bbb;margin-bottom:17px}.weekCol{flex:1;text-align:center}.weekBarWrap{height:80px;display:flex;align-items:end;justify-content:center}.weekBar{width:22px;background:#111;min-height:2px}.weekCol span{display:block;font-size:9px;color:#777;margin-top:5px}.weekCol b{font-size:9px;font-weight:700}
-.highlightRow{border-top:1px solid #ccc;padding:12px 0}.highlightRow .kicker{font-size:10px;color:#777;margin-bottom:4px}.highlightRow .highlightTitle{font-size:14px;font-weight:800}.highlightRow .highlightMeta{font-size:11px;color:#666;margin-top:3px;line-height:1.45}
-.coverRail{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:3px 0 8px}.coverRail::-webkit-scrollbar{display:none}.miniCoverBtn{flex:0 0 72px;border:0;background:#fff;padding:0;text-align:left}.miniCoverArt{height:91px;border:1px solid #aaa;background:#f5f5f3;display:flex;align-items:center;justify-content:center;font-size:9px;color:#666}.miniCoverBtn.album .miniCoverArt{height:72px}.miniCoverTitle{font-size:9.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:5px}.miniCoverMeta{font-size:8.5px;color:#888;margin-top:1px}
-.shareStrip{border-top:1px solid #111;margin-top:17px;padding-top:12px}
-
-.pastGrid{display:grid;grid-template-columns:1fr;gap:15px;padding-bottom:10px}.pastCard{border:0;background:#fff;padding:0;text-align:left}.pastPreview{height:196px;border:1px solid #aaa;position:relative;overflow:hidden;background:#f2f2ef}.pastMetaRow{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0 0}.pastMetaRow b{font-size:15px}.pastMetaRow span{font-size:11px;color:#666}
-.forestPoster{position:relative;overflow:hidden;background:#ecece8;border:1px solid #999}.forestPoster.large{height:470px;margin:0 -20px 12px;border-left:0;border-right:0}.forestPoster.preview{height:100%}.forestPoster:before{content:"";position:absolute;left:-5%;right:-5%;bottom:0;height:44%;background:linear-gradient(to top,#d6d6cf 0,#e9e9e4 68%,transparent 100%)}
-.forestPoster .sun{position:absolute;width:76px;height:76px;border:1px solid #aaa;border-radius:50%;right:38px;top:38px;opacity:.55}.forestPoster .hill{position:absolute;left:-10%;right:-10%;height:120px;border-radius:50% 50% 0 0/35% 35% 0 0;background:#ddd;bottom:64px;opacity:.75}.forestPoster .silTree{position:absolute;bottom:36px;width:5px;background:#333}.forestPoster .silTree:before{content:"";position:absolute;left:50%;transform:translateX(-50%);bottom:18px;width:48px;height:62px;background:#555;border-radius:48% 52% 44% 56%}.forestPoster .silTree.small:before{width:34px;height:44px}.forestPoster .silTree.tall:before{width:58px;height:84px}.forestPoster .tinyAnimal{position:absolute;font-size:12px;color:#555;animation:forestDrift 4.8s ease-in-out infinite alternate}.forestPoster .tinyAnimal.a2{animation-delay:1.3s}.forestPoster .tinyAnimal.a3{animation-delay:2.2s}@keyframes forestDrift{from{transform:translateX(-2px) translateY(0)}to{transform:translateX(3px) translateY(-2px)}}
-.theme-2024{background:linear-gradient(#f1f1ef,#e7e7e2)}.theme-2025{background:linear-gradient(#ededeb,#e1e1dc)}.theme-2026{background:linear-gradient(#f6f6f3,#e7e7e1)}
-.pastHeroSummary{text-align:center;padding:5px 0 13px}.pastHeroSummary .big{font-size:30px;font-weight:850;letter-spacing:-.04em}.pastHeroSummary .sub{font-size:11px;color:#666;margin-top:5px}.pastHeroActions{display:grid;grid-template-columns:1fr 1fr;gap:7px}.pastHeroActions .btn{margin:0;font-size:12px}
-.reportHead{padding:7px 0 15px;border-bottom:1px solid #999}.reportHead .year{font-size:12px;color:#777}.reportHead h2{font-size:24px;margin:3px 0 0}.annualTrend{display:flex;height:118px;align-items:end;gap:4px;padding:8px 0 3px;border-bottom:1px solid #bbb}.annualTrend .m{flex:1;text-align:center}.annualTrend .barwrap{height:85px;display:flex;align-items:end;justify-content:center}.annualTrend .bar{width:11px;background:#111;min-height:1px}.annualTrend span{display:block;font-size:7.5px;color:#777;margin-top:4px}.reportSection{margin-top:20px}.reportSection h3{font-size:13px;margin:0 0 8px}.reportList{border-top:1px solid #bbb}.reportList button{width:100%;border:0;border-bottom:1px solid #ddd;background:#fff;padding:10px 0;display:flex;align-items:center;gap:9px;text-align:left}.reportList .rCover{width:40px;height:51px;border:1px solid #aaa;background:#f5f5f3;display:flex;align-items:center;justify-content:center;font-size:8px;flex:none}.reportList button.album .rCover{height:40px}.reportList .rTitle{font-size:12px;font-weight:800}.reportList .rMeta{font-size:9.5px;color:#777;margin-top:2px}
-.sharePreview{border:1px solid #999;background:#f5f5f2;padding:17px;margin:8px 0 14px;text-align:center}.sharePreview .shareForest{height:150px;margin-bottom:13px}.sharePreview b{font-size:18px}.sharePreview p{font-size:11px!important;margin:5px 0 0!important}
-@media(max-width:700px){.forestPoster.large{margin-left:-18px;margin-right:-18px}.forestSubnav{margin-left:-18px;margin-right:-18px;padding:0 12px}.forestSubnav button{font-size:10.5px}}
+<style id="forest-year-pan-correction-20260909-174520">
+/* FOREST-04: 끝난 연도의 확정 숲. 하나의 큰 2D 장면을 확대/축소 없이 지도처럼 상하좌우 이동. */
+.yearDetailIntro{padding:15px 0 10px!important}
+.yearDetailIntro span{display:block;margin-top:4px;font-size:11px;color:#777}
+.yearForestFrame{margin-top:4px!important}
+.yearForestViewport{
+  height:360px!important;
+  overflow:hidden!important;
+  position:relative!important;
+  background:#f7f7f5!important;
+  border:1px solid #aaa!important;
+  overscroll-behavior:contain!important;
+  touch-action:none!important;
+  cursor:grab!important;
+  user-select:none!important;
+  -webkit-user-select:none!important;
+}
+.yearForestViewport.dragging{cursor:grabbing!important}
+.yearForestCanvas{
+  position:absolute!important;
+  left:0!important;top:0!important;
+  width:760px!important;height:620px!important;
+  min-width:760px!important;min-height:620px!important;
+  will-change:transform!important;
+  transform:translate3d(0,0,0);
+}
+.yearForestViewport .forestWorld{
+  position:absolute!important;
+  left:0!important;top:0!important;
+  width:760px!important;height:620px!important;
+  min-width:760px!important;
+  background:linear-gradient(#fbfbfa,#f3f3ef)!important;
+}
+.yearForestFrame .forestGround{bottom:70px!important}
+.yearForestFrame .forestTree{bottom:71px!important}
+.yearPanHint{padding:9px 0 0;font-size:10.5px;color:#777;line-height:1.5}
+.yearForestFrame>.forestEdge{display:none!important}
+@media(max-width:700px){.yearForestViewport{height:350px!important}}
 </style>
 
+<style id="forest-year-panzoom-patch-20260909-181320">
+/* FOREST-04: 원근 없는 큰 2D 숲 일러스트를 bounded free-pan + pinch zoom으로 감상 */
+.yearForestViewport{
+  height:360px!important;
+  overflow:hidden!important;
+  position:relative!important;
+  background:#f7f7f5!important;
+  border:1px solid #aaa!important;
+  overscroll-behavior:contain!important;
+  touch-action:none!important;
+  cursor:grab!important;
+  user-select:none!important;
+  -webkit-user-select:none!important;
+}
+.yearForestViewport.dragging{cursor:grabbing!important}
+.yearForestCanvas{
+  position:absolute!important;
+  left:0!important;
+  top:0!important;
+  width:760px!important;
+  height:620px!important;
+  min-width:760px!important;
+  min-height:620px!important;
+  transform-origin:0 0!important;
+  will-change:transform!important;
+}
+.yearForestViewport .forestWorld{
+  position:absolute!important;
+  left:0!important;
+  top:0!important;
+  width:760px!important;
+  height:620px!important;
+  min-width:760px!important;
+  min-height:620px!important;
+  background:linear-gradient(#fbfbfa,#f3f3ef)!important;
+}
+.yearForestFrame .forestGround{bottom:70px!important}
+.yearForestFrame .forestTree{bottom:71px!important}
+.yearViewControls{display:flex;justify-content:center;gap:8px;padding:10px 0 0}
+.yearViewControls button{height:30px;border:1px solid #bbb;background:#fff;padding:0 12px;font-size:12px;font-weight:700;color:#111}
+.yearViewControls .zoomBtn{width:36px;padding:0;font-size:20px;line-height:1}
+.yearViewControls button:active{transform:translateY(1px)}
+.yearPanHint{padding:9px 0 0;font-size:10.5px;color:#777;line-height:1.5;text-align:center}
+@media(max-width:700px){.yearForestViewport{height:350px!important}}
+</style>
+
+<style id="forest-current-arrows-and-flat-year-forest-20260909-1940">
+/* FOREST-01: 제목성 보조 문구 없이 숲 자체만 노출. 좌우 컨트롤은 항상 표시. */
+#forest .forestFrame{position:relative!important;margin-top:14px!important}
+#forest .forestEdge{display:block!important;position:absolute!important;top:50%!important;transform:translateY(-50%)!important;z-index:30!important;width:34px!important;height:54px!important;border:0!important;background:rgba(255,255,255,.86)!important;color:#111!important;font-size:30px!important;line-height:1!important;padding:0!important}
+#forest .forestEdge.left{left:5px!important}
+#forest .forestEdge.right{right:5px!important}
+#forest .forestEdge:disabled{opacity:.25!important}
+
+/* FOREST-04: 현재 연도 숲의 바닥선/나무 컴포넌트를 재사용하지 않는 독립적인 평면 숲. */
+#forestYear .yearDetailIntro{padding:14px 0 8px!important}
+#forestYear .yearDetailIntro b{font-size:17px!important}
+#forestYear .yearForestFrame{margin-top:2px!important}
+#forestYear .yearForestViewport{height:390px!important;background:#fafafa!important}
+#forestYear .yearForestWorld{background:#fafafa!important;overflow:hidden!important}
+#forestYear .forestGround,#forestYear .animal,#forestYear .yearViewControls,#forestYear .yearPanHint{display:none!important}
+.yearTree{position:absolute;width:48px;height:72px;transform:translate(-50%,-50%);pointer-events:none}
+.yearTree .trunk{position:absolute;left:50%;bottom:4px;width:5px;height:30px;transform:translateX(-50%);background:#111;border-radius:2px}
+.yearTree .crown{position:absolute;left:50%;bottom:25px;width:42px;height:42px;transform:translateX(-50%);background:#111;border-radius:50% 50% 46% 54%}
+.yearTree.v2 .crown{width:38px;height:46px;border-radius:46% 54% 48% 52%}
+.yearTree.v3 .crown{width:46px;height:38px;border-radius:52% 48% 55% 45%}
+.yearTree.v2 .trunk{height:28px}.yearTree.v3 .trunk{height:32px}
+</style>
+
+<style id="forest-year-fullscreen-patch-20260909-1942">
+/* FOREST-04: 숲 기록 상세에서는 숲 자체가 남은 화면을 가득 차지한다. */
+#forestYear{
+  overflow:hidden!important;
+  padding-bottom:0!important;
+}
+#forestYear .apphead{flex:0 0 auto!important}
+#forestYear .yearDetailIntro{flex:0 0 auto!important;padding:10px 0 8px!important}
+#forestYear .yearForestFrame{
+  position:relative!important;
+  flex:1 1 auto!important;
+  min-height:0!important;
+  margin:0 -18px!important;
+}
+#forestYear .yearForestViewport{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  border-left:0!important;
+  border-right:0!important;
+  border-bottom:0!important;
+}
+#forestYear .yearTotal{display:none!important}
+@media(max-width:700px){
+  #forestYear .yearForestFrame{margin:0 -16px!important}
+  #forestYear .yearForestViewport{height:100%!important}
+}
+</style>
 </head>
 <body>
 <div class="prototypeTools">
-  <b>프로토타입 상태 확인</b>
-  <button onclick="demoNewUser()">신규 사용자 흐름</button>
-  <button onclick="demoRecommendation()">금주의 추천 · 미선택</button>
-  <button onclick="demoPick('book')">책 선택 상태</button>
-  <button onclick="demoPick('album')">음반 선택 상태</button>
-  <button onclick="demoPick('movie')">영화 선택 상태</button>
-  <button onclick="advanceDemoDay()">다음 날 상태</button>
-  <button onclick="go('forest')">올해의 숲</button><button onclick="go('monthlyForest')">월간 기록</button><button onclick="go('pastForest')">지난 숲</button>
-  <button onclick="go('scrap')">스크랩</button>
-  <button onclick="openNotionLibrary()">실제 독서목록 212권</button>
-  <button onclick="openDirectEntry('scrap')">직접 기록 검색</button>
-  <button onclick="startExternalShareDemo('instagramBook')">SNS 공유 식별</button>
+  <button onclick="demoNewUser()">신규 사용자</button>
+  <button onclick="demoRecommendation()">추천 미선택</button>
+  <button onclick="advanceDemoDay()">다음 날</button>
+  <button onclick="startExternalShareDemo('instagramBook')">외부 공유 진입</button>
+  <button onclick="adjustForestDemo(10)">10그루 +</button>
+  <button onclick="adjustForestDemo(-10)">10그루 −</button>
+  <button onclick="resetForestDemo()">나무 테스트 초기화</button>
 </div>
 <div class="device" id="device">
   <div class="status"><span>9:41</span><div class="island"></div><span>5G ▰</span></div>
@@ -284,66 +367,63 @@ textarea:focus{border-color:#111;box-shadow:inset 0 0 0 1px #111}
   </section>
 
   <section class="screen focus" id="onbIntro">
-    <h1 class="hero">어떻게 시작할까요?</h1>
-    <p>이미 쌓아둔 관심이 있다면 가져오고, 없다면 직접 골라 시작할 수 있습니다.</p>
-    <div class="importGuide"><b>저장해둔 콘텐츠가 있나요?</b><span>서점 장바구니·찜 목록·SNS 저장 화면의 스크린샷을 가져오면 여러 콘텐츠를 한 번에 정리하는 흐름을 확인할 수 있습니다.</span></div>
-    <button class="btn" onclick="startImport('onboarding')">저장한 콘텐츠 가져오기</button>
-    <button class="btn secondary" onclick="go('onboarding');renderOnboarding()">10개 직접 골라보기</button>
-    <div class="note">두 방법을 섞어서 진행할 수 있습니다. 직접 선택과 가져온 콘텐츠를 합쳐 10개 이상이면 송림을 시작할 수 있습니다.</div>
+    <div class="apphead"><button class="back" id="tasteEntryBack" onclick="tasteEntryGoBack()" aria-label="이전 화면으로 돌아가기">‹</button><h1 id="tasteEntryTitle">송림 시작하기</h1><span></span></div>
+    <h1 class="hero">이미 저장해둔 콘텐츠가 있나요?</h1>
+    <p>서점 장바구니·찜 목록·SNS 저장 화면처럼 이미 쌓여 있는 관심을 사진으로 가져오거나, 책·음반·영화를 직접 골라 시작할 수 있습니다.</p>
+    <div class="onbRouteBlock">
+      <button class="onbRoute" onclick="openImport('onboarding')"><b>저장한 콘텐츠 가져오기</b><span>사진·스크린샷 여러 장에서 콘텐츠를 한 번에 찾습니다.</span><em>›</em></button>
+      <button class="onbRoute" onclick="go('onboarding');renderOnboarding()"><b>10개 직접 골라보기</b><span>아는 콘텐츠만 관심 있음 / 경험함 / 싫음으로 답합니다.</span><em>›</em></button>
+    </div>
+    <div class="note">두 방법은 섞어서 진행할 수 있습니다. 직접 응답과 가져오기에서 저장한 항목을 합쳐 유효 취향 신호 10개 이상이면 바로 송림을 시작합니다.</div>
   </section>
 
   <section class="screen focus" id="onboarding">
-    <div class="apphead"><span class="headbtn">취향 선택</span><button class="headbtn hidden" id="onbStartTop" onclick="finishOnboarding()">송림 시작하기</button></div>
+    <div class="apphead"><button class="back" onclick="go('onbIntro')">‹</button><h1>10개 직접 골라보기</h1><button class="headbtn hidden" id="onbStartTop" onclick="finishOnboarding()">시작</button></div>
     <div class="progress"><i id="onbProgress"></i></div>
     <div class="small" id="onbCount"></div>
     <div class="cover" id="onbCover">BOOK COVER</div>
     <h2 class="center" id="onbTitle"></h2><p class="center" id="onbCreator"></p>
     <div class="choices" id="onbChoices"></div>
     <button class="skip" onclick="skipOnboarding()">건너뛰기 · 잘 모르겠어요</button>
-    <button class="btn secondary" onclick="startImport('onboarding')">사진으로 저장한 콘텐츠 가져오기</button>
-    <button class="btn text" onclick="openManualTaste()">원하는 책·음반·영화 직접 입력</button>
-    <button class="btn secondary hidden" id="onbStartBottom" onclick="finishOnboarding()">송림 시작하기</button>
+    <div class="onbSubActions">
+      <button class="btn secondary" onclick="openImport('onboarding')">저장한 콘텐츠 가져오기</button>
+      <button class="btn text" onclick="openManualTaste()">원하는 책·음반·영화 직접 입력</button>
+    </div>
+    <button class="btn hidden" id="onbStartBottom" onclick="finishOnboarding()">송림 시작하기</button>
   </section>
 
-
-  <section class="screen focus" id="importPhoto">
-    <div class="apphead"><button class="back" onclick="importBack()">‹</button><h1>사진으로 가져오기</h1><span></span></div>
-    <h1 class="hero">이미 저장해둔 콘텐츠를 가져오세요</h1>
-    <p>장바구니, 찜 목록, SNS 저장 화면처럼 콘텐츠가 여러 개 보이는 스크린샷도 괜찮습니다.</p>
-    <input id="importFiles" type="file" accept="image/*" multiple class="hidden" onchange="handleImportFiles(this.files)">
-    <button class="btn" onclick="$('importFiles').click()">사진 / 스크린샷 선택</button>
-    <div id="importPreviewGrid" class="importPreviewGrid"></div>
-    <div id="importPhotoNote" class="note">실제 프로토타입에서는 선택한 사진을 브라우저 안에서만 미리 보여줍니다. 임의 이미지의 실제 AI 인식은 서버 연동 전이라, 결과 확인 화면은 샘플 후보로 시뮬레이션합니다.</div>
-    <button class="btn hidden" id="importAnalyzeBtn" onclick="analyzeImport()">콘텐츠 찾기</button>
-    <button class="btn secondary" onclick="loadImportDemo()">사진 없이 샘플 흐름 보기</button>
+  <section class="screen focus" id="importPhotos">
+    <div class="apphead"><button class="back" onclick="cancelImport()">‹</button><h1>사진으로 가져오기</h1><span></span></div>
+    <h1 class="hero">저장해둔 화면을 선택해주세요</h1>
+    <p>교보·알라딘 장바구니/보관함, 책·영화 찜 목록, Instagram 저장 화면처럼 작품이 여러 개 보이는 사진이나 스크린샷을 선택할 수 있습니다.</p>
+    <div class="importExamples"><span>서점 장바구니</span><span>찜 목록</span><span>SNS 저장 화면</span></div>
+    <input class="hidden" id="importFileInput" type="file" accept="image/*" multiple onchange="handleImportFiles(this.files)">
+    <button class="photoPicker" onclick="document.getElementById('importFileInput').click()"><span class="photoIcon">＋</span><b>사진 / 스크린샷 선택</b><small>여러 장 선택 가능</small></button>
+    <div id="importSelectedInfo" class="small importSelectedInfo">선택한 사진이 없습니다.</div>
+    <button class="btn secondary" onclick="loadImportDemo()">프로토타입 샘플 3장 선택</button>
+    <button class="btn" id="importAnalyzeBtn" disabled onclick="analyzeImportBatch()">콘텐츠 찾기</button>
+    <button class="btn text" onclick="cancelImport()">취소</button>
   </section>
 
   <section class="screen focus" id="importReview">
-    <div class="apphead"><button class="back" onclick="go('importPhoto')">‹</button><h1>가져온 콘텐츠 확인</h1><span></span></div>
-    <div class="importResultHead"><div><b id="importFoundTitle">콘텐츠를 찾았어요</b><div class="small">잘못 찾은 항목은 빼거나 다른 후보로 바꿀 수 있습니다.</div></div><span id="importSelectedCount"></span></div>
-    <div class="sectionlabel">원본 사진</div>
-    <div id="importSourceStrip" class="importSourceStrip"></div>
-    <div class="sectionlabel">찾은 콘텐츠</div>
-    <div id="importCandidateList"></div>
-    <button class="btn" onclick="saveImportedCandidates()">선택한 콘텐츠 모두 저장</button>
-    <button class="btn secondary" onclick="go('importPhoto')">다른 사진 추가</button>
-    <button class="btn text" onclick="openDirectEntry(state.importReturn==='onboarding'?'onboarding':'scrap')">제목으로 직접 찾기</button>
-  </section>
-
-  <section class="screen app" id="directPick">
-    <div class="apphead"><button class="back" onclick="go('today')">‹</button><h1>직접 고르기</h1><span></span></div>
-    <p style="margin-top:14px">내 스크랩의 경험 전 콘텐츠 중 이번 주에 시작할 하나를 고릅니다. 여러 번 저장한 콘텐츠부터 보여줍니다.</p>
-    <div class="search"><input id="directPickSearch" placeholder="책·음반·영화 검색" oninput="renderDirectPick()"></div>
-    <div class="chips" id="directPickChips">
-      <button class="chip active" onclick="setDirectPickType('all',this)">전체</button>
-      <button class="chip" onclick="setDirectPickType('book',this)">책</button>
-      <button class="chip" onclick="setDirectPickType('album',this)">음반</button>
-      <button class="chip" onclick="setDirectPickType('movie',this)">영화</button>
-    </div>
-    <div id="directPickList" class="pickList"></div>
+    <div class="apphead"><button class="back" onclick="go('importPhotos')">‹</button><h1>가져온 콘텐츠 확인</h1><span></span></div>
+    <div class="importReviewHead"><b id="importFoundCount">찾은 콘텐츠 0개</b><span id="importSelectedCount">0개 선택</span></div>
+    <p class="small">잘못 찾은 항목은 제외하거나 다른 후보로 바꿀 수 있습니다. 같은 콘텐츠가 여러 장에서 겹치면 한 항목으로 합칩니다.</p>
+    <div id="importReviewList" class="importReviewList"></div>
+    <button class="btn" onclick="saveImportBatch()">선택한 콘텐츠 모두 저장</button>
+    <div class="importBottomActions"><button class="btn secondary" onclick="go('importPhotos')">다른 사진 추가</button><button class="btn secondary" onclick="openDirectEntry(state.importOrigin==='onboarding'?'onboarding':'scrap')">직접 검색</button></div>
   </section>
 
   <section class="screen app" id="today"><div class="apphead"><h1>금주의 추천</h1><span></span></div><div id="todayBody"></div></section>
+
+  <section class="screen app" id="weeklyPick">
+    <div class="apphead"><button class="back" onclick="go('today')">‹</button><h1>직접 고르기</h1><span></span></div>
+    <p style="margin-top:14px">경험 전 스크랩에서 이번 주에 경험할 하나를 직접 선택합니다.</p>
+    <div class="search"><input id="weeklyPickSearch" placeholder="제목·저자·아티스트·감독 검색" oninput="renderWeeklyPick()"></div>
+    <div class="chips" id="weeklyPickChips"><button class="chip active" onclick="setWeeklyPickType('all',this)">전체</button><button class="chip" onclick="setWeeklyPickType('book',this)">책</button><button class="chip" onclick="setWeeklyPickType('album',this)">음반</button><button class="chip" onclick="setWeeklyPickType('movie',this)">영화</button></div>
+    <div class="small" style="margin:8px 0 4px">많이 저장한 순 · 최근 저장순</div>
+    <div id="weeklyPickList"></div>
+  </section>
 
   <section class="screen app" id="scrap">
     <div class="apphead"><h1>스크랩</h1><button class="headbtn" onclick="startShareFlow()">+ 저장</button></div>
@@ -356,7 +436,8 @@ textarea:focus{border-color:#111;box-shadow:inset 0 0 0 1px #111}
     <div class="chips" id="typeChips">
       <button class="chip active" onclick="setTypeFilter('all',this)">전체</button><button class="chip" onclick="setTypeFilter('book',this)">책</button><button class="chip" onclick="setTypeFilter('album',this)">음반</button><button class="chip" onclick="setTypeFilter('movie',this)">영화</button>
     </div>
-    <div class="small">많이 저장한 순 · 같은 횟수는 최근 저장순</div><div id="scrapList"></div>
+    <div class="scrapSortRow"><span class="small">저장한 콘텐츠</span><button class="sortButton" id="scrapSortButton" onclick="toggleScrapSort()">많이 저장한 순⌄</button></div>
+    <div id="scrapList"></div>
   </section>
 
   <section class="screen app" id="detail">
@@ -423,40 +504,44 @@ textarea:focus{border-color:#111;box-shadow:inset 0 0 0 1px #111}
     <div id="directResults" class="candidateList"></div>
   </section>
 
-  <section class="screen app" id="forest">
-    <div class="apphead"><h1>나의 숲</h1><span></span></div>
-    <div class="forestSubnav"><button class="active" onclick="go('forest')">올해의 숲</button><button onclick="go('monthlyForest')">월간 기록</button><button onclick="go('pastForest')">지난 숲</button></div>
-    <div class="forestHeadline"><div class="year" id="forestYearLabel">2026</div><div class="count"><b id="forestExperienceCount">0</b>개의 경험</div></div>
+  <section class="screen app forestScreen" id="forest">
+    <div class="forestTabs"><button class="active" onclick="go('forest')">올해의 숲</button><button onclick="go('forestMonth')">월간 기록</button><button onclick="go('forestArchive')">숲 기록</button></div>
+    <span id="forestYearLabel" hidden></span>
     <div class="forestFrame">
-      <div class="forestViewport" id="forestViewport"><div class="forestWorld" id="forestWorld"><div class="forestGround"></div><div class="forestAvatar" id="forestAvatar"></div></div></div>
-      <button class="forestEdge left" onclick="moveForest(-1)">‹</button><button class="forestEdge right" onclick="moveForest(1)">›</button>
+      <div class="forestViewport" id="forestViewport" aria-label="올해의 숲 · 좌우로 이동해서 탐색"><div class="forestWorld" id="forestWorld"><div class="forestGround"></div></div></div>
+      <button class="forestEdge left" type="button" aria-label="이전 나무" onclick="moveForest(-1)">‹</button>
+      <button class="forestEdge right" type="button" aria-label="다음 나무" onclick="moveForest(1)">›</button>
+      <div class="forestEmpty hidden" id="forestEmpty"></div>
     </div>
-    <div class="forestHint">올해 경험한 콘텐츠를 좌우로 둘러보세요. 경험 중인 콘텐츠도 지금의 성장 상태로 함께 보입니다.</div>
-    <div class="forestActions"><button class="btn secondary" onclick="openAnnualReport(2026,'forest')">올해 기록 보기</button><button class="btn" onclick="shareForestYear(2026)">올해의 숲 공유</button></div>
+    <div class="forestSummaryRow"><div class="forestSummary"><span>책 <b id="bookStat">0</b></span><i></i><span>음반 <b id="albumStat">0</b></span><i></i><span>영화 <b id="movieStat">0</b></span></div><span class="small">완료한 경험</span></div>
+    <div class="forestRecent"><div class="sectionlabel">최근 본 콘텐츠</div><div id="forestRecentList"></div></div>
   </section>
 
-  <section class="screen app" id="monthlyForest">
-    <div class="apphead"><h1>나의 숲</h1><span></span></div>
-    <div class="forestSubnav"><button onclick="go('forest')">올해의 숲</button><button class="active" onclick="go('monthlyForest')">월간 기록</button><button onclick="go('pastForest')">지난 숲</button></div>
-    <div class="monthNav"><button onclick="changeMonth(-1)">‹</button><b id="monthLabel">2026년 9월</b><button id="nextMonthBtn" onclick="changeMonth(1)">›</button></div>
-    <div id="monthlyBody"></div>
+  <section class="screen app forestScreen" id="forestMonth">
+    <div class="forestTabs"><button onclick="go('forest')">올해의 숲</button><button class="active" onclick="go('forestMonth')">월간 기록</button><button onclick="go('forestArchive')">숲 기록</button></div>
+    <div class="monthPicker"><button onclick="changeForestMonth(-1)">‹</button><b id="forestMonthLabel">2026년 9월</b><button id="forestMonthNext" onclick="changeForestMonth(1)">›</button></div>
+    <div class="monthlyHeadline"><div><b id="monthSavedCount">0</b><span>저장한 콘텐츠</span></div><div><b id="monthCompletedCount">0</b><span>경험한 콘텐츠</span></div></div>
+    <div class="forestSummaryRow monthlyCategories"><div class="forestSummary"><span>책 <b id="monthBookCount">0</b></span><i></i><span>음반 <b id="monthAlbumCount">0</b></span><i></i><span>영화 <b id="monthMovieCount">0</b></span></div><span class="small">경험 완료</span></div>
+    <div class="sectionlabel">주차별 경험 흐름</div><div class="weekBars" id="monthWeekBars"></div>
+    <div class="forestRecent"><div class="sectionlabel" id="monthListTitle">9월에 경험한 콘텐츠</div><div id="monthContentList"></div></div>
+    <button class="btn secondary" onclick="shareMonthlyRecord()">이번 달 기록 공유</button>
   </section>
 
-  <section class="screen app" id="pastForest">
-    <div class="apphead"><h1>나의 숲</h1><span></span></div>
-    <div class="forestSubnav"><button onclick="go('forest')">올해의 숲</button><button onclick="go('monthlyForest')">월간 기록</button><button class="active" onclick="go('pastForest')">지난 숲</button></div>
-    <p style="margin-top:4px">한 해의 경험을 한 장의 숲으로 남깁니다.</p>
-    <div id="pastForestGrid" class="pastGrid"></div>
+  <section class="screen app forestScreen" id="forestArchive">
+    <div class="forestTabs"><button onclick="go('forest')">올해의 숲</button><button onclick="go('forestMonth')">월간 기록</button><button class="active" onclick="go('forestArchive')">숲 기록</button></div>
+    <p style="margin-top:16px">완성된 지난 숲을 연도별로 모아봅니다.</p>
+    <div id="forestYearList" class="forestYearList"></div>
   </section>
 
-  <section class="screen app" id="pastForestDetail">
-    <div class="apphead"><button class="back" onclick="go('pastForest')">‹</button><h1 id="pastForestTitle">지난 숲</h1><span></span></div>
-    <div id="pastForestDetailBody"></div>
-  </section>
-
-  <section class="screen app" id="annualReport">
-    <div class="apphead"><button class="back" onclick="annualReportBack()">‹</button><h1>연간 리포트</h1><span></span></div>
-    <div id="annualReportBody"></div>
+  <section class="screen app forestScreen" id="forestYear">
+    <div class="apphead"><button class="back" onclick="go('forestArchive')">‹</button><h1 id="forestYearDetailTitle">2025 나의 숲</h1><span></span></div>
+    <div class="yearDetailIntro"><b id="forestYearDetailCount">0개의 경험</b></div>
+    <div class="forestFrame yearForestFrame">
+      <div class="forestViewport yearForestViewport" id="yearForestViewport" aria-label="상하좌우로 드래그하고 두 손가락으로 확대 축소하며 감상하는 연도별 숲">
+        <div class="yearForestCanvas" id="yearForestCanvas"><div class="forestWorld" id="yearForestWorld"></div></div>
+      </div>
+    </div>
+    <div class="yearTotal" id="yearTotalText">0개의 경험</div>
   </section>
 
   <section class="screen app" id="my">
@@ -466,19 +551,13 @@ textarea:focus{border-color:#111;box-shadow:inset 0 0 0 1px #111}
     <div class="menu">
       <div class="menuitem" onclick="openProfile()"><span>프로필</span><span>›</span></div>
       <div class="menuitem"><span>오늘의 경험 알림</span><div class="switch on" id="notifSwitch" onclick="toggleNotif(event)"></div></div>
-      <div class="menuitem" onclick="go('tasteMore')"><span>취향 데이터 더 입력하기</span><span>›</span></div>
+      <div class="menuitem" onclick="go('onbIntro')"><span>취향 데이터 더 입력하기</span><span>›</span></div>
       <div class="menuitem" onclick="openAccount()"><span>계정 / 데이터</span><span>›</span></div>
       <div class="menuitem" onclick="openTerms()"><span>약관</span><span>›</span></div>
     </div>
     <button class="btn secondary" style="margin-top:20px" onclick="logout()">로그아웃</button>
   </section>
 
-  <section class="screen app" id="tasteMore">
-    <div class="apphead"><button class="back" onclick="go('my')">‹</button><h1>취향 데이터</h1><span></span></div>
-    <p style="margin-top:15px">초기 응답 이후에도 책·음반·영화 취향 데이터를 추가로 보강할 수 있습니다.</p>
-    <button class="btn" onclick="go('onboarding');renderOnboarding()">취향 데이터 더 입력하기</button>
-    <div class="note">기존 UserContent는 유지하고 새 응답 또는 상태 변경만 반영합니다.</div>
-  </section>
 
   <div class="tabbar" id="tabs">
     <button data-tab="today" onclick="tab('today')"><span class="ico">⌂</span>금주의 추천</button>
@@ -504,14 +583,14 @@ const baseCompleted=[
  ['movie','애프터썬','샬롯 웰스',5],['movie','헤어질 결심','박찬욱',5],['movie','패스트 라이브즈','셀린 송',null],['movie','드라이브 마이 카','하마구치 류스케',4],['movie','에브리씽 에브리웨어 올 앳 원스','다니엘 콴·다니엘 샤이너트',null],['movie','월터의 상상은 현실이 된다','벤 스틸러',4]
 ];
 let nextId=1;
-let contents=baseCompleted.map((x,i)=>({id:nextId++,type:x[0],title:x[1],creator:x[2],status:'experienced',rating:x[3],source:i%3===0?'온보딩':i%3===1?'웹 공유':'Instagram 공유',saved:100-i,saveCount:(i%4)+1,completed:i<13?`2026.09.${String(1+(i%9)).padStart(2,'0')}`:`2026.08.${String(18+(i%12)).padStart(2,'0')}`,growth:4}));
+let contents=baseCompleted.map((x,i)=>({id:nextId++,type:x[0],title:x[1],creator:x[2],status:'experienced',rating:x[3],source:i%3===0?'온보딩':i%3===1?'웹 공유':'Instagram 공유',saved:100-i,completed:`2026.08.${String(Math.max(1,31-i)).padStart(2,'0')}`,growth:4}));
 contents.push(
- {id:nextId++,type:'album',title:'In Rainbows',creator:'Radiohead',status:'interested',source:'Instagram 공유',saved:130,saveCount:3,tracks:['Nude','15 Step','Weird Fishes/Arpeggi','All I Need'],trackIndex:0},
- {id:nextId++,type:'book',title:'노르웨이의 숲',creator:'무라카미 하루키',status:'interested',source:'웹 공유',saved:129,saveCount:2},
- {id:nextId++,type:'movie',title:'퍼펙트 데이즈',creator:'빔 벤더스',status:'interested',source:'Instagram 공유',saved:128,saveCount:2},
- {id:nextId++,type:'book',title:'코스모스',creator:'칼 세이건',status:'interested',source:'웹 공유',saved:127,saveCount:4},
- {id:nextId++,type:'album',title:'Kind of Blue',creator:'Miles Davis',status:'interested',source:'온보딩',saved:126,saveCount:1,tracks:['So What','Freddie Freeloader','Blue in Green'],trackIndex:0},
- {id:nextId++,type:'movie',title:'문라이트',creator:'배리 젠킨스',status:'interested',source:'온보딩',saved:125,saveCount:1}
+ {id:nextId++,type:'album',title:'In Rainbows',creator:'Radiohead',status:'interested',source:'Instagram 공유',saved:130,tracks:['Nude','15 Step','Weird Fishes/Arpeggi','All I Need'],trackIndex:0},
+ {id:nextId++,type:'book',title:'노르웨이의 숲',creator:'무라카미 하루키',status:'interested',source:'웹 공유',saved:129},
+ {id:nextId++,type:'movie',title:'퍼펙트 데이즈',creator:'빔 벤더스',status:'interested',source:'Instagram 공유',saved:128},
+ {id:nextId++,type:'book',title:'코스모스',creator:'칼 세이건',status:'interested',source:'웹 공유',saved:127},
+ {id:nextId++,type:'album',title:'Kind of Blue',creator:'Miles Davis',status:'interested',source:'온보딩',saved:126,tracks:['So What','Freddie Freeloader','Blue in Green'],trackIndex:0},
+ {id:nextId++,type:'movie',title:'문라이트',creator:'배리 젠킨스',status:'interested',source:'온보딩',saved:125}
 );
 
 // 실제 Notion 독서목록 QA 데이터 · 212권
@@ -525,40 +604,26 @@ notionBooks.forEach((b,idx)=>{
     source:'Notion 독서목록',saved:1000-idx,completed:b.completed||undefined,
     rating:b.rating||undefined,growth:mapped==='experienced'?4:(mapped==='in_progress'?1:undefined),
     year:b.year||undefined,extra:b.genre||undefined,provider:'Notion QA 원본',providerId:b.id,
-    workKey:'book:'+normSeed(b.title)+':'+normSeed(b.creator),
-    saveCount:b.status==='Want to Read'?2:1
+    workKey:'book:'+normSeed(b.title)+':'+normSeed(b.creator)
   });
 });
 function normSeed(v){return String(v||'').toLowerCase().replace(/[\s·:()\[\]{}'".,!?\-_/]/g,'')}
 
-let state={onbIndex:0,onbAnswers:0,currentId:null,skipped:new Set(),statusFilter:'all',typeFilter:'all',detailId:null,detailFrom:'scrap',shareReturn:'scrap',shareCandidate:null,notifs:true,day:0,returnVisit:false,dailyLog:{},forestX:0,importReturn:'scrap',importFiles:[],importCandidates:[],directPickType:'all',lastSelectionSource:null,monthCursor:'2026-09',pastYear:2025,reportYear:2026,reportFrom:'forest'};
-let saveEvents=[];
-const PROTOTYPE_TODAY='2026-09-09';
+let state={onbIndex:0,onbAnswers:0,currentId:null,skipped:new Set(),statusFilter:'all',typeFilter:'all',allForestFilter:'all',detailId:null,detailFrom:'scrap',shareReturn:'scrap',shareCandidate:null,notifs:true,day:0,returnVisit:false,dailyLog:{},forestX:0};
 function $(id){return document.getElementById(id)}
 function typeLabel(t){return t==='book'?'책':t==='album'?'음반':'영화'}
 function statusLabel(s){return s==='interested'?'경험 전':s==='in_progress'?'경험 중':s==='experienced'?'경험 완료':'싫음'}
 function creatorLabel(t){return t==='book'?'저자':t==='album'?'아티스트':'감독'}
 function coverClass(t){return t==='album'?'album':t==='movie'?'movie':''}
 function esc(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
-function saveCountLabel(n){const count=Math.max(1,Number(n)||1);return `${count}번 저장`}
-function bumpSaveCount(item,source){if(!item)return item;item.saveCount=Math.max(1,Number(item.saveCount)||1)+1;item.saved=Date.now();if(source&&!item.source)item.source=source;if(Array.isArray(saveEvents))saveEvents.push({contentId:item.id,date:PROTOTYPE_TODAY,source:source||item.source||'직접 저장'});return item}
-function interestPriority(a,b){const ac=Math.max(1,Number(a.saveCount)||1),bc=Math.max(1,Number(b.saveCount)||1);return (bc-ac)||((b.saved||0)-(a.saved||0))}
 function activeContent(){return state.currentId?contents.find(x=>x.id===state.currentId):null}
 function completed(){return contents.filter(x=>x.status==='experienced')}
 function go(id){
  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
  const el=$(id); if(!el)return; el.classList.add('active'); el.scrollTop=0;
  const app=el.classList.contains('app'); $('tabs').classList.toggle('show',app);
- if(app){let tabId=id==='detail'?'scrap':['monthlyForest','pastForest','pastForestDetail','annualReport'].includes(id)?'forest':id==='tasteMore'?'my':id;setActiveTab(tabId)}
- if(id==='today')renderToday();
- if(id==='scrap')renderScraps();
- if(id==='detail')renderDetail();
- if(id==='forest')renderForest();
- if(id==='monthlyForest')renderMonthlyForest();
- if(id==='pastForest')renderPastForest();
- if(id==='pastForestDetail')renderPastForestDetail();
- if(id==='annualReport')renderAnnualReport();
- if(id==='directPick')renderDirectPick();
+ if(app){let tabId=id==='detail'?'scrap':id==='allForest'?'forest':id;setActiveTab(tabId)}
+ if(id==='today')renderToday(); if(id==='scrap')renderScraps(); if(id==='detail')renderDetail(); if(id==='forest')renderForest(); if(id==='allForest')renderAllForest();
 }
 function tab(id){go(id)}
 function setActiveTab(id){document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('active',b.dataset.tab===id))}
@@ -575,32 +640,32 @@ function logout(){state.currentId=null;go('login')}
 function onbChoicesFor(t){return t==='book'?['읽고 싶음','읽음','싫음']:t==='album'?['들어보고 싶음','들어봄','싫음']:['보고 싶음','봄','싫음']}
 function renderOnboarding(){if(state.onbIndex>=onboardingItems.length)state.onbIndex=0;const x=onboardingItems[state.onbIndex];$('onbCount').textContent=`취향 파악 중 · ${state.onbAnswers}개 응답 · 10개 응답 후 시작 가능`;$('onbProgress').style.width=Math.min(100,state.onbAnswers/10*100)+'%';$('onbCover').textContent=typeLabel(x.type).toUpperCase()+' COVER';$('onbCover').className='cover '+coverClass(x.type);$('onbTitle').textContent=x.title;$('onbCreator').textContent=x.creator;$('onbChoices').innerHTML=onbChoicesFor(x.type).map(v=>`<button onclick="answerOnboarding('${esc(v)}')">${esc(v)}</button>`).join('');const ready=state.onbAnswers>=10;$('onbStartTop').classList.toggle('hidden',!ready);$('onbStartBottom').classList.toggle('hidden',!ready)}
 function mapOnbStatus(type,value){if(value==='싫음')return'dislike';if(type==='book')return value==='읽음'?'experienced':'interested';if(type==='album')return value==='들어봄'?'experienced':'interested';return value==='봄'?'experienced':'interested'}
-function upsertContent(type,title,creator,status,source='온보딩'){let x=contents.find(c=>c.type===type&&c.title.toLowerCase()===title.toLowerCase()&&(c.creator||'').toLowerCase()===(creator||'').toLowerCase());if(!x){x={id:nextId++,type,title,creator,status,source,saved:Date.now(),saveCount:1};contents.push(x)}else{x.status=status;bumpSaveCount(x,source)}if(status==='experienced'){x.growth=4;x.completed=PROTOTYPE_TODAY.replaceAll('-','.')}return x}
+function upsertContent(type,title,creator,status,source='온보딩'){let x=contents.find(c=>c.type===type&&c.title.toLowerCase()===title.toLowerCase()&&(c.creator||'').toLowerCase()===(creator||'').toLowerCase());if(!x){x={id:nextId++,type,title,creator,status,source,saved:Date.now()};contents.push(x)}else{x.status=status;x.source=x.source||source}if(status==='experienced'){x.growth=4;x.completed='2026.09.08'}return x}
 function answerOnboarding(value){const x=onboardingItems[state.onbIndex];upsertContent(x.type,x.title,x.creator,mapOnbStatus(x.type,value));state.onbAnswers++;state.onbIndex=(state.onbIndex+1)%onboardingItems.length;renderOnboarding()}
 function skipOnboarding(){state.onbIndex=(state.onbIndex+1)%onboardingItems.length;renderOnboarding()}
-function finishOnboarding(){if(state.onbAnswers<10){toast('10개 이상 응답하면 시작할 수 있어요');return}go('today')}
+function finishOnboarding(){if(window.isAddingTaste?.()){go('my');toast('취향 데이터를 추가했습니다');return;}if(state.onbAnswers<10){toast('10개 이상 응답하면 시작할 수 있어요');return}go('today')}
 function openManualTaste(){showSheet(`<h2>직접 입력</h2><p>목록에 없는 책·음반·영화를 추가합니다.</p><select id="manualType" onchange="updateManualState()"><option value="book">책</option><option value="album">음반</option><option value="movie">영화</option></select><input id="manualTitle" placeholder="제목"><input id="manualCreator" placeholder="저자"><select id="manualStatus"></select><button class="btn" onclick="saveManualTaste()">취향에 추가</button><button class="btn secondary" onclick="closeSheet()">취소</button>`);updateManualState()}
 function updateManualState(){const t=$('manualType')?.value||'book';$('manualCreator').placeholder=creatorLabel(t);$('manualStatus').innerHTML=onbChoicesFor(t).map(v=>`<option>${esc(v)}</option>`).join('')}
 function saveManualTaste(){const t=$('manualType').value,title=$('manualTitle').value.trim(),creator=$('manualCreator').value.trim(),v=$('manualStatus').value;if(!title){toast('제목을 입력해주세요');return}upsertContent(t,title,creator,mapOnbStatus(t,v));state.onbAnswers++;closeSheet();renderOnboarding();toast('취향 데이터에 반영했습니다')}
 
-function recommendationBase(){return contents.filter(x=>x.status==='interested').sort(interestPriority)}
+function recommendationBase(){return contents.filter(x=>x.status==='interested')}
 function recommendationPool(){return recommendationBase().filter(x=>!state.skipped.has(x.id))}
 function currentRecommendation(){return recommendationPool()[0]||null}
 function skipRecommendation(){const r=currentRecommendation();if(r)state.skipped.add(r.id);renderToday()}
 function resetRecommendationSession(){state.skipped.clear();renderToday()}
-function renderToday(){const box=$('todayBody'),cur=activeContent();if(!cur){const r=currentRecommendation();if(!r){box.innerHTML=recommendationBase().length?`<div class="recommend"><div class="note" style="margin-top:16px">이번 추천에서 볼 수 있는 후보를 모두 확인했습니다.</div><button class="btn secondary" onclick="resetRecommendationSession()">처음부터 다시 보기</button></div>`:`<div class="note" style="margin-top:16px">추천할 경험 전 콘텐츠가 없습니다. 스크랩에 책·음반·영화를 추가해주세요.</div>`;return}box.innerHTML=`<div class="recommend"><div class="cover small ${coverClass(r.type)}">${typeLabel(r.type)} COVER</div><h2>${esc(r.title)}</h2><p>${esc(r.creator)}</p><div class="note">${Math.max(1,Number(r.saveCount)||1)>1?`이 콘텐츠를 <strong>${Math.max(1,Number(r.saveCount)||1)}번 저장</strong>했어요. 반복해서 관심을 보인 콘텐츠부터 보여드려요.`:`저장해둔 관심 중 하나를 다시 꺼냈어요.`}</div><div class="recommend-actions"><button class="btn" onclick="startRecommendedExperience(${r.id})">경험 시작하기</button>${recommendationBase().length>1?'<button class="btn text" onclick="skipRecommendation()">이번에는 넘기기</button>':''}<button class="btn secondary" onclick="openDirectPick()">내가 직접 고를래요</button></div><div class="placeholderDaily"><div class="sectionlabel">오늘의 경험</div><p>콘텐츠를 선택하면 같은 화면에서 바로 오늘의 경험이 열립니다.</p></div></div>`;return}
+function renderToday(){const box=$('todayBody'),cur=activeContent();if(!cur){const r=currentRecommendation();if(!r){box.innerHTML=recommendationBase().length?`<div class="recommend"><div class="note" style="margin-top:16px">이번 추천에서 볼 수 있는 후보를 모두 확인했습니다.</div><button class="btn secondary" onclick="resetRecommendationSession()">처음부터 다시 보기</button></div>`:`<div class="note" style="margin-top:16px">추천할 경험 전 콘텐츠가 없습니다. 스크랩에 책·음반·영화를 추가해주세요.</div>`;return}box.innerHTML=`<div class="recommend"><div class="cover small ${coverClass(r.type)}">${typeLabel(r.type)} COVER</div><h2>${esc(r.title)}</h2><p>${esc(r.creator)}</p><div class="recommend-actions"><button class="btn" onclick="startExperience(${r.id})">경험 시작하기</button>${recommendationBase().length>1?'<button class="btn text" onclick="skipRecommendation()">이번에는 넘기기</button>':''}</div><div class="placeholderDaily"><div class="sectionlabel">오늘의 경험</div><p>콘텐츠를 선택하면 같은 화면에서 바로 오늘의 경험이 열립니다.</p></div></div>`;return}
  const dailyFirst=state.returnVisit;const currentCard=`<div class="currentCard">${contentCard(cur,'today')}</div>`;const experience=experienceHTML(cur,dailyFirst);box.innerHTML=dailyFirst?`${experience}<div class="sectionlabel">현재 경험 중</div>${currentCard}`:`${currentCard}${experience}`}
-function startExperience(id){const target=contents.find(x=>x.id===id);if(!target)return;const active=activeContent();if(active&&active.id!==id){showSheet(`<h2>현재 경험을 바꿀까요?</h2><p>${esc(active.title)}을(를) 경험 중입니다. 바꾸면 기존 콘텐츠는 경험 전 상태로 돌아갑니다.</p><button class="btn" onclick="confirmReplaceExperience(${id})">바꾸기</button><button class="btn secondary" onclick="closeSheet()">취소</button>`);return}target.status='in_progress';target.growth=target.growth??0;state.currentId=id;state.skipped.clear();state.returnVisit=false;renderToday();toast('경험을 시작했습니다 · 씨앗이 생겼어요')}
-function confirmReplaceExperience(id){const active=activeContent();if(active){active.status='interested';delete active.growth}state.currentId=null;closeSheet();startExperience(id)}
+function startExperience(id){const target=contents.find(x=>x.id===id);if(!target)return;const active=activeContent();if(active&&active.id!==id){showSheet(`<h2>현재 경험을 바꿀까요?</h2><p>${esc(active.title)}을(를) 경험 중입니다. 기존 콘텐츠의 진행 상태는 유지됩니다.</p><button class="btn" onclick="confirmReplaceExperience(${id})">바꾸기</button><button class="btn secondary" onclick="closeSheet()">취소</button>`);return}target.status='in_progress';target.growth=target.growth??0;state.currentId=id;state.skipped.clear();state.returnVisit=false;renderToday();toast('경험을 시작했습니다 · 씨앗이 생겼어요')}
+function confirmReplaceExperience(id){const active=activeContent();if(active){active.status='in_progress'}state.currentId=null;closeSheet();startExperience(id)}
 function experienceHTML(x,first){if(x.type==='book')return bookExperience(x,first);if(x.type==='album')return albumExperience(x,first);return movieExperience(x,first)}
-function dailyRecorded(x){return state.dailyLog[x.id]===state.day}
+function dailyRecorded(x){return state.dailyLog[x.id]===appToday()}
 function bookExperience(x,first){const done=dailyRecorded(x);const bookInfo=`<div class="dailyBookInfo"><div class="dailyBookThumb">책</div><div class="grow"><div class="title">${esc(x.title)}</div><div class="meta">${esc(x.creator||'')}</div></div></div>`;return `<div class="experience ${first?'first':''}"><div class="sectionlabel">오늘의 페이지</div>${done?`<div class="experienceBox">${bookInfo}<div class="dailyDone"><b>오늘 독서 완료</b><span>오늘의 성장은 이미 기록되었습니다. 현재 단계: ${growthLabel(x.growth)}</span></div><div class="completeAction"><span class="small">책을 모두 읽었다면</span><button class="btn text" onclick="completeExperience(${x.id})">이 책 감상 완료</button></div></div>`:`<div class="experienceBox">${bookInfo}<div class="actionStack"><button class="btn secondary" onclick="externalAction('서점 페이지')">서점 페이지</button><button class="btn" onclick="recordDaily(${x.id},'book')">오늘 독서 완료</button></div><div class="completeAction"><span class="small">책을 모두 읽었다면</span><button class="btn text" onclick="completeExperience(${x.id})">이 책 감상 완료</button></div></div>`}</div>`}
 function albumExperience(x,first){if(!x.tracks)x.tracks=['Nude','15 Step','Weird Fishes/Arpeggi','All I Need'];x.trackIndex=x.trackIndex||0;const song=x.tracks[x.trackIndex%x.tracks.length];const done=dailyRecorded(x);return `<div class="experience ${first?'first':''}"><div class="sectionlabel">오늘의 곡</div><div class="experienceBox"><h2>${esc(song)}</h2><p>${esc(x.title)} · Track ${String((x.trackIndex%x.tracks.length)+1).padStart(2,'0')}</p>${done?`<div class="dailyDone" style="margin-bottom:10px"><b>오늘의 일일 경험 기록 완료</b><span>오늘은 더 성장하지 않습니다. 현재 단계: ${growthLabel(x.growth)}</span></div>`:''}<div class="actionStack"><button class="btn" onclick="listenTrack(${x.id})">이 곡 듣기</button><button class="btn secondary" onclick="nextTrack(${x.id})">다음 곡</button></div><div class="completeAction"><span class="small">앨범 전체 감상을 마쳤다면</span><button class="btn text" onclick="completeExperience(${x.id})">이 앨범 감상 완료</button></div></div></div>`}
 function movieExperience(x,first){return `<div class="experience ${first?'first':''}"><div class="sectionlabel">영화 감상</div><div class="experienceBox"><h2>${esc(x.title)}</h2><p>영화는 별도 일일 성장 없이 감상 완료로 바로 기록합니다.</p><div class="actionStack"><button class="btn" onclick="externalAction('보러가기')">보러가기</button></div><div class="completeAction"><button class="btn text" onclick="completeExperience(${x.id})">이 작품 감상 완료</button></div></div></div>`}
 function externalAction(label){toast(`${label} · 외부 서비스 연결 동작입니다`)}
 function growthLabel(g){return ['씨앗','싹','덤불','나무','큰 나무'][Math.max(0,Math.min(4,g??0))]}
-function recordDaily(id,type){const x=contents.find(c=>c.id===id);if(!x)return;if(dailyRecorded(x)){toast('오늘의 성장은 이미 기록했습니다');return}state.dailyLog[id]=state.day;x.growth=Math.min(3,(x.growth??0)+1);renderToday();toast(`${type==='book'?'오늘 독서':'오늘의 경험'} 기록 완료 · ${growthLabel(x.growth)}`)}
-function listenTrack(id){externalAction('이 곡 듣기');const x=contents.find(c=>c.id===id);if(!x||dailyRecorded(x))return;state.dailyLog[id]=state.day;x.growth=Math.min(3,(x.growth??0)+1);setTimeout(()=>{if($('today').classList.contains('active'))renderToday();toast(`오늘의 일일 경험 기록 · ${growthLabel(x.growth)}`)},350)}
+function recordDaily(id,type){const x=contents.find(c=>c.id===id);if(!x)return;if(dailyRecorded(x)){toast('오늘의 성장은 이미 기록했습니다');return}state.dailyLog[id]=appToday();x.growth=Math.min(3,(x.growth??0)+1);renderToday();toast(`${type==='book'?'오늘 독서':'오늘의 경험'} 기록 완료 · ${growthLabel(x.growth)}`)}
+function listenTrack(id){externalAction('이 곡 듣기');const x=contents.find(c=>c.id===id);if(!x||dailyRecorded(x))return;state.dailyLog[id]=appToday();x.growth=Math.min(3,(x.growth??0)+1);setTimeout(()=>{if($('today').classList.contains('active'))renderToday();toast(`오늘의 일일 경험 기록 · ${growthLabel(x.growth)}`)},350)}
 function nextTrack(id){const x=contents.find(c=>c.id===id);if(!x)return;x.trackIndex=((x.trackIndex||0)+1)%(x.tracks?.length||1);renderToday();toast('오늘의 곡을 바꿨습니다 · 성장에는 반영되지 않습니다')}
 function completeExperience(id){const x=contents.find(c=>c.id===id);if(!x)return;x.status='experienced';x.growth=4;x.completed='2026.09.08';state.currentId=null;state.skipped.clear();state.returnVisit=false;showCompletion(x)}
 function showCompletion(x){showSheet(`<h2>${typeLabel(x.type)} 경험 완료</h2><div style="height:100px;position:relative;margin:8px 0 14px"><div class="allTree" style="width:70px;height:90px;margin:auto;transform:scale(1.45);transform-origin:center bottom"></div></div><p><b>${esc(x.title)}</b>이(가) 큰 나무로 나의 숲에 기록되었습니다.</p><button class="btn" onclick="openRating(${x.id})">평가하기</button><button class="btn secondary" onclick="skipRatingAfterComplete()">나중에 평가하기</button>`)}
@@ -608,16 +673,16 @@ function openRating(id){const x=contents.find(c=>c.id===id);if(!x)return;showShe
 function saveRating(id,n){const x=contents.find(c=>c.id===id);if(x)x.rating=n;closeSheet();toast(`${n}점으로 기록했습니다`);if($('detail').classList.contains('active'))renderDetail();else if($('today').classList.contains('active'))renderToday()}
 function skipRatingAfterComplete(){closeSheet();go('today')}
 
-function contentCard(x,from='scrap'){const rating=x.status==='experienced'?(x.rating?`<span class="rating">내 평가 ${x.rating}/5</span>`:`<span class="rating muted">평가 없음</span>`):'';const savedMark=`<span class="rating muted">${saveCountLabel(x.saveCount)}</span>`;return `<div class="card row" onclick="openDetail(${x.id},'${from}')"><div class="thumb ${coverClass(x.type)}">${typeLabel(x.type)}</div><div class="grow"><div class="title">${esc(x.title)}</div><div class="meta">${esc(x.creator)}</div><span class="pill">${statusLabel(x.status)}</span>${savedMark}${rating}</div><span class="chev">›</span></div>`}
+function contentCard(x,from='scrap'){const rating=x.status==='experienced'?(x.rating?`<span class="rating">내 평가 ${x.rating}/5</span>`:`<span class="rating muted">평가 없음</span>`):'';return `<div class="card row" onclick="openDetail(${x.id},'${from}')"><div class="thumb ${coverClass(x.type)}">${typeLabel(x.type)}</div><div class="grow"><div class="title">${esc(x.title)}</div><div class="meta">${esc(x.creator)}</div><span class="pill">${statusLabel(x.status)}</span>${rating}</div><span class="chev">›</span></div>`}
 function setStatusFilter(v,b){state.statusFilter=v;document.querySelectorAll('#statusChips .chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderScraps()}
 function setTypeFilter(v,b){state.typeFilter=v;document.querySelectorAll('#typeChips .chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderScraps()}
 function openNotionLibrary(){state.statusFilter='all';state.typeFilter='book';go('scrap');setTimeout(()=>{document.querySelectorAll('#statusChips .chip').forEach((b,i)=>b.classList.toggle('active',i===0));document.querySelectorAll('#typeChips .chip').forEach((b,i)=>b.classList.toggle('active',i===1));renderScraps();},0)}
-function renderScraps(){const q=($('searchInput')?.value||'').trim().toLowerCase();const arr=[...contents].filter(x=>x.status!=='dislike').filter(x=>state.statusFilter==='all'||x.status===state.statusFilter).filter(x=>state.typeFilter==='all'||x.type===state.typeFilter).filter(x=>!q||x.title.toLowerCase().includes(q)||(x.creator||'').toLowerCase().includes(q)).sort(interestPriority);$('scrapList').innerHTML=arr.length?arr.map(x=>contentCard(x,'scrap')).join(''):'<div class="note">조건에 맞는 스크랩이 없습니다.</div>'}
+function renderScraps(){const q=($('searchInput')?.value||'').trim().toLowerCase();const arr=[...contents].filter(x=>x.status!=='dislike').filter(x=>state.statusFilter==='all'||x.status===state.statusFilter).filter(x=>state.typeFilter==='all'||x.type===state.typeFilter).filter(x=>!q||x.title.toLowerCase().includes(q)||(x.creator||'').toLowerCase().includes(q)).sort((a,b)=>(b.saved||0)-(a.saved||0));$('scrapList').innerHTML=arr.length?arr.map(x=>contentCard(x,'scrap')).join(''):'<div class="note">조건에 맞는 스크랩이 없습니다.</div>'}
 function openDetail(id,from='scrap'){state.detailId=id;state.detailFrom=from;go('detail')}
-function detailBack(){if(state.detailFrom==='forest')return go('forest');if(state.detailFrom==='annualReport')return go('annualReport');if(state.detailFrom==='monthlyForest')return go('monthlyForest');if(state.detailFrom==='today')return go('today');go('scrap')}
+function detailBack(){go(state.detailFrom==='forest'?'forest':state.detailFrom==='allForest'?'allForest':state.detailFrom==='today'?'today':'scrap')}
 function renderDetail(){const x=contents.find(c=>c.id===state.detailId);if(!x){$('detailBody').innerHTML='<div class="note">콘텐츠를 찾을 수 없습니다.</div>';return}let primary='';if(x.status==='interested')primary=`<button class="btn" onclick="startFromDetail(${x.id})">경험 시작하기</button>`;else if(x.status==='in_progress')primary=`<button class="btn" onclick="go('today')">오늘의 경험으로 이동</button>`;else if(x.status==='experienced')primary=`<button class="btn secondary" onclick="openRating(${x.id})">${x.rating?'평가 수정':'평가하기'}</button>`;$('detailBody').innerHTML=`<div class="cover detailCover ${coverClass(x.type)}">${typeLabel(x.type)} COVER</div><h1 class="hero" style="margin-top:16px">${esc(x.title)}</h1><p>${esc(x.creator)}</p><div class="detailMeta"><div class="line"><span>유형</span><b>${typeLabel(x.type)}</b></div><div class="line"><span>최초 저장 출처</span><b>${esc(x.source||'직접 입력')}</b></div><div class="line"><span>현재 상태</span><b>${statusLabel(x.status)}</b></div>${x.completed?`<div class="line"><span>완료일</span><b>${esc(x.completed)}</b></div>`:''}${x.status==='experienced'?`<div class="line"><span>내 평가</span><b>${x.rating?x.rating+' / 5':'평가 없음'}</b></div>`:''}</div><div class="detailActions">${primary}<button class="btn text" onclick="deleteCurrentContent()">삭제</button></div>`}
 function startFromDetail(id){const x=contents.find(c=>c.id===id);const active=activeContent();if(active&&active.id!==id){showSheet(`<h2>현재 경험을 바꿀까요?</h2><p>${esc(active.title)}을(를) 경험 중입니다.</p><button class="btn" onclick="replaceFromDetail(${id})">바꾸기</button><button class="btn secondary" onclick="closeSheet()">취소</button>`);return}startExperience(id);go('today')}
-function replaceFromDetail(id){const active=activeContent();if(active){active.status='interested';delete active.growth}state.currentId=null;closeSheet();startExperience(id);go('today')}
+function replaceFromDetail(id){const active=activeContent();if(active){active.status='in_progress'}state.currentId=null;closeSheet();startExperience(id);go('today')}
 function openEditCurrent(){const x=contents.find(c=>c.id===state.detailId);if(!x)return;showSheet(`<h2>콘텐츠 수정</h2><select id="editType"><option value="book" ${x.type==='book'?'selected':''}>책</option><option value="album" ${x.type==='album'?'selected':''}>음반</option><option value="movie" ${x.type==='movie'?'selected':''}>영화</option></select><input id="editTitle" value="${esc(x.title)}"><input id="editCreator" value="${esc(x.creator||'')}"><button class="btn" onclick="saveEditCurrent()">저장</button><button class="btn secondary" onclick="closeSheet()">취소</button>`)}
 function saveEditCurrent(){const x=contents.find(c=>c.id===state.detailId);if(!x)return;x.type=$('editType').value;x.title=$('editTitle').value.trim()||x.title;x.creator=$('editCreator').value.trim();closeSheet();renderDetail();toast('수정했습니다')}
 function deleteCurrentContent(){const x=contents.find(c=>c.id===state.detailId);if(!x)return;showSheet(`<h2>스크랩에서 삭제할까요?</h2><p>사용자 관심 데이터만 삭제하며 콘텐츠 원본 정보 자체를 삭제하지 않습니다.</p><button class="btn" onclick="confirmDelete(${x.id})">삭제</button><button class="btn secondary" onclick="closeSheet()">취소</button>`)}
@@ -626,97 +691,22 @@ function confirmDelete(id){if(state.currentId===id)state.currentId=null;contents
 function startShareFlow(){state.shareReturn='scrap';go('shareAnalyze')}
 function cancelShare(){go(state.shareReturn||'scrap')}
 function shareHighConfidence(){state.shareCandidate={type:'book',title:'채식주의자',creator:'한강'};renderShareConfirm();go('shareConfirm')}
-function renderShareConfirm(){const x=state.shareCandidate;if(!x)return;const duplicate=contents.find(c=>c.type===x.type&&c.title===x.title&&c.creator===x.creator);$('shareConfirmBody').innerHTML=`<div class="cover small ${coverClass(x.type)}" style="margin-top:16px">${typeLabel(x.type)} COVER</div><h2>${esc(x.title)}</h2><p>${esc(x.creator)} · ${typeLabel(x.type)}</p>${duplicate?`<div class="note">이미 저장된 콘텐츠입니다. 새 항목을 만들지 않고 저장 횟수만 추가합니다. 반복 저장 횟수는 추천과 기본 정렬에 반영됩니다.</div><button class="btn" onclick="finishDuplicateShare(${duplicate.id})">기존 스크랩 보기</button>`:`<p>관심의 씨앗으로 저장할까요?</p><button class="btn" onclick="confirmShareSave()">관심의 씨앗으로 저장</button>`}<button class="btn secondary" onclick="cancelShare()">취소</button>`}
+function renderShareConfirm(){const x=state.shareCandidate;if(!x)return;const duplicate=contents.find(c=>c.type===x.type&&c.title===x.title&&c.creator===x.creator);$('shareConfirmBody').innerHTML=`<div class="cover small ${coverClass(x.type)}" style="margin-top:16px">${typeLabel(x.type)} COVER</div><h2>${esc(x.title)}</h2><p>${esc(x.creator)} · ${typeLabel(x.type)}</p>${duplicate?`<div class="note">이미 저장된 콘텐츠입니다. 새 항목을 만들지 않고 기존 기록에 연결합니다.</div><button class="btn" onclick="finishDuplicateShare(${duplicate.id})">기존 스크랩 보기</button>`:`<p>관심의 씨앗으로 저장할까요?</p><button class="btn" onclick="confirmShareSave()">관심의 씨앗으로 저장</button>`}<button class="btn secondary" onclick="cancelShare()">취소</button>`}
 function shareLowConfidence(){go('shareCorrect')}
 function chooseShareCandidate(title,creator,type){state.shareCandidate={title,creator,type};renderShareConfirm();go('shareConfirm')}
 function manualShareEdit(){showSheet(`<h2>직접 수정</h2><select id="shareType"><option value="book">책</option><option value="album">음반</option><option value="movie">영화</option></select><input id="shareTitle" value="채식주의자"><input id="shareCreator" value="한강"><button class="btn" onclick="saveManualShareCandidate()">확정</button><button class="btn secondary" onclick="closeSheet()">취소</button>`)}
 function saveManualShareCandidate(){const title=$('shareTitle').value.trim();if(!title){toast('제목을 입력해주세요');return}state.shareCandidate={type:$('shareType').value,title,creator:$('shareCreator').value.trim()};closeSheet();renderShareConfirm();go('shareConfirm')}
 function confirmShareSave(){const x=state.shareCandidate;if(!x)return;let item=contents.find(c=>c.type===x.type&&c.title.toLowerCase()===x.title.toLowerCase()&&(c.creator||'').toLowerCase()===(x.creator||'').toLowerCase());if(!item){item={id:nextId++,type:x.type,title:x.title,creator:x.creator,status:'interested',source:'외부 공유',saved:Date.now()};contents.push(item)}state.detailId=item.id;state.detailFrom='scrap';go('detail');toast('관심의 씨앗으로 저장했습니다')}
-function finishDuplicateShare(id){const item=contents.find(c=>c.id===id);if(item)bumpSaveCount(item,'외부 공유');state.detailId=id;state.detailFrom='scrap';go('detail');toast('기존 콘텐츠에 저장 횟수를 추가했습니다')}
+function finishDuplicateShare(id){state.detailId=id;state.detailFrom='scrap';go('detail')}
 
-function parseDateParts(v){
- const m=String(v||'').match(/(20\d{2})[./-](\d{1,2})[./-](\d{1,2})/);return m?{y:Number(m[1]),m:Number(m[2]),d:Number(m[3])}:null
-}
-function dateKey(v){const p=parseDateParts(v);return p?`${p.y}-${String(p.m).padStart(2,'0')}-${String(p.d).padStart(2,'0')}`:''}
-function itemYear(x){const p=parseDateParts(x.completed);return p?p.y:null}
-function completedInYear(year){return contents.filter(x=>x.status==='experienced'&&itemYear(x)===Number(year))}
-function currentForestItems(){
- const year=2026,done=completedInYear(year).sort((a,b)=>dateKey(a.completed).localeCompare(dateKey(b.completed))||a.id-b.id),active=contents.filter(x=>x.status==='in_progress');
- return [...done,...active.filter(x=>!done.some(d=>d.id===x.id))]
-}
-function forestStage(x){if(x.status==='experienced')return 4;return Math.max(0,Math.min(3,x.growth??0))}
-function renderForest(){
- const vp=$('forestViewport'),world=$('forestWorld');if(!vp||!world)return;
- world.querySelectorAll('.forestTree,.memoryTree,.animal').forEach(x=>x.remove());
- const items=currentForestItems(),done=completedInYear(2026),anchor=Math.max(170,Math.round((vp.clientWidth||350)*.55)),spacing=116;
- const worldWidth=Math.max(980,anchor+Math.max(0,items.length-1)*spacing+180);world.style.width=worldWidth+'px';
- // 환경 동물은 데이터 양과 무관하게 고정 연출
- [['새',.22,112],['토끼',.54,27],['개구리',.78,18]].forEach((v,i)=>{const a=document.createElement('span');a.className='animal';a.textContent=v[0];a.style.left=Math.round(worldWidth*v[1])+'px';a.style.bottom=v[2]+'px';a.style.animation=`forestDrift ${4.2+i*.6}s ease-in-out infinite alternate`;world.appendChild(a)});
- items.forEach((x,i)=>{const px=anchor+i*spacing,e=document.createElement('button');e.className='forestTree stage-'+['seed','sprout','bush','tree','big'][forestStage(x)];e.dataset.x=px;e.style.left=px+'px';e.onclick=()=>openDetail(x.id,'forest');e.innerHTML=`<span class="forestInfo"><b>${esc(x.title)}</b><span>${esc(x.creator)}</span></span><span class="shape"><i></i></span>`;world.appendChild(e)});
- state.forestX=items.length?anchor:anchor;$('forestAvatar').style.left=state.forestX+'px';$('forestYearLabel').textContent='2026';$('forestExperienceCount').textContent=done.length;
- vp.scrollTo({left:0,behavior:'auto'});updateForestActive();
-}
+function forestStage(x){return x.status==='experienced'?4:Math.max(0,Math.min(3,x.growth??0))}
+function renderForest(){const vp=$('forestViewport'),world=$('forestWorld');world.querySelectorAll('.forestTree,.memoryTree,.animal').forEach(x=>x.remove());const cur=activeContent();const inProg=contents.filter(x=>x.status==='in_progress');const done=[...completed()].sort((a,b)=>(b.saved||0)-(a.saved||0));const ordered=[];if(cur)ordered.push(cur);[...inProg,...done].forEach(x=>{if(!ordered.some(o=>o.id===x.id))ordered.push(x)});const walk=ordered.slice(0,10),walkIds=new Set(walk.map(x=>x.id)),memory=done.filter(x=>!walkIds.has(x.id));const anchor=Math.max(170,Math.round((vp.clientWidth||350)*.55)),spacing=128,worldWidth=Math.max(980,anchor+Math.max(0,walk.length-1)*spacing+180);world.style.width=worldWidth+'px';memory.forEach((x,i)=>{const e=document.createElement('span');e.className='memoryTree';e.style.left=Math.min(worldWidth-20,anchor+90+(i%22)*38+((Math.floor(i/22)%2)*15))+'px';e.style.bottom=(31+(i%4)*8)+'px';world.appendChild(e)});const animals=Math.min(10,Math.floor(done.length/6));['새','토끼','개구리'].forEach(()=>{});for(let i=0;i<animals;i++){const a=document.createElement('span');a.className='animal';a.textContent=['새','토끼','개구리'][i%3];a.style.left=Math.min(worldWidth-40,anchor+115+((i*211)%760))+'px';a.style.bottom=(22+(i%3)*14)+'px';world.appendChild(a)}walk.forEach((x,i)=>{const px=anchor+i*spacing,e=document.createElement('button');e.className='forestTree stage-'+['seed','sprout','bush','tree','big'][forestStage(x)];e.dataset.x=px;e.style.left=px+'px';e.onclick=()=>openDetail(x.id,'forest');e.innerHTML=`<span class="forestInfo"><b>${esc(x.title)}</b><span>${esc(x.creator)}</span></span><span class="shape"><i></i></span>`;world.appendChild(e)});state.forestX=walk.length?anchor:anchor;$('forestAvatar').style.left=state.forestX+'px';const counts={book:done.filter(x=>x.type==='book').length,album:done.filter(x=>x.type==='album').length,movie:done.filter(x=>x.type==='movie').length};$('bookStat').textContent=counts.book;$('albumStat').textContent=counts.album;$('movieStat').textContent=counts.movie;const recent=[...inProg,...done.filter(d=>!inProg.some(i=>i.id===d.id))].slice(0,4);$('forestRecentList').innerHTML=recent.length?recent.map(x=>contentCard(x,'forest')).join(''):'<div class="note">아직 경험 기록이 없습니다.</div>';vp.scrollTo({left:0,behavior:'auto'});updateForestActive()}
 function treePositions(){return [...document.querySelectorAll('#forestWorld .forestTree')].map(e=>({e,x:Number(e.dataset.x)})).filter(v=>Number.isFinite(v.x)).sort((a,b)=>a.x-b.x)}
 function moveForest(dir){const vp=$('forestViewport'),trees=treePositions();if(!trees.length)return;let idx=0,best=Infinity;trees.forEach((t,i)=>{const d=Math.abs(t.x-state.forestX);if(d<best){best=d;idx=i}});idx=Math.max(0,Math.min(trees.length-1,idx+(dir>0?1:-1)));state.forestX=trees[idx].x;$('forestAvatar').style.left=state.forestX+'px';vp.scrollTo({left:Math.max(0,state.forestX-vp.clientWidth/2),behavior:'smooth'});updateForestActive()}
 function updateForestActive(){const trees=treePositions();trees.forEach(t=>t.e.classList.remove('active'));if(!trees.length)return;let nearest=trees[0];trees.forEach(t=>{if(Math.abs(t.x-state.forestX)<Math.abs(nearest.x-state.forestX))nearest=t});nearest.e.classList.add('active')}
-function setupForestDrag(){const vp=$('forestViewport');if(!vp||vp.dataset.ready)return;vp.dataset.ready='1';let down=false,startX=0,startScroll=0,moved=false;vp.addEventListener('pointerdown',e=>{if(e.target.closest('.forestTree'))return;down=true;moved=false;startX=e.clientX;startScroll=vp.scrollLeft;try{vp.setPointerCapture(e.pointerId)}catch(_){}});vp.addEventListener('pointermove',e=>{if(!down)return;const dx=e.clientX-startX;if(Math.abs(dx)>4)moved=true;vp.scrollLeft=startScroll-dx});const end=e=>{if(!down)return;down=false;const center=vp.scrollLeft+vp.clientWidth/2;state.forestX=center;const trees=treePositions();if(trees.length){let n=trees[0];trees.forEach(t=>{if(Math.abs(t.x-center)<Math.abs(n.x-center))n=t});state.forestX=n.x;$('forestAvatar').style.left=n.x+'px';vp.scrollTo({left:Math.max(0,n.x-vp.clientWidth/2),behavior:'smooth'})}updateForestActive();try{vp.releasePointerCapture(e.pointerId)}catch(_){}};vp.addEventListener('pointerup',end);vp.addEventListener('pointercancel',end);vp.addEventListener('click',e=>{if(moved&&!e.target.closest('.forestTree')){e.preventDefault();e.stopPropagation();moved=false}},true)}
-
-function seedSaveEvents(){
- saveEvents=[];
- contents.filter(x=>x.status!=='dislike').forEach((x,i)=>{
-   const p=parseDateParts(x.completed);let base;
-   if(p){let m=p.m,d=Math.max(1,p.d-6);base={y:p.y,m,d}} else {base={y:2026,m:i%3===0?9:8,d:1+(i%9)}}
-   const cnt=Math.max(1,Math.min(5,Number(x.saveCount)||1));
-   for(let n=0;n<cnt;n++){let mm=base.m,dd=Math.max(1,base.d-n*2);saveEvents.push({contentId:x.id,date:`${base.y}-${String(mm).padStart(2,'0')}-${String(dd).padStart(2,'0')}`,source:x.source||'저장'})}
- });
- // 현재 월을 충분히 검토할 수 있도록 일부 관심 콘텐츠에도 9월 저장 이벤트를 둔다.
- contents.filter(x=>x.status==='interested').slice(0,10).forEach((x,i)=>saveEvents.push({contentId:x.id,date:`2026-09-${String(1+(i%9)).padStart(2,'0')}`,source:x.source||'저장'}));
- // 프로토타입에서 반복 저장→경험 하이라이트가 실제로 보이도록 대표 사례를 보강한다.
- const sepDone=monthCompleted(2026,9)[0];if(sepDone){['2026-09-01','2026-09-02','2026-09-03'].forEach(date=>saveEvents.push({contentId:sepDone.id,date,source:'반복 저장 데모'}))}
- const done2025=completedInYear(2025).slice().sort((a,b)=>dateKey(b.completed).localeCompare(dateKey(a.completed)))[0];if(done2025){['2025-09-12','2025-10-08','2025-11-03'].forEach(date=>saveEvents.push({contentId:done2025.id,date,source:'반복 저장 데모'}))}
- // 연간 리포트에서 저장과 경험이 같은 숫자로만 보이지 않도록, 완료 전 관심 저장도 샘플로 구성한다.
- contents.filter(x=>x.status==='interested').slice(0,24).forEach((x,i)=>saveEvents.push({contentId:x.id,date:`2025-${String(1+(i%12)).padStart(2,'0')}-${String(3+(i%20)).padStart(2,'0')}`,source:'관심 저장 데모'}));
-}
-function monthParts(key){const [y,m]=String(key).split('-').map(Number);return {y,m}}
-function monthKey(y,m){return `${y}-${String(m).padStart(2,'0')}`}
-function monthEvents(y,m){const prefix=monthKey(y,m);return saveEvents.filter(e=>e.date.startsWith(prefix))}
-function monthCompleted(y,m){return completedInYear(y).filter(x=>parseDateParts(x.completed)?.m===m)}
-function uniqueSavedCount(events){return new Set(events.map(e=>e.contentId)).size}
-function typeCounts(rows){return {book:rows.filter(x=>x.type==='book').length,album:rows.filter(x=>x.type==='album').length,movie:rows.filter(x=>x.type==='movie').length}}
-function weekBucket(day){return Math.min(4,Math.floor((day-1)/7))}
-function topSavedFromEvents(events){const map=new Map();events.forEach(e=>map.set(e.contentId,(map.get(e.contentId)||0)+1));return [...map.entries()].sort((a,b)=>b[1]-a[1]||b[0]-a[0])[0]||null}
-function saveCountBefore(id,completed){const end=dateKey(completed);return saveEvents.filter(e=>e.contentId===id&&(!end||e.date<=end)).length}
-function repeatedToExperience(rows){return rows.map(x=>({x,n:saveCountBefore(x.id,x.completed)})).filter(v=>v.n>=2).sort((a,b)=>b.n-a.n||dateKey(b.x.completed).localeCompare(dateKey(a.x.completed)))[0]||null}
-function renderMonthlyForest(){
- const {y,m}=monthParts(state.monthCursor),events=monthEvents(y,m),done=monthCompleted(y,m),types=typeCounts(done),savedUnique=uniqueSavedCount(events),top=topSavedFromEvents(events),repeat=repeatedToExperience(done);
- $('monthLabel').textContent=`${y}년 ${m}월`;
- const next=monthKey(y,m)<'2026-09';$('nextMonthBtn').disabled=!next;
- const weeks=[0,0,0,0,0];done.forEach(x=>{const p=parseDateParts(x.completed);if(p)weeks[weekBucket(p.d)]++});const maxW=Math.max(1,...weeks);
- const topItem=top?contents.find(x=>x.id===top[0]):null;
- $('monthlyBody').innerHTML=`
-   <div class="recapHero"><div class="recapMetric"><span>저장한 콘텐츠</span><b>${savedUnique}</b><em>개</em></div><div class="recapMetric"><span>경험한 콘텐츠</span><b>${done.length}</b><em>개</em></div></div>
-   <div class="recapTypes">책 <b>${types.book}</b> · 음반 <b>${types.album}</b> · 영화 <b>${types.movie}</b></div>
-   <div class="sectionlabel">주차별 경험</div><div class="weekChart">${weeks.map((n,i)=>`<div class="weekCol"><div class="weekBarWrap"><div class="weekBar" style="height:${Math.max(2,Math.round(n/maxW*76))}px"></div></div><b>${n}</b><span>${i+1}주</span></div>`).join('')}</div>
-   ${topItem?`<div class="highlightRow"><div class="kicker">가장 많이 저장한 콘텐츠</div><div class="highlightTitle">${esc(topItem.title)}</div><div class="highlightMeta">이번 달 ${top[1]}번 저장 · ${esc(topItem.creator)}</div></div>`:''}
-   ${repeat?`<div class="highlightRow"><div class="kicker">여러 번 저장해두다 이번 달 경험</div><div class="highlightTitle">${esc(repeat.x.title)}</div><div class="highlightMeta">${repeat.n}번 저장 후 경험 완료 · ${esc(repeat.x.creator)}</div></div>`:''}
-   <div class="sectionlabel">이번 달 경험한 콘텐츠</div><div class="coverRail">${done.length?done.slice().reverse().map(x=>`<button class="miniCoverBtn ${x.type==='album'?'album':''}" onclick="openDetail(${x.id},'monthlyForest')"><div class="miniCoverArt">${typeLabel(x.type)}</div><div class="miniCoverTitle">${esc(x.title)}</div><div class="miniCoverMeta">${esc(x.creator)}</div></button>`).join(''):'<div class="note" style="min-width:100%">이번 달 완료 기록이 없습니다.</div>'}</div>
-   <div class="shareStrip"><button class="btn" onclick="shareMonthly(${y},${m})">${m}월 기록 공유하기</button></div>`;
-}
-function changeMonth(delta){let {y,m}=monthParts(state.monthCursor);m+=delta;if(m<1){m=12;y--}if(m>12){m=1;y++}const next=monthKey(y,m);if(next>'2026-09')return;state.monthCursor=next;renderMonthlyForest()}
-
-function forestArt(year,large=false){const theme=`theme-${year%3===0?2026:year%3===1?2024:2025}`;const positions=year%3===0?[8,25,43,63,82]:year%3===1?[12,31,55,74,90]:[7,22,48,69,86];return `<div class="forestPoster ${large?'large':'preview'} ${theme}"><span class="sun"></span><span class="hill"></span>${positions.map((p,i)=>`<span class="silTree ${i%3===0?'tall':i%2===0?'small':''}" style="left:${p}%;height:${42+(i%3)*11}px"></span>`).join('')}<span class="tinyAnimal" style="left:19%;bottom:28px">새</span><span class="tinyAnimal a2" style="left:65%;bottom:22px">토끼</span><span class="tinyAnimal a3" style="left:79%;bottom:14px">개구리</span></div>`}
-function pastYears(){const set=new Set(completed().map(itemYear).filter(y=>y&&y<2026));return [...set].sort((a,b)=>b-a)}
-function renderPastForest(){const years=pastYears();$('pastForestGrid').innerHTML=years.length?years.map(y=>`<button class="pastCard" onclick="openPastForest(${y})"><div class="pastPreview">${forestArt(y,false)}</div><div class="pastMetaRow"><b>${y} 나의 숲</b><span>${completedInYear(y).length}개의 경험 ›</span></div></button>`).join(''):'<div class="note">지난 숲은 내년부터 생겨요.</div>'}
-function openPastForest(year){state.pastYear=Number(year);go('pastForestDetail')}
-function renderPastForestDetail(){const y=state.pastYear,done=completedInYear(y),types=typeCounts(done);$('pastForestTitle').textContent=`${y} 나의 숲`;$('pastForestDetailBody').innerHTML=`${forestArt(y,true)}<div class="pastHeroSummary"><div class="big">${done.length}개의 경험</div><div class="sub">책 ${types.book} · 음반 ${types.album} · 영화 ${types.movie}</div></div><div class="pastHeroActions"><button class="btn secondary" onclick="openAnnualReport(${y},'pastForestDetail')">연간 리포트</button><button class="btn" onclick="shareForestYear(${y})">공유하기</button></div>`}
-
-function yearEvents(year){return saveEvents.filter(e=>Number(e.date.slice(0,4))===Number(year))}
-function openAnnualReport(year,from='forest'){state.reportYear=Number(year);state.reportFrom=from;go('annualReport')}
-function annualReportBack(){go(state.reportFrom==='pastForestDetail'?'pastForestDetail':'forest')}
-function renderAnnualReport(){const y=state.reportYear,events=yearEvents(y),done=completedInYear(y),types=typeCounts(done),top=topSavedFromEvents(events),repeat=repeatedToExperience(done),monthly=Array.from({length:12},(_,i)=>done.filter(x=>parseDateParts(x.completed)?.m===i+1).length),maxM=Math.max(1,...monthly),topItem=top?contents.find(x=>x.id===top[0]):null;const lastMonth=y===2026?9:12;$('annualReportBody').innerHTML=`<div class="reportHead"><div class="year">${y}</div><h2>${y===2026?'올해 기록':'연간 리포트'}</h2></div><div class="recapHero" style="margin-top:14px"><div class="recapMetric"><span>저장한 콘텐츠</span><b>${uniqueSavedCount(events)}</b><em>개</em></div><div class="recapMetric"><span>경험한 콘텐츠</span><b>${done.length}</b><em>개</em></div></div><div class="recapTypes">책 <b>${types.book}</b> · 음반 <b>${types.album}</b> · 영화 <b>${types.movie}</b></div><div class="sectionlabel">월별 경험 추이</div><div class="annualTrend">${monthly.slice(0,lastMonth).map((n,i)=>`<div class="m"><div class="barwrap"><div class="bar" style="height:${Math.max(1,Math.round(n/maxM*82))}px"></div></div><span>${i+1}월</span></div>`).join('')}</div>${topItem?`<div class="highlightRow"><div class="kicker">가장 많이 저장한 콘텐츠</div><div class="highlightTitle">${esc(topItem.title)}</div><div class="highlightMeta">${top[1]}번 저장 · ${esc(topItem.creator)}</div></div>`:''}${repeat?`<div class="highlightRow"><div class="kicker">여러 번 저장하다 경험한 콘텐츠</div><div class="highlightTitle">${esc(repeat.x.title)}</div><div class="highlightMeta">${repeat.n}번 저장 후 경험 완료 · ${esc(repeat.x.creator)}</div></div>`:''}<div class="reportSection"><h3>${y}년에 경험한 콘텐츠</h3><div class="reportList">${done.length?done.slice().sort((a,b)=>dateKey(b.completed).localeCompare(dateKey(a.completed))).map(x=>`<button class="${x.type==='album'?'album':''}" onclick="openDetail(${x.id},'annualReport')"><div class="rCover">${typeLabel(x.type)}</div><div><div class="rTitle">${esc(x.title)}</div><div class="rMeta">${esc(x.creator)} · ${esc(x.completed||'')}</div></div></button>`).join(''):'<div class="note">완료 기록이 없습니다.</div>'}</div></div>`}
-
-function shareMonthly(year,month){const events=monthEvents(year,month),done=monthCompleted(year,month),types=typeCounts(done);showSheet(`<h2>${year}년 ${month}월 기록</h2><div class="sharePreview"><b>이번 달 ${uniqueSavedCount(events)}개를 저장하고<br>${done.length}개를 경험했어요.</b><p>책 ${types.book} · 음반 ${types.album} · 영화 ${types.movie}</p></div><button class="btn" onclick="closeSheet();toast('공유 시트를 열었습니다 · 프로토타입')">공유하기</button><button class="btn secondary" onclick="closeSheet()">닫기</button>`)}
-function shareForestYear(year){const done=completedInYear(year),types=typeCounts(done);showSheet(`<h2>${year} 나의 숲</h2><div class="sharePreview"><div class="shareForest">${forestArt(year,false)}</div><b>${year}년, ${done.length}개의 경험이 자랐어요.</b><p>책 ${types.book} · 음반 ${types.album} · 영화 ${types.movie}</p></div><button class="btn" onclick="closeSheet();toast('공유 시트를 열었습니다 · 프로토타입')">공유하기</button><button class="btn secondary" onclick="closeSheet()">닫기</button>`)}
+function setupForestDrag(){const vp=$('forestViewport');if(!vp||vp.dataset.ready)return;vp.dataset.ready='1';let down=false,startX=0,startScroll=0,moved=false,pointerId=null;vp.addEventListener('pointerdown',e=>{if(e.pointerType==='touch')return;if(e.target.closest('.forestTree'))return;down=true;moved=false;pointerId=e.pointerId;startX=e.clientX;startScroll=vp.scrollLeft;vp.classList.add('dragging');try{vp.setPointerCapture(e.pointerId)}catch(_){}});vp.addEventListener('pointermove',e=>{if(!down||e.pointerId!==pointerId)return;const dx=e.clientX-startX;if(Math.abs(dx)>3)moved=true;vp.scrollLeft=startScroll-dx;state.forestX=vp.scrollLeft+vp.clientWidth/2;updateForestActive()});const end=e=>{if(!down||e.pointerId!==pointerId)return;down=false;pointerId=null;vp.classList.remove('dragging');state.forestX=vp.scrollLeft+vp.clientWidth/2;updateForestActive();try{vp.releasePointerCapture(e.pointerId)}catch(_){}};vp.addEventListener('pointerup',end);vp.addEventListener('pointercancel',end);vp.addEventListener('scroll',()=>{state.forestX=vp.scrollLeft+vp.clientWidth/2;updateForestActive()},{passive:true});vp.addEventListener('click',e=>{if(moved&&!e.target.closest('.forestTree')){e.preventDefault();e.stopPropagation();moved=false}},true)}
+function setAllForestFilter(v,b){state.allForestFilter=v;document.querySelectorAll('#allForestChips .chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderAllForest()}
+function renderAllForest(){const all=completed(),rows=state.allForestFilter==='all'?all:all.filter(x=>x.type===state.allForestFilter);$('allCount').textContent=all.length;$('allForestGrid').innerHTML=rows.length?rows.map(x=>`<button class="allItem" onclick="openDetail(${x.id},'allForest')"><div class="allTree"></div><div class="allTitle">${esc(x.title)}</div><div class="allMeta">${typeLabel(x.type)}</div></button>`).join(''):'<div class="note" style="grid-column:1/-1">아직 기록이 없습니다.</div>'}
 
 function openProfile(){showSheet(`<h2>프로필</h2><input value="sol" placeholder="닉네임"><input value="test@songlim.kr" disabled><button class="btn" onclick="closeSheet();toast('프로필을 저장했습니다')">저장</button><button class="btn secondary" onclick="closeSheet()">취소</button>`)}
 function toggleNotif(e){e.stopPropagation();state.notifs=!state.notifs;$('notifSwitch').classList.toggle('on',state.notifs);toast(state.notifs?'오늘의 경험 알림을 켰습니다':'오늘의 경험 알림을 껐습니다')}
@@ -725,9 +715,9 @@ function openTerms(){showSheet(`<h2>약관</h2><div class="menu"><div class="men
 
 function demoNewUser(){state.onbIndex=0;state.onbAnswers=0;go('onbIntro')}
 function demoRecommendation(){const cur=activeContent();if(cur){cur.status='interested';delete cur.growth}state.currentId=null;state.skipped.clear();state.returnVisit=false;go('today')}
-function ensureInterested(type){let x=contents.find(c=>c.type===type&&c.status==='interested');if(x)return x;const data=type==='book'?['사피엔스','유발 하라리']:type==='album'?['A Love Supreme','John Coltrane']:['컨택트','드니 빌뇌브'];x={id:nextId++,type,title:data[0],creator:data[1],status:'interested',source:'프로토타입',saved:Date.now(),saveCount:1};contents.push(x);return x}
+function ensureInterested(type){let x=contents.find(c=>c.type===type&&c.status==='interested');if(x)return x;const data=type==='book'?['사피엔스','유발 하라리']:type==='album'?['A Love Supreme','John Coltrane']:['컨택트','드니 빌뇌브'];x={id:nextId++,type,title:data[0],creator:data[1],status:'interested',source:'프로토타입',saved:Date.now()};contents.push(x);return x}
 function demoPick(type){const old=activeContent();if(old){old.status='interested';delete old.growth}state.currentId=null;const x=ensureInterested(type);x.status='in_progress';x.growth=0;state.currentId=x.id;state.returnVisit=false;state.dailyLog[x.id]=undefined;go('today')}
-function advanceDemoDay(){state.day++;state.returnVisit=true;go('today');toast('다음 날 상태로 전환했습니다')}
+function advanceDemoDay(){window.demoDayOffset=(window.demoDayOffset||0)+1;state.day++;state.returnVisit=true;go('today');toast('다음 날 상태로 전환했습니다')}
 
 
 // ===== 콘텐츠 데이터 수집·매칭 정의서 반영 프로토타입 =====
@@ -758,8 +748,7 @@ notionBooks.forEach((b)=>{
     key:'notion-'+b.id.toLowerCase(),type:'book',title:b.title,creator:b.creator,year:b.year||'',
     extra:[b.genre,b.status==='Finished'?'읽음':b.status==='Going'?'읽는 중':'읽고 싶음'].filter(Boolean).join(' · '),
     provider:'Notion QA 원본 · API 연동 전',providerId:b.id,
-    workKey:'book:'+normSeed(b.title)+':'+normSeed(b.creator),
-    saveCount:b.status==='Want to Read'?2:1
+    workKey:'book:'+normSeed(b.title)+':'+normSeed(b.creator)
   });
 });
 state.directReturn='scrap';state.directType='all';state.shareEvidence=[];state.shareCandidates=[];state.shareScore=0;
@@ -770,7 +759,7 @@ function catalogByKey(key){return providerCatalog.find(x=>x.key===key)}
 function typeGlyph(t){return t==='book'?'책':t==='album'?'음반':'영화'}
 function candidateRowHTML(x,action){return `<button class="candidateRow ${x.type==='album'?'album':''}" onclick="${action}"><div class="thumb ${coverClass(x.type)}">${typeGlyph(x.type)}</div><div class="grow"><div class="title">${esc(x.title)}</div><div class="candidateMeta">${esc(x.creator)} · ${esc(x.year||'')}</div><div class="candidateSub">${esc(x.extra||'')} · ${esc(x.provider||'')}</div></div><span class="chev">›</span></button>`}
 
-function startShareFlow(){state.shareReturn='scrap';showSheet(`<h2>콘텐츠 추가</h2><p>이미 쌓아둔 목록은 사진으로 가져오고, 새로 발견한 콘텐츠는 외부 앱에서 송림으로 공유할 수 있습니다.</p><button class="btn" onclick="closeSheet();startImport('scrap')">사진으로 가져오기</button><button class="btn secondary" onclick="closeSheet();openDirectEntry('scrap')">제목으로 직접 찾기</button><button class="btn secondary" onclick="closeSheet();startExternalShareDemo()">외부 공유 흐름 보기</button><button class="btn text" onclick="closeSheet()">취소</button>`)}
+function startShareFlow(){state.shareReturn='scrap';showSheet(`<h2>콘텐츠 추가</h2><p>외부에서 발견한 콘텐츠를 확인하거나 제목으로 직접 기록할 수 있습니다.</p><div class="entryChoice"><button class="btn" onclick="closeSheet();startExternalShareDemo()">외부 공유 확인</button><button class="btn secondary" onclick="closeSheet();openDirectEntry('scrap')">제목으로 기록</button></div><button class="btn text" onclick="closeSheet()">취소</button>`)}
 function startExternalShareDemo(example){state.shareReturn='scrap';go('shareAnalyze');if(example)loadShareExample(example)}
 function cancelShare(){go(state.shareReturn||'scrap')}
 function loadShareExample(kind){const app=$('shareSourceApp'),url=$('shareUrlInput'),txt=$('shareTextInput');if(!app||!url||!txt)return;const examples={
@@ -797,10 +786,9 @@ function chooseShareCandidateByKey(key){const x=catalogByKey(key);if(!x)return;s
 function shareHighConfidence(){loadShareExample('instagramBook');analyzeSharedInput()}
 function shareLowConfidence(){loadShareExample('threadsTitle');analyzeSharedInput()}
 function simulateScreenFind(){state.shareCandidates=[catalogByKey('book-veg-changbi')];state.shareScore=72;state.shareEvidence=['화면 이미지에서 작품명 후보 추출','외부 도서 DB에서 실제 엔티티 확인'];renderShareCandidates();go('shareCorrect');toast('화면에서 책 제목 후보를 찾았습니다 · 프로토타입 시뮬레이션')}
-function renderShareConfirm(){const x=state.shareCandidate;if(!x)return;const duplicate=findExistingContent(x);const ev=(state.shareEvidence||[]).map(v=>`<span class="confidenceBadge">${esc(v)}</span>`).join('');$('shareConfirmBody').innerHTML=`<div class="cover small ${coverClass(x.type)}" style="margin-top:16px">${typeLabel(x.type)} COVER</div><h2>${esc(x.title)}</h2><p>${esc(x.creator)} · ${typeLabel(x.type)}${x.year?' · '+esc(x.year):''}</p><div class="autoMeta"><div><span>데이터 출처</span><b>${esc(x.provider||'외부 DB')}</b></div><div><span>식별자</span><b>${esc(x.providerId||'정규화 매칭')}</b></div></div>${ev?`<div class="evidence"><b>식별 근거</b><br>${ev}</div>`:''}${duplicate?`<div class="note">이미 저장된 콘텐츠입니다. 새 항목을 만들지 않고 저장 횟수만 추가합니다. 반복 저장 횟수는 추천과 기본 정렬에 반영됩니다.</div><button class="btn" onclick="finishDuplicateShare(${duplicate.id})">기존 스크랩 보기</button>`:`<p>관심의 씨앗으로 저장할까요?</p><button class="btn" onclick="confirmShareSave()">관심의 씨앗으로 저장</button>`}<button class="btn secondary" onclick="go('shareAnalyze')">다시 찾기</button>`}
+function renderShareConfirm(){const x=state.shareCandidate;if(!x)return;const duplicate=findExistingContent(x);const ev=(state.shareEvidence||[]).map(v=>`<span class="confidenceBadge">${esc(v)}</span>`).join('');$('shareConfirmBody').innerHTML=`<div class="cover small ${coverClass(x.type)}" style="margin-top:16px">${typeLabel(x.type)} COVER</div><h2>${esc(x.title)}</h2><p>${esc(x.creator)} · ${typeLabel(x.type)}${x.year?' · '+esc(x.year):''}</p><div class="autoMeta"><div><span>데이터 출처</span><b>${esc(x.provider||'외부 DB')}</b></div><div><span>식별자</span><b>${esc(x.providerId||'정규화 매칭')}</b></div></div>${ev?`<div class="evidence"><b>식별 근거</b><br>${ev}</div>`:''}${duplicate?`<div class="note">이미 저장된 콘텐츠입니다. 새 항목을 만들지 않고 기존 기록에 연결합니다.</div><button class="btn" onclick="finishDuplicateShare(${duplicate.id})">기존 스크랩 보기</button>`:`<p>관심의 씨앗으로 저장할까요?</p><button class="btn" onclick="confirmShareSave()">관심의 씨앗으로 저장</button>`}<button class="btn secondary" onclick="go('shareAnalyze')">다시 찾기</button>`}
 function findExistingContent(x){return contents.find(c=>(x.workKey&&c.workKey===x.workKey)||(c.type===x.type&&norm(c.title)===norm(x.title)&&norm(c.creator)===norm(x.creator)))}
-contents.forEach(x=>{x.saveCount=Math.max(1,Number(x.saveCount)||1)});
-function confirmShareSave(){const x=state.shareCandidate;if(!x)return;let item=findExistingContent(x);if(!item){item={id:nextId++,type:x.type,title:x.title,creator:x.creator,status:'interested',source:x.sourceApp||'외부 공유',saved:Date.now(),saveCount:1,provider:x.provider,providerId:x.providerId,year:x.year,extra:x.extra,workKey:x.workKey,tracks:x.tracks};contents.push(item)}else{bumpSaveCount(item,x.sourceApp||'외부 공유')}state.detailId=item.id;state.detailFrom='scrap';go('detail');toast('관심의 씨앗으로 저장했습니다')}
+function confirmShareSave(){const x=state.shareCandidate;if(!x)return;let item=findExistingContent(x);if(!item){item={id:nextId++,type:x.type,title:x.title,creator:x.creator,status:'interested',source:x.sourceApp||'외부 공유',saved:Date.now(),provider:x.provider,providerId:x.providerId,year:x.year,extra:x.extra,workKey:x.workKey,tracks:x.tracks};contents.push(item)}else{item.saved=Date.now();item.source=item.source||x.sourceApp||'외부 공유'}state.detailId=item.id;state.detailFrom='scrap';go('detail');toast('관심의 씨앗으로 저장했습니다')}
 function manualShareEdit(){openDirectEntry('share')}
 
 function openDirectEntry(origin='scrap'){state.directReturn=origin;state.directType='all';go('directEntry');setTimeout(()=>{const input=$('directSearchInput');if(input){input.value='';input.focus()}document.querySelectorAll('#directTypeChips .chip').forEach((b,i)=>b.classList.toggle('active',i===0));renderDirectResults()},0)}
@@ -809,97 +797,13 @@ function setDirectType(v,b){state.directType=v;document.querySelectorAll('#direc
 function renderDirectResults(){const input=$('directSearchInput');const box=$('directResults'),hint=$('directSearchHint');if(!input||!box)return;const q=input.value.trim();if(q.length<2){box.innerHTML='';if(hint)hint.textContent='두 글자 이상 입력하면 후보를 찾습니다. · 실제 Notion 독서목록 212권 포함';return}const rows=catalogSearch(q,state.directType);if(hint)hint.textContent=rows.length?`${rows.length}개의 후보 · 선택하면 기본 정보가 자동으로 채워집니다.`:'일치하는 후보가 없습니다. 다른 제목이나 제작자 이름으로 검색해보세요.';box.innerHTML=rows.length?rows.map(x=>candidateRowHTML(x,`selectDirectCandidate('${x.key}')`)).join(''):'<div class="emptySearch">검색 결과가 없습니다.</div>'}
 function selectDirectCandidate(key){const x=catalogByKey(key);if(!x)return;state.directCandidate=x;const labels=x.type==='book'?['읽고 싶음','읽음','싫음']:x.type==='album'?['들어보고 싶음','들어봄','싫음']:['보고 싶음','봄','싫음'];showSheet(`<h2>${esc(x.title)}</h2><p>${esc(x.creator)} · ${esc(x.year||'')}</p><div class="autoMeta"><div><span>${x.type==='book'?'출판/판본':'정보'}</span><b>${esc(x.extra||'-')}</b></div><div><span>자동완성 출처</span><b>${esc(x.provider)}</b></div><div><span>식별자</span><b>${esc(x.providerId)}</b></div></div><p style="margin-top:14px">현재 상태를 선택해주세요.</p><div class="choices">${labels.map(v=>`<button onclick="saveDirectCandidate('${esc(v)}')">${esc(v)}</button>`).join('')}</div><button class="btn text" onclick="closeSheet()">취소</button>`)}
 function directStatus(type,value){if(value==='싫음')return'dislike';if(type==='book')return value==='읽음'?'experienced':'interested';if(type==='album')return value==='들어봄'?'experienced':'interested';return value==='봄'?'experienced':'interested'}
-function saveDirectCandidate(value){const x=state.directCandidate;if(!x)return;const status=directStatus(x.type,value);let item=findExistingContent(x);const existed=!!item;if(!item){item={id:nextId++,type:x.type,title:x.title,creator:x.creator,status,source:'직접 기록',saved:Date.now(),saveCount:1,provider:x.provider,providerId:x.providerId,year:x.year,extra:x.extra,workKey:x.workKey,tracks:x.tracks};contents.push(item)}else{item.status=status;bumpSaveCount(item,'직접 기록');item.provider=item.provider||x.provider;item.providerId=item.providerId||x.providerId;item.year=item.year||x.year;item.extra=item.extra||x.extra;item.workKey=item.workKey||x.workKey;if(x.tracks&&!item.tracks)item.tracks=x.tracks}
+function saveDirectCandidate(value){const x=state.directCandidate;if(!x)return;const status=directStatus(x.type,value);let item=findExistingContent(x);const existed=!!item;if(!item){item={id:nextId++,type:x.type,title:x.title,creator:x.creator,status,source:'직접 기록',saved:Date.now(),provider:x.provider,providerId:x.providerId,year:x.year,extra:x.extra,workKey:x.workKey,tracks:x.tracks};contents.push(item)}else{item.status=status;item.saved=Date.now();item.provider=item.provider||x.provider;item.providerId=item.providerId||x.providerId;item.year=item.year||x.year;item.extra=item.extra||x.extra;item.workKey=item.workKey||x.workKey;if(x.tracks&&!item.tracks)item.tracks=x.tracks}
  if(status==='experienced'){item.growth=4;item.completed='2026.09.08'}else if(status==='dislike'){delete item.growth}
  closeSheet();if(state.directReturn==='onboarding'){state.onbAnswers++;renderOnboarding();go('onboarding');toast(existed?'기존 기록을 업데이트했습니다':'취향 데이터에 추가했습니다');return}state.detailId=item.id;state.detailFrom='scrap';go('detail');toast(existed?'이미 있던 콘텐츠를 업데이트했습니다':'기본 정보를 자동완성해 기록했습니다')}
 function openManualTaste(){openDirectEntry('onboarding')}
 
-
-// ===== 이미지 가져오기 / 직접 선택 프로토타입 =====
-const importDemoCandidates=[
- {type:'book',title:'모순',creator:'양귀자',provider:'Kakao Book',providerId:'DEMO-ISBN-001',flag:'찾음'},
- {type:'book',title:'구의 증명',creator:'최진영',provider:'Kakao Book',providerId:'DEMO-ISBN-002',flag:'찾음'},
- {type:'book',title:'급류',creator:'정대건',provider:'Kakao Book',providerId:'DEMO-ISBN-003',flag:'찾음'},
- {type:'book',title:'파과',creator:'구병모',provider:'Kakao Book',providerId:'DEMO-ISBN-004',flag:'확인 필요'},
- {type:'movie',title:'애프터썬',creator:'샬롯 웰스',provider:'TMDB',providerId:'DEMO-TMDB-005',flag:'찾음'},
- {type:'album',title:'Blue',creator:'Joni Mitchell',provider:'MusicBrainz',providerId:'DEMO-MBID-006',flag:'찾음'}
-];
-function startImport(origin='scrap'){
- state.importReturn=origin; state.importFiles=[]; state.importCandidates=[];
- go('importPhoto');
- setTimeout(()=>{const f=$('importFiles');if(f)f.value='';const g=$('importPreviewGrid');if(g)g.innerHTML='';const b=$('importAnalyzeBtn');if(b)b.classList.add('hidden');const n=$('importPhotoNote');if(n)n.textContent='실제 프로토타입에서는 선택한 사진을 브라우저 안에서만 미리 보여줍니다. 임의 이미지의 실제 AI 인식은 서버 연동 전이라, 결과 확인 화면은 샘플 후보로 시뮬레이션합니다.'},0)
-}
-function importBack(){if(state.importReturn==='onboarding')go('onbIntro');else go('scrap')}
-function handleImportFiles(files){
- const list=[...files].slice(0,6); state.importFiles=[];
- const grid=$('importPreviewGrid'); if(grid)grid.innerHTML='';
- if(!list.length){$('importAnalyzeBtn')?.classList.add('hidden');return}
- list.forEach((file,i)=>{
-  const url=URL.createObjectURL(file); state.importFiles.push({name:file.name,url});
-  if(grid)grid.insertAdjacentHTML('beforeend',`<button class="importPreview" onclick="openImportImage(${i})"><img src="${url}" alt=""><span>사진 ${i+1}</span></button>`)
- });
- $('importAnalyzeBtn')?.classList.remove('hidden');
- const note=$('importPhotoNote'); if(note)note.textContent=`${list.length}장을 선택했습니다. ‘콘텐츠 찾기’를 누르면 이 프로토타입에서는 실제 사진을 유지한 채 인식 결과 확인 UX를 시뮬레이션합니다.`;
-}
-function loadImportDemo(){state.importFiles=[{name:'교보 장바구니 예시',url:null},{name:'저장 목록 예시',url:null}];analyzeImport()}
-function analyzeImport(){
- state.importCandidates=importDemoCandidates.map((x,i)=>({...x,_idx:i,selected:true,sourceIndex:state.importFiles.length?i%state.importFiles.length:0}));
- renderImportReview();go('importReview')
-}
-function renderImportReview(){
- const list=$('importCandidateList'),strip=$('importSourceStrip');if(!list||!strip)return;
- strip.innerHTML=(state.importFiles.length?state.importFiles:[{name:'샘플 원본',url:null}]).map((f,i)=>f.url?`<button class="importSourceThumb" onclick="openImportImage(${i})"><img src="${f.url}" alt=""></button>`:`<button class="importSourceThumb demo" onclick="openImportImage(${i})">${esc(f.name||'샘플 원본')}</button>`).join('');
- list.innerHTML=state.importCandidates.map((x,i)=>`<div class="importCandidate"><input type="checkbox" ${x.selected?'checked':''} onchange="toggleImportCandidate(${i},this.checked)"><div class="miniThumb ${coverClass(x.type)}">${typeLabel(x.type)}</div><div><div class="candidateTitle">${esc(x.title)}</div><div class="candidateInfo">${esc(x.creator)} · ${typeLabel(x.type)} · 사진 ${(x.sourceIndex||0)+1}</div><span class="candidateFlag ${x.flag==='확인 필요'?'need':''}">${esc(x.flag)}</span>${x.flag==='확인 필요'?` <button class="headbtn" onclick="swapImportCandidate(${i})">다른 후보</button>`:''}</div></div>`).join('');
- updateImportSelectedCount()
-}
-function toggleImportCandidate(i,v){if(state.importCandidates[i])state.importCandidates[i].selected=v;updateImportSelectedCount()}
-function updateImportSelectedCount(){const n=state.importCandidates.filter(x=>x.selected).length;if($('importSelectedCount'))$('importSelectedCount').textContent=`${n}개 선택`}
-function swapImportCandidate(i){
- const x=state.importCandidates[i];if(!x)return;
- const alt={type:'book',title:'홍학의 자리',creator:'정해연',provider:'Kakao Book',providerId:'DEMO-ALT-001',flag:'후보 변경',selected:true,sourceIndex:x.sourceIndex,_idx:x._idx};
- state.importCandidates[i]=alt;renderImportReview();toast('다른 후보로 바꿨습니다')
-}
-function openImportImage(i){
- const f=(state.importFiles.length?state.importFiles:[{name:'샘플 원본',url:null}])[i]||state.importFiles[0];
- if(f&&f.url)showSheet(`<h2>원본 사진 ${i+1}</h2><img class="importHero" src="${f.url}" alt=""><p>인식 결과와 원본을 번갈아 확인할 수 있습니다.</p><button class="btn secondary" onclick="closeSheet()">닫기</button>`);
- else showSheet(`<h2>원본 사진 ${i+1}</h2><div class="cover" style="height:220px">샘플 장바구니 / 찜 목록 화면</div><p>실제 파일을 선택하면 이 위치에서 원본 이미지를 크게 확인합니다.</p><button class="btn secondary" onclick="closeSheet()">닫기</button>`)
-}
-function saveImportedCandidates(){
- const selected=state.importCandidates.filter(x=>x.selected); if(!selected.length){toast('저장할 콘텐츠를 선택해주세요');return}
- let addedSignals=0;
- selected.forEach(x=>{
-  let item=findExistingContent(x);
-  if(!item){
-   item={id:nextId++,type:x.type,title:x.title,creator:x.creator,status:'interested',source:'사진 가져오기',saved:Date.now(),saveCount:1,provider:x.provider,providerId:x.providerId,workKey:`${x.type}:${norm(x.title)}:${norm(x.creator)}`};
-   contents.push(item)
-  }else{
-   // 기존 EXPERIENCED / IN_PROGRESS 상태는 절대 INTERESTED로 되돌리지 않는다.
-   bumpSaveCount(item,'사진 가져오기')
-  }
-  addedSignals++
- });
- if(state.importReturn==='onboarding'){
-  state.onbAnswers+=addedSignals;
-  if(state.onbAnswers>=10){go('today');toast(`${selected.length}개를 가져왔어요 · 송림을 시작합니다`)}
-  else{go('onboarding');renderOnboarding();toast(`${selected.length}개를 가져왔어요 · 현재 ${state.onbAnswers}개 신호`)}
- }else{go('scrap');renderScraps();toast(`${selected.length}개를 스크랩에 정리했습니다`)}
-}
-function startRecommendedExperience(id){state.lastSelectionSource='songlim_recommendation';startExperience(id)}
-function openDirectPick(){
- state.directPickType='all';go('directPick');
- setTimeout(()=>{const q=$('directPickSearch');if(q)q.value='';document.querySelectorAll('#directPickChips .chip').forEach((b,i)=>b.classList.toggle('active',i===0));renderDirectPick()},0)
-}
-function setDirectPickType(v,b){state.directPickType=v;document.querySelectorAll('#directPickChips .chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderDirectPick()}
-function renderDirectPick(){
- const box=$('directPickList');if(!box)return;
- const q=norm($('directPickSearch')?.value||'');
- const arr=contents.filter(x=>x.status==='interested').filter(x=>state.directPickType==='all'||x.type===state.directPickType).filter(x=>!q||norm(x.title).includes(q)||norm(x.creator).includes(q)).sort(interestPriority);
- box.innerHTML=arr.length?arr.slice(0,30).map(x=>`<button class="pickRow ${x.type==='album'?'album':''}" onclick="chooseDirectPick(${x.id})"><div class="thumb ${coverClass(x.type)}">${typeLabel(x.type)}</div><div class="grow"><div class="title">${esc(x.title)}</div><div class="meta">${esc(x.creator)} · ${saveCountLabel(x.saveCount)}</div></div><span class="pickAction">이번 주 선택</span></button>`).join(''):`<div class="note">경험 전 콘텐츠가 없습니다. 스크랩에 먼저 저장해보세요.<button class="btn secondary" style="margin-top:10px" onclick="startImport('scrap')">사진으로 가져오기</button></div>`
-}
-function chooseDirectPick(id){state.lastSelectionSource='user_direct';startExperience(id);toast('이번 주 콘텐츠로 직접 선택했습니다')}
-
 // 상세 화면에 자동완성 메타데이터 표시
-function renderDetail(){const x=contents.find(c=>c.id===state.detailId);if(!x){$('detailBody').innerHTML='<div class="note">콘텐츠를 찾을 수 없습니다.</div>';return}let primary='';if(x.status==='interested')primary=`<button class="btn" onclick="startFromDetail(${x.id})">경험 시작하기</button>`;else if(x.status==='in_progress')primary=`<button class="btn" onclick="go('today')">오늘의 경험으로 이동</button>`;else if(x.status==='experienced')primary=`<button class="btn secondary" onclick="openRating(${x.id})">${x.rating?'평가 수정':'평가하기'}</button>`;$('detailBody').innerHTML=`<div class="cover detailCover ${coverClass(x.type)}">${typeLabel(x.type)} COVER</div><h1 class="hero" style="margin-top:16px">${esc(x.title)}</h1><p>${esc(x.creator)}</p><div class="detailMeta"><div class="line"><span>유형</span><b>${typeLabel(x.type)}</b></div>${x.year?`<div class="line"><span>연도</span><b>${esc(x.year)}</b></div>`:''}${x.extra?`<div class="line"><span>기본 정보</span><b>${esc(x.extra)}</b></div>`:''}<div class="line"><span>최초 저장 출처</span><b>${esc(x.source||'직접 입력')}</b></div>${x.provider?`<div class="line"><span>메타데이터</span><b>${esc(x.provider)}</b></div>`:''}${x.providerId?`<div class="line"><span>외부 식별자</span><b>${esc(x.providerId)}</b></div>`:''}<div class="line"><span>저장 횟수</span><b>${saveCountLabel(x.saveCount)}</b></div><div class="line"><span>현재 상태</span><b>${statusLabel(x.status)}</b></div>${x.completed?`<div class="line"><span>완료일</span><b>${esc(x.completed)}</b></div>`:''}${x.status==='experienced'?`<div class="line"><span>내 평가</span><b>${x.rating?x.rating+' / 5':'평가 없음'}</b></div>`:''}</div><div class="detailActions">${primary}<button class="btn text" onclick="deleteCurrentContent()">삭제</button></div>`}
+function renderDetail(){const x=contents.find(c=>c.id===state.detailId);if(!x){$('detailBody').innerHTML='<div class="note">콘텐츠를 찾을 수 없습니다.</div>';return}let primary='';if(x.status==='interested')primary=`<button class="btn" onclick="startFromDetail(${x.id})">경험 시작하기</button>`;else if(x.status==='in_progress')primary=`<button class="btn" onclick="go('today')">오늘의 경험으로 이동</button>`;else if(x.status==='experienced')primary=`<button class="btn secondary" onclick="openRating(${x.id})">${x.rating?'평가 수정':'평가하기'}</button>`;$('detailBody').innerHTML=`<div class="cover detailCover ${coverClass(x.type)}">${typeLabel(x.type)} COVER</div><h1 class="hero" style="margin-top:16px">${esc(x.title)}</h1><p>${esc(x.creator)}</p><div class="detailMeta"><div class="line"><span>유형</span><b>${typeLabel(x.type)}</b></div>${x.year?`<div class="line"><span>연도</span><b>${esc(x.year)}</b></div>`:''}${x.extra?`<div class="line"><span>기본 정보</span><b>${esc(x.extra)}</b></div>`:''}<div class="line"><span>최초 저장 출처</span><b>${esc(x.source||'직접 입력')}</b></div>${x.provider?`<div class="line"><span>메타데이터</span><b>${esc(x.provider)}</b></div>`:''}${x.providerId?`<div class="line"><span>외부 식별자</span><b>${esc(x.providerId)}</b></div>`:''}<div class="line"><span>현재 상태</span><b>${statusLabel(x.status)}</b></div>${x.completed?`<div class="line"><span>완료일</span><b>${esc(x.completed)}</b></div>`:''}${x.status==='experienced'?`<div class="line"><span>내 평가</span><b>${x.rating?x.rating+' / 5':'평가 없음'}</b></div>`:''}</div><div class="detailActions">${primary}<button class="btn text" onclick="deleteCurrentContent()">삭제</button></div>`}
 
 // ===== Notion 212권 데이터 적용 안정화 패치 =====
 function cleanNotionText(v){return String(v||'').replace(/\s*\(https:\/\/app\.notion\.com\/[^)]*\)/g,'').replace(/\s*,\s*/g,' · ').trim()}
@@ -941,7 +845,7 @@ function renderScraps(){
   .filter(x=>state.statusFilter==='all'||x.status===state.statusFilter)
   .filter(x=>state.typeFilter==='all'||x.type===state.typeFilter)
   .filter(x=>!q||norm(x.title).includes(q)||norm(x.creator).includes(q))
-  .sort(interestPriority);
+  .sort((a,b)=>(b.saved||0)-(a.saved||0));
  const notionCount=arr.filter(x=>x.source==='Notion 독서목록').length;
  const info=(state.typeFilter==='book'||state.typeFilter==='all')?`<div class="small" style="margin:10px 0">현재 ${arr.length}개${notionCount?` · Notion 독서목록 ${notionCount}권 포함`:''}</div>`:'';
  $('scrapList').innerHTML=info+(arr.length?arr.map(x=>contentCard(x,'scrap')).join(''):'<div class="note">조건에 맞는 스크랩이 없습니다.</div>')
@@ -960,9 +864,693 @@ function catalogByKey(key){
  }
  return providerCatalog.find(x=>x.key===key)
 }
-function init(){ensureNotionContents();seedSaveEvents();renderOnboarding();setupForestDrag();renderScraps();renderForest();renderMonthlyForest();renderPastForest()}
+function init(){ensureNotionContents();renderOnboarding();setupForestDrag();renderScraps();renderForest()}
 
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+</script>
+
+<script id="function-definition-patch-20260909-1719">
+function appToday(){const d=new Date();d.setDate(d.getDate()+(window.demoDayOffset||0));return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+let APP_YEAR=Number(appToday().slice(0,4));
+let APP_MONTH=Number(appToday().slice(5,7));
+state.importOrigin='scrap';state.importFiles=[];state.importBatch=[];state.scrapSort='saved_count';state.weeklyPickType='all';state.forestMonthYear=APP_YEAR;state.forestMonth=APP_MONTH;state.forestYear=APP_YEAR;state.yearPanX=0;state.yearPanY=0;
+
+function dateKey(v){const m=String(v||'').match(/(20\d{2})[.\/-](\d{1,2})[.\/-](\d{1,2})/);return m?`${m[1]}-${String(m[2]).padStart(2,'0')}-${String(m[3]).padStart(2,'0')}`:''}
+function dateParts(v){const k=dateKey(v);if(!k)return null;const [y,m,d]=k.split('-').map(Number);return {y,m,d,key:k}}
+function saveCountOf(x){return Math.max(1,Number(x.saveCount||x.save_count||1))}
+function lastSavedKey(x){return dateKey(x.lastSavedAt||x.last_saved_at)||((typeof x.saved==='string')?dateKey(x.saved):'')||'2026-09-01'}
+function ensureSaveModel(){contents.forEach((x,i)=>{if(!x.saveCount)x.saveCount=(x.source==='Notion 독서목록'?1:Math.min(5,1+(i%5)));if(!x.lastSavedAt)x.lastSavedAt=x.source==='Notion 독서목록'?'2026-09-09':(i<8?'2026-09-08':'2026-08-28');if(!x.firstSavedAt)x.firstSavedAt=x.lastSavedAt;if(!Array.isArray(x.saveEvents))x.saveEvents=[x.lastSavedAt]})}
+function pushSaveEvent(x,source){ensureSaveModel();x.saveCount=saveCountOf(x)+1;x.lastSavedAt=appToday();x.saved=Date.now();x.saveEvents=x.saveEvents||[];x.saveEvents.push(appToday());if(source&&!x.source)x.source=source}
+function completedInYear(year){return contents.filter(x=>x.status==='experienced'&&dateParts(x.completed)?.y===year)}
+function completedInMonth(year,month){return contents.filter(x=>{const p=dateParts(x.completed);return x.status==='experienced'&&p&&p.y===year&&p.m===month}).sort((a,b)=>dateKey(b.completed).localeCompare(dateKey(a.completed)))}
+function inProgressNow(){return contents.filter(x=>x.status==='in_progress')}
+function contentSavedInMonth(x,year,month){const ev=(x.saveEvents||[x.lastSavedAt]).map(dateParts).filter(Boolean);return ev.some(p=>p.y===year&&p.m===month)}
+function formatCompleted(v){const p=dateParts(v);return p?`${p.m}월 ${p.d}일 완료`:''}
+
+// 화면 이동: 기능정의서 SCREEN ID 구조에 맞춘 컨텍스트 유지
+function go(id){
+ document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+ const el=$(id);if(!el)return;el.classList.add('active');el.scrollTop=0;
+ const app=el.classList.contains('app');$('tabs').classList.toggle('show',app);
+ if(app){let tabId=['forest','forestMonth','forestArchive','forestYear'].includes(id)?'forest':id==='weeklyPick'?'today':id==='detail'?'scrap':id;setActiveTab(tabId)}
+ if(id==='today')renderToday();
+ if(id==='weeklyPick')renderWeeklyPick();
+ if(id==='scrap')renderScraps();
+ if(id==='detail')renderDetail();
+ if(id==='forest')renderForest();
+ if(id==='forestMonth')renderForestMonth();
+ if(id==='forestArchive')renderForestArchive();
+ if(id==='forestYear')renderForestYear();
+ if(id==='importReview')renderImportReview();
+}
+
+// ONB-01 / IMPORT-01 / IMPORT-02
+function openImport(origin='scrap'){state.importOrigin=origin;state.importFiles=[];state.importBatch=[];go('importPhotos');const input=$('importFileInput');if(input)input.value='';$('importSelectedInfo').textContent='선택한 사진이 없습니다.';$('importAnalyzeBtn').disabled=true}
+function cancelImport(){go(state.importOrigin==='onboarding'?'onbIntro':'scrap')}
+function handleImportFiles(files){state.importFiles=[...(files||[])];const n=state.importFiles.length;$('importSelectedInfo').textContent=n?`${n}장 선택됨 · ${state.importFiles.slice(0,3).map(f=>f.name).join(' · ')}${n>3?' 외 '+(n-3)+'장':''}`:'선택한 사진이 없습니다.';$('importAnalyzeBtn').disabled=!n}
+function loadImportDemo(){state.importFiles=[{name:'교보_장바구니.png'},{name:'찜목록.png'},{name:'instagram_saved.png'}];$('importSelectedInfo').textContent='3장 선택됨 · 교보_장바구니.png · 찜목록.png · instagram_saved.png';$('importAnalyzeBtn').disabled=false;toast('샘플 사진 3장을 선택했습니다')}
+function analyzeImportBatch(){if(!state.importFiles.length){toast('사진을 먼저 선택해주세요');return}const sample=['book-norwegian','album-rainbows','movie-perfect','book-cosmos','album-blue','movie-decision'];state.importBatch=sample.map((key,i)=>{const x=catalogByKey(key)||providerCatalog.find(p=>p.key===key);return {...x,selected:true,confidence:i===4?'확인 필요':'확정',batchIndex:i}}).filter(Boolean);go('importReview')}
+function renderImportReview(){const box=$('importReviewList');if(!box)return;const selected=state.importBatch.filter(x=>x.selected).length;$('importFoundCount').textContent=`찾은 콘텐츠 ${state.importBatch.length}개`;$('importSelectedCount').textContent=`${selected}개 선택`;box.innerHTML=state.importBatch.map((x,i)=>{const existing=findExistingContent(x);return `<div class="importItem ${x.type==='album'?'album':''}"><button class="importCheck ${x.selected?'on':''}" onclick="toggleImportItem(${i})">${x.selected?'✓':''}</button><div class="importThumb">${typeLabel(x.type)}</div><div class="importItemBody"><div class="title">${esc(x.title)}</div><div class="meta">${esc(x.creator)}${x.year?' · '+esc(x.year):''}</div><div class="importState">${existing?`이미 저장됨 · 현재 ${saveCountOf(existing)}번 저장`:x.confidence}${x.confidence==='확인 필요'?' · 후보 확인 권장':''}</div><div class="importItemActions">${x.confidence==='확인 필요'?`<button onclick="changeImportCandidate(${i})">다른 후보</button>`:''}<button onclick="excludeImportItem(${i})">제외</button></div></div></div>`}).join('')||'<div class="note">찾은 콘텐츠가 없습니다. 다른 사진을 선택하거나 직접 검색해주세요.</div>'}
+function toggleImportItem(i){if(!state.importBatch[i])return;state.importBatch[i].selected=!state.importBatch[i].selected;renderImportReview()}
+function excludeImportItem(i){if(!state.importBatch[i])return;state.importBatch[i].selected=false;renderImportReview()}
+function changeImportCandidate(i){const current=state.importBatch[i];if(!current)return;const alt=current.type==='album'?catalogByKey('album-kindofblue'):current.type==='movie'?catalogByKey('movie-aftersun'):catalogByKey('book-greek');showSheet(`<h2>다른 후보 선택</h2><p>현재: ${esc(current.title)} · ${esc(current.creator)}</p>${alt?candidateRowHTML(alt,`applyImportCandidate(${i},'${alt.key}')`):''}<button class="btn secondary" onclick="closeSheet()">취소</button>`)}
+function applyImportCandidate(i,key){const x=catalogByKey(key);if(!x)return;state.importBatch[i]={...x,selected:true,confidence:'사용자 확인',batchIndex:i};closeSheet();renderImportReview()}
+function saveImportBatch(){const rows=state.importBatch.filter(x=>x.selected);if(!rows.length){toast('저장할 콘텐츠를 선택해주세요');return}ensureSaveModel();let signal=0;const seen=new Set();rows.forEach(x=>{const dedup=x.workKey||`${x.type}|${norm(x.title)}|${norm(x.creator)}`;if(seen.has(dedup))return;seen.add(dedup);let item=findExistingContent(x);if(item){pushSaveEvent(item,'사진 가져오기')}else{item={id:nextId++,type:x.type,title:x.title,creator:x.creator,status:'interested',source:'사진 가져오기',saved:Date.now(),saveCount:1,firstSavedAt:appToday(),lastSavedAt:appToday(),saveEvents:[appToday()],provider:x.provider,providerId:x.providerId,year:x.year,extra:x.extra,workKey:x.workKey,tracks:x.tracks};contents.push(item)}signal++});if(state.importOrigin==='onboarding'){state.onbAnswers+=signal;if(window.isAddingTaste?.()){go('my');toast(`${signal}개를 취향 데이터에 추가했습니다`)}else if(state.onbAnswers>=10){go('today');toast(`${signal}개를 가져왔습니다 · 송림을 시작합니다`)}else{go('onboarding');renderOnboarding();toast(`${signal}개를 가져왔습니다 · 현재 ${state.onbAnswers}개 신호`)}}else{go('scrap');toast(`${signal}개를 스크랩에 반영했습니다`)}}
+
+// 스크랩: save_count 우선 정렬 + 저장 횟수 표시
+function startShareFlow(){state.shareReturn='scrap';showSheet(`<h2>콘텐츠 추가</h2><p>앱 안에서는 사진으로 가져오거나 제목으로 직접 검색할 수 있습니다. 외부에서 발견한 콘텐츠는 OS 공유에서 송림을 선택합니다.</p><div class="entryChoice"><button class="btn" onclick="closeSheet();openImport('scrap')">사진으로 가져오기</button><button class="btn secondary" onclick="closeSheet();openDirectEntry('scrap')">직접 검색</button></div><button class="btn text" onclick="closeSheet()">취소</button>`)}
+function toggleScrapSort(){state.scrapSort=state.scrapSort==='saved_count'?'recent':'saved_count';$('scrapSortButton').textContent=state.scrapSort==='saved_count'?'많이 저장한 순⌄':'최근 저장순⌄';renderScraps()}
+function contentCard(x,from='scrap'){const rating=x.status==='experienced'?(x.rating?`<span class="rating">내 평가 ${x.rating}/5</span>`:`<span class="rating muted">평가 없음</span>`):'';return `<div class="card row" onclick="openDetail(${x.id},'${from}')"><div class="thumb ${coverClass(x.type)}">${typeLabel(x.type)}</div><div class="grow"><div class="title">${esc(x.title)}</div><div class="meta">${esc(x.creator)}</div><span class="pill">${statusLabel(x.status)}</span><span class="saveCount">${saveCountOf(x)}번 저장</span>${rating}</div><span class="chev">›</span></div>`}
+function renderScraps(){ensureSaveModel();const q=norm($('searchInput')?.value||'');const arr=[...contents].filter(x=>x.status!=='dislike').filter(x=>state.statusFilter==='all'||x.status===state.statusFilter).filter(x=>state.typeFilter==='all'||x.type===state.typeFilter).filter(x=>!q||norm(x.title).includes(q)||norm(x.creator).includes(q)).sort((a,b)=>state.scrapSort==='recent'?lastSavedKey(b).localeCompare(lastSavedKey(a)):(saveCountOf(b)-saveCountOf(a)||lastSavedKey(b).localeCompare(lastSavedKey(a))));$('scrapList').innerHTML=arr.length?arr.map(x=>contentCard(x,'scrap')).join(''):'<div class="note">조건에 맞는 스크랩이 없습니다.</div>'}
+function renderDetail(){const x=contents.find(c=>c.id===state.detailId);if(!x){$('detailBody').innerHTML='<div class="note">콘텐츠를 찾을 수 없습니다.</div>';return}ensureSaveModel();let primary='';if(x.status==='interested')primary=`<button class="btn" onclick="startFromDetail(${x.id})">경험 시작하기</button>`;else if(x.status==='in_progress')primary=`<button class="btn" onclick="go('today')">오늘의 경험으로 이동</button>`;else if(x.status==='experienced')primary=`<button class="btn secondary" onclick="openRating(${x.id})">${x.rating?'평가 수정':'평가하기'}</button>`;$('detailBody').innerHTML=`<div class="cover detailCover ${coverClass(x.type)}">${typeLabel(x.type)} COVER</div><h1 class="hero" style="margin-top:16px">${esc(x.title)}</h1><p>${esc(x.creator)}</p><div class="detailMeta"><div class="line"><span>유형</span><b>${typeLabel(x.type)}</b></div>${x.year?`<div class="line"><span>연도</span><b>${esc(x.year)}</b></div>`:''}${x.extra?`<div class="line"><span>기본 정보</span><b>${esc(x.extra)}</b></div>`:''}<div class="line"><span>최초 저장 출처</span><b>${esc(x.source||'직접 입력')}</b></div><div class="line"><span>총 저장 횟수</span><b>${saveCountOf(x)}번</b></div>${x.provider?`<div class="line"><span>메타데이터</span><b>${esc(x.provider)}</b></div>`:''}${x.providerId?`<div class="line"><span>외부 식별자</span><b>${esc(x.providerId)}</b></div>`:''}<div class="line"><span>현재 상태</span><b>${statusLabel(x.status)}</b></div>${x.completed?`<div class="line"><span>완료일</span><b>${esc(dateKey(x.completed)||x.completed)}</b></div>`:''}${x.status==='experienced'?`<div class="line"><span>내 평가</span><b>${x.rating?x.rating+' / 5':'평가 없음'}</b></div>`:''}</div><div class="detailActions">${primary}<button class="btn text" onclick="deleteCurrentContent()">삭제</button></div>`}
+function confirmShareSave(){const x=state.shareCandidate;if(!x)return;ensureSaveModel();let item=findExistingContent(x);if(!item){item={id:nextId++,type:x.type,title:x.title,creator:x.creator,status:'interested',source:x.sourceApp||'외부 공유',saved:Date.now(),saveCount:1,firstSavedAt:appToday(),lastSavedAt:appToday(),saveEvents:[appToday()],provider:x.provider,providerId:x.providerId,year:x.year,extra:x.extra,workKey:x.workKey,tracks:x.tracks};contents.push(item)}else{pushSaveEvent(item,x.sourceApp||'외부 공유')}state.detailId=item.id;state.detailFrom='scrap';go('detail');toast(item.saveCount>1?`${item.saveCount}번 저장된 관심으로 반영했습니다`:'관심의 씨앗으로 저장했습니다')}
+function finishDuplicateShare(id){const item=contents.find(x=>x.id===id);if(item)pushSaveEvent(item,'외부 공유');state.detailId=id;state.detailFrom='scrap';go('detail');toast(item?`${saveCountOf(item)}번 저장으로 반영했습니다`:'기존 스크랩을 엽니다')}
+
+// TODAY-01 / TODAY-02: 반복 저장 우선 추천과 사용자 직접 선택
+function recommendationBase(){ensureSaveModel();return contents.filter(x=>x.status==='interested').sort((a,b)=>saveCountOf(b)-saveCountOf(a)||lastSavedKey(b).localeCompare(lastSavedKey(a)))}
+function renderToday(){const box=$('todayBody'),cur=activeContent();if(!cur){const r=currentRecommendation();if(!r){box.innerHTML=recommendationBase().length?`<div class="recommend"><div class="note" style="margin-top:16px">이번 추천에서 볼 수 있는 후보를 모두 확인했습니다.</div><button class="btn secondary" onclick="resetRecommendationSession()">처음부터 다시 보기</button></div>`:`<div class="note" style="margin-top:16px">경험 전 콘텐츠가 없습니다. 스크랩에서 관심 콘텐츠를 먼저 저장해주세요.</div><button class="btn" onclick="openImport('scrap')">사진으로 가져오기</button><button class="btn secondary" onclick="openDirectEntry('scrap')">직접 검색</button>`;return}box.innerHTML=`<div class="recommend"><div class="cover small ${coverClass(r.type)}">${typeLabel(r.type)} COVER</div><h2>${esc(r.title)}</h2><p>${esc(r.creator)} · ${saveCountOf(r)}번 저장</p><div class="recommend-actions"><button class="btn" onclick="startExperience(${r.id})">경험 시작하기</button>${recommendationBase().length>1?'<button class="btn secondary" onclick="skipRecommendation()">이번에는 넘기기</button>':''}<button class="btn text" onclick="go('weeklyPick')">내가 직접 고를래요</button></div><div class="placeholderDaily"><div class="sectionlabel">오늘의 경험</div><p>콘텐츠를 선택하면 같은 화면에서 바로 오늘의 경험이 열립니다.</p></div></div>`;return}const dailyFirst=state.returnVisit;const currentCard=`<div class="currentCard">${contentCard(cur,'today')}</div>`;const experience=experienceHTML(cur,dailyFirst);box.innerHTML=dailyFirst?`${experience}<div class="sectionlabel">현재 경험 중</div>${currentCard}`:`${currentCard}${experience}`}
+function setWeeklyPickType(v,b){state.weeklyPickType=v;document.querySelectorAll('#weeklyPickChips .chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderWeeklyPick()}
+function renderWeeklyPick(){ensureSaveModel();const q=norm($('weeklyPickSearch')?.value||'');const arr=recommendationBase().filter(x=>state.weeklyPickType==='all'||x.type===state.weeklyPickType).filter(x=>!q||norm(x.title).includes(q)||norm(x.creator).includes(q));$('weeklyPickList').innerHTML=arr.length?arr.map(x=>`<button class="monthRecord" onclick="selectWeeklyPick(${x.id})"><div class="thumb ${coverClass(x.type)}">${typeLabel(x.type)}</div><div class="grow"><div class="title">${esc(x.title)}</div><div class="meta">${esc(x.creator)}</div><div class="weeklyPickCount">${saveCountOf(x)}번 저장</div></div><span class="chev">›</span></button>`).join(''):'<div class="note">경험 전 콘텐츠가 없습니다. 사진 가져오기 또는 직접 검색으로 관심을 먼저 저장해주세요.</div><button class="btn" onclick="openImport(\'scrap\')">사진으로 가져오기</button><button class="btn secondary" onclick="openDirectEntry(\'scrap\')">직접 검색</button>'}
+function selectWeeklyPick(id){const x=contents.find(c=>c.id===id);if(!x)return;x.selectionSource='USER_DIRECT';startExperience(id);go('today')}
+function completeExperience(id){const x=contents.find(c=>c.id===id);if(!x)return;x.status='experienced';x.growth=4;x.completed=appToday();state.currentId=null;state.skipped.clear();state.returnVisit=false;showCompletion(x)}
+
+// FOREST-01: 현재 연도 완료 + 현재 경험 중만 표시
+function forestStage(x){return x.status==='experienced'?4:Math.max(0,Math.min(3,x.growth??0))}
+function renderForestWorld(world,items,{avatar=null,clickable=true,heightMode='current'}={}){world.querySelectorAll('.forestTree,.animal').forEach(x=>x.remove());const spacing=76,anchor=92,worldWidth=Math.max(world.parentElement?.clientWidth||350,anchor+Math.max(0,items.length-1)*spacing+110);world.style.width=worldWidth+'px';items.forEach((x,i)=>{const px=anchor+i*spacing;const e=document.createElement(clickable?'button':'span');e.className='forestTree stage-'+['seed','sprout','bush','tree','big'][forestStage(x)];e.dataset.x=px;e.style.left=px+'px';e.style.bottom=(heightMode==='year'?57:37)+(i%3)*4+'px';if(clickable)e.onclick=()=>openDetail(x.id,'forest');e.innerHTML=`<span class="forestInfo"><b>${esc(x.title)}</b><span>${esc(x.creator)}</span></span><span class="shape"><i></i></span>`;world.appendChild(e)});const animalCount=Math.min(5,Math.floor(items.length/12)+1);for(let i=0;i<animalCount&&items.length;i++){const a=document.createElement('span');a.className='animal '+(i%3===0?'bird':'');a.textContent=['새','토끼','개구리'][i%3];a.style.left=Math.min(worldWidth-30,130+((i*227)%Math.max(180,worldWidth-160)))+'px';a.style.bottom=(heightMode==='year'?58:38)+(i%2)*18+'px';world.appendChild(a)}if(avatar){state.forestX=items.length?anchor:anchor;avatar.style.left=state.forestX+'px'}}
+function renderForest(){ensureSaveModel();$('forestYearLabel').textContent=`${APP_YEAR} 올해의 숲`;const done=completedInYear(APP_YEAR).sort((a,b)=>dateKey(b.completed).localeCompare(dateKey(a.completed)));const inProg=inProgressNow();const active=activeContent();const ordered=[];if(active&&inProg.some(x=>x.id===active.id))ordered.push(active);inProg.forEach(x=>{if(!ordered.some(o=>o.id===x.id))ordered.push(x)});done.forEach(x=>{if(!ordered.some(o=>o.id===x.id))ordered.push(x)});ordered.splice(10);const vp=$('forestViewport'),world=$('forestWorld');renderForestWorld(world,ordered,{avatar:null,clickable:true});const empty=$('forestEmpty');if(!ordered.length){empty.classList.remove('hidden');empty.innerHTML=`<b>아직 올해의 숲이 비어 있어요</b><span>${recommendationBase().length?'저장한 콘텐츠에서 하나를 골라 경험을 시작해보세요.':'스크랩에 관심 콘텐츠를 먼저 저장해보세요.'}</span><button class="btn inline" style="margin-top:12px" onclick="${recommendationBase().length?"go('today')":"openImport('scrap')"}">${recommendationBase().length?'경험 시작하기':'콘텐츠 가져오기'}</button>`}else empty.classList.add('hidden');const counts={book:done.filter(x=>x.type==='book').length,album:done.filter(x=>x.type==='album').length,movie:done.filter(x=>x.type==='movie').length};$('bookStat').textContent=counts.book;$('albumStat').textContent=counts.album;$('movieStat').textContent=counts.movie;const recent=[...done].sort((a,b)=>dateKey(b.completed).localeCompare(dateKey(a.completed))).slice(0,2);$('forestRecentList').innerHTML=recent.length?recent.map(x=>forestRecordCard(x,'forest')).join(''):'<div class="note">올해 완료한 경험이 아직 없습니다.</div>';vp.scrollTo({left:0,behavior:'auto'});updateForestActive()}
+function treePositions(){return [...document.querySelectorAll('#forestWorld .forestTree')].map(e=>({e,x:Number(e.dataset.x)})).filter(v=>Number.isFinite(v.x)).sort((a,b)=>a.x-b.x)}
+function detailBack(){if(state.detailFrom==='forest')go('forest');else if(state.detailFrom==='forestMonth')go('forestMonth');else if(state.detailFrom==='today')go('today');else go('scrap')}
+function forestRecordCard(x,from){return `<button class="monthRecord" onclick="openDetail(${x.id},'${from}')"><div class="thumb ${coverClass(x.type)}">${typeLabel(x.type)}</div><div class="grow"><div class="title">${esc(x.title)}</div><div class="recordMeta">${esc(x.creator)} · ${typeLabel(x.type)} · ${formatCompleted(x.completed)}</div></div><span class="chev">›</span></button>`}
+
+// FOREST-02 월간 기록
+function renderForestMonth(){ensureSaveModel();const y=state.forestMonthYear,m=state.forestMonth;$('forestMonthLabel').textContent=`${y}년 ${m}월`;$('forestMonthNext').disabled=(y>APP_YEAR)||(y===APP_YEAR&&m>=APP_MONTH);const saved=contents.filter(x=>x.status!=='dislike'&&contentSavedInMonth(x,y,m));const done=completedInMonth(y,m);$('monthSavedCount').textContent=saved.length;$('monthCompletedCount').textContent=done.length;$('monthBookCount').textContent=done.filter(x=>x.type==='book').length;$('monthAlbumCount').textContent=done.filter(x=>x.type==='album').length;$('monthMovieCount').textContent=done.filter(x=>x.type==='movie').length;$('monthListTitle').textContent=`${m}월에 경험한 콘텐츠`;const weeks=[0,0,0,0,0];done.forEach(x=>{const p=dateParts(x.completed);if(p)weeks[Math.min(4,Math.floor((p.d-1)/7))]++});const max=Math.max(1,...weeks);$('monthWeekBars').innerHTML=weeks.map((v,i)=>`<div class="weekRow"><span>${i+1}주</span><div class="weekTrack"><div class="weekFill" style="width:${v/max*100}%"></div></div><span class="weekValue">${v}</span></div>`).join('');$('monthContentList').innerHTML=done.length?done.map(x=>forestRecordCard(x,'forestMonth')).join(''):'<div class="note">이 달에 완료한 경험이 없습니다.</div>'}
+function changeForestMonth(delta){let y=state.forestMonthYear,m=state.forestMonth+delta;if(m<1){m=12;y--}if(m>12){m=1;y++}if(y>APP_YEAR||(y===APP_YEAR&&m>APP_MONTH))return;state.forestMonthYear=y;state.forestMonth=m;renderForestMonth()}
+function shareMonthlyRecord(){toast(`${state.forestMonthYear}년 ${state.forestMonth}월 기록 · OS 공유 시트로 연결됩니다`)}
+
+// FOREST-03 / 04 연도별 숲 기록
+function forestYears(){const years=[...new Set(completed().map(x=>dateParts(x.completed)?.y).filter(Boolean))].sort((a,b)=>b-a);if(completedInYear(APP_YEAR).length&&!years.includes(APP_YEAR))years.unshift(APP_YEAR);return years}
+function renderForestArchive(){const years=forestYears().filter(y=>y<APP_YEAR);$('forestYearList').innerHTML=years.length?years.map(y=>{const n=completedInYear(y).length;return `<button class="yearCard" onclick="openForestYear(${y})"><div class="yearForestPreview"><i></i><i></i><i></i></div><div class="yearInfo"><b>${y}</b><span>${n}개의 경험 · 확정된 숲</span></div><span class="chev">›</span></button>`}).join(''):'<div class="note">아직 완성된 숲 기록이 없습니다.</div>'}
+function openForestYear(year){state.forestYear=year;go('forestYear')}
+const YEAR_SCENE_W=760,YEAR_SCENE_H=620;
+function renderForestYear(){const year=state.forestYear||APP_YEAR;if(year===APP_YEAR){go('forest');return}const rows=completedInYear(year).sort((a,b)=>dateKey(a.completed).localeCompare(dateKey(b.completed)));$('forestYearDetailTitle').textContent=`${year} 나의 숲`;$('forestYearDetailCount').textContent=`${rows.length}개의 경험`;$('yearTotalText').textContent=`${rows.length}개의 경험`;renderYearForestScene(rows);requestAnimationFrame(()=>centerYearForest())}
+function renderYearForestScene(items){const world=$('yearForestWorld'),canvas=$('yearForestCanvas');world.querySelectorAll('.forestTree,.animal').forEach(x=>x.remove());world.style.width=YEAR_SCENE_W+'px';world.style.height=YEAR_SCENE_H+'px';world.style.transform='none';canvas.style.width=YEAR_SCENE_W+'px';canvas.style.height=YEAR_SCENE_H+'px';const cols=Math.max(5,Math.ceil(Math.sqrt(Math.max(1,items.length)*1.25)));const usableW=YEAR_SCENE_W-120,usableH=YEAR_SCENE_H-150;items.forEach((x,i)=>{const col=i%cols,row=Math.floor(i/cols);const rows=Math.max(1,Math.ceil(items.length/cols));const jitter=((i*37)%23)-11;const px=60+(cols===1?usableW/2:col*(usableW/(cols-1)))+jitter;const py=76+(rows===1?usableH/2:row*(usableH/Math.max(1,rows-1)))+((i*19)%17-8);const e=document.createElement('span');e.className='forestTree stage-'+['seed','sprout','bush','tree','big'][forestStage(x)];e.style.left=px+'px';e.style.bottom=py+'px';e.innerHTML=`<span class="shape"><i></i></span>`;world.appendChild(e)});const animalCount=Math.min(7,Math.max(1,Math.floor(items.length/10)));for(let i=0;i<animalCount;i++){const a=document.createElement('span');a.className='animal '+(i%3===0?'bird':'');a.textContent=['새','토끼','개구리'][i%3];a.style.left=(90+((i*223)%(YEAR_SCENE_W-160)))+'px';a.style.bottom=(95+((i*137)%(YEAR_SCENE_H-210)))+'px';world.appendChild(a)}}
+function yearPanBounds(){const vp=$('yearForestViewport');if(!vp)return {minX:0,maxX:0,minY:0,maxY:0};return {minX:Math.min(0,vp.clientWidth-YEAR_SCENE_W),maxX:0,minY:Math.min(0,vp.clientHeight-YEAR_SCENE_H),maxY:0}}
+function applyYearPan(){const canvas=$('yearForestCanvas');if(!canvas)return;canvas.style.transform=`translate3d(${state.yearPanX||0}px,${state.yearPanY||0}px,0)`}
+function clampYearPan(){const b=yearPanBounds();state.yearPanX=Math.max(b.minX,Math.min(b.maxX,state.yearPanX||0));state.yearPanY=Math.max(b.minY,Math.min(b.maxY,state.yearPanY||0));applyYearPan()}
+function centerYearForest(){const vp=$('yearForestViewport');if(!vp)return;state.yearPanX=Math.min(0,(vp.clientWidth-YEAR_SCENE_W)/2);state.yearPanY=Math.min(0,(vp.clientHeight-YEAR_SCENE_H)/2);clampYearPan()}
+function setupYearForestDrag(){const vp=$('yearForestViewport');if(!vp||vp.dataset.panReady)return;vp.dataset.panReady='1';let down=false,pid=null,sx=0,sy=0,ox=0,oy=0;const begin=(id,x,y)=>{down=true;pid=id;sx=x;sy=y;ox=state.yearPanX||0;oy=state.yearPanY||0;vp.classList.add('dragging')};const move=(id,x,y)=>{if(!down||id!==pid)return;state.yearPanX=ox+(x-sx);state.yearPanY=oy+(y-sy);clampYearPan()};const finish=id=>{if(!down||id!==pid)return;down=false;pid=null;vp.classList.remove('dragging')};vp.addEventListener('pointerdown',e=>{if(e.button!==undefined&&e.button!==0)return;e.preventDefault();begin(e.pointerId,e.clientX,e.clientY);try{vp.setPointerCapture(e.pointerId)}catch(_){}});vp.addEventListener('pointermove',e=>{if(!down||e.pointerId!==pid)return;e.preventDefault();move(e.pointerId,e.clientX,e.clientY)});vp.addEventListener('pointerup',e=>{finish(e.pointerId);try{vp.releasePointerCapture(e.pointerId)}catch(_){}});vp.addEventListener('pointercancel',e=>finish(e.pointerId));vp.addEventListener('lostpointercapture',e=>finish(e.pointerId));window.addEventListener('resize',()=>{if(document.getElementById('forestYear')?.classList.contains('active'))clampYearPan()})}
+
+// 직접 검색 저장도 save_count와 완료일을 동일 모델에 연결
+function saveDirectCandidate(value){const x=state.directCandidate;if(!x)return;ensureSaveModel();const status=directStatus(x.type,value);let item=findExistingContent(x);const existed=!!item;if(!item){item={id:nextId++,type:x.type,title:x.title,creator:x.creator,status,source:'직접 검색',saved:Date.now(),saveCount:1,firstSavedAt:appToday(),lastSavedAt:appToday(),saveEvents:[appToday()],provider:x.provider,providerId:x.providerId,year:x.year,extra:x.extra,workKey:x.workKey,tracks:x.tracks};contents.push(item)}else{item.status=status;pushSaveEvent(item,'직접 검색');item.provider=item.provider||x.provider;item.providerId=item.providerId||x.providerId;item.year=item.year||x.year;item.extra=item.extra||x.extra;item.workKey=item.workKey||x.workKey;if(x.tracks&&!item.tracks)item.tracks=x.tracks}if(status==='experienced'){item.growth=4;item.completed=appToday()}else if(status==='dislike'){delete item.growth}closeSheet();if(state.directReturn==='onboarding'){state.onbAnswers++;renderOnboarding();go('onboarding');toast(existed?'기존 기록을 업데이트했습니다':'취향 데이터에 추가했습니다');return}state.detailId=item.id;state.detailFrom='scrap';go('detail');toast(existed?`${saveCountOf(item)}번 저장으로 반영했습니다`:'기본 정보를 자동완성해 기록했습니다')}
+
+function patchPrototypeInit(){const septemberDemo={'애프터썬':'2026-09-08','헤어질 결심':'2026-09-06','Blue':'2026-09-03'};contents.forEach(x=>{if(x.source!=='Notion 독서목록'&&septemberDemo[x.title]&&x.status==='experienced')x.completed=septemberDemo[x.title]});ensureSaveModel();setupForestDrag();setupYearForestDrag();renderOnboarding();renderScraps();renderForest()}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',patchPrototypeInit);else patchPrototypeInit();
+</script>
+
+<script id="forest-year-panzoom-script-20260909-181320">
+(function(){
+  const SCENE_W = 760, SCENE_H = 620, MAX_SCALE = 2.8;
+  function vp(){ return document.getElementById('yearForestViewport'); }
+  function canvas(){ return document.getElementById('yearForestCanvas'); }
+  function intro(){ return document.querySelector('#forestYear .yearDetailIntro span'); }
+  function hint(){ return document.querySelector('#forestYear .yearPanHint'); }
+  function ensureState(){
+    if(typeof state!=='object') return;
+    if(!Number.isFinite(state.yearPanX)) state.yearPanX = 0;
+    if(!Number.isFinite(state.yearPanY)) state.yearPanY = 0;
+    if(!Number.isFinite(state.yearScale)) state.yearScale = fitScale();
+  }
+  function fitScale(){
+    const el = vp();
+    if(!el) return 1;
+    return Math.min(el.clientWidth/SCENE_W, el.clientHeight/SCENE_H);
+  }
+  function clampScale(scale){
+    const min = fitScale();
+    return Math.max(min, Math.min(MAX_SCALE, scale));
+  }
+  function panBounds(scale){
+    const el = vp();
+    if(!el) return {minX:0,maxX:0,minY:0,maxY:0};
+    const s = clampScale(scale ?? state.yearScale ?? fitScale());
+    const scaledW = SCENE_W * s;
+    const scaledH = SCENE_H * s;
+    let minX, maxX, minY, maxY;
+    if(scaledW <= el.clientWidth){ minX = maxX = (el.clientWidth - scaledW)/2; }
+    else { minX = el.clientWidth - scaledW; maxX = 0; }
+    if(scaledH <= el.clientHeight){ minY = maxY = (el.clientHeight - scaledH)/2; }
+    else { minY = el.clientHeight - scaledH; maxY = 0; }
+    return {minX,maxX,minY,maxY};
+  }
+  function applyYearTransform(){
+    ensureState();
+    const el = canvas();
+    if(!el) return;
+    el.style.transform = `translate3d(${state.yearPanX}px,${state.yearPanY}px,0) scale(${state.yearScale})`;
+  }
+  window.clampYearPan = function(){
+    ensureState();
+    state.yearScale = clampScale(state.yearScale);
+    const b = panBounds(state.yearScale);
+    state.yearPanX = Math.max(b.minX, Math.min(b.maxX, state.yearPanX));
+    state.yearPanY = Math.max(b.minY, Math.min(b.maxY, state.yearPanY));
+    applyYearTransform();
+  };
+  window.centerYearForest = function(){
+    ensureState();
+    state.yearScale = fitScale();
+    const b = panBounds(state.yearScale);
+    state.yearPanX = b.minX;
+    state.yearPanY = b.minY;
+    applyYearTransform();
+  };
+  window.setYearForestFit = function(){ window.centerYearForest(); };
+  function localPoint(clientX, clientY){
+    const el = vp();
+    const r = el.getBoundingClientRect();
+    return {x: clientX - r.left, y: clientY - r.top};
+  }
+  function zoomAt(scaleFactor, anchorX, anchorY){
+    ensureState();
+    const prev = state.yearScale;
+    const next = clampScale(prev * scaleFactor);
+    if(Math.abs(next - prev) < 0.0001) return;
+    const worldX = (anchorX - state.yearPanX) / prev;
+    const worldY = (anchorY - state.yearPanY) / prev;
+    state.yearScale = next;
+    state.yearPanX = anchorX - worldX * next;
+    state.yearPanY = anchorY - worldY * next;
+    clampYearPan();
+  }
+  window.zoomYearForest = function(direction){
+    const el = vp();
+    if(!el) return;
+    const x = el.clientWidth/2, y = el.clientHeight/2;
+    zoomAt(direction > 0 ? 1.2 : 1/1.2, x, y);
+  };
+  window.renderForestYear = function(){
+    const year = state.forestYear || APP_YEAR;
+    if(year === APP_YEAR){ go('forest'); return; }
+    const rows = completedInYear(year).sort((a,b)=>dateKey(a.completed).localeCompare(dateKey(b.completed)));
+    $('forestYearDetailTitle').textContent = `${year} 나의 숲`;
+    $('forestYearDetailCount').textContent = `${rows.length}개의 경험`;
+    $('yearTotalText').textContent = `${rows.length}개의 경험`;
+    if(intro()) intro().textContent = '한 해가 끝난 뒤 확정된 숲입니다. 한 손가락으로 이동하고, 두 손가락으로 확대·축소해 감상하세요.';
+    if(hint()) hint().textContent = '한 손가락으로 숲을 이동하고, 두 손가락으로 확대·축소해 전체 보기와 세부 감상을 오갑니다.';
+    renderYearForestScene(rows);
+    requestAnimationFrame(()=>setYearForestFit());
+  };
+  window.renderYearForestScene = function(items){
+    const world = $('yearForestWorld');
+    const layer = $('yearForestCanvas');
+    world.querySelectorAll('.forestTree,.animal').forEach(x=>x.remove());
+    world.style.width = SCENE_W + 'px';
+    world.style.height = SCENE_H + 'px';
+    layer.style.width = SCENE_W + 'px';
+    layer.style.height = SCENE_H + 'px';
+    const count = Math.max(1, items.length);
+    const cols = Math.max(4, Math.ceil(Math.sqrt(count) * 1.3));
+    const rowsCount = Math.max(3, Math.ceil(count / cols));
+    const usableW = SCENE_W - 140;
+    const usableH = SCENE_H - 190;
+    items.forEach((item, i)=>{
+      const col = i % cols;
+      const row = Math.floor(i / cols);
+      const baseX = 70 + (cols === 1 ? usableW / 2 : col * (usableW / Math.max(1, cols - 1)));
+      const baseY = 92 + (rowsCount === 1 ? usableH / 2 : row * (usableH / Math.max(1, rowsCount - 1)));
+      const jitterX = ((i * 31) % 25) - 12;
+      const jitterY = ((i * 17) % 21) - 10;
+      const e = document.createElement('span');
+      e.className = 'forestTree stage-' + ['seed','sprout','bush','tree','big'][forestStage(item)];
+      e.style.left = (baseX + jitterX) + 'px';
+      e.style.bottom = (baseY + jitterY) + 'px';
+      e.innerHTML = '<span class="shape"><i></i></span>';
+      world.appendChild(e);
+    });
+    const animalCount = Math.min(8, Math.max(2, Math.floor(items.length / 10) + 1));
+    for(let i=0;i<animalCount;i++){
+      const a = document.createElement('span');
+      a.className = 'animal ' + (i % 3 === 0 ? 'bird' : '');
+      a.textContent = ['새','토끼','개구리'][i % 3];
+      a.style.left = (70 + ((i * 127) % (SCENE_W - 140))) + 'px';
+      a.style.bottom = (105 + ((i * 79) % (SCENE_H - 220))) + 'px';
+      world.appendChild(a);
+    }
+    applyYearTransform();
+  };
+  window.setupYearForestDrag = function(){
+    const el = vp();
+    if(!el || el.dataset.panZoomReady) return;
+    el.dataset.panZoomReady = '1';
+    let mouseDown = false, mouseId = null, startX = 0, startY = 0, originX = 0, originY = 0;
+    let touchMode = null;
+    let pinchStartDistance = 0, pinchStartScale = 1, pinchWorldX = 0, pinchWorldY = 0;
+
+    function beginPan(clientX, clientY){
+      ensureState();
+      mouseDown = true;
+      startX = clientX; startY = clientY;
+      originX = state.yearPanX; originY = state.yearPanY;
+      el.classList.add('dragging');
+    }
+    function movePan(clientX, clientY){
+      if(!mouseDown) return;
+      state.yearPanX = originX + (clientX - startX);
+      state.yearPanY = originY + (clientY - startY);
+      clampYearPan();
+    }
+    function endPan(){
+      mouseDown = false; mouseId = null;
+      el.classList.remove('dragging');
+    }
+    function touchDistance(t1, t2){
+      const dx = t1.clientX - t2.clientX, dy = t1.clientY - t2.clientY;
+      return Math.hypot(dx, dy);
+    }
+    function touchMid(t1, t2){
+      return {x:(t1.clientX + t2.clientX)/2, y:(t1.clientY + t2.clientY)/2};
+    }
+    el.addEventListener('pointerdown', e=>{
+      if(e.pointerType === 'touch') return;
+      if(e.button !== undefined && e.button !== 0) return;
+      e.preventDefault();
+      mouseId = e.pointerId;
+      beginPan(e.clientX, e.clientY);
+      try{ el.setPointerCapture(e.pointerId); }catch(_){ }
+    });
+    el.addEventListener('pointermove', e=>{
+      if(mouseId !== e.pointerId || !mouseDown) return;
+      e.preventDefault();
+      movePan(e.clientX, e.clientY);
+    });
+    function finishPointer(e){
+      if(mouseId !== e.pointerId) return;
+      endPan();
+      try{ el.releasePointerCapture(e.pointerId); }catch(_){ }
+    }
+    el.addEventListener('pointerup', finishPointer);
+    el.addEventListener('pointercancel', finishPointer);
+    el.addEventListener('lostpointercapture', finishPointer);
+
+    el.addEventListener('touchstart', e=>{
+      if(e.touches.length === 1){
+        touchMode = 'pan';
+        const t = e.touches[0];
+        beginPan(t.clientX, t.clientY);
+      }else if(e.touches.length >= 2){
+        touchMode = 'pinch';
+        endPan();
+        const [t1,t2] = e.touches;
+        const mid = touchMid(t1,t2);
+        const p = localPoint(mid.x, mid.y);
+        ensureState();
+        pinchStartDistance = touchDistance(t1,t2);
+        pinchStartScale = state.yearScale;
+        pinchWorldX = (p.x - state.yearPanX) / state.yearScale;
+        pinchWorldY = (p.y - state.yearPanY) / state.yearScale;
+      }
+    }, {passive:false});
+    el.addEventListener('touchmove', e=>{
+      if(touchMode === 'pinch' && e.touches.length >= 2){
+        e.preventDefault();
+        const [t1,t2] = e.touches;
+        const mid = touchMid(t1,t2);
+        const p = localPoint(mid.x, mid.y);
+        const dist = touchDistance(t1,t2);
+        const next = clampScale(pinchStartScale * (dist / Math.max(1, pinchStartDistance)));
+        state.yearScale = next;
+        state.yearPanX = p.x - pinchWorldX * next;
+        state.yearPanY = p.y - pinchWorldY * next;
+        clampYearPan();
+      }else if(touchMode === 'pan' && e.touches.length === 1){
+        e.preventDefault();
+        const t = e.touches[0];
+        movePan(t.clientX, t.clientY);
+      }
+    }, {passive:false});
+    el.addEventListener('touchend', e=>{
+      if(e.touches.length >= 2){
+        touchMode = 'pinch';
+        const [t1,t2] = e.touches;
+        const mid = touchMid(t1,t2);
+        const p = localPoint(mid.x, mid.y);
+        pinchStartDistance = touchDistance(t1,t2);
+        pinchStartScale = state.yearScale;
+        pinchWorldX = (p.x - state.yearPanX) / state.yearScale;
+        pinchWorldY = (p.y - state.yearPanY) / state.yearScale;
+      }else if(e.touches.length === 1){
+        touchMode = 'pan';
+        const t = e.touches[0];
+        beginPan(t.clientX, t.clientY);
+      }else{
+        touchMode = null;
+        endPan();
+      }
+    }, {passive:false});
+    el.addEventListener('touchcancel', ()=>{ touchMode = null; endPan(); }, {passive:false});
+
+    el.addEventListener('wheel', e=>{
+      if(!e.ctrlKey && !e.metaKey) return;
+      e.preventDefault();
+      const p = localPoint(e.clientX, e.clientY);
+      zoomAt(e.deltaY < 0 ? 1.08 : 1/1.08, p.x, p.y);
+    }, {passive:false});
+
+    window.addEventListener('resize', ()=>{
+      if(document.getElementById('forestYear')?.classList.contains('active')){
+        ensureState();
+        state.yearScale = Math.max(fitScale(), state.yearScale || fitScale());
+        clampYearPan();
+      }
+    });
+  };
+
+  function initPanZoomPatch(){
+    if(intro()) intro().textContent = '한 해가 끝난 뒤 확정된 숲입니다. 한 손가락으로 이동하고, 두 손가락으로 확대·축소해 감상하세요.';
+    if(hint()) hint().textContent = '한 손가락으로 숲을 이동하고, 두 손가락으로 확대·축소해 전체 보기와 세부 감상을 오갑니다.';
+    ensureState();
+    setupYearForestDrag();
+    if(document.getElementById('forestYear')?.classList.contains('active')) setYearForestFit();
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initPanZoomPatch); else initPanZoomPatch();
+})();
+</script>
+
+<script id="forest-final-correction-20260909-1940">
+(function(){
+  // FOREST-01 arrows: move one tree at a time without relying on the removed avatar element.
+  window.moveForest=function(dir){
+    const vp=document.getElementById('forestViewport');
+    const trees=(typeof treePositions==='function'?treePositions():[]);
+    if(!vp||!trees.length)return;
+    const center=vp.scrollLeft+vp.clientWidth/2;
+    let idx=0,best=Infinity;
+    trees.forEach((t,i)=>{const d=Math.abs(t.x-center);if(d<best){best=d;idx=i}});
+    idx=Math.max(0,Math.min(trees.length-1,idx+(dir>0?1:-1)));
+    const target=Math.max(0,Math.min(vp.scrollWidth-vp.clientWidth,trees[idx].x-vp.clientWidth/2));
+    vp.scrollTo({left:target,behavior:'smooth'});
+    state.forestX=trees[idx].x;
+    if(typeof updateForestActive==='function')updateForestActive();
+  };
+
+  // FOREST-04 completed forest: one flat 2D illustration-like canvas, no ground line or perspective.
+  window.renderYearForestScene=function(items){
+    const world=document.getElementById('yearForestWorld');
+    const layer=document.getElementById('yearForestCanvas');
+    if(!world||!layer)return;
+    world.innerHTML='';
+    const W=760,H=620;
+    world.style.width=W+'px';world.style.height=H+'px';
+    layer.style.width=W+'px';layer.style.height=H+'px';
+    const n=Math.max(1,items.length);
+    // Dense, even 2D distribution across the whole illustration. Position does not change tree scale/opacity.
+    const cols=Math.max(6,Math.ceil(Math.sqrt(n*1.35)));
+    const rows=Math.max(5,Math.ceil(n/cols));
+    const padX=48,padY=48;
+    const cellW=(W-padX*2)/cols;
+    const cellH=(H-padY*2)/rows;
+    items.forEach((item,i)=>{
+      const col=i%cols,row=Math.floor(i/cols);
+      const jx=((i*37)%31-15)*0.55;
+      const jy=((i*23)%29-14)*0.55;
+      const x=padX+cellW*(col+.5)+jx;
+      const y=padY+cellH*(row+.5)+jy;
+      const t=document.createElement('span');
+      t.className='yearTree v'+((i%3)+1);
+      t.style.left=x+'px';t.style.top=y+'px';
+      t.innerHTML='<i class="crown"></i><i class="trunk"></i>';
+      world.appendChild(t);
+    });
+  };
+
+  window.renderForestYear=function(){
+    const year=state.forestYear||APP_YEAR;
+    if(year===APP_YEAR){go('forest');return;}
+    const rows=completedInYear(year).sort((a,b)=>dateKey(a.completed).localeCompare(dateKey(b.completed)));
+    document.getElementById('forestYearDetailTitle').textContent=`${year} 나의 숲`;
+    document.getElementById('forestYearDetailCount').textContent=`${rows.length}개의 경험`;
+    document.getElementById('yearTotalText').textContent=`${rows.length}개의 경험`;
+    renderYearForestScene(rows);
+    requestAnimationFrame(()=>{if(typeof setYearForestFit==='function')setYearForestFit();});
+  };
+
+  // Keep the hidden compatibility label empty so older render code cannot reintroduce visible copy.
+  const oldRenderForest=window.renderForest;
+  if(typeof oldRenderForest==='function'){
+    window.renderForest=function(){
+      oldRenderForest();
+      const label=document.getElementById('forestYearLabel');
+      if(label)label.textContent='';
+    };
+  }
+})();
+</script>
+
+<script id="forest-year-fullscreen-script-20260909-1942">
+(function(){
+  function applyForestYearFull(){
+    const page=document.getElementById('forestYear');
+    const frame=page?.querySelector('.yearForestFrame');
+    if(!page||!frame)return;
+    page.style.display=page.classList.contains('active')?'flex':'';
+    if(page.classList.contains('active')){
+      page.style.flexDirection='column';
+      const tabs=document.getElementById('tabs');
+      const tabsH=tabs&&tabs.classList.contains('show')?tabs.getBoundingClientRect().height:0;
+      const rect=page.getBoundingClientRect();
+      const top=frame.getBoundingClientRect().top-rect.top;
+      const h=Math.max(320, window.innerHeight-rect.top-top-tabsH);
+      frame.style.height=h+'px';
+      requestAnimationFrame(()=>{ if(typeof setYearForestFit==='function') setYearForestFit(); });
+    }
+  }
+  const oldGo=window.go;
+  if(typeof oldGo==='function'){
+    window.go=function(id){ oldGo(id); if(id==='forestYear') requestAnimationFrame(applyForestYearFull); else applyForestYearFull(); };
+  }
+  window.addEventListener('resize',()=>{if(document.getElementById('forestYear')?.classList.contains('active'))applyForestYearFull();});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',applyForestYearFull);else applyForestYearFull();
+})();
+</script>
+<script id="functional-fixes-1946">
+(function(){
+  'use strict';
+  window.norm = function(value){return String(value??'').normalize('NFKC').toLowerCase().replace(/[\s·:()\[\]{}'".,!?\-_/]/g,'');};
+
+  const storageKey='songrim.records.v1';
+  const fields=['onbIndex','onbAnswers','currentId','notifs','day','returnVisit','dailyLog','forestMonthYear','forestMonth','forestYear'];
+  let ready=false, storageWarning=false;
+  function persist(){
+    if(!ready||window.forestDemoActive||window.demoDayOffset)return;
+    try{
+      const savedState={};fields.forEach(k=>savedState[k]=state[k]);
+      localStorage.setItem(storageKey,JSON.stringify({version:1,contents,nextId,state:savedState}));
+    }catch(error){if(!storageWarning){storageWarning=true;toast('기록을 저장하지 못했습니다. 브라우저 저장 공간을 확인해주세요.');}}
+  }
+  function restore(){
+    try{
+      const raw=localStorage.getItem(storageKey);
+      if(raw){
+        const saved=JSON.parse(raw);
+        if(saved.version!==1||!Array.isArray(saved.contents)||!saved.contents.every(x=>Number.isSafeInteger(x.id)&&typeof x.title==='string'&&['book','album','movie'].includes(x.type)&&['interested','in_progress','experienced','dislike'].includes(x.status)))throw new Error('invalid save');
+        contents=saved.contents;
+        nextId=Math.max(1,Number(saved.nextId)||1,...contents.map(x=>x.id+1));
+        fields.forEach(k=>{if(saved.state&&Object.prototype.hasOwnProperty.call(saved.state,k))state[k]=saved.state[k];});
+        if(!contents.some(x=>x.id===state.currentId&&x.status==='in_progress'))state.currentId=null;
+      }
+    }catch(error){storageWarning=true;toast('저장된 기록을 불러오지 못했습니다. 기존 저장본은 덮어쓰지 않습니다.');return;}
+    ready=true;
+    renderOnboarding();renderScraps();renderToday();renderForest();renderForestMonth();renderForestArchive();
+  }
+  ['upsertContent','answerOnboarding','saveManualTaste','startExperience','confirmReplaceExperience','recordDaily','listenTrack','nextTrack','completeExperience','saveRating','saveEditCurrent','confirmDelete','saveDirectCandidate','saveImportBatch','confirmShareSave','finishDuplicateShare','toggleNotif','advanceDemoDay','demoPick','demoRecommendation','logout'].forEach(name=>{
+    const original=window[name];if(typeof original!=='function')return;
+    window[name]=function(...args){const result=original.apply(this,args);persist();return result;};
+  });
+  window.addEventListener('pagehide',persist);
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')persist();});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',restore);else restore();
+
+  let generation=0,busy=false,loader=null;
+  const oldGo=window.go;
+  window.go=function(id){if(id!=='importPhotos')generation++;return oldGo(id);};
+  const originalOpen=window.openImport;
+  window.openImport=function(origin){generation++;state.importDemo=false;return originalOpen(origin);};
+  const originalFiles=window.handleImportFiles;
+  window.handleImportFiles=function(files){
+    generation++;state.importDemo=false;
+    const images=Array.from(files||[]).filter(f=>/^image\//.test(f.type)||/\.(png|jpe?g|webp|bmp|gif)$/i.test(f.name));
+    originalFiles(images);
+    if(images.length!==Array.from(files||[]).length)toast('이미지 파일만 선택해주세요.');
+  };
+  const originalDemo=window.loadImportDemo;
+  window.loadImportDemo=function(){generation++;state.importDemo=true;originalDemo();};
+  function loadOCR(){
+    if(window.Tesseract)return Promise.resolve(window.Tesseract);
+    if(loader)return loader;
+    loader=new Promise((resolve,reject)=>{
+      const script=document.createElement('script');
+      script.src='https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
+      script.onload=()=>window.Tesseract?resolve(window.Tesseract):reject(new Error('OCR unavailable'));
+      script.onerror=()=>reject(new Error('OCR download failed'));
+      document.head.appendChild(script);
+    }).catch(error=>{loader=null;throw error;});
+    return loader;
+  }
+  function matches(text){
+    const lines=String(text||'').split(/\r?\n/).map(norm).filter(Boolean),whole=lines.join('');
+    const seen=new Set();
+    return providerCatalog.filter(x=>{
+      const title=norm(x.title),creator=norm(x.creator),key=x.type+'|'+title+'|'+creator;
+      if(title.length<2||seen.has(key))return false;
+      const found=lines.some(line=>line===title)||(title.length>=4&&whole.includes(title))||(whole.includes(title)&&creator.length>1&&whole.includes(creator));
+      if(!found)return false;seen.add(key);return true;
+    }).map((x,i)=>({...x,selected:true,confidence:'확인 필요',batchIndex:i}));
+  }
+  window.matchImportedText=matches;
+  window.analyzeImportBatch=async function(){
+    if(busy)return;
+    if(!state.importFiles.length){toast('사진을 먼저 선택해주세요');return;}
+    const token=++generation,files=[...state.importFiles],demo=!!state.importDemo;
+    const button=$('importAnalyzeBtn');busy=true;button.disabled=true;button.textContent='사진을 읽는 중…';
+    state.importBatch=[];
+    let worker;
+    try{
+      let text='';
+      if(demo){text='노르웨이의 숲 무라카미 하루키\nIn Rainbows Radiohead\n퍼펙트 데이즈 빔 벤더스';}
+      else{
+        const engine=await loadOCR();
+        if(token!==generation)return;
+        worker=await engine.createWorker('kor+eng');
+        for(let i=0;i<files.length;i++){
+          if(token!==generation)return;
+          button.textContent=`사진 읽는 중 ${i+1}/${files.length}`;
+          const result=await worker.recognize(files[i]);
+          text+='\n'+(result.data.text||'');
+        }
+      }
+      if(token!==generation)return;
+      state.importBatch=matches(text);
+      go('importReview');
+      if(!state.importBatch.length)toast('일치하는 콘텐츠가 없습니다. 제목이 선명한 사진이나 직접 검색을 이용해주세요.');
+    }catch(error){
+      if(token===generation){state.importBatch=[];toast('사진을 읽지 못했습니다. 인터넷 연결과 이미지 형식을 확인한 뒤 다시 시도해주세요.');}
+    }finally{
+      if(worker)await worker.terminate().catch(()=>{});
+      busy=false;button.disabled=!state.importFiles.length;button.textContent='콘텐츠 찾기';
+    }
+  };
+})();
+
+</script>
+
+<script id="forest-background-1950">
+(function(){
+ const backgrounds=["url(\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22284%22%20viewBox%3D%220%200%20800%20284%22%3E%3Crect%20width%3D%22800%22%20height%3D%22284%22%20fill%3D%22%23f8f9f5%22%2F%3E%3Cpath%20d%3D%22M0%20220%20Q180%20185%20400%20218T800%20215V284H0Z%22%20fill%3D%22%23edf0e8%22%2F%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M25%20126h4v121h-4z%22%2F%3E%3Cellipse%20cx%3D%2227%22%20cy%3D%22126%22%20rx%3D%2217%22%20ry%3D%2224.65%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M162%20157h4v90h-4z%22%2F%3E%3Cellipse%20cx%3D%22164%22%20cy%3D%22157%22%20rx%3D%2224%22%20ry%3D%2234.8%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M299%20188h4v59h-4z%22%2F%3E%3Cellipse%20cx%3D%22301%22%20cy%3D%22188%22%20rx%3D%2231%22%20ry%3D%2244.949999999999996%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M436%20154h4v93h-4z%22%2F%3E%3Cellipse%20cx%3D%22438%22%20cy%3D%22154%22%20rx%3D%2220%22%20ry%3D%2229%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E\")","url(\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22284%22%20viewBox%3D%220%200%20800%20284%22%3E%3Crect%20width%3D%22800%22%20height%3D%22284%22%20fill%3D%22%23f8f9f5%22%2F%3E%3Cpath%20d%3D%22M0%20220%20Q180%20185%20400%20218T800%20215V284H0Z%22%20fill%3D%22%23edf0e8%22%2F%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M25%20126h4v121h-4z%22%2F%3E%3Cellipse%20cx%3D%2227%22%20cy%3D%22126%22%20rx%3D%2217%22%20ry%3D%2224.65%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M162%20157h4v90h-4z%22%2F%3E%3Cellipse%20cx%3D%22164%22%20cy%3D%22157%22%20rx%3D%2224%22%20ry%3D%2234.8%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M299%20188h4v59h-4z%22%2F%3E%3Cellipse%20cx%3D%22301%22%20cy%3D%22188%22%20rx%3D%2231%22%20ry%3D%2244.949999999999996%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M436%20154h4v93h-4z%22%2F%3E%3Cellipse%20cx%3D%22438%22%20cy%3D%22154%22%20rx%3D%2220%22%20ry%3D%2229%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M573%20185h4v62h-4z%22%2F%3E%3Cellipse%20cx%3D%22575%22%20cy%3D%22185%22%20rx%3D%2227%22%20ry%3D%2239.15%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M710%20151h4v96h-4z%22%2F%3E%3Cellipse%20cx%3D%22712%22%20cy%3D%22151%22%20rx%3D%2234%22%20ry%3D%2249.3%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M47%20182h4v65h-4z%22%2F%3E%3Cellipse%20cx%3D%2249%22%20cy%3D%22182%22%20rx%3D%2223%22%20ry%3D%2233.35%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M184%20148h4v99h-4z%22%2F%3E%3Cellipse%20cx%3D%22186%22%20cy%3D%22148%22%20rx%3D%2230%22%20ry%3D%2243.5%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M321%20179h4v68h-4z%22%2F%3E%3Cellipse%20cx%3D%22323%22%20cy%3D%22179%22%20rx%3D%2219%22%20ry%3D%2227.55%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M458%20145h4v102h-4z%22%2F%3E%3Cellipse%20cx%3D%22460%22%20cy%3D%22145%22%20rx%3D%2226%22%20ry%3D%2237.699999999999996%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M595%20176h4v71h-4z%22%2F%3E%3Cellipse%20cx%3D%22597%22%20cy%3D%22176%22%20rx%3D%2233%22%20ry%3D%2247.85%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M732%20142h4v105h-4z%22%2F%3E%3Cellipse%20cx%3D%22734%22%20cy%3D%22142%22%20rx%3D%2222%22%20ry%3D%2231.9%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E\")","url(\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22284%22%20viewBox%3D%220%200%20800%20284%22%3E%3Crect%20width%3D%22800%22%20height%3D%22284%22%20fill%3D%22%23f8f9f5%22%2F%3E%3Cpath%20d%3D%22M0%20220%20Q180%20185%20400%20218T800%20215V284H0Z%22%20fill%3D%22%23edf0e8%22%2F%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M25%20126h4v121h-4z%22%2F%3E%3Cellipse%20cx%3D%2227%22%20cy%3D%22126%22%20rx%3D%2217%22%20ry%3D%2224.65%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M162%20157h4v90h-4z%22%2F%3E%3Cellipse%20cx%3D%22164%22%20cy%3D%22157%22%20rx%3D%2224%22%20ry%3D%2234.8%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M299%20188h4v59h-4z%22%2F%3E%3Cellipse%20cx%3D%22301%22%20cy%3D%22188%22%20rx%3D%2231%22%20ry%3D%2244.949999999999996%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M436%20154h4v93h-4z%22%2F%3E%3Cellipse%20cx%3D%22438%22%20cy%3D%22154%22%20rx%3D%2220%22%20ry%3D%2229%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M573%20185h4v62h-4z%22%2F%3E%3Cellipse%20cx%3D%22575%22%20cy%3D%22185%22%20rx%3D%2227%22%20ry%3D%2239.15%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M710%20151h4v96h-4z%22%2F%3E%3Cellipse%20cx%3D%22712%22%20cy%3D%22151%22%20rx%3D%2234%22%20ry%3D%2249.3%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M47%20182h4v65h-4z%22%2F%3E%3Cellipse%20cx%3D%2249%22%20cy%3D%22182%22%20rx%3D%2223%22%20ry%3D%2233.35%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M184%20148h4v99h-4z%22%2F%3E%3Cellipse%20cx%3D%22186%22%20cy%3D%22148%22%20rx%3D%2230%22%20ry%3D%2243.5%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M321%20179h4v68h-4z%22%2F%3E%3Cellipse%20cx%3D%22323%22%20cy%3D%22179%22%20rx%3D%2219%22%20ry%3D%2227.55%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M458%20145h4v102h-4z%22%2F%3E%3Cellipse%20cx%3D%22460%22%20cy%3D%22145%22%20rx%3D%2226%22%20ry%3D%2237.699999999999996%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M595%20176h4v71h-4z%22%2F%3E%3Cellipse%20cx%3D%22597%22%20cy%3D%22176%22%20rx%3D%2233%22%20ry%3D%2247.85%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M732%20142h4v105h-4z%22%2F%3E%3Cellipse%20cx%3D%22734%22%20cy%3D%22142%22%20rx%3D%2222%22%20ry%3D%2231.9%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M69%20173h4v74h-4z%22%2F%3E%3Cellipse%20cx%3D%2271%22%20cy%3D%22173%22%20rx%3D%2229%22%20ry%3D%2242.05%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M206%20139h4v108h-4z%22%2F%3E%3Cellipse%20cx%3D%22208%22%20cy%3D%22139%22%20rx%3D%2218%22%20ry%3D%2226.099999999999998%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M343%20170h4v77h-4z%22%2F%3E%3Cellipse%20cx%3D%22345%22%20cy%3D%22170%22%20rx%3D%2225%22%20ry%3D%2236.25%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M480%20136h4v111h-4z%22%2F%3E%3Cellipse%20cx%3D%22482%22%20cy%3D%22136%22%20rx%3D%2232%22%20ry%3D%2246.4%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M617%20167h4v80h-4z%22%2F%3E%3Cellipse%20cx%3D%22619%22%20cy%3D%22167%22%20rx%3D%2221%22%20ry%3D%2230.45%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M754%20133h4v114h-4z%22%2F%3E%3Cellipse%20cx%3D%22756%22%20cy%3D%22133%22%20rx%3D%2228%22%20ry%3D%2240.6%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M91%20164h4v83h-4z%22%2F%3E%3Cellipse%20cx%3D%2293%22%20cy%3D%22164%22%20rx%3D%2217%22%20ry%3D%2224.65%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M228%20130h4v117h-4z%22%2F%3E%3Cellipse%20cx%3D%22230%22%20cy%3D%22130%22%20rx%3D%2224%22%20ry%3D%2234.8%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M365%20161h4v86h-4z%22%2F%3E%3Cellipse%20cx%3D%22367%22%20cy%3D%22161%22%20rx%3D%2231%22%20ry%3D%2244.949999999999996%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M502%20127h4v120h-4z%22%2F%3E%3Cellipse%20cx%3D%22504%22%20cy%3D%22127%22%20rx%3D%2220%22%20ry%3D%2229%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M639%20158h4v89h-4z%22%2F%3E%3Cellipse%20cx%3D%22641%22%20cy%3D%22158%22%20rx%3D%2227%22%20ry%3D%2239.15%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M776%20189h4v58h-4z%22%2F%3E%3Cellipse%20cx%3D%22778%22%20cy%3D%22189%22%20rx%3D%2234%22%20ry%3D%2249.3%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E\")","url(\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22284%22%20viewBox%3D%220%200%20800%20284%22%3E%3Crect%20width%3D%22800%22%20height%3D%22284%22%20fill%3D%22%23f8f9f5%22%2F%3E%3Cpath%20d%3D%22M0%20220%20Q180%20185%20400%20218T800%20215V284H0Z%22%20fill%3D%22%23edf0e8%22%2F%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M25%20126h4v121h-4z%22%2F%3E%3Cellipse%20cx%3D%2227%22%20cy%3D%22126%22%20rx%3D%2217%22%20ry%3D%2224.65%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M162%20157h4v90h-4z%22%2F%3E%3Cellipse%20cx%3D%22164%22%20cy%3D%22157%22%20rx%3D%2224%22%20ry%3D%2234.8%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M299%20188h4v59h-4z%22%2F%3E%3Cellipse%20cx%3D%22301%22%20cy%3D%22188%22%20rx%3D%2231%22%20ry%3D%2244.949999999999996%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M436%20154h4v93h-4z%22%2F%3E%3Cellipse%20cx%3D%22438%22%20cy%3D%22154%22%20rx%3D%2220%22%20ry%3D%2229%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M573%20185h4v62h-4z%22%2F%3E%3Cellipse%20cx%3D%22575%22%20cy%3D%22185%22%20rx%3D%2227%22%20ry%3D%2239.15%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M710%20151h4v96h-4z%22%2F%3E%3Cellipse%20cx%3D%22712%22%20cy%3D%22151%22%20rx%3D%2234%22%20ry%3D%2249.3%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M47%20182h4v65h-4z%22%2F%3E%3Cellipse%20cx%3D%2249%22%20cy%3D%22182%22%20rx%3D%2223%22%20ry%3D%2233.35%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M184%20148h4v99h-4z%22%2F%3E%3Cellipse%20cx%3D%22186%22%20cy%3D%22148%22%20rx%3D%2230%22%20ry%3D%2243.5%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M321%20179h4v68h-4z%22%2F%3E%3Cellipse%20cx%3D%22323%22%20cy%3D%22179%22%20rx%3D%2219%22%20ry%3D%2227.55%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M458%20145h4v102h-4z%22%2F%3E%3Cellipse%20cx%3D%22460%22%20cy%3D%22145%22%20rx%3D%2226%22%20ry%3D%2237.699999999999996%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M595%20176h4v71h-4z%22%2F%3E%3Cellipse%20cx%3D%22597%22%20cy%3D%22176%22%20rx%3D%2233%22%20ry%3D%2247.85%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M732%20142h4v105h-4z%22%2F%3E%3Cellipse%20cx%3D%22734%22%20cy%3D%22142%22%20rx%3D%2222%22%20ry%3D%2231.9%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M69%20173h4v74h-4z%22%2F%3E%3Cellipse%20cx%3D%2271%22%20cy%3D%22173%22%20rx%3D%2229%22%20ry%3D%2242.05%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M206%20139h4v108h-4z%22%2F%3E%3Cellipse%20cx%3D%22208%22%20cy%3D%22139%22%20rx%3D%2218%22%20ry%3D%2226.099999999999998%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M343%20170h4v77h-4z%22%2F%3E%3Cellipse%20cx%3D%22345%22%20cy%3D%22170%22%20rx%3D%2225%22%20ry%3D%2236.25%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M480%20136h4v111h-4z%22%2F%3E%3Cellipse%20cx%3D%22482%22%20cy%3D%22136%22%20rx%3D%2232%22%20ry%3D%2246.4%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M617%20167h4v80h-4z%22%2F%3E%3Cellipse%20cx%3D%22619%22%20cy%3D%22167%22%20rx%3D%2221%22%20ry%3D%2230.45%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M754%20133h4v114h-4z%22%2F%3E%3Cellipse%20cx%3D%22756%22%20cy%3D%22133%22%20rx%3D%2228%22%20ry%3D%2240.6%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M91%20164h4v83h-4z%22%2F%3E%3Cellipse%20cx%3D%2293%22%20cy%3D%22164%22%20rx%3D%2217%22%20ry%3D%2224.65%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M228%20130h4v117h-4z%22%2F%3E%3Cellipse%20cx%3D%22230%22%20cy%3D%22130%22%20rx%3D%2224%22%20ry%3D%2234.8%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M365%20161h4v86h-4z%22%2F%3E%3Cellipse%20cx%3D%22367%22%20cy%3D%22161%22%20rx%3D%2231%22%20ry%3D%2244.949999999999996%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M502%20127h4v120h-4z%22%2F%3E%3Cellipse%20cx%3D%22504%22%20cy%3D%22127%22%20rx%3D%2220%22%20ry%3D%2229%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M639%20158h4v89h-4z%22%2F%3E%3Cellipse%20cx%3D%22641%22%20cy%3D%22158%22%20rx%3D%2227%22%20ry%3D%2239.15%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M776%20189h4v58h-4z%22%2F%3E%3Cellipse%20cx%3D%22778%22%20cy%3D%22189%22%20rx%3D%2234%22%20ry%3D%2249.3%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M113%20155h4v92h-4z%22%2F%3E%3Cellipse%20cx%3D%22115%22%20cy%3D%22155%22%20rx%3D%2223%22%20ry%3D%2233.35%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M250%20186h4v61h-4z%22%2F%3E%3Cellipse%20cx%3D%22252%22%20cy%3D%22186%22%20rx%3D%2230%22%20ry%3D%2243.5%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M387%20152h4v95h-4z%22%2F%3E%3Cellipse%20cx%3D%22389%22%20cy%3D%22152%22%20rx%3D%2219%22%20ry%3D%2227.55%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M524%20183h4v64h-4z%22%2F%3E%3Cellipse%20cx%3D%22526%22%20cy%3D%22183%22%20rx%3D%2226%22%20ry%3D%2237.699999999999996%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M661%20149h4v98h-4z%22%2F%3E%3Cellipse%20cx%3D%22663%22%20cy%3D%22149%22%20rx%3D%2233%22%20ry%3D%2247.85%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M-2%20180h4v67h-4z%22%2F%3E%3Cellipse%20cx%3D%220%22%20cy%3D%22180%22%20rx%3D%2222%22%20ry%3D%2231.9%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M135%20146h4v101h-4z%22%2F%3E%3Cellipse%20cx%3D%22137%22%20cy%3D%22146%22%20rx%3D%2229%22%20ry%3D%2242.05%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M272%20177h4v70h-4z%22%2F%3E%3Cellipse%20cx%3D%22274%22%20cy%3D%22177%22%20rx%3D%2218%22%20ry%3D%2226.099999999999998%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M409%20143h4v104h-4z%22%2F%3E%3Cellipse%20cx%3D%22411%22%20cy%3D%22143%22%20rx%3D%2225%22%20ry%3D%2236.25%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M546%20174h4v73h-4z%22%2F%3E%3Cellipse%20cx%3D%22548%22%20cy%3D%22174%22%20rx%3D%2232%22%20ry%3D%2246.4%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M683%20140h4v107h-4z%22%2F%3E%3Cellipse%20cx%3D%22685%22%20cy%3D%22140%22%20rx%3D%2221%22%20ry%3D%2230.45%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M20%20171h4v76h-4z%22%2F%3E%3Cellipse%20cx%3D%2222%22%20cy%3D%22171%22%20rx%3D%2228%22%20ry%3D%2240.6%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M157%20137h4v110h-4z%22%2F%3E%3Cellipse%20cx%3D%22159%22%20cy%3D%22137%22%20rx%3D%2217%22%20ry%3D%2224.65%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M294%20168h4v79h-4z%22%2F%3E%3Cellipse%20cx%3D%22296%22%20cy%3D%22168%22%20rx%3D%2224%22%20ry%3D%2234.8%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23e0e4dd%22%3E%3Cpath%20d%3D%22M431%20134h4v113h-4z%22%2F%3E%3Cellipse%20cx%3D%22433%22%20cy%3D%22134%22%20rx%3D%2231%22%20ry%3D%2244.949999999999996%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22%23d4d9d3%22%3E%3Cpath%20d%3D%22M568%20165h4v82h-4z%22%2F%3E%3Cellipse%20cx%3D%22570%22%20cy%3D%22165%22%20rx%3D%2220%22%20ry%3D%2229%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E\")"];
+ const original=window.renderForest;
+ window.renderForest=function(){original();const count=completedInYear(APP_YEAR).length;const stage=count>=60?3:count>=30?2:count>=10?1:0;const world=document.getElementById('forestWorld');world.style.backgroundImage=backgrounds[stage];world.style.backgroundSize='800px 100%';world.style.backgroundRepeat='repeat-x';world.dataset.backgroundStage=stage;};
+ if(document.readyState!=='loading')window.renderForest();
+})();
+</script>
+
+<script id="forest-demo-controls">
+(function(){
+ let snapshot=null;
+ window.adjustForestDemo=function(delta){
+  if(!snapshot){snapshot={contents:JSON.stringify(contents),nextId};window.forestDemoActive=true;contents=JSON.parse(snapshot.contents);}
+  if(delta>0){for(let i=0;i<10;i++)contents.push({id:nextId++,type:'book',title:'숲 테스트 책 '+nextId,creator:'테스트',status:'experienced',completed:appToday(),growth:4,source:'숲 테스트',saveCount:1,lastSavedAt:appToday(),saveEvents:[appToday()]});}
+  else {const ids=new Set(completedInYear(APP_YEAR).slice(-10).map(x=>x.id));contents=contents.filter(x=>!ids.has(x.id));}
+  go('forest');toast('올해 완료 '+completedInYear(APP_YEAR).length+'개 · 표시 최대 10그루');
+ };
+ window.resetForestDemo=function(){if(snapshot){contents=JSON.parse(snapshot.contents);nextId=snapshot.nextId;snapshot=null;}window.forestDemoActive=false;go('forest');toast('나무 테스트를 초기화했습니다');};
+})();
+</script>
+
+<script id="taste-entry-navigation-1956">
+(function(){
+ let addingTaste=false;window.isAddingTaste=()=>addingTaste;
+ let entryReturn='signup';
+ window.tasteEntryGoBack=function(){go(entryReturn);};
+ const previousGo=window.go;
+ window.go=function(id){
+  if(id==='onbIntro'){const from=document.querySelector('.screen.active')?.id;if(from&&!['onbIntro','onboarding','importPhotos','importReview','directEntry'].includes(from))entryReturn=from;}
+  if(id==='onbIntro'&&document.getElementById('my').classList.contains('active'))addingTaste=true;
+  else if(!['onbIntro','onboarding','importPhotos','importReview','directEntry'].includes(id))addingTaste=false;
+  document.getElementById('tasteEntryTitle').textContent=addingTaste?'씨앗 심기':'송림 시작하기';
+  document.getElementById('tasteEntryBack').classList.remove('hidden');
+  document.getElementById('onbStartTop').textContent=addingTaste?'입력 완료':'시작';
+  document.getElementById('onbStartBottom').textContent=addingTaste?'입력 완료':'송림 시작하기';
+  return previousGo(id);
+ };
+})();
+</script>
+<style>.back{min-width:44px;min-height:44px}.importCheck{width:44px;height:44px}.importItem{grid-template-columns:44px 48px minmax(0,1fr)}.importItemActions button{min-height:44px;min-width:44px}</style>
+<script>(function(){
+ let editingImport=null;
+ const originalRender=window.renderOnboarding;
+ window.renderOnboarding=function(){
+  originalRender();
+  if(window.isAddingTaste?.()){
+   $('onbCount').textContent='취향을 더 알려주세요. 원하는 만큼 입력한 뒤 완료할 수 있습니다.';
+   ['onbStartTop','onbStartBottom'].forEach(id=>{$(id).textContent='입력 완료';$(id).classList.remove('hidden');});
+  }
+ };
+ const introNote=document.querySelector('#onbIntro .note');
+ const initialNote=introNote?.textContent;
+ const priorGo=window.go;
+ window.go=function(id){
+  const result=priorGo(id);
+  if(id==='onboarding')renderOnboarding();
+  if(id==='onbIntro'&&introNote)introNote.textContent=window.isAddingTaste?.()?'사진 가져오기와 직접 입력을 섞어서 취향을 더할 수 있습니다.':initialNote;
+  return result;
+ };
+ window.openManualContent=function(){
+  const title=editingImport!==null?state.importBatch[editingImport]?.title:($('directSearchInput')?.value||'');
+  const current=editingImport!==null?state.importBatch[editingImport]:null;
+  showSheet(`<h2>${current?'인식 결과 수정':'직접 추가'}</h2><label>유형<select id="newContentType"><option value="book">책</option><option value="album">음반</option><option value="movie">영화</option></select></label><label>제목<input id="newContentTitle" value="${esc(title||'')}"></label><label>저자 / 아티스트 / 감독<input id="newContentCreator" value="${esc(current?.creator||'')}"></label><label>상태<select id="newContentStatus"><option value="interested">경험 전</option><option value="experienced">경험 완료</option><option value="dislike">싫음</option></select></label><button class="btn" onclick="saveManualContent()">${current?'수정 적용':'추가'}</button><button class="btn secondary" onclick="closeSheet()">취소</button>`);
+  $('newContentType').value=current?.type||(state.directType==='all'?'book':state.directType)||'book';
+  if(current)$('newContentStatus').parentElement.style.display='none';
+ };
+ window.saveManualContent=function(){
+  const type=$('newContentType').value,title=$('newContentTitle').value.trim(),creator=$('newContentCreator').value.trim();
+  if(!title){toast('제목을 입력해주세요');return;}
+  const x={type,title,creator,workKey:type+':'+norm(title)+':'+norm(creator)};
+  if(editingImport!==null){state.importBatch[editingImport]={...x,selected:true,confidence:'사용자 확인',batchIndex:editingImport};closeSheet();go('importReview');return;}
+  const status=$('newContentStatus').value;
+  state.directCandidate=x;
+  const label=status==='dislike'?'싫음':status==='interested'?'경험 전':type==='book'?'읽음':type==='album'?'들어봄':'봄';
+  saveDirectCandidate(label);
+ };
+ const results=window.renderDirectResults;
+ window.renderDirectResults=function(){
+  if(editingImport===null){results();$('directResults').insertAdjacentHTML('beforeend','<button class="btn secondary" onclick="openManualContent()">찾는 콘텐츠 직접 추가</button>');return;}
+  const rows=catalogSearch($('directSearchInput').value,state.directType);
+  $('directSearchHint').textContent='제목을 검색해 바꾸거나 인식 결과를 직접 수정해주세요.';
+  $('directResults').innerHTML=rows.map(x=>candidateRowHTML(x,`chooseImportSearch('${x.key}')`)).join('')+'<button class="btn secondary" onclick="openManualContent()">인식 결과 직접 수정</button>';
+ };
+ const direct=window.openDirectEntry;
+ window.openDirectEntry=function(origin){editingImport=null;return direct(origin);};
+ window.changeImportCandidate=function(i){
+  if(!state.importBatch[i])return;
+  direct('importReview');editingImport=i;
+  setTimeout(()=>{$('directSearchInput').value=state.importBatch[i].title;renderDirectResults();},0);
+ };
+ window.chooseImportSearch=function(key){if(editingImport===null)return;applyImportCandidate(editingImport,key);go('importReview');};
+ const back=window.directBack;
+ window.directBack=function(){if(editingImport!==null){editingImport=null;go('importReview');return;}back();};
+ let previousDay=appToday();
+ function refreshDay(){
+  const today=appToday();if(today===previousDay)return;
+  const oldYear=APP_YEAR,oldMonth=APP_MONTH;previousDay=today;
+  APP_YEAR=Number(today.slice(0,4));APP_MONTH=Number(today.slice(5,7));
+  if(state.forestMonthYear===oldYear&&state.forestMonth===oldMonth){state.forestMonthYear=APP_YEAR;state.forestMonth=APP_MONTH;}
+  state.returnVisit=true;
+  const id=document.querySelector('.screen.active')?.id;
+  if(['today','forest','forestMonth','forestArchive'].includes(id))go(id);
+ }
+ window.addEventListener('focus',refreshDay);
+ document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refreshDay();});
+ setInterval(refreshDay,30000);
+})();
 </script>
 </body>
 </html>
