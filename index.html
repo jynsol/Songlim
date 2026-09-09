@@ -16,6 +16,68 @@
       word-break: keep-all;
     }
     a { color: inherit; }
+    
+    /* 비밀번호 보호 화면 스타일 */
+    #auth-screen {
+      position: fixed;
+      inset: 0;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 20px;
+    }
+    .auth-box {
+      width: min(360px, 100%);
+      text-align: center;
+    }
+    .auth-box h2 {
+      margin: 0 0 10px;
+      font-size: 24px;
+      letter-spacing: -.03em;
+    }
+    .auth-box p {
+      margin: 0 0 20px;
+      color: #666;
+      font-size: 14px;
+    }
+    .auth-box input {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      outline: none;
+    }
+    .auth-box input:focus {
+      border-color: #111;
+    }
+    .auth-box button {
+      width: 100%;
+      padding: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      background: #111;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .auth-error {
+      margin-top: 10px;
+      color: #e53e3e;
+      font-size: 13px;
+      display: none;
+    }
+
+    /* 메인 콘텐츠 숨김 처리 (인증 전) */
+    #main-content {
+      display: none;
+    }
+
     .wrap {
       width: min(920px, calc(100% - 40px));
       margin: 0 auto;
@@ -125,7 +187,22 @@
   </style>
 </head>
 <body>
-  <main class="wrap">
+
+  <!-- 비밀번호 입력 화면 -->
+  <div id="auth-screen">
+    <div class="auth-box">
+      <h2>🔒 접근 제한</h2>
+      <p>프로젝트 자료를 보려면 비밀번호를 입력하세요.</p>
+      <form id="auth-form" onsubmit="checkPassword(event)">
+        <input type="password" id="password-input" placeholder="비밀번호 입력" autofocus required />
+        <button type="submit">확인</button>
+      </form>
+      <div id="auth-error" class="auth-error">비밀번호가 틀렸습니다.</div>
+    </div>
+  </div>
+
+  <!-- 메인 콘텐츠 -->
+  <main id="main-content" class="wrap">
     <header>
       <p class="eyebrow">SONGLIM · PROJECT DOCUMENTS</p>
       <h1>송림</h1>
@@ -175,5 +252,33 @@
       <p style="margin: 0;">본 저작물의 무단 전재, 복제, 배포 및 상업적 목적의 이용은 저작권법 등 관련 법령에 의해 엄격히 금지되며, 위반 시 법적 책임을 물을 수 있습니다.</p>
     </footer>
   </main>
+
+  <script>
+    // 👇 이곳에 원하시는 비밀번호를 설정하세요
+    const CORRECT_PASSWORD = "1117"; 
+
+    function checkPassword(event) {
+      event.preventDefault();
+      const inputVal = document.getElementById("password-input").value;
+      const errorMsg = document.getElementById("auth-error");
+
+      if (inputVal === CORRECT_PASSWORD) {
+        document.getElementById("auth-screen").style.display = "none";
+        document.getElementById("main-content").style.display = "block";
+        // 브라우저 세션 동안 로그인 상태 유지 (선택사항)
+        sessionStorage.setItem("songlim_auth", "true");
+      } else {
+        errorMsg.style.display = "block";
+        document.getElementById("password-input").value = "";
+        document.getElementById("password-input").focus();
+      }
+    }
+
+    // 이미 인증한 경우 새로고침해도 다시 묻지 않도록 처리
+    if (sessionStorage.getItem("songlim_auth") === "true") {
+      document.getElementById("auth-screen").style.display = "none";
+      document.getElementById("main-content").style.display = "block";
+    }
+  </script>
 </body>
 </html>
