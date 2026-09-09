@@ -6,70 +6,107 @@
   <title>송림 | 프로젝트 자료</title>
   <meta name="description" content="송림 프로젝트의 지원서, 사업계획서, 기능정의서, 프로토타입 자료입니다." />
   <style>
+    :root {
+      --bg: #ffffff;
+      --text-main: #111111;
+      --text-sub: #555555;
+      --text-muted: #888888;
+      --border-color: #e5e5e5;
+      --border-dark: #111111;
+      --hover-bg: #fafafa;
+    }
+
     * { box-sizing: border-box; }
-    html { background: #fff; }
+    html { background: var(--bg); }
     body {
       margin: 0;
-      color: #111;
-      background: #fff;
+      color: var(--text-main);
+      background: var(--bg);
       font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", Arial, sans-serif;
       word-break: keep-all;
+      -webkit-font-smoothing: antialiased;
     }
-    a { color: inherit; }
+    a { color: inherit; text-decoration: none; }
     
-    /* 비밀번호 보호 화면 스타일 */
+    /* 비밀번호 보호 화면 디자인 통일 */
     #auth-screen {
       position: fixed;
       inset: 0;
-      background: #fff;
+      background: var(--bg);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       z-index: 9999;
-      padding: 20px;
+      padding: 24px;
     }
-    .auth-box {
-      width: min(360px, 100%);
-      text-align: center;
+    .auth-card {
+      width: min(400px, 100%);
+      padding: 40px 32px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.03);
+      text-align: left;
     }
-    .auth-box h2 {
-      margin: 0 0 10px;
-      font-size: 24px;
-      letter-spacing: -.03em;
+    .auth-badge {
+      display: inline-block;
+      margin-bottom: 16px;
+      padding: 4px 10px;
+      background: #f1f1f1;
+      color: #333;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      border-radius: 4px;
+      text-transform: uppercase;
     }
-    .auth-box p {
-      margin: 0 0 20px;
-      color: #666;
+    .auth-card h2 {
+      margin: 0 0 8px;
+      font-size: 26px;
+      letter-spacing: -.04em;
+      line-height: 1.2;
+    }
+    .auth-card p {
+      margin: 0 0 24px;
+      color: var(--text-sub);
       font-size: 14px;
+      line-height: 1.5;
     }
-    .auth-box input {
+    .auth-card input {
       width: 100%;
-      padding: 12px 14px;
+      padding: 14px 16px;
       font-size: 15px;
       border: 1px solid #ccc;
-      border-radius: 6px;
-      margin-bottom: 10px;
+      border-radius: 8px;
+      margin-bottom: 12px;
       outline: none;
+      transition: border-color .15s ease, box-shadow .15s ease;
     }
-    .auth-box input:focus {
-      border-color: #111;
+    .auth-card input:focus {
+      border-color: var(--border-dark);
+      box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.08);
     }
-    .auth-box button {
+    .auth-card button {
       width: 100%;
-      padding: 12px;
+      padding: 14px;
       font-size: 15px;
       font-weight: 600;
-      background: #111;
+      background: var(--border-dark);
       color: #fff;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
+      transition: opacity .15s ease;
+    }
+    .auth-card button:hover {
+      opacity: 0.9;
     }
     .auth-error {
-      margin-top: 10px;
-      color: #e53e3e;
+      margin-top: 12px;
+      color: #d32f2f;
       font-size: 13px;
+      font-weight: 500;
       display: none;
     }
 
@@ -78,6 +115,7 @@
       display: none;
     }
 
+    /* 메인 페이지 레이아웃 (기존 디자인 스타일 유지 및 정돈) */
     .wrap {
       width: min(920px, calc(100% - 40px));
       margin: 0 auto;
@@ -85,11 +123,11 @@
     }
     header {
       padding-bottom: 40px;
-      border-bottom: 1px solid #111;
+      border-bottom: 1px solid var(--border-dark);
     }
     .eyebrow {
       margin: 0 0 22px;
-      color: #6a6a6a;
+      color: var(--text-muted);
       font-size: 12px;
       font-weight: 700;
       letter-spacing: .04em;
@@ -103,7 +141,7 @@
     .intro {
       max-width: 640px;
       margin: 24px 0 0;
-      color: #444;
+      color: var(--text-sub);
       font-size: 16px;
       line-height: 1.7;
     }
@@ -119,18 +157,18 @@
       min-height: 112px;
       padding: 22px 0;
       text-decoration: none;
-      border-bottom: 1px solid #ccc;
+      border-bottom: 1px solid var(--border-color);
       transition: background .16s ease, padding .16s ease;
     }
     .item:hover,
     .item:focus-visible {
-      background: #f6f6f4;
+      background: var(--hover-bg);
       padding-left: 14px;
       padding-right: 14px;
       outline: none;
     }
     .num {
-      color: #777;
+      color: var(--text-muted);
       font-size: 12px;
       font-weight: 700;
       letter-spacing: .08em;
@@ -144,7 +182,7 @@
     }
     .text span {
       display: block;
-      color: #666;
+      color: var(--text-sub);
       font-size: 13px;
       line-height: 1.55;
     }
@@ -157,15 +195,19 @@
     footer {
       margin-top: 46px;
       padding-top: 18px;
-      border-top: 1px solid #eee;
-      color: #888;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-muted);
       font-size: 11px;
       line-height: 1.6;
     }
+
     @media (max-width: 640px) {
       .wrap {
         width: min(100% - 32px, 920px);
         padding: 44px 0 64px;
+      }
+      .auth-card {
+        padding: 32px 20px;
       }
       header { padding-bottom: 30px; }
       .intro { font-size: 14px; }
@@ -188,16 +230,17 @@
 </head>
 <body>
 
-  <!-- 비밀번호 입력 화면 -->
+  <!-- 비밀번호 입력 화면 (디자인 리뉴얼) -->
   <div id="auth-screen">
-    <div class="auth-box">
-      <h2>🔒 접근 제한</h2>
-      <p>프로젝트 자료를 보려면 비밀번호를 입력하세요.</p>
+    <div class="auth-card">
+      <div class="auth-badge">Secure Access</div>
+      <h2>송림 프로젝트</h2>
+      <p>보안된 문서에 접근하려면 설정된 비밀번호를 입력해 주세요.</p>
       <form id="auth-form" onsubmit="checkPassword(event)">
         <input type="password" id="password-input" placeholder="비밀번호 입력" autofocus required />
-        <button type="submit">확인</button>
+        <button type="submit">접속하기</button>
       </form>
-      <div id="auth-error" class="auth-error">비밀번호가 틀렸습니다.</div>
+      <div id="auth-error" class="auth-error">비밀번호가 올바르지 않습니다.</div>
     </div>
   </div>
 
@@ -254,7 +297,6 @@
   </main>
 
   <script>
-    // 👇 이곳에 원하시는 비밀번호를 설정하세요
     const CORRECT_PASSWORD = "1117"; 
 
     function checkPassword(event) {
@@ -265,7 +307,6 @@
       if (inputVal === CORRECT_PASSWORD) {
         document.getElementById("auth-screen").style.display = "none";
         document.getElementById("main-content").style.display = "block";
-        // 브라우저 세션 동안 로그인 상태 유지 (선택사항)
         sessionStorage.setItem("songlim_auth", "true");
       } else {
         errorMsg.style.display = "block";
@@ -274,7 +315,6 @@
       }
     }
 
-    // 이미 인증한 경우 새로고침해도 다시 묻지 않도록 처리
     if (sessionStorage.getItem("songlim_auth") === "true") {
       document.getElementById("auth-screen").style.display = "none";
       document.getElementById("main-content").style.display = "block";
