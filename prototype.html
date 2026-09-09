@@ -1,0 +1,672 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>송림 프로토타입 · 기능정의서 기준</title>
+<style>
+:root{--ink:#111;--sub:#666;--line:#c8c8c2;--soft:#f5f5f2;--paper:#fff;--accent:#1f3a2d}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",Arial,sans-serif;color:var(--ink);background:#ececec;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+body{display:flex;justify-content:center;align-items:flex-start;padding:20px 0}
+.device{width:390px;height:844px;background:var(--paper);border:1px solid #111;position:relative;overflow:hidden}
+.status{height:44px;padding:13px 17px 0;display:flex;justify-content:space-between;font-size:12px;font-weight:700;position:relative;background:#fff;z-index:50}
+.island{position:absolute;left:50%;top:9px;transform:translateX(-50%);width:112px;height:22px;background:#111}
+.screen{position:absolute;inset:44px 0 0;display:none;background:#fff;overflow-y:auto;padding:0 20px 96px;scrollbar-width:none;-ms-overflow-style:none}.screen::-webkit-scrollbar{display:none}.screen.active{display:block}.screen.focus{padding-bottom:28px}
+.apphead{position:sticky;top:0;z-index:20;min-height:56px;background:rgba(255,255,255,.97);border-bottom:1px solid #111;display:flex;align-items:center;justify-content:space-between;padding:9px 0}
+.apphead h1{font-size:21px;line-height:1.2;margin:0;letter-spacing:-.035em}.back,.headbtn{border:0;background:#fff;color:#111;padding:8px 0}.back{font-size:27px;line-height:1;width:28px;text-align:left}.headbtn{font-size:12px;font-weight:700}
+h1.hero{font-size:29px;line-height:1.22;letter-spacing:-.045em;margin:34px 0 8px}h2{font-size:19px;line-height:1.35;letter-spacing:-.03em;margin:16px 0 7px}h3{font-size:14px;margin:18px 0 8px}p{font-size:13px;line-height:1.58;color:var(--sub);margin:0 0 12px}.small{font-size:11px;color:var(--sub)}.center{text-align:center}.muted{color:#888}.rule{border-top:1px solid var(--line);margin:18px 0}
+.logo{font-size:35px;font-weight:800;letter-spacing:-.05em;margin-top:74px}.tagline{font-size:13px;color:#59655d;margin-top:6px}
+input,select{width:100%;height:48px;border:1px solid #999;background:#fff;border-radius:0;padding:0 12px;margin:5px 0;outline:none;font-size:14px}input:focus,select:focus{border-color:#111;box-shadow:inset 0 0 0 1px #111}
+.btn{width:100%;min-height:48px;border:1px solid #111;background:#111;color:#fff;font-weight:800;font-size:14px;padding:11px 12px;margin:6px 0;border-radius:0}.btn.secondary{background:#fff;color:#111}.btn.soft{background:var(--soft);color:#111;border-color:#999}.btn.text{border:0;background:#fff;color:#555;text-decoration:underline;font-weight:600;min-height:38px}.btn.danger{background:#fff;color:#111;border:1px solid #111}.btn.inline{width:auto;min-height:36px;padding:7px 11px;margin:0;font-size:12px}.btn:disabled{opacity:.45;cursor:default}
+.social{background:#f5f5f5;color:#111}.divider{display:flex;align-items:center;gap:10px;color:#999;font-size:11px;margin:13px 0}.divider:before,.divider:after{content:"";height:1px;background:#ccc;flex:1}
+.note{border:1px solid #aaa;background:#f7f7f5;padding:12px;font-size:12px;color:#555;line-height:1.55;margin:12px 0}.error{min-height:16px;font-size:11px;color:#8a2f29;margin:2px 0}.success{border:1px solid #aaa;background:#f7f7f5;padding:10px;font-size:12px;color:#333;margin:8px 0}
+.progress{height:5px;background:#e5e5e1;margin:15px 0 11px}.progress i{display:block;height:100%;background:#111;width:0}
+.cover{height:238px;border:1px solid #999;background:#f1f1ef;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#555;margin:14px 0}.cover.small{height:136px}.cover.album{background:#ededed}.cover.movie{background:#f4f4f4}
+.choices{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.choices button{min-height:48px;border:1px solid #999;background:#fff;font-size:12px;font-weight:700}.skip{display:block;border:0;background:#fff;text-decoration:underline;color:#666;font-size:12px;margin:13px auto;padding:8px}
+.sectionlabel{font-size:12px;font-weight:800;letter-spacing:-.015em;margin:20px 0 8px}.sectionnote{font-size:11px;color:#777;margin-bottom:8px}
+.card{border:1px solid #aaa;background:#fff;padding:13px;margin:9px 0}.row{display:flex;align-items:center;gap:11px}.grow{min-width:0;flex:1}.thumb{width:55px;height:70px;border:1px solid #999;background:#f1f1ef;display:flex;align-items:center;justify-content:center;flex:none;font-size:9px;font-weight:800;color:#666}.thumb.album{height:55px}.title{font-weight:800;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.meta{font-size:11.5px;color:#666;margin-top:3px;line-height:1.45}.pill{display:inline-block;border:1px solid #aaa;padding:3px 6px;font-size:10px;margin-top:7px;color:#444}.rating{font-size:10px;font-weight:800;margin-left:5px}.chev{color:#777;font-size:18px}
+.recommend{padding-top:4px}.recommend .cover{margin-top:12px}.recommend-actions{margin-top:13px}.placeholderDaily{border-top:1px solid #bbb;margin-top:22px;padding-top:18px}.placeholderDaily p{margin-bottom:0}
+.currentCard{margin-top:14px}.experience{border-top:1px solid #111;margin-top:18px;padding-top:18px}.experience.first{border-top:0;margin-top:12px;padding-top:0}.experienceBox{border:1px solid #aaa;background:#f8f8f6;padding:16px;margin-top:8px}.experienceBox h2{margin-top:0}.quote{font-size:17px;line-height:1.55;color:#222;margin:5px 0 15px}.actionStack{display:grid;gap:7px;margin-top:10px}.actionStack .btn{margin:0}.completeAction{border-top:1px solid #bbb;margin-top:14px;padding-top:12px}.completeAction .btn{margin-top:5px}.dailyDone{border:1px solid #aaa;background:#f8f8f6;padding:14px;margin-top:8px}.dailyDone b{display:block;font-size:14px;margin-bottom:4px}.dailyDone span{font-size:12px;color:#555}
+.search{position:relative;margin:11px 0 8px}.search input{padding-left:34px}.search:before{content:"⌕";position:absolute;left:12px;top:18px;color:#777;font-size:18px}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:8px 0 12px}.chips::-webkit-scrollbar{display:none}.chip{border:1px solid #999;background:#fff;padding:7px 10px;font-size:11px;white-space:nowrap}.chip.active{background:#111;color:#fff;border-color:#111}
+.detailCover{height:178px;margin-top:14px}.detailMeta{border-top:1px solid #bbb;margin-top:18px}.detailMeta .line{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid #ddd;font-size:12px}.detailMeta .line span:first-child{color:#777}.detailActions{margin-top:18px}
+.tabbar{position:absolute;left:0;right:0;bottom:0;height:82px;border-top:1px solid #111;background:#fff;display:none;grid-template-columns:repeat(4,1fr);z-index:40;padding:8px 3px 18px}.tabbar.show{display:grid}.tabbar button{border:0;background:#fff;color:#777;font-size:10px;font-weight:700}.tabbar button.active{color:#111}.tabbar .ico{display:block;font-size:19px;line-height:1.2;margin-bottom:3px}.homebar{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);width:98px;height:4px;background:#111;z-index:55}
+.sheet{display:none;position:absolute;inset:0;background:rgba(0,0,0,.22);z-index:80;align-items:flex-end}.sheet.show{display:flex}.sheetbox{width:100%;max-height:78%;overflow-y:auto;background:#fff;border-top:1px solid #111;padding:18px 20px 30px;scrollbar-width:none}.sheetbox::-webkit-scrollbar{display:none}.sheetbox h2{margin-top:0}.ratingRow{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:12px 0}.ratingBtn{height:42px;border:1px solid #111;background:#fff;font-weight:800}.ratingBtn.selected{background:#111;color:#fff}
+.toast{display:none;position:absolute;left:50%;bottom:94px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 12px;font-size:11px;z-index:90;white-space:nowrap;max-width:86%;overflow:hidden;text-overflow:ellipsis}.toast.show{display:block}
+.menu{border-top:1px solid #bbb;margin-top:10px}.menuitem{min-height:56px;border-bottom:1px solid #ccc;display:flex;align-items:center;justify-content:space-between;font-size:14px}.switch{width:44px;height:24px;border:1px solid #999;background:#ddd;position:relative}.switch:after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;background:#fff;border:1px solid #999}.switch.on{background:#111}.switch.on:after{left:21px}
+/* forest */
+.forestFrame{position:relative;margin-top:10px}.forestViewport{height:270px;border:1px solid #999;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;touch-action:pan-x;background:#fafafa}.forestViewport::-webkit-scrollbar{display:none}.forestWorld{position:relative;height:268px;min-width:980px}.forestGround{position:absolute;left:0;right:0;bottom:38px;border-top:1px solid #777}.forestAvatar{position:absolute;bottom:33px;width:8px;height:8px;background:#111;border-radius:50%;transform:translateX(-50%);z-index:10;pointer-events:none}.forestTree{position:absolute;bottom:39px;width:78px;height:100px;transform:translateX(-50%);border:0;background:transparent;padding:0;overflow:visible}.forestTree .shape{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:70px;height:75px}.forestTree .shape i,.forestTree .shape i:before,.forestTree .shape i:after{content:"";position:absolute;background:#111;display:block}.stage-seed .shape i{width:8px;height:8px;border-radius:50%;left:31px;bottom:2px}.stage-sprout .shape i{width:2px;height:24px;left:34px;bottom:2px}.stage-sprout .shape i:before{width:12px;height:7px;left:-10px;top:6px;border-radius:100% 0 100% 0;transform:rotate(18deg)}.stage-sprout .shape i:after{width:12px;height:7px;left:0;top:0;border-radius:0 100% 0 100%;transform:rotate(-16deg)}.stage-bush .shape i{width:42px;height:20px;left:14px;bottom:2px;border-radius:50%}.stage-bush .shape i:before{width:23px;height:23px;left:0;top:-10px;border-radius:50%}.stage-bush .shape i:after{width:25px;height:25px;right:0;top:-11px;border-radius:50%}.stage-tree .shape i{width:4px;height:27px;left:33px;bottom:0}.stage-tree .shape i:before{width:33px;height:33px;left:-14px;top:-19px;border-radius:50%}.stage-big .shape i{width:5px;height:32px;left:33px;bottom:0}.stage-big .shape i:before{width:43px;height:43px;left:-19px;top:-26px;border-radius:50%}.forestInfo{position:absolute;left:50%;bottom:82px;transform:translateX(-50%);display:none;min-width:128px;max-width:172px;background:#fff;border:1px solid #111;padding:6px 8px;font-size:10px;line-height:1.35;z-index:15}.forestInfo b{display:block;margin-bottom:2px}.forestTree.active .forestInfo{display:block}.stage-seed .forestInfo{bottom:51px}.stage-sprout .forestInfo{bottom:62px}.stage-bush .forestInfo{bottom:66px}.stage-tree .forestInfo{bottom:75px}.forestEdge{position:absolute;top:50%;transform:translateY(-50%);z-index:20;width:34px;height:50px;border:0;background:rgba(255,255,255,.78);font-size:32px}.forestEdge.left{left:7px}.forestEdge.right{right:7px}.memoryTree{position:absolute;width:14px;height:23px;opacity:.22;z-index:1}.memoryTree:before{content:"";position:absolute;left:6px;bottom:0;width:2px;height:9px;background:#111}.memoryTree:after{content:"";position:absolute;left:1px;bottom:7px;width:12px;height:14px;border:1px solid #111;border-radius:50%;background:#fff}.animal{position:absolute;font-size:9px;color:#777;z-index:2;pointer-events:none}.forestSummaryLink{width:100%;border:0;background:#fff;padding:0;text-align:left}.forestSummaryRow{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #bbb;padding:13px 0}.forestSummary{display:flex;align-items:center;gap:8px;font-size:11px;color:#555}.forestSummary b{font-size:14px;color:#111}.forestSummary i{width:1px;height:12px;background:#bbb}.forestRecent{margin-top:18px}.forestRecent h3{margin-bottom:9px}.allTotal{padding:17px 0 10px;border-bottom:1px solid #bbb}.allTotal b{font-size:28px}.allTotal span{font-size:13px;color:#555;margin-left:4px}.allGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px 8px;padding:17px 0 30px}.allItem{border:0;background:#fff;padding:0;text-align:center;min-width:0}.allTree{height:52px;position:relative}.allTree:before{content:"";position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:4px;height:24px;background:#111}.allTree:after{content:"";position:absolute;left:50%;bottom:15px;transform:translateX(-50%);width:30px;height:30px;background:#111;border-radius:50%}.allTitle{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:6px}.allMeta{font-size:9px;color:#777;margin-top:2px}
+.prototypeTools{position:fixed;left:24px;top:24px;width:180px;background:#fff;border:1px solid #999;padding:12px;z-index:9999}.prototypeTools b{display:block;font-size:11px;margin-bottom:8px}.prototypeTools button{width:100%;border:1px solid #111;background:#fff;padding:8px 6px;margin:4px 0;font-size:11px}.prototypeTools button:hover{background:#f3f3f3}
+@media(max-width:700px){html,body{width:100%;height:100%;overflow:hidden;background:#fff}body{padding:0;display:block}.device{width:100vw;height:100dvh;border:0}.prototypeTools{display:none}}
+</style>
+
+<style id="daily-book-info-fix">
+.dailyBookInfo{display:flex;align-items:center;gap:12px;padding:0 0 14px;margin-bottom:14px;border-bottom:1px solid #bbb}
+.dailyBookThumb{width:46px;height:58px;border:1px solid #999;background:#f2f2f2;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex:none}
+.dailyBookInfo .title{font-size:15px;white-space:normal;line-height:1.35}
+.dailyBookInfo .meta{font-size:12px;margin-top:4px}
+</style>
+
+<style id="songlim-unified-doc-tone-20260909">
+:root{
+  --songlim-ink:#111;
+  --songlim-text:#2b2b2b;
+  --songlim-sub:#666;
+  --songlim-muted:#858585;
+  --songlim-line:#d7d7d7;
+  --songlim-line-strong:#9a9a9a;
+  --songlim-soft:#f7f7f5;
+  --songlim-paper:#fff;
+}
+html,body{
+  background:var(--songlim-paper)!important;
+  color:var(--songlim-ink)!important;
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",Arial,sans-serif!important;
+  -webkit-font-smoothing:antialiased;
+  font-synthesis:none;
+}
+body{letter-spacing:-.018em!important}
+*{box-shadow:none!important;text-shadow:none!important}
+a{color:inherit}
+</style>
+
+<style id="songlim-prototype-tone-20260909">
+:root{--ink:#111;--sub:#666;--line:#d3d3d3;--soft:#f7f7f5;--paper:#fff;--accent:#111}
+html,body{font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",Arial,sans-serif!important;background:#f3f3f1!important;color:#111!important}
+body{padding:20px 0!important}
+.device{background:#fff!important;border:1px solid #999!important;box-shadow:none!important}
+.status{background:#fff!important;border-bottom:1px solid #e2e2e2!important}.island{background:#111!important}
+.screen{background:#fff!important}.apphead{background:#fff!important;border-bottom:1px solid #111!important;backdrop-filter:none!important}.apphead h1{font-size:20px!important;font-weight:750!important}.back,.headbtn{background:#fff!important}
+h1.hero{font-size:27px!important}h2{font-size:18px!important}p{color:#666!important}
+.logo{font-size:32px!important;font-weight:800!important}.tagline{color:#666!important}
+input,select{border-color:#aaa!important;background:#fff!important}.btn{background:#111!important;color:#fff!important;border-color:#111!important}.btn.secondary,.btn.soft,.social{background:#fff!important;color:#111!important;border-color:#aaa!important}.btn.text{background:#fff!important;color:#555!important;border:0!important;text-decoration:underline!important;text-underline-offset:2px!important}.btn.danger{background:#fff!important;color:#111!important;border-color:#111!important}
+.note,.success{background:var(--soft)!important;border-color:#bbb!important;color:#555!important}.progress{background:#e7e7e5!important}.progress i{background:#111!important}
+.cover,.thumb,.dailyBookThumb{background:var(--soft)!important;border-color:#aaa!important;color:#666!important}.cover.album,.cover.movie,.thumb.album{background:var(--soft)!important}
+.choices button,.chip,.ratingBtn{background:#fff!important;border-color:#aaa!important}.chip.active,.ratingBtn.selected{background:#111!important;color:#fff!important;border-color:#111!important}
+.card,.experienceBox,.dailyDone{background:#fff!important;border-color:#aaa!important}.sectionlabel{font-weight:750!important}.experience{border-top-color:#111!important}.dailyBookInfo,.completeAction,.placeholderDaily,.detailMeta,.menu,.forestSummaryRow,.allTotal{border-color:#d0d0d0!important}
+.pill{border-color:#aaa!important;color:#555!important}.tabbar{background:#fff!important;border-top-color:#111!important}.tabbar button{background:#fff!important}.tabbar button.active{color:#111!important}.homebar{background:#111!important}
+.sheet{background:rgba(0,0,0,.18)!important}.sheetbox{background:#fff!important;border-top-color:#111!important}.toast{background:#111!important;color:#fff!important}
+.menuitem{border-color:#d0d0d0!important}.switch{border-color:#aaa!important;background:#ddd!important}.switch.on{background:#111!important}
+.forestViewport{background:#fafafa!important;border-color:#aaa!important}.forestGround{border-color:#999!important}.forestEdge{background:rgba(255,255,255,.9)!important}.forestInfo{border-color:#999!important}.memoryTree{opacity:.2!important}
+.prototypeTools{background:#fff!important;border-color:#aaa!important;box-shadow:none!important}.prototypeTools button{background:#fff!important;border-color:#aaa!important}.prototypeTools button:hover{background:var(--soft)!important}
+*{box-shadow:none!important;text-shadow:none!important}
+@media(max-width:700px){html,body{background:#fff!important}.device{border:0!important}}
+</style>
+
+<style id="songlim-final-prototype-2236">
+/* 2236 기능정의서 기준: 실제 앱 검토에 필요한 위계만 남긴 흑백 프로토타입 */
+:root{--ink:#111;--text:#2b2b2b;--sub:#666;--muted:#888;--line:#d7d7d7;--line2:#a6a6a6;--soft:#f6f6f4;--paper:#fff}
+html,body{font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",Arial,sans-serif!important;color:var(--ink)!important}
+body{background:#f2f2f0!important;padding:18px 0!important}
+.device{background:#fff!important;border:1px solid #999!important;box-shadow:none!important}
+.status{height:44px!important;background:#fff!important;border-bottom:1px solid #e5e5e5!important;padding-top:13px!important}.island{background:#111!important}
+.screen{background:#fff!important;padding-left:20px!important;padding-right:20px!important}
+.apphead{min-height:54px!important;background:#fff!important;border-bottom:1px solid #111!important;padding:8px 0!important;backdrop-filter:none!important}.apphead h1{font-size:19px!important;font-weight:750!important}.headbtn{font-size:12px!important}.back{font-size:25px!important}
+h1.hero{font-size:26px!important;line-height:1.28!important;margin:28px 0 8px!important}h2{font-size:18px!important;line-height:1.4!important}h3{font-size:14px!important}p{font-size:13px!important;line-height:1.58!important;color:#666!important}.small{color:#777!important}.logo{font-size:31px!important;margin-top:68px!important}.tagline{color:#666!important}
+
+/* 입력/행동: 주행동만 검정, 나머지는 흰색 */
+input,select{height:46px!important;border:1px solid var(--line2)!important;background:#fff!important;padding:0 11px!important;margin:5px 0!important}
+input:focus,select:focus{border-color:#111!important;box-shadow:inset 0 0 0 1px #111!important}
+.btn{min-height:46px!important;background:#111!important;color:#fff!important;border:1px solid #111!important;font-size:13.5px!important;font-weight:750!important;margin:5px 0!important;padding:10px 12px!important}
+.btn.secondary,.btn.soft,.social{background:#fff!important;color:#111!important;border-color:var(--line2)!important}.btn.text{background:#fff!important;color:#555!important;border:0!important;text-decoration:none!important;font-weight:600!important}.btn.text:after{content:"";display:block;width:100%;border-bottom:1px solid #aaa;transform:scaleX(0);transition:none}.btn.danger{background:#fff!important;color:#111!important;border-color:#111!important}
+.divider{color:#999!important}.divider:before,.divider:after{background:#d7d7d7!important}
+
+/* 필요한 안내 면만 아주 옅게 */
+.note,.success,.dailyDone{background:var(--soft)!important;border:1px solid var(--line)!important;color:#555!important;padding:11px!important}
+.progress{height:4px!important;background:#e6e6e4!important}.progress i{background:#111!important}
+.cover,.thumb,.dailyBookThumb{background:var(--soft)!important;border:1px solid var(--line2)!important;color:#666!important}
+.cover{margin:12px 0!important}.card{border:1px solid var(--line)!important;background:#fff!important;padding:12px!important;margin:8px 0!important}.title{font-size:14px!important}.meta{color:#666!important}.pill{border:1px solid var(--line2)!important;color:#555!important;background:#fff!important}
+
+.sectionlabel{font-size:12px!important;font-weight:750!important;margin:18px 0 7px!important}.sectionnote{color:#777!important}
+.experience{border-top:1px solid #111!important;margin-top:17px!important;padding-top:17px!important}.experienceBox{border:1px solid var(--line)!important;background:#fff!important;padding:14px!important}.completeAction,.placeholderDaily,.dailyBookInfo,.detailMeta,.menu,.forestSummaryRow,.allTotal{border-color:var(--line)!important}
+.actionStack{gap:6px!important}.dailyDone{margin-top:7px!important}
+
+/* 필터는 문서형 탭: 활성만 면 */
+.chips{gap:5px!important;margin:7px 0 11px!important}.chip{border:1px solid var(--line2)!important;background:#fff!important;padding:6px 9px!important}.chip.active{background:#111!important;color:#fff!important;border-color:#111!important}
+.search input{height:44px!important}.detailMeta .line{border-bottom:1px solid var(--line)!important;padding:10px 0!important}
+
+.tabbar{height:80px!important;background:#fff!important;border-top:1px solid #111!important;padding-top:7px!important}.tabbar button{background:#fff!important;color:#888!important}.tabbar button.active{color:#111!important}.tabbar .ico{font-size:18px!important}.homebar{background:#111!important}
+.sheet{background:rgba(0,0,0,.16)!important}.sheetbox{background:#fff!important;border-top:1px solid #111!important;padding:17px 20px 28px!important}.ratingBtn{border:1px solid var(--line2)!important;background:#fff!important}.ratingBtn.selected{background:#111!important;color:#fff!important;border-color:#111!important}.toast{background:#111!important;color:#fff!important}
+.menuitem{min-height:54px!important;border-bottom:1px solid var(--line)!important}.switch{border-color:var(--line2)!important}.switch.on{background:#111!important}
+
+/* 숲도 기능 구조만 명확하게 */
+.forestViewport{background:#fafafa!important;border:1px solid var(--line2)!important}.forestGround{border-color:#999!important}.forestEdge{background:rgba(255,255,255,.92)!important}.forestInfo{border:1px solid var(--line2)!important}.forestSummaryRow{padding:12px 0!important}.allGrid{gap:16px 8px!important}
+.prototypeTools{background:#fff!important;border:1px solid var(--line2)!important;padding:11px!important}.prototypeTools button{border:1px solid var(--line2)!important;background:#fff!important;padding:7px 6px!important}.prototypeTools button:hover{background:var(--soft)!important}
+
+@media(max-width:700px){
+ html,body{width:100%!important;height:100%!important;overflow:hidden!important;background:#fff!important}
+ body{padding:0!important;display:block!important}.device{width:100vw!important;height:100dvh!important;border:0!important}.prototypeTools{display:none!important}
+ .screen{padding-left:18px!important;padding-right:18px!important}.apphead{min-height:52px!important}.apphead h1{font-size:19px!important}
+ h1.hero{font-size:25px!important}.logo{font-size:30px!important}
+}
+</style>
+
+
+<style id="data-pipeline-prototype-20260908">
+textarea{width:100%;min-height:88px;border:1px solid #a6a6a6;background:#fff;border-radius:0;padding:11px;margin:5px 0;outline:none;font:inherit;resize:vertical}
+textarea:focus{border-color:#111;box-shadow:inset 0 0 0 1px #111}
+.entryChoice{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.entryChoice .btn{margin:0}
+.sourceExamples{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;margin:8px 0 13px}.sourceExamples::-webkit-scrollbar{display:none}
+.sourceExamples button{flex:0 0 auto;border:1px solid #a6a6a6;background:#fff;padding:6px 8px;font-size:10px}
+.candidateList{border-top:1px solid #aaa;margin-top:12px}.candidateRow{width:100%;border:0;border-bottom:1px solid #d7d7d7;background:#fff;text-align:left;padding:12px 0;display:flex;gap:11px;align-items:center}.candidateRow .thumb{width:46px;height:58px}.candidateRow.album .thumb{height:46px}.candidateMeta{font-size:11px;color:#666;line-height:1.45;margin-top:3px}.candidateSub{font-size:10px;color:#888;margin-top:4px}.evidence{border-top:1px solid #d7d7d7;border-bottom:1px solid #d7d7d7;padding:10px 0;margin:12px 0;font-size:11px;color:#555;line-height:1.55}.evidence b{color:#111}.confidenceBadge{display:inline-block;border:1px solid #999;padding:3px 6px;font-size:10px;margin:0 4px 4px 0;background:#fff}.autoMeta{border-top:1px solid #bbb;margin-top:12px}.autoMeta div{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #ddd;font-size:11px}.autoMeta span{color:#777}.emptySearch{padding:18px 0;color:#777;font-size:12px}
+@media(max-width:700px){.entryChoice{grid-template-columns:1fr}.sourceExamples{margin-right:-18px;padding-right:18px}}
+</style>
+</head>
+<body>
+<div class="prototypeTools">
+  <b>프로토타입 상태 확인</b>
+  <button onclick="demoNewUser()">신규 사용자 흐름</button>
+  <button onclick="demoRecommendation()">금주의 추천 · 미선택</button>
+  <button onclick="demoPick('book')">책 선택 상태</button>
+  <button onclick="demoPick('album')">음반 선택 상태</button>
+  <button onclick="demoPick('movie')">영화 선택 상태</button>
+  <button onclick="advanceDemoDay()">다음 날 상태</button>
+  <button onclick="go('forest')">나의 숲</button>
+  <button onclick="go('scrap')">스크랩</button>
+  <button onclick="openNotionLibrary()">실제 독서목록 212권</button>
+  <button onclick="openDirectEntry('scrap')">직접 기록 검색</button>
+  <button onclick="startExternalShareDemo('instagramBook')">SNS 공유 식별</button>
+</div>
+<div class="device" id="device">
+  <div class="status"><span>9:41</span><div class="island"></div><span>5G ▰</span></div>
+
+  <section class="screen focus active" id="login">
+    <div class="center"><div class="logo">송림</div><div class="tagline">취향이 자라는 숲</div></div>
+    <div style="margin-top:42px">
+      <button class="btn social" onclick="loginExisting()">카카오로 로그인</button>
+      <button class="btn social" onclick="loginExisting()">Apple로 로그인</button>
+      <div class="divider">또는</div>
+      <input id="loginEmail" value="test@songlim.kr" placeholder="이메일">
+      <input id="loginPw" value="1234" type="password" placeholder="비밀번호">
+      <div class="error" id="loginError"></div>
+      <button class="btn" onclick="loginExisting()">로그인</button>
+      <button class="btn text" onclick="go('forgot')">비밀번호를 잊으셨나요?</button>
+      <button class="btn text" onclick="go('signup')">처음이신가요? 회원가입</button>
+    </div>
+  </section>
+
+  <section class="screen focus" id="signup">
+    <div class="apphead"><button class="back" onclick="go('login')">‹</button><h1>회원가입</h1><span></span></div>
+    <h1 class="hero">송림 시작하기</h1><p>가입 방법을 선택해주세요.</p>
+    <button class="btn social" onclick="go('onbIntro')">카카오로 회원가입</button>
+    <button class="btn social" onclick="go('onbIntro')">Apple로 회원가입</button>
+    <div class="divider">또는</div>
+    <button class="btn secondary" onclick="go('emailSignup')">이메일로 회원가입</button>
+    <button class="btn text" onclick="go('login')">로그인으로 돌아가기</button>
+  </section>
+
+  <section class="screen focus" id="emailSignup">
+    <div class="apphead"><button class="back" onclick="go('signup')">‹</button><h1>이메일 회원가입</h1><span></span></div>
+    <div style="margin-top:16px">
+      <input id="joinEmail" placeholder="이메일">
+      <button class="btn secondary" onclick="sendCode()">인증번호 받기</button>
+      <input id="joinCode" placeholder="인증번호 · 테스트 123456">
+      <input id="joinPw" type="password" placeholder="비밀번호">
+      <input id="joinPw2" type="password" placeholder="비밀번호 확인">
+      <label style="display:flex;align-items:center;gap:8px;font-size:12px;margin:10px 0"><input id="terms" type="checkbox" style="width:auto;height:auto;margin:0">필수 약관 전체 동의</label>
+      <div class="error" id="joinError"></div>
+      <button class="btn" onclick="joinEmailUser()">가입 완료</button>
+      <button class="btn text" onclick="go('login')">로그인으로 돌아가기</button>
+    </div>
+  </section>
+
+  <section class="screen focus" id="forgot">
+    <div class="apphead"><button class="back" onclick="go('login')">‹</button><h1>비밀번호 찾기</h1><span></span></div>
+    <h1 class="hero">비밀번호 재설정</h1><p>가입한 이메일로 재설정 안내를 보내드립니다.</p>
+    <input id="forgotEmail" placeholder="가입한 이메일">
+    <div id="forgotResult"></div>
+    <button class="btn" onclick="resetPassword()">재설정 메일 보내기</button>
+    <button class="btn text" onclick="go('login')">로그인으로 돌아가기</button>
+  </section>
+
+  <section class="screen focus" id="onbIntro">
+    <h1 class="hero">취향을 조금 알려주세요</h1>
+    <p>책·음반·영화 중 아는 콘텐츠에만 답해주세요. 모르는 콘텐츠는 건너뛰어도 됩니다.</p>
+    <div class="note">약 10개 이상 응답하면 바로 송림을 시작할 수 있습니다. 건너뛴 콘텐츠는 취향 데이터로 저장하지 않습니다.</div>
+    <button class="btn" onclick="go('onboarding');renderOnboarding()">시작하기</button>
+  </section>
+
+  <section class="screen focus" id="onboarding">
+    <div class="apphead"><span class="headbtn">취향 선택</span><button class="headbtn hidden" id="onbStartTop" onclick="finishOnboarding()">송림 시작하기</button></div>
+    <div class="progress"><i id="onbProgress"></i></div>
+    <div class="small" id="onbCount"></div>
+    <div class="cover" id="onbCover">BOOK COVER</div>
+    <h2 class="center" id="onbTitle"></h2><p class="center" id="onbCreator"></p>
+    <div class="choices" id="onbChoices"></div>
+    <button class="skip" onclick="skipOnboarding()">건너뛰기 · 잘 모르겠어요</button>
+    <button class="btn text" onclick="openManualTaste()">원하는 책·음반·영화 직접 입력</button>
+    <button class="btn secondary hidden" id="onbStartBottom" onclick="finishOnboarding()">송림 시작하기</button>
+  </section>
+
+  <section class="screen app" id="today"><div class="apphead"><h1>금주의 추천</h1><span></span></div><div id="todayBody"></div></section>
+
+  <section class="screen app" id="scrap">
+    <div class="apphead"><h1>스크랩</h1><button class="headbtn" onclick="startShareFlow()">+ 저장</button></div>
+    <div class="search"><input id="searchInput" placeholder="저장한 책·음반·영화 검색" oninput="renderScraps()"></div>
+    <div class="sectionlabel">경험 상태</div>
+    <div class="chips" id="statusChips">
+      <button class="chip active" onclick="setStatusFilter('all',this)">전체</button><button class="chip" onclick="setStatusFilter('interested',this)">경험 전</button><button class="chip" onclick="setStatusFilter('in_progress',this)">경험 중</button><button class="chip" onclick="setStatusFilter('experienced',this)">경험 완료</button>
+    </div>
+    <div class="sectionlabel">콘텐츠 유형</div>
+    <div class="chips" id="typeChips">
+      <button class="chip active" onclick="setTypeFilter('all',this)">전체</button><button class="chip" onclick="setTypeFilter('book',this)">책</button><button class="chip" onclick="setTypeFilter('album',this)">음반</button><button class="chip" onclick="setTypeFilter('movie',this)">영화</button>
+    </div>
+    <div class="small">최근 저장순</div><div id="scrapList"></div>
+  </section>
+
+  <section class="screen app" id="detail">
+    <div class="apphead"><button class="back" onclick="detailBack()">‹</button><h1>콘텐츠 상세</h1><button class="headbtn" onclick="openEditCurrent()">수정</button></div>
+    <div id="detailBody"></div>
+  </section>
+
+  <section class="screen focus" id="shareAnalyze">
+    <div class="apphead"><button class="back" onclick="cancelShare()">‹</button><h1>외부 공유 확인</h1><span></span></div>
+    <h1 class="hero">공유된 콘텐츠 찾기</h1><p>Share Sheet에서 넘어온 URL·텍스트를 기준으로 실제 콘텐츠 후보를 찾습니다.</p>
+    <div class="sectionlabel">프로토타입 예시</div>
+    <div class="sourceExamples">
+      <button onclick="loadShareExample('instagramBook')">Instagram · 제목+저자</button>
+      <button onclick="loadShareExample('threadsTitle')">Threads · 제목만</button>
+      <button onclick="loadShareExample('blogMovie')">블로그 · 영화</button>
+      <button onclick="loadShareExample('noClue')">Instagram · 단서 없음</button>
+      <button onclick="loadShareExample('storeBook')">서점 · 직접 식별</button>
+    </div>
+    <select id="shareSourceApp">
+      <option>Instagram</option><option>Threads</option><option>블로그</option><option>YouTube</option><option>교보문고</option><option>기타 웹</option>
+    </select>
+    <input id="shareUrlInput" placeholder="공유 URL (선택)">
+    <textarea id="shareTextInput" placeholder="공유된 텍스트 또는 캡션"></textarea>
+    <div class="note" id="shareAnalyzeNote">실제 앱에서는 Share Sheet payload가 자동으로 들어옵니다. 이 프로토타입에서는 예시 또는 직접 입력으로 흐름을 확인합니다.</div>
+    <button class="btn" onclick="analyzeSharedInput()">콘텐츠 찾기</button>
+    <button class="btn secondary" onclick="openDirectEntry('share')">제목으로 직접 찾기</button>
+    <button class="btn text" onclick="cancelShare()">취소</button>
+  </section>
+
+  <section class="screen focus" id="shareConfirm">
+    <div class="apphead"><button class="back" onclick="go('shareAnalyze')">‹</button><h1>저장 확인</h1><span></span></div>
+    <div id="shareConfirmBody"></div>
+  </section>
+
+  <section class="screen focus" id="shareCorrect">
+    <div class="apphead"><button class="back" onclick="go('shareAnalyze')">‹</button><h1>콘텐츠 확인</h1><span></span></div>
+    <h2 style="margin-top:18px">어떤 콘텐츠인가요?</h2><p>자동 확정하기엔 단서가 부족해 후보만 좁혔습니다.</p>
+    <div id="shareCandidateList" class="candidateList"></div>
+    <button class="btn secondary" onclick="openDirectEntry('share')">제목으로 다시 찾기</button>
+    <button class="btn text" onclick="cancelShare()">취소</button>
+  </section>
+
+  <section class="screen focus" id="shareFallback">
+    <div class="apphead"><button class="back" onclick="go('shareAnalyze')">‹</button><h1>콘텐츠 찾기</h1><span></span></div>
+    <h1 class="hero">공유 정보만으로는 찾기 어려워요</h1>
+    <p>게시물 안의 화면에만 제목이나 표지가 있는 경우가 있습니다. 그래도 저장은 계속할 수 있습니다.</p>
+    <div class="note">잘못된 콘텐츠를 추측해 저장하지 않고, 확실하지 않을 때만 한 번 확인하는 구조입니다.</div>
+    <button class="btn" onclick="simulateScreenFind()">화면에서 찾기</button>
+    <button class="btn secondary" onclick="openDirectEntry('share')">제목으로 검색</button>
+    <button class="btn text" onclick="cancelShare()">나중에 하기</button>
+  </section>
+
+  <section class="screen focus" id="directEntry">
+    <div class="apphead"><button class="back" onclick="directBack()">‹</button><h1>직접 기록</h1><span></span></div>
+    <h1 class="hero">제목만 입력해도 됩니다</h1><p>후보를 선택하면 저자·아티스트·감독과 기본 정보를 자동으로 채웁니다.</p>
+    <div class="chips" id="directTypeChips">
+      <button class="chip active" onclick="setDirectType('all',this)">전체</button>
+      <button class="chip" onclick="setDirectType('book',this)">책</button>
+      <button class="chip" onclick="setDirectType('album',this)">음반</button>
+      <button class="chip" onclick="setDirectType('movie',this)">영화</button>
+    </div>
+    <div class="search"><input id="directSearchInput" placeholder="예: 데미안, In Rainbows, 헤어질 결심" oninput="renderDirectResults()"></div>
+    <div id="directSearchHint" class="small">두 글자 이상 입력하면 후보를 찾습니다. · 실제 Notion 독서목록 212권 테스트 데이터 포함</div>
+    <div id="directResults" class="candidateList"></div>
+  </section>
+
+  <section class="screen app" id="forest">
+    <div class="apphead"><h1>나의 숲</h1><span></span></div>
+    <div class="forestFrame">
+      <div class="forestViewport" id="forestViewport"><div class="forestWorld" id="forestWorld"><div class="forestGround"></div><div class="forestAvatar" id="forestAvatar"></div></div></div>
+      <button class="forestEdge left" onclick="moveForest(-1)">‹</button><button class="forestEdge right" onclick="moveForest(1)">›</button>
+    </div>
+    <button class="forestSummaryLink" onclick="go('allForest')"><div class="forestSummaryRow"><div class="forestSummary"><span>도서 <b id="bookStat">0</b></span><i></i><span>음반 <b id="albumStat">0</b></span><i></i><span>영화 <b id="movieStat">0</b></span></div><span class="small">전체 숲 보기 ›</span></div></button>
+    <div class="forestRecent"><h3>최근 기록</h3><div id="forestRecentList"></div></div>
+  </section>
+
+  <section class="screen app" id="allForest">
+    <div class="apphead"><button class="back" onclick="go('forest')">‹</button><h1>전체 숲</h1><span></span></div>
+    <div class="allTotal"><b id="allCount">0</b><span>개의 경험</span></div>
+    <div class="chips" id="allForestChips"><button class="chip active" onclick="setAllForestFilter('all',this)">전체</button><button class="chip" onclick="setAllForestFilter('book',this)">도서</button><button class="chip" onclick="setAllForestFilter('album',this)">음반</button><button class="chip" onclick="setAllForestFilter('movie',this)">영화</button></div>
+    <div class="allGrid" id="allForestGrid"></div>
+  </section>
+
+  <section class="screen app" id="my">
+    <div class="apphead"><h1>MY</h1><span></span></div>
+    <div class="card" style="margin-top:14px"><div class="title">sol</div><div class="meta">test@songlim.kr</div></div>
+    <div class="card"><div class="title">가져온 독서 기록 · 212권</div><div class="meta">읽고 싶음 53 · 읽는 중 14 · 완료 144 · 미분류 1</div><button class="btn secondary" style="margin-top:10px" onclick="openNotionLibrary()">독서목록 보기</button></div>
+    <div class="menu">
+      <div class="menuitem" onclick="openProfile()"><span>프로필</span><span>›</span></div>
+      <div class="menuitem"><span>오늘의 경험 알림</span><div class="switch on" id="notifSwitch" onclick="toggleNotif(event)"></div></div>
+      <div class="menuitem" onclick="go('tasteMore')"><span>취향 데이터 더 입력하기</span><span>›</span></div>
+      <div class="menuitem" onclick="openAccount()"><span>계정 / 데이터</span><span>›</span></div>
+      <div class="menuitem" onclick="openTerms()"><span>약관</span><span>›</span></div>
+    </div>
+    <button class="btn secondary" style="margin-top:20px" onclick="logout()">로그아웃</button>
+  </section>
+
+  <section class="screen app" id="tasteMore">
+    <div class="apphead"><button class="back" onclick="go('my')">‹</button><h1>취향 데이터</h1><span></span></div>
+    <p style="margin-top:15px">초기 응답 이후에도 책·음반·영화 취향 데이터를 추가로 보강할 수 있습니다.</p>
+    <button class="btn" onclick="go('onboarding');renderOnboarding()">취향 데이터 더 입력하기</button>
+    <div class="note">기존 UserContent는 유지하고 새 응답 또는 상태 변경만 반영합니다.</div>
+  </section>
+
+  <div class="tabbar" id="tabs">
+    <button data-tab="today" onclick="tab('today')"><span class="ico">⌂</span>금주의 추천</button>
+    <button data-tab="forest" onclick="tab('forest')"><span class="ico">♧</span>나의 숲</button>
+    <button data-tab="scrap" onclick="tab('scrap')"><span class="ico">▤</span>스크랩</button>
+    <button data-tab="my" onclick="tab('my')"><span class="ico">○</span>MY</button>
+  </div>
+  <div class="homebar"></div>
+  <div class="sheet" id="sheet" onclick="sheetBackground(event)"><div class="sheetbox" id="sheetbox"></div></div>
+  <div class="toast" id="toast"></div>
+</div>
+<script>
+const onboardingItems=[
+ {type:'book',title:'데미안',creator:'헤르만 헤세'}, {type:'album',title:'In Rainbows',creator:'Radiohead'}, {type:'movie',title:'기생충',creator:'봉준호'},
+ {type:'book',title:'작별하지 않는다',creator:'한강'}, {type:'album',title:'Blue',creator:'Joni Mitchell'}, {type:'movie',title:'헤어질 결심',creator:'박찬욱'},
+ {type:'book',title:'소년이 온다',creator:'한강'}, {type:'album',title:'Abbey Road',creator:'The Beatles'}, {type:'movie',title:'벌새',creator:'김보라'},
+ {type:'book',title:'물고기는 존재하지 않는다',creator:'룰루 밀러'}, {type:'album',title:'Melodrama',creator:'Lorde'}, {type:'movie',title:'애프터썬',creator:'샬롯 웰스'},
+ {type:'book',title:'파친코',creator:'이민진'}, {type:'album',title:'Vespertine',creator:'Björk'}, {type:'movie',title:'퍼펙트 데이즈',creator:'빔 벤더스'}
+];
+const baseCompleted=[
+ ['book','데미안','헤르만 헤세',5],['book','작별하지 않는다','한강',null],['book','소년이 온다','한강',5],['book','싯다르타','헤르만 헤세',null],['book','물고기는 존재하지 않는다','룰루 밀러',4],['book','파친코','이민진',null],['book','팩트풀니스','한스 로슬링',null],['book','타인의 고통','수전 손택',4],['book','스토너','존 윌리엄스',5],['book','이방인','알베르 카뮈',null],['book','채식주의자','한강',4],['book','밝은 밤','최은영',5],
+ ['album','Blue','Joni Mitchell',5],['album','Carrie & Lowell','Sufjan Stevens',null],['album','Blonde','Frank Ocean',5],['album','Melodrama','Lorde',null],['album','Punisher','Phoebe Bridgers',4],['album','Back to Black','Amy Winehouse',null],['album','To Pimp a Butterfly','Kendrick Lamar',5],['album','Vespertine','Björk',null],
+ ['movie','애프터썬','샬롯 웰스',5],['movie','헤어질 결심','박찬욱',5],['movie','패스트 라이브즈','셀린 송',null],['movie','드라이브 마이 카','하마구치 류스케',4],['movie','에브리씽 에브리웨어 올 앳 원스','다니엘 콴·다니엘 샤이너트',null],['movie','월터의 상상은 현실이 된다','벤 스틸러',4]
+];
+let nextId=1;
+let contents=baseCompleted.map((x,i)=>({id:nextId++,type:x[0],title:x[1],creator:x[2],status:'experienced',rating:x[3],source:i%3===0?'온보딩':i%3===1?'웹 공유':'Instagram 공유',saved:100-i,completed:`2026.08.${String(Math.max(1,31-i)).padStart(2,'0')}`,growth:4}));
+contents.push(
+ {id:nextId++,type:'album',title:'In Rainbows',creator:'Radiohead',status:'interested',source:'Instagram 공유',saved:130,tracks:['Nude','15 Step','Weird Fishes/Arpeggi','All I Need'],trackIndex:0},
+ {id:nextId++,type:'book',title:'노르웨이의 숲',creator:'무라카미 하루키',status:'interested',source:'웹 공유',saved:129},
+ {id:nextId++,type:'movie',title:'퍼펙트 데이즈',creator:'빔 벤더스',status:'interested',source:'Instagram 공유',saved:128},
+ {id:nextId++,type:'book',title:'코스모스',creator:'칼 세이건',status:'interested',source:'웹 공유',saved:127},
+ {id:nextId++,type:'album',title:'Kind of Blue',creator:'Miles Davis',status:'interested',source:'온보딩',saved:126,tracks:['So What','Freddie Freeloader','Blue in Green'],trackIndex:0},
+ {id:nextId++,type:'movie',title:'문라이트',creator:'배리 젠킨스',status:'interested',source:'온보딩',saved:125}
+);
+
+// 실제 Notion 독서목록 QA 데이터 · 212권
+const notionBooks=[{"id":"BOOK-001","title":"5년 만에 신혼여행","creator":"장강명","status":"Finished","year":"2025","genre":"수필/에세이","completed":"2025/10/18","rating":3},{"id":"BOOK-002","title":"13.67","creator":"찬호께이","status":"Finished","year":"2025","genre":"추리/미스터리/스릴러","completed":"2025/03/26","rating":4},{"id":"BOOK-003","title":"코스모스","creator":"칼 세이건","status":"Want to Read","year":"","genre":"과학","completed":"","rating":null},{"id":"BOOK-004","title":"28","creator":"정유정","status":"Finished","year":"2026","genre":"문학_장편소설","completed":"2026/04/24","rating":3},{"id":"BOOK-005","title":"1984","creator":"조지 오웰","status":"Finished","year":"2026","genre":"문학_장편소설","completed":"2026/02/09","rating":4},{"id":"BOOK-006","title":"2024 제15회 젊은작가상 수상집","creator":"김멜라","status":"Finished","year":"2025","genre":"문학_단편소설 (https://app.notion.com/p/_-f9381db6f0168227bb0401b1b581666c?pvs=21), 수상집","completed":"2025/11/28","rating":4},{"id":"BOOK-007","title":"페스트","creator":"알베르 카뮈","status":"Want to Read","year":"","genre":"문학_장편소설","completed":"","rating":null},{"id":"BOOK-008","title":"정확한 사랑의 실험","creator":"신형철","status":"Want to Read","year":"","genre":"수필/에세이","completed":"","rating":null},{"id":"BOOK-009","title":"왜 나는 너를 사랑하는가","creator":"알랭드보통","status":"Want to Read","year":"","genre":"수필/에세이","completed":"","rating":null},{"id":"BOOK-010","title":"김약국의 딸들","creator":"박경리","status":"Want to Read","year":"","genre":"문학_장편소설","completed":"","rating":null},{"id":"BOOK-011","title":"프라이드 그린 토마토","creator":"페니 플래그","status":"Want to Read","year":"","genre":"문학_장편소설","completed":"","rating":null},{"id":"BOOK-012","title":"프랑켄슈타인","creator":"메리 셀리","status":"Want to Read","year":"","genre":"문학_장편소설","completed":"","rating":null},{"id":"BOOK-013","title":"호미","creator":"박완서","status":"Going","year":"","genre":"수필/에세이","completed":"","rating":null},{"id":"BOOK-014","title":"나는 나를 파괴할 권리가 있다","creator":"김영하","status":"Want to Read","year":"","genre":"문학_장편소설","completed":"","rating":null},{"id":"BOOK-015","title":"흰","creator":"한강","status":"Want to Read","year":"","genre":"문학_장편소설 (https://app.notion.com/p/_-6c281db6f01683fe9b1b01093bf4d091?pvs=21), 문학_단편소설","completed":"","rating":null},{"id":"BOOK-016","title":"고독한 용의자","creator":"찬호께이","status":"Finished","year":"2025","genre":"추리/미스터리/스릴러","completed":"2025/05/09","rating":3},{"id":"BOOK-017","title":"그쪽의 풍경은 환한가","creator":"심보선","status":"Finished","year":"2025","genre":"수필/에세이","completed":"2025/11/27","rating":3},{"id":"BOOK-018","title":"1Q84","creator":"무라카미 하루키","status":"Finished","year":"","genre":"문학_장편소설","completed":"2024/01/31","rating":2},{"id":"BOOK-019","title":"노인을 위한 나라는 없다","creator":"코맥 매카시","status":"Want to Read","year":"","genre":"문학_장편소설","completed":"","rating":null},{"id":"BOOK-020","title":"긴키 지방의 어느 장소에 대하여","creator":"세스지","status":"Finished","year":"2025","genre":"추리/미스터리/스릴러","completed":"2025/08/26","rating":3},{"id":"BOOK-021","title":"대도시의 사랑법","creator":"박상영","status":"Finished","year":"2025","genre":"문학_단편소설","completed":"2024/04/10","rating":3},{"id":"BOOK-022","title":"달리기를 말할 때 내가 하고 싶은 이야기","creator":"무라카미 하루키","status":"Want to Read","year":"","genre":"수필/에세이","completed":"","rating":null},{"id":"BOOK-023","title":"논리적 생각의 핵심 개념들","creator":"나이절 워버턴","status":"Want to Read","year":"","genre":"인문","completed":"","rating":null},{"id":"BOOK-024","title":"우리는 다른 미래를 상상할 수 있을까","creator":"노엄 촘스키","status":"Want to Read","year":"","genre":"인문","completed":"","rating":null},{"id":"BOOK-025","title":"곰탕1","creator":"김영탁","status":"Finished","year":"2026","genre":"문학_장편소설","completed":"2026/03/18","rating":3},{"id":"BOOK-026","title":"엄마의 말뚝","creator":"박완서","status":"Finished","year":"2026","genre":"문학_장편소설","completed":"2026/06/09","rating":4},{"id":"BOOK-027","title":"김유정문학상 12회_작별","creator":"한강","status":"Finished","year":"2025","genre":"수상집","completed":"2024/11/13","rating":3},{"id":"BOOK-028","title":"더럽혀진 성지 순례에 대하여","creator":"세스지","status":"Finished","year":"2026","genre":"추리/미스터리/스릴러","completed":"2026/01/28","rating":3},{"id":"BOOK-029","title":"이방인","creator":"알베르 카뮈","status":"Finished","year":"2026","genre":"문학_장편소설","completed":"2026/08/06","rating":5},{"id":"BOOK-030","title":"마음","creator":"나쓰메 소세키","status":"Want to Read","year":"","genre":"문학_장편소설","completed":"","rating":null},{"id":"BOOK-031","title":"나는 소망한다 내게 금지된 것을","creator":"양귀자","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2024/10/02","rating":3},{"id":"BOOK-032","title":"일의 기쁨과 슬픔","creator":"장류진","status":"Want to Read","year":"","genre":"문학_단편소설","completed":"","rating":null},{"id":"BOOK-033","title":"눈먼 자들의 도시","creator":"주제 사라마구","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/05/13","rating":4},{"id":"BOOK-034","title":"모두를 위한 페미니즘","creator":"벨 훅스","status":"Want to Read","year":"","genre":"인문","completed":"","rating":null},{"id":"BOOK-035","title":"나를 찾아줘","creator":"길리언 플린","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/10/30","rating":3},{"id":"BOOK-036","title":"눈물을 마시는 새 1","creator":"이영도","status":"Finished","year":"2025","genre":"판타지/SF","completed":"2025/05/16","rating":3},{"id":"BOOK-037","title":"미세 좌절의 시대","creator":"장강명","status":"Want to Read","year":"","genre":"수필/에세이","completed":"","rating":null},{"id":"BOOK-038","title":"망내인","creator":"찬호께이","status":"Finished","year":"2025","genre":"추리/미스터리/스릴러","completed":"2025/03/31","rating":3},{"id":"BOOK-039","title":"우울할땐 뇌 과학","creator":"앨릭스 코브","status":"Want to Read","year":"","genre":"인문","completed":"","rating":null},{"id":"BOOK-040","title":"먹으면서 먹는 얘기할 때가 제일 좋아","creator":"정신우","status":"Finished","year":"2025","genre":"수필/에세이","completed":"2025/09/23","rating":3},{"id":"BOOK-041","title":"삼월은 붉은 구렁을","creator":"온다 리쿠","status":"Finished","year":"2025","genre":"추리/미스터리/스릴러","completed":"2025/09/11","rating":2},{"id":"BOOK-042","title":"나목","creator":"박완서","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/04/14","rating":5},{"id":"BOOK-043","title":"서 있는 여자","creator":"박완서","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/04/23","rating":5},{"id":"BOOK-044","title":"먼저 온 미래","creator":"장강명","status":"Finished","year":"2025","genre":"인문","completed":"2025/09/26","rating":5},{"id":"BOOK-045","title":"데미안","creator":"헤르만 헤세","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/11/30","rating":3},{"id":"BOOK-046","title":"눈물을 마시는 새 2","creator":"이영도","status":"Finished","year":"2025","genre":"판타지/SF","completed":"2025/05/19","rating":3},{"id":"BOOK-047","title":"사람은 무엇으로 사는가","creator":"레프 톨스토이","status":"Want to Read","year":"","genre":"문학_단편소설","completed":"","rating":null},{"id":"BOOK-048","title":"나의 라임 오렌지나무","creator":"J. M. 바스콘셀로스","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/04/21","rating":5},{"id":"BOOK-049","title":"멋진 신세계","creator":"올더스 헉슬리","status":"Finished","year":"2026","genre":"판타지/SF (https://app.notion.com/p/SF-fec81db6f0168382b9d481e56e7a92f9?pvs=21), 문학_장편소설","completed":"2026/01/26","rating":4},{"id":"BOOK-050","title":"보기왕이온다","creator":"사와무라 이치","status":"Finished","year":"2025","genre":"추리/미스터리/스릴러","completed":"2025/09/03","rating":2},{"id":"BOOK-051","title":"곰탕2","creator":"김영탁","status":"Finished","year":"2026","genre":"문학_장편소설","completed":"2026/03/19","rating":3},{"id":"BOOK-052","title":"모순","creator":"양귀자","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2024/09/10","rating":4},{"id":"BOOK-053","title":"몬테크리스토 백작 1","creator":"알렉상드르 뒤마","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/09/29","rating":5},{"id":"BOOK-054","title":"서랍에 저녁을 넣어두었다","creator":"한강","status":"Finished","year":"2025","genre":"문학_시","completed":"2024/10/02","rating":4},{"id":"BOOK-055","title":"사랑하고 선량하게 잦아드네","creator":"유수연","status":"Want to Read","year":"","genre":"문학_시","completed":"","rating":null},{"id":"BOOK-056","title":"몬테크리스토 백작 2","creator":"알렉상드르 뒤마","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/10/01","rating":4},{"id":"BOOK-057","title":"몬테크리스토 백작 3","creator":"알렉상드르 뒤마","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/10/02","rating":4},{"id":"BOOK-058","title":"나의 아름다운 이웃","creator":"박완서","status":"Finished","year":"2025","genre":"문학_단편소설","completed":"2025/02/27","rating":3},{"id":"BOOK-059","title":"두 사람의 인터내셔널","creator":"김기태","status":"Finished","year":"2025","genre":"문학_단편소설","completed":"2025/12/18","rating":3},{"id":"BOOK-060","title":"설국","creator":"가와바타 야스나리","status":"Want to Read","year":"","genre":"문학_장편소설","completed":"","rating":null},{"id":"BOOK-061","title":"세계사를 바꾼 13가지 식물","creator":"이나카기히데히로","status":"Finished","year":"2025","genre":"역사","completed":"2025/07/22","rating":3},{"id":"BOOK-062","title":"보리의 바다에 가라앉는 열매","creator":"온다 리쿠","status":"Finished","year":"2025","genre":"추리/미스터리/스릴러","completed":"2025/09/12","rating":2},{"id":"BOOK-063","title":"밀레니엄-여자를 증오한 남자들 1","creator":"스티그 라르손","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/11/06","rating":4},{"id":"BOOK-064","title":"내게 무해한 사람","creator":"최은영","status":"Finished","year":"2025","genre":"문학_단편소설","completed":"2025/12/06","rating":3},{"id":"BOOK-065","title":"밀레니엄-여자를 증오한 남자들2","creator":"스티그 라르손","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/11/07","rating":3},{"id":"BOOK-066","title":"소년이 온다","creator":"한강","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/03/01","rating":5},{"id":"BOOK-067","title":"수확자","creator":"닐 셔스터먼","status":"Finished","year":"2025","genre":"판타지/SF","completed":"2025/06/16","rating":3},{"id":"BOOK-068","title":"브람스를 좋아하세요…","creator":"프랑수아즈 사강","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/11/04","rating":3},{"id":"BOOK-069","title":"구의 증명","creator":"최진영","status":"Finished","year":"","genre":"문학_장편소설","completed":"2024/08/01","rating":2},{"id":"BOOK-070","title":"술꾼들의 모국어","creator":"권여선","status":"Finished","year":"2025","genre":"수필/에세이","completed":"2025/06/10","rating":3},{"id":"BOOK-071","title":"노르웨이의 숲","creator":"무라카미 하루키","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2024/07/09","rating":3},{"id":"BOOK-072","title":"심플 플랜","creator":"스콧 스미스","status":"Finished","year":"2025","genre":"추리/미스터리/스릴러","completed":"2025/09/04","rating":3},{"id":"BOOK-073","title":"두고 온 여름","creator":"성해나","status":"Finished","year":"2026","genre":"문학_장편소설","completed":"2026/03/15","rating":3},{"id":"BOOK-074","title":"사랑의 기술","creator":"에리히 프롬","status":"Finished","year":"2025","genre":"인문","completed":"2025/11/21","rating":3},{"id":"BOOK-075","title":"싯다르타","creator":"헤르만 헤세","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/04/01","rating":4},{"id":"BOOK-076","title":"이기적 유전자","creator":"리처드 도킨스","status":"Want to Read","year":"","genre":"인문","completed":"","rating":null},{"id":"BOOK-077","title":"귀신들의 땅","creator":"천쓰홍","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/08/28","rating":4},{"id":"BOOK-078","title":"아무튼, 레코드","creator":"성진환","status":"Finished","year":"2026","genre":"수필/에세이","completed":"2026/02/11","rating":4},{"id":"BOOK-079","title":"딸에 대하여","creator":"김혜진","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2024/08/01","rating":3},{"id":"BOOK-080","title":"그 많던 싱아는 누가 먹었을까","creator":"박완서","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2024/12/25","rating":5},{"id":"BOOK-081","title":"사탄탱고","creator":"크러스너호르커이 라슬로","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/10/21","rating":4},{"id":"BOOK-082","title":"눈물을 마시는 새 3","creator":"이영도","status":"Finished","year":"2025","genre":"판타지/SF","completed":"2025/05/29","rating":3},{"id":"BOOK-083","title":"안녕이라 그랬어","creator":"김애란","status":"Finished","year":"2026","genre":"문학_장편소설","completed":"2026/01/30","rating":4},{"id":"BOOK-084","title":"살아있는 자들을 위한 죽음 수업","creator":"이호","status":"Finished","year":"2025","genre":"인문","completed":"2025/11/11","rating":3},{"id":"BOOK-085","title":"애크로이드 살인사건","creator":"애거서 크리스티","status":"Finished","year":"2025","genre":"추리/미스터리/스릴러","completed":"2025/03/20","rating":3},{"id":"BOOK-086","title":"살인 재능","creator":"피터 스완슨","status":"Finished","year":"2025","genre":"추리/미스터리/스릴러","completed":"2025/07/14","rating":1},{"id":"BOOK-087","title":"그 산이 정말 거기에 있었을까","creator":"박완서","status":"Finished","year":"2025","genre":"문학_단편소설","completed":"2025/02/24","rating":5},{"id":"BOOK-088","title":"애프터 다크","creator":"무라카미 하루키","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/11/19","rating":3},{"id":"BOOK-089","title":"살인자의 기억법","creator":"김영하","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2024/06/12","rating":2},{"id":"BOOK-090","title":"눈물을 마시는 새 4","creator":"이영도","status":"Finished","year":"2025","genre":"판타지/SF","completed":"2025/06/05","rating":3},{"id":"BOOK-091","title":"이상 소설 전집","creator":"이상","status":"Want to Read","year":"","genre":"문학_단편소설","completed":"","rating":null},{"id":"BOOK-092","title":"그대 아직도 꿈꾸고 있는가","creator":"박완서","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/11/12","rating":4},{"id":"BOOK-093","title":"양들의 침묵","creator":"토머스 해리스","status":"Finished","year":"2026","genre":"문학_장편소설","completed":"2026/02/24","rating":3},{"id":"BOOK-094","title":"눈앞에 없는 사람","creator":"심보선","status":"Finished","year":"2025","genre":"문학_시","completed":"2024/05/30","rating":4},{"id":"BOOK-095","title":"어두운 상점들의 거리","creator":"파트릭 모디아노","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/11/07","rating":null},{"id":"BOOK-096","title":"일리아스","creator":"호메로스","status":"Want to Read","year":"","genre":"인문","completed":"","rating":null},{"id":"BOOK-097","title":"죽여 마땅한 사람들","creator":"피터 스완슨","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/12/09","rating":2},{"id":"BOOK-098","title":"그리고 아무도 없었다","creator":"애거서 크리스티","status":"Finished","year":"2025","genre":"추리/미스터리/스릴러","completed":"2025/11/24","rating":3},{"id":"BOOK-099","title":"우리가 열 번을 나고 죽을 때","creator":"성해나","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/10/27","rating":3},{"id":"BOOK-100","title":"자기만의 방","creator":"버지니아 울프","status":"Want to Read","year":"","genre":"수필/에세이","completed":"","rating":null},{"id":"BOOK-101","title":"여름, 스피드","creator":"김봉곤","status":"Finished","year":"2025","genre":"문학_단편소설","completed":"2024/05/09","rating":2},{"id":"BOOK-102","title":"죽은 자의 녹취록","creator":"미쓰다 신조","status":"Finished","year":"2025","genre":"추리/미스터리/스릴러","completed":"2025/10/07","rating":2},{"id":"BOOK-103","title":"우중괴담","creator":"미쓰다 신조","status":"Finished","year":"2025","genre":"추리/미스터리/스릴러","completed":"2025/09/05","rating":2},{"id":"BOOK-104","title":"죽은 집에 관한 기록","creator":"전건우","status":"Finished","year":"2026","genre":"추리/미스터리/스릴러","completed":"2026/03/19","rating":1},{"id":"BOOK-105","title":"이 지랄맞음이 쌓여 축제가 되겠지","creator":"조승리","status":"Finished","year":"2025","genre":"수필/에세이","completed":"2025/03/26","rating":4},{"id":"BOOK-106","title":"로드","creator":"코맥 매카시","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/11/20","rating":5},{"id":"BOOK-107","title":"인간실격","creator":"다자이 오사무","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/11/13","rating":5},{"id":"BOOK-108","title":"직업으로서의 소설가","creator":"무라카미 하루키","status":"Finished","year":"2025","genre":"수필/에세이","completed":"2025/03/21","rating":3},{"id":"BOOK-109","title":"다정한 매일매일","creator":"백수린","status":"Finished","year":"2025","genre":"수필/에세이","completed":"2025/11/03","rating":3},{"id":"BOOK-110","title":"입에 대한 앙케트","creator":"세스지","status":"Finished","year":"2025","genre":"추리/미스터리/스릴러","completed":"2025/10/13","rating":3},{"id":"BOOK-111","title":"채식주의자","creator":"한강","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2024/12/18","rating":5},{"id":"BOOK-112","title":"작별하지않는다","creator":"한강","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2024/12/11","rating":4},{"id":"BOOK-113","title":"최재천의 희망수업","creator":"최재천","status":"Finished","year":"2025","genre":"수필/에세이","completed":"2025/04/03","rating":4},{"id":"BOOK-114","title":"잘린 머리처럼 불길한 것","creator":"미쓰다 신조","status":"Finished","year":"2025","genre":"추리/미스터리/스릴러","completed":"2025/05/10","rating":2},{"id":"BOOK-115","title":"컬러 퍼플","creator":"앨리스 워커","status":"Finished","year":"2026","genre":"문학_장편소설","completed":"2026/01/06","rating":3},{"id":"BOOK-116","title":"롤리타","creator":"블라디미르 나보코프","status":"Finished","year":"2026","genre":"문학_장편소설","completed":"2026/03/09","rating":3},{"id":"BOOK-117","title":"콘클라베","creator":"로버트 해리스","status":"Finished","year":"2025","genre":"추리/미스터리/스릴러","completed":"2025/05/12","rating":4},{"id":"BOOK-118","title":"장미속의 뱀","creator":"온다 리쿠","status":"Finished","year":"2025","genre":"추리/미스터리/스릴러","completed":"2025/09/15","rating":1},{"id":"BOOK-119","title":"여름은 고작 계절","creator":"김서해","status":"Finished","year":"2026","genre":"문학_장편소설","completed":"2026/03/14","rating":4},{"id":"BOOK-120","title":"달과 6펜스","creator":"서머싯 몸","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/10/25","rating":4},{"id":"BOOK-121","title":"파이 이야기","creator":"얀 마텔","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/03/28","rating":5},{"id":"BOOK-122","title":"저주 토끼","creator":"정보라","status":"Finished","year":"2025","genre":"문학_단편소설","completed":"2025/12/03","rating":3},{"id":"BOOK-123","title":"태엽감는 새 연대기1","creator":"무라카미 하루키","status":"Finished","year":"2025 (https://app.notion.com/p/2025-ac381db6f01683aebae701695f42abbb?pvs=21), 2026","genre":"문학_장편소설","completed":"2026/05/15","rating":3},{"id":"BOOK-124","title":"종의 기원","creator":"정유정","status":"Finished","year":"2025","genre":"추리/미스터리/스릴러","completed":"2024/05/14","rating":3},{"id":"BOOK-125","title":"파과","creator":"구병모","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/10/15","rating":3},{"id":"BOOK-126","title":"오늘은 좀 매울지도 몰라","creator":"강창래","status":"Finished","year":"2025","genre":"수필/에세이","completed":"2024/12/11","rating":4},{"id":"BOOK-127","title":"작별하지 않는다","creator":"한강","status":"Want to Read","year":"","genre":"문학_장편소설","completed":"","rating":null},{"id":"BOOK-128","title":"마션","creator":"앤디 위어","status":"Finished","year":"2025","genre":"판타지/SF","completed":"2025/04/30","rating":4},{"id":"BOOK-129","title":"폭풍의 언덕","creator":"에밀리 브론테","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/04/09","rating":3},{"id":"BOOK-130","title":"프로젝트 헤일메리","creator":"앤디 위어","status":"Finished","year":"2025","genre":"판타지/SF","completed":"2025/04/28","rating":4},{"id":"BOOK-131","title":"마시지 않을 수 없는 밤이니까요","creator":"정지아","status":"Finished","year":"2025","genre":"수필/에세이","completed":"2025/09/09","rating":4},{"id":"BOOK-132","title":"오래 준비해온 대답","creator":"김영하","status":"Finished","year":"2025","genre":"수필/에세이","completed":"2025/02/04","rating":3},{"id":"BOOK-133","title":"흉가","creator":"미쓰다 신조","status":"Finished","year":"2025","genre":"추리/미스터리/스릴러","completed":"2025/10/02","rating":2},{"id":"BOOK-134","title":"오역하는 말들","creator":"황석희","status":"Finished","year":"2025","genre":"수필/에세이","completed":"2025/07/07","rating":4},{"id":"BOOK-135","title":"핏빛 자오선","creator":"코맥 매카시","status":"Finished","year":"2026","genre":"문학_장편소설","completed":"2026/02/03","rating":5},{"id":"BOOK-136","title":"핑거스미스","creator":"세라 워터스","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/09/19","rating":3},{"id":"BOOK-137","title":"철학의 역사","creator":"나이절 워버턴","status":"Want to Read","year":"","genre":"인문","completed":"","rating":null},{"id":"BOOK-138","title":"완전한 행복","creator":"정유정","status":"Finished","year":"","genre":"추리/미스터리/스릴러","completed":"2024/10/20","rating":2},{"id":"BOOK-139","title":"한 말씀만 하소서","creator":"박완서","status":"Finished","year":"2025","genre":"수필/에세이","completed":"2025/11/29","rating":5},{"id":"BOOK-140","title":"용의자들","creator":"정해연","status":"Finished","year":"2025","genre":"추리/미스터리/스릴러","completed":"2025/03/19","rating":2},{"id":"BOOK-141","title":"해리포터와 불의 잔","creator":"J.K 롤링","status":"Finished","year":"2025","genre":"판타지/SF","completed":"2025/02/03","rating":3},{"id":"BOOK-142","title":"해리포터와 비밀의 방","creator":"J.K 롤링","status":"Finished","year":"2025","genre":"판타지/SF","completed":"2025/01/31","rating":3},{"id":"BOOK-143","title":"할매","creator":"황석영","status":"Finished","year":"2026","genre":"문학_장편소설","completed":"2026/01/15","rating":4},{"id":"BOOK-144","title":"해리포터와 아즈카반의 죄수","creator":"J.K 롤링","status":"Finished","year":"2025","genre":"판타지/SF","completed":"2025/02/01","rating":3},{"id":"BOOK-145","title":"해리포터와 죽음의 성물","creator":"J.K 롤링","status":"Finished","year":"2025","genre":"판타지/SF","completed":"2025/02/12","rating":3},{"id":"BOOK-146","title":"달콤 쌉싸름한 초콜릿","creator":"라우라 에스키벨","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/06/27","rating":4},{"id":"BOOK-147","title":"해리포터와 혼혈왕자","creator":"J.K 롤링","status":"Finished","year":"2025","genre":"판타지/SF","completed":"2025/02/10","rating":3},{"id":"BOOK-148","title":"해변의 카프카1","creator":"무라카미 하루키","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/11/17","rating":4},{"id":"BOOK-149","title":"해가 지는 곳으로","creator":"최진영","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2024/09/11","rating":2},{"id":"BOOK-150","title":"해변의 카프카2","creator":"무라카미 하루키","status":"Finished","year":"2025","genre":"문학_장편소설","completed":"2025/11/18","rating":3},{"id":"BOOK-151","title":"홍학의 자리","creator":"정해연","status":"Finished","year":"2025","genre":"추리/미스터리/스릴러","completed":"2025/06/09","rating":2},{"id":"BOOK-152","title":"해리포터와 마법사의 돌","creator":"J.K 롤링","status":"Finished","year":"2025","genre":"판타지/SF","completed":"2023/10/25","rating":4},{"id":"BOOK-153","title":"화가","creator":"미쓰다 신조","status":"Finished","year":"2025","genre":"추리/미스터리/스릴러","completed":"2025/10/15","rating":2},{"id":"BOOK-154","title":"해리포터와 불사조 기사단","creator":"J.K 롤링","status":"Finished","year":"2025","genre":"판타지/SF","completed":"2025/02/09","rating":3},{"id":"BOOK-155","title":"황혼녘 백합의 뼈","creator":"온다 리쿠","status":"Finished","year":"2025","genre":"추리/미스터리/스릴러","completed":"2025/09/13","rating":2},{"id":"BOOK-156","title":"당신이 누군가를 죽였다","creator":"히가시노 게이고","status":"Finished","year":"2025","genre":"추리/미스터리/스릴러","completed":"2024/10/08","rating":1},{"id":"BOOK-157","title":"녹지대","creator":"박경리","status":"Want to Read","year":"","genre":"문학_장편소설","completed":"","rating":null},{"id":"BOOK-158","title":"여름비 이야기","creator":"기시 유스케","status":"Finished","year":"2026","genre":"추리/미스터리/스릴러","completed":"2026/04/30","rating":3},{"id":"BOOK-159","title":"셔터우의 세 자매","creator":"천쓰홍","status":"Want to Read","year":"","genre":"문학_장편소설","completed":"","rating":null},{"id":"BOOK-160","title":"옥수수밭 아이들 외","creator":"스티븐 킹","status":"Finished","year":"2026","genre":"추리/미스터리/스릴러","completed":"2026/05/28","rating":3},{"id":"BOOK-161","title":"리타 헤이워드와 쇼생크 탈출","creator":"스티븐 킹","status":"Want to Read","year":"","genre":"문학_장편소설","completed":"","rating":null},{"id":"BOOK-162","title":"월든","creator":"헨리 데이비드 소로","status":"Want to Read","year":"","genre":"수필/에세이","completed":"","rating":null},{"id":"BOOK-163","title":"고백","creator":"미나토 가나에","status":"Finished","year":"2026","genre":"추리/미스터리/스릴러","completed":"2026/05/14","rating":3},{"id":"BOOK-164","title":"태엽 감는 새 연대기2","creator":"무라카미 하루키","status":"Finished","year":"2026","genre":"문학_장편소설","completed":"2026/05/20","rating":3},{"id":"BOOK-165","title":"태엽 감는 새 연대기3","creator":"무라카미 하루키","status":"Finished","year":"2026","genre":"문학_장편소설","completed":"2026/06/12","rating":3},{"id":"BOOK-166","title":"쥬디 할머니","creator":"박완서","status":"Want to Read","year":"","genre":"문학_단편소설","completed":"","rating":null},{"id":"BOOK-167","title":"페이백","creator":"민도연","status":"Want to Read","year":"","genre":"추리/미스터리/스릴러","completed":"","rating":null},{"id":"BOOK-168","title":"이제야 언니에게","creator":"최진영","status":"Want to Read","year":"","genre":"문학_장편소설","completed":"","rating":null},{"id":"BOOK-169","title":"다정한 것이 살아남는다","creator":"브라이언 헤어","status":"Want to Read","year":"","genre":"인문","completed":"","rating":null},{"id":"BOOK-170","title":"연민에 관하여","creator":"프랭크 카프리오","status":"Want to Read","year":"","genre":"인문","completed":"","rating":null},{"id":"BOOK-171","title":"철학을 삼킨 예술","creator":"한상연","status":"Want to Read","year":"","genre":"인문","completed":"","rating":null},{"id":"BOOK-172","title":"철학적 시 읽기의 즐거움","creator":"강신주","status":"Want to Read","year":"","genre":"인문","completed":"","rating":null},{"id":"BOOK-173","title":"첫 여름, 완주","creator":"김금희","status":"Want to Read","year":"","genre":"문학_장편소설","completed":"","rating":null},{"id":"BOOK-174","title":"바깥은 여름","creator":"김애란","status":"Want to Read","year":"","genre":"문학_단편소설","completed":"","rating":null},{"id":"BOOK-175","title":"투명인간","creator":"성석제","status":"Want to Read","year":"","genre":"문학_장편소설","completed":"","rating":null},{"id":"BOOK-176","title":"젊은작가상 수상작품집 10주년 특별판","creator":"이장욱","status":"Want to Read","year":"","genre":"문학_단편소설 (https://app.notion.com/p/_-f9381db6f0168227bb0401b1b581666c?pvs=21), 수상집","completed":"","rating":null},{"id":"BOOK-177","title":"노조키메","creator":"미쓰다 신조","status":"Want to Read","year":"","genre":"추리/미스터리/스릴러","completed":"","rating":null},{"id":"BOOK-178","title":"쇼코의 미소","creator":"최은영","status":"Want to Read","year":"","genre":"문학_단편소설","completed":"","rating":null},{"id":"BOOK-179","title":"글쓰기의 감옥에서 발견한 것","creator":"위화","status":"Want to Read","year":"","genre":"수필/에세이","completed":"","rating":null},{"id":"BOOK-180","title":"미망1","creator":"박완서","status":"Want to Read","year":"","genre":"문학_장편소설","completed":"","rating":null},{"id":"BOOK-181","title":"제 7일","creator":"위화","status":"Finished","year":"2026","genre":"문학_장편소설","completed":"2026/07/10","rating":3},{"id":"BOOK-182","title":"이끼와 함께","creator":"로빈 월 키머러","status":"Want to Read","year":"","genre":"과학","completed":"","rating":null},{"id":"BOOK-183","title":"트로츠키와 야생란","creator":"이장욱","status":"Going","year":"","genre":"문학_단편소설","completed":"","rating":null},{"id":"BOOK-184","title":"악수도 없이 헤어졌다","creator":"피천득","status":"Want to Read","year":"","genre":"수필/에세이","completed":"","rating":null},{"id":"BOOK-185","title":"산곡미풍","creator":"위화","status":"Want to Read","year":"","genre":"수필/에세이","completed":"","rating":null},{"id":"BOOK-186","title":"노인과 바다","creator":"어니스트 헤밍웨이","status":"Finished","year":"2026","genre":"문학_장편소설","completed":"2026/07/24","rating":4},{"id":"BOOK-187","title":"검은 사슴","creator":"한강","status":"Want to Read","year":"","genre":"문학_장편소설","completed":"","rating":null},{"id":"BOOK-188","title":"자연은 계산하지 않는다","creator":"로빈 월 키머러","status":"Want to Read","year":"","genre":"인문","completed":"","rating":null},{"id":"BOOK-189","title":"인생","creator":"위화","status":"Finished","year":"2026","genre":"문학_장편소설","completed":"2026/07/02","rating":4},{"id":"BOOK-190","title":"허삼관 매혈기","creator":"위화","status":"Finished","year":"2026","genre":"문학_장편소설","completed":"2026/07/01","rating":4},{"id":"BOOK-191","title":"낙원","creator":"압둘라자크 구르나","status":"Want to Read","year":"","genre":"문학_장편소설","completed":"","rating":null},{"id":"BOOK-192","title":"원청","creator":"위화","status":"Want to Read","year":"","genre":"문학_장편소설","completed":"","rating":null},{"id":"BOOK-193","title":"사양","creator":"다자이 오사무","status":"Finished","year":"2026","genre":"문학_장편소설","completed":"2026/07/30","rating":3},{"id":"BOOK-194","title":"위대한 개츠비","creator":"F.스콧 피츠제럴드","status":"","year":"","genre":"문학_장편소설","completed":"","rating":null},{"id":"BOOK-195","title":"바람이 분다, 가라","creator":"한강","status":"Finished","year":"2026","genre":"문학_장편소설","completed":"2026/08/03","rating":3},{"id":"BOOK-196","title":"검은 집","creator":"기시 유스케","status":"Going","year":"","genre":"추리/미스터리/스릴러","completed":"","rating":null},{"id":"BOOK-197","title":"고독한 밤에 호루라기를 불어라","creator":"이응준","status":"Going","year":"","genre":"수필/에세이","completed":"","rating":null},{"id":"BOOK-198","title":"청킹 맨션의 보스는 알고 있다","creator":"오가와 사야카","status":"Going","year":"","genre":"인문","completed":"","rating":null},{"id":"BOOK-199","title":"참을 수 없는 존재의 가벼움","creator":"밀란 쿤데라","status":"Going","year":"","genre":"문학_장편소설","completed":"","rating":null},{"id":"BOOK-200","title":"쾌: 젓가락 괴담 경연","creator":"미쓰다 신조","status":"Finished","year":"2026","genre":"추리/미스터리/스릴러","completed":"2026/08/17","rating":2},{"id":"BOOK-201","title":"악의","creator":"히가시노 게이고","status":"Finished","year":"2026","genre":"추리/미스터리/스릴러","completed":"2026/08/17","rating":3},{"id":"BOOK-202","title":"오늘 밤은 굶고 자야지","creator":"박상영","status":"Finished","year":"2026","genre":"수필/에세이","completed":"2026/08/19","rating":3},{"id":"BOOK-203","title":"아무튼, 현수동","creator":"장강명","status":"Going","year":"","genre":"수필/에세이","completed":"","rating":null},{"id":"BOOK-204","title":"책, 이게 뭐라고","creator":"장강명","status":"Going","year":"","genre":"수필/에세이","completed":"","rating":null},{"id":"BOOK-205","title":"아침에는 죽음을 생각하는 것이 좋다","creator":"김영민","status":"Finished","year":"2026","genre":"수필/에세이","completed":"2026/08/24","rating":3},{"id":"BOOK-206","title":"꿈꾸는 자가 창조한다","creator":"박경리","status":"Going","year":"","genre":"수필/에세이","completed":"","rating":null},{"id":"BOOK-207","title":"그랬다고 적었다","creator":"김애란","status":"Going","year":"","genre":"수필/에세이","completed":"","rating":null},{"id":"BOOK-208","title":"1차원이 되고 싶어","creator":"박상영","status":"Going","year":"","genre":"문학_장편소설","completed":"","rating":null},{"id":"BOOK-209","title":"믿음에 대하여","creator":"박상영","status":"Going","year":"","genre":"문학_단편소설 (https://app.notion.com/p/_-f9381db6f0168227bb0401b1b581666c?pvs=21), 문학_장편소설","completed":"","rating":null},{"id":"BOOK-210","title":"순도 100퍼센트의 휴식","creator":"박상영","status":"Going","year":"","genre":"수필/에세이","completed":"","rating":null},{"id":"BOOK-211","title":"여행의 이유","creator":"김영하","status":"Going","year":"","genre":"수필/에세이","completed":"","rating":null},{"id":"BOOK-212","title":"새의 선물","creator":"은희경","status":"Finished","year":"2026","genre":"문학_장편소설","completed":"2026/08/28","rating":4}];
+// 프로토타입의 책 샘플은 실제 독서목록으로 교체하고, 음반·영화 샘플은 유지한다.
+contents=contents.filter(x=>x.type!=='book');
+notionBooks.forEach((b,idx)=>{
+  const mapped=b.status==='Finished'?'experienced':b.status==='Going'?'in_progress':'interested';
+  contents.push({
+    id:nextId++,type:'book',title:b.title,creator:b.creator,status:mapped,
+    source:'Notion 독서목록',saved:1000-idx,completed:b.completed||undefined,
+    rating:b.rating||undefined,growth:mapped==='experienced'?4:(mapped==='in_progress'?1:undefined),
+    year:b.year||undefined,extra:b.genre||undefined,provider:'Notion QA 원본',providerId:b.id,
+    workKey:'book:'+normSeed(b.title)+':'+normSeed(b.creator)
+  });
+});
+function normSeed(v){return String(v||'').toLowerCase().replace(/[\s·:()\[\]{}'".,!?\-_/]/g,'')}
+
+let state={onbIndex:0,onbAnswers:0,currentId:null,skipped:new Set(),statusFilter:'all',typeFilter:'all',allForestFilter:'all',detailId:null,detailFrom:'scrap',shareReturn:'scrap',shareCandidate:null,notifs:true,day:0,returnVisit:false,dailyLog:{},forestX:0};
+function $(id){return document.getElementById(id)}
+function typeLabel(t){return t==='book'?'책':t==='album'?'음반':'영화'}
+function statusLabel(s){return s==='interested'?'경험 전':s==='in_progress'?'경험 중':s==='experienced'?'경험 완료':'싫음'}
+function creatorLabel(t){return t==='book'?'저자':t==='album'?'아티스트':'감독'}
+function coverClass(t){return t==='album'?'album':t==='movie'?'movie':''}
+function esc(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function activeContent(){return state.currentId?contents.find(x=>x.id===state.currentId):null}
+function completed(){return contents.filter(x=>x.status==='experienced')}
+function go(id){
+ document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+ const el=$(id); if(!el)return; el.classList.add('active'); el.scrollTop=0;
+ const app=el.classList.contains('app'); $('tabs').classList.toggle('show',app);
+ if(app){let tabId=id==='detail'?'scrap':id==='allForest'?'forest':id==='tasteMore'?'my':id;setActiveTab(tabId)}
+ if(id==='today')renderToday(); if(id==='scrap')renderScraps(); if(id==='detail')renderDetail(); if(id==='forest')renderForest(); if(id==='allForest')renderAllForest();
+}
+function tab(id){go(id)}
+function setActiveTab(id){document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('active',b.dataset.tab===id))}
+function toast(msg){const e=$('toast');e.textContent=msg;e.classList.add('show');clearTimeout(window.__toast);window.__toast=setTimeout(()=>e.classList.remove('show'),1700)}
+function showSheet(html){$('sheetbox').innerHTML=html;$('sheet').classList.add('show')}
+function closeSheet(){$('sheet').classList.remove('show')}
+function sheetBackground(e){if(e.target===$('sheet'))closeSheet()}
+function loginExisting(){if(!$('loginEmail').value||!$('loginPw').value){$('loginError').textContent='이메일과 비밀번호를 입력해주세요.';return}$('loginError').textContent='';go('today')}
+function sendCode(){toast('인증번호를 보냈습니다 · 테스트 123456')}
+function joinEmailUser(){if(!$('joinEmail').value||$('joinCode').value!=='123456'||!$('joinPw').value||$('joinPw').value!==$('joinPw2').value||!$('terms').checked){$('joinError').textContent='이메일 인증, 비밀번호 일치, 필수 약관 동의를 확인해주세요.';return}$('joinError').textContent='';go('onbIntro')}
+function resetPassword(){if(!$('forgotEmail').value){$('forgotResult').innerHTML='<div class="error">이메일을 입력해주세요.</div>';return}$('forgotResult').innerHTML='<div class="success">재설정 안내를 보냈습니다. 프로토타입에서는 실제 메일이 발송되지 않습니다.</div>'}
+function logout(){state.currentId=null;go('login')}
+
+function onbChoicesFor(t){return t==='book'?['읽고 싶음','읽음','싫음']:t==='album'?['들어보고 싶음','들어봄','싫음']:['보고 싶음','봄','싫음']}
+function renderOnboarding(){if(state.onbIndex>=onboardingItems.length)state.onbIndex=0;const x=onboardingItems[state.onbIndex];$('onbCount').textContent=`취향 파악 중 · ${state.onbAnswers}개 응답 · 10개 응답 후 시작 가능`;$('onbProgress').style.width=Math.min(100,state.onbAnswers/10*100)+'%';$('onbCover').textContent=typeLabel(x.type).toUpperCase()+' COVER';$('onbCover').className='cover '+coverClass(x.type);$('onbTitle').textContent=x.title;$('onbCreator').textContent=x.creator;$('onbChoices').innerHTML=onbChoicesFor(x.type).map(v=>`<button onclick="answerOnboarding('${esc(v)}')">${esc(v)}</button>`).join('');const ready=state.onbAnswers>=10;$('onbStartTop').classList.toggle('hidden',!ready);$('onbStartBottom').classList.toggle('hidden',!ready)}
+function mapOnbStatus(type,value){if(value==='싫음')return'dislike';if(type==='book')return value==='읽음'?'experienced':'interested';if(type==='album')return value==='들어봄'?'experienced':'interested';return value==='봄'?'experienced':'interested'}
+function upsertContent(type,title,creator,status,source='온보딩'){let x=contents.find(c=>c.type===type&&c.title.toLowerCase()===title.toLowerCase()&&(c.creator||'').toLowerCase()===(creator||'').toLowerCase());if(!x){x={id:nextId++,type,title,creator,status,source,saved:Date.now()};contents.push(x)}else{x.status=status;x.source=x.source||source}if(status==='experienced'){x.growth=4;x.completed='2026.09.08'}return x}
+function answerOnboarding(value){const x=onboardingItems[state.onbIndex];upsertContent(x.type,x.title,x.creator,mapOnbStatus(x.type,value));state.onbAnswers++;state.onbIndex=(state.onbIndex+1)%onboardingItems.length;renderOnboarding()}
+function skipOnboarding(){state.onbIndex=(state.onbIndex+1)%onboardingItems.length;renderOnboarding()}
+function finishOnboarding(){if(state.onbAnswers<10){toast('10개 이상 응답하면 시작할 수 있어요');return}go('today')}
+function openManualTaste(){showSheet(`<h2>직접 입력</h2><p>목록에 없는 책·음반·영화를 추가합니다.</p><select id="manualType" onchange="updateManualState()"><option value="book">책</option><option value="album">음반</option><option value="movie">영화</option></select><input id="manualTitle" placeholder="제목"><input id="manualCreator" placeholder="저자"><select id="manualStatus"></select><button class="btn" onclick="saveManualTaste()">취향에 추가</button><button class="btn secondary" onclick="closeSheet()">취소</button>`);updateManualState()}
+function updateManualState(){const t=$('manualType')?.value||'book';$('manualCreator').placeholder=creatorLabel(t);$('manualStatus').innerHTML=onbChoicesFor(t).map(v=>`<option>${esc(v)}</option>`).join('')}
+function saveManualTaste(){const t=$('manualType').value,title=$('manualTitle').value.trim(),creator=$('manualCreator').value.trim(),v=$('manualStatus').value;if(!title){toast('제목을 입력해주세요');return}upsertContent(t,title,creator,mapOnbStatus(t,v));state.onbAnswers++;closeSheet();renderOnboarding();toast('취향 데이터에 반영했습니다')}
+
+function recommendationBase(){return contents.filter(x=>x.status==='interested')}
+function recommendationPool(){return recommendationBase().filter(x=>!state.skipped.has(x.id))}
+function currentRecommendation(){return recommendationPool()[0]||null}
+function skipRecommendation(){const r=currentRecommendation();if(r)state.skipped.add(r.id);renderToday()}
+function resetRecommendationSession(){state.skipped.clear();renderToday()}
+function renderToday(){const box=$('todayBody'),cur=activeContent();if(!cur){const r=currentRecommendation();if(!r){box.innerHTML=recommendationBase().length?`<div class="recommend"><div class="note" style="margin-top:16px">이번 추천에서 볼 수 있는 후보를 모두 확인했습니다.</div><button class="btn secondary" onclick="resetRecommendationSession()">처음부터 다시 보기</button></div>`:`<div class="note" style="margin-top:16px">추천할 경험 전 콘텐츠가 없습니다. 스크랩에 책·음반·영화를 추가해주세요.</div>`;return}box.innerHTML=`<div class="recommend"><div class="cover small ${coverClass(r.type)}">${typeLabel(r.type)} COVER</div><h2>${esc(r.title)}</h2><p>${esc(r.creator)}</p><div class="recommend-actions"><button class="btn" onclick="startExperience(${r.id})">경험 시작하기</button>${recommendationBase().length>1?'<button class="btn text" onclick="skipRecommendation()">이번에는 넘기기</button>':''}</div><div class="placeholderDaily"><div class="sectionlabel">오늘의 경험</div><p>콘텐츠를 선택하면 같은 화면에서 바로 오늘의 경험이 열립니다.</p></div></div>`;return}
+ const dailyFirst=state.returnVisit;const currentCard=`<div class="currentCard">${contentCard(cur,'today')}</div>`;const experience=experienceHTML(cur,dailyFirst);box.innerHTML=dailyFirst?`${experience}<div class="sectionlabel">현재 경험 중</div>${currentCard}`:`${currentCard}${experience}`}
+function startExperience(id){const target=contents.find(x=>x.id===id);if(!target)return;const active=activeContent();if(active&&active.id!==id){showSheet(`<h2>현재 경험을 바꿀까요?</h2><p>${esc(active.title)}을(를) 경험 중입니다. 바꾸면 기존 콘텐츠는 경험 전 상태로 돌아갑니다.</p><button class="btn" onclick="confirmReplaceExperience(${id})">바꾸기</button><button class="btn secondary" onclick="closeSheet()">취소</button>`);return}target.status='in_progress';target.growth=target.growth??0;state.currentId=id;state.skipped.clear();state.returnVisit=false;renderToday();toast('경험을 시작했습니다 · 씨앗이 생겼어요')}
+function confirmReplaceExperience(id){const active=activeContent();if(active){active.status='interested';delete active.growth}state.currentId=null;closeSheet();startExperience(id)}
+function experienceHTML(x,first){if(x.type==='book')return bookExperience(x,first);if(x.type==='album')return albumExperience(x,first);return movieExperience(x,first)}
+function dailyRecorded(x){return state.dailyLog[x.id]===state.day}
+function bookExperience(x,first){const done=dailyRecorded(x);const bookInfo=`<div class="dailyBookInfo"><div class="dailyBookThumb">책</div><div class="grow"><div class="title">${esc(x.title)}</div><div class="meta">${esc(x.creator||'')}</div></div></div>`;return `<div class="experience ${first?'first':''}"><div class="sectionlabel">오늘의 페이지</div>${done?`<div class="experienceBox">${bookInfo}<div class="dailyDone"><b>오늘 독서 완료</b><span>오늘의 성장은 이미 기록되었습니다. 현재 단계: ${growthLabel(x.growth)}</span></div><div class="completeAction"><span class="small">책을 모두 읽었다면</span><button class="btn text" onclick="completeExperience(${x.id})">이 책 감상 완료</button></div></div>`:`<div class="experienceBox">${bookInfo}<div class="actionStack"><button class="btn secondary" onclick="externalAction('서점 페이지')">서점 페이지</button><button class="btn" onclick="recordDaily(${x.id},'book')">오늘 독서 완료</button></div><div class="completeAction"><span class="small">책을 모두 읽었다면</span><button class="btn text" onclick="completeExperience(${x.id})">이 책 감상 완료</button></div></div>`}</div>`}
+function albumExperience(x,first){if(!x.tracks)x.tracks=['Nude','15 Step','Weird Fishes/Arpeggi','All I Need'];x.trackIndex=x.trackIndex||0;const song=x.tracks[x.trackIndex%x.tracks.length];const done=dailyRecorded(x);return `<div class="experience ${first?'first':''}"><div class="sectionlabel">오늘의 곡</div><div class="experienceBox"><h2>${esc(song)}</h2><p>${esc(x.title)} · Track ${String((x.trackIndex%x.tracks.length)+1).padStart(2,'0')}</p>${done?`<div class="dailyDone" style="margin-bottom:10px"><b>오늘의 일일 경험 기록 완료</b><span>오늘은 더 성장하지 않습니다. 현재 단계: ${growthLabel(x.growth)}</span></div>`:''}<div class="actionStack"><button class="btn" onclick="listenTrack(${x.id})">이 곡 듣기</button><button class="btn secondary" onclick="nextTrack(${x.id})">다음 곡</button></div><div class="completeAction"><span class="small">앨범 전체 감상을 마쳤다면</span><button class="btn text" onclick="completeExperience(${x.id})">이 앨범 감상 완료</button></div></div></div>`}
+function movieExperience(x,first){return `<div class="experience ${first?'first':''}"><div class="sectionlabel">영화 감상</div><div class="experienceBox"><h2>${esc(x.title)}</h2><p>영화는 별도 일일 성장 없이 감상 완료로 바로 기록합니다.</p><div class="actionStack"><button class="btn" onclick="externalAction('보러가기')">보러가기</button></div><div class="completeAction"><button class="btn text" onclick="completeExperience(${x.id})">이 작품 감상 완료</button></div></div></div>`}
+function externalAction(label){toast(`${label} · 외부 서비스 연결 동작입니다`)}
+function growthLabel(g){return ['씨앗','싹','덤불','나무','큰 나무'][Math.max(0,Math.min(4,g??0))]}
+function recordDaily(id,type){const x=contents.find(c=>c.id===id);if(!x)return;if(dailyRecorded(x)){toast('오늘의 성장은 이미 기록했습니다');return}state.dailyLog[id]=state.day;x.growth=Math.min(3,(x.growth??0)+1);renderToday();toast(`${type==='book'?'오늘 독서':'오늘의 경험'} 기록 완료 · ${growthLabel(x.growth)}`)}
+function listenTrack(id){externalAction('이 곡 듣기');const x=contents.find(c=>c.id===id);if(!x||dailyRecorded(x))return;state.dailyLog[id]=state.day;x.growth=Math.min(3,(x.growth??0)+1);setTimeout(()=>{if($('today').classList.contains('active'))renderToday();toast(`오늘의 일일 경험 기록 · ${growthLabel(x.growth)}`)},350)}
+function nextTrack(id){const x=contents.find(c=>c.id===id);if(!x)return;x.trackIndex=((x.trackIndex||0)+1)%(x.tracks?.length||1);renderToday();toast('오늘의 곡을 바꿨습니다 · 성장에는 반영되지 않습니다')}
+function completeExperience(id){const x=contents.find(c=>c.id===id);if(!x)return;x.status='experienced';x.growth=4;x.completed='2026.09.08';state.currentId=null;state.skipped.clear();state.returnVisit=false;showCompletion(x)}
+function showCompletion(x){showSheet(`<h2>${typeLabel(x.type)} 경험 완료</h2><div style="height:100px;position:relative;margin:8px 0 14px"><div class="allTree" style="width:70px;height:90px;margin:auto;transform:scale(1.45);transform-origin:center bottom"></div></div><p><b>${esc(x.title)}</b>이(가) 큰 나무로 나의 숲에 기록되었습니다.</p><button class="btn" onclick="openRating(${x.id})">평가하기</button><button class="btn secondary" onclick="skipRatingAfterComplete()">나중에 평가하기</button>`)}
+function openRating(id){const x=contents.find(c=>c.id===id);if(!x)return;showSheet(`<h2>선택 평가</h2><p>${esc(x.title)}은(는) 어땠나요?</p><div class="ratingRow">${[1,2,3,4,5].map(n=>`<button class="ratingBtn ${x.rating===n?'selected':''}" onclick="saveRating(${id},${n})">${n}</button>`).join('')}</div><button class="btn text" onclick="closeSheet()">나중에 평가하기</button>`)}
+function saveRating(id,n){const x=contents.find(c=>c.id===id);if(x)x.rating=n;closeSheet();toast(`${n}점으로 기록했습니다`);if($('detail').classList.contains('active'))renderDetail();else if($('today').classList.contains('active'))renderToday()}
+function skipRatingAfterComplete(){closeSheet();go('today')}
+
+function contentCard(x,from='scrap'){const rating=x.status==='experienced'?(x.rating?`<span class="rating">내 평가 ${x.rating}/5</span>`:`<span class="rating muted">평가 없음</span>`):'';return `<div class="card row" onclick="openDetail(${x.id},'${from}')"><div class="thumb ${coverClass(x.type)}">${typeLabel(x.type)}</div><div class="grow"><div class="title">${esc(x.title)}</div><div class="meta">${esc(x.creator)}</div><span class="pill">${statusLabel(x.status)}</span>${rating}</div><span class="chev">›</span></div>`}
+function setStatusFilter(v,b){state.statusFilter=v;document.querySelectorAll('#statusChips .chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderScraps()}
+function setTypeFilter(v,b){state.typeFilter=v;document.querySelectorAll('#typeChips .chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderScraps()}
+function openNotionLibrary(){state.statusFilter='all';state.typeFilter='book';go('scrap');setTimeout(()=>{document.querySelectorAll('#statusChips .chip').forEach((b,i)=>b.classList.toggle('active',i===0));document.querySelectorAll('#typeChips .chip').forEach((b,i)=>b.classList.toggle('active',i===1));renderScraps();},0)}
+function renderScraps(){const q=($('searchInput')?.value||'').trim().toLowerCase();const arr=[...contents].filter(x=>x.status!=='dislike').filter(x=>state.statusFilter==='all'||x.status===state.statusFilter).filter(x=>state.typeFilter==='all'||x.type===state.typeFilter).filter(x=>!q||x.title.toLowerCase().includes(q)||(x.creator||'').toLowerCase().includes(q)).sort((a,b)=>(b.saved||0)-(a.saved||0));$('scrapList').innerHTML=arr.length?arr.map(x=>contentCard(x,'scrap')).join(''):'<div class="note">조건에 맞는 스크랩이 없습니다.</div>'}
+function openDetail(id,from='scrap'){state.detailId=id;state.detailFrom=from;go('detail')}
+function detailBack(){go(state.detailFrom==='forest'?'forest':state.detailFrom==='allForest'?'allForest':state.detailFrom==='today'?'today':'scrap')}
+function renderDetail(){const x=contents.find(c=>c.id===state.detailId);if(!x){$('detailBody').innerHTML='<div class="note">콘텐츠를 찾을 수 없습니다.</div>';return}let primary='';if(x.status==='interested')primary=`<button class="btn" onclick="startFromDetail(${x.id})">경험 시작하기</button>`;else if(x.status==='in_progress')primary=`<button class="btn" onclick="go('today')">오늘의 경험으로 이동</button>`;else if(x.status==='experienced')primary=`<button class="btn secondary" onclick="openRating(${x.id})">${x.rating?'평가 수정':'평가하기'}</button>`;$('detailBody').innerHTML=`<div class="cover detailCover ${coverClass(x.type)}">${typeLabel(x.type)} COVER</div><h1 class="hero" style="margin-top:16px">${esc(x.title)}</h1><p>${esc(x.creator)}</p><div class="detailMeta"><div class="line"><span>유형</span><b>${typeLabel(x.type)}</b></div><div class="line"><span>최초 저장 출처</span><b>${esc(x.source||'직접 입력')}</b></div><div class="line"><span>현재 상태</span><b>${statusLabel(x.status)}</b></div>${x.completed?`<div class="line"><span>완료일</span><b>${esc(x.completed)}</b></div>`:''}${x.status==='experienced'?`<div class="line"><span>내 평가</span><b>${x.rating?x.rating+' / 5':'평가 없음'}</b></div>`:''}</div><div class="detailActions">${primary}<button class="btn text" onclick="deleteCurrentContent()">삭제</button></div>`}
+function startFromDetail(id){const x=contents.find(c=>c.id===id);const active=activeContent();if(active&&active.id!==id){showSheet(`<h2>현재 경험을 바꿀까요?</h2><p>${esc(active.title)}을(를) 경험 중입니다.</p><button class="btn" onclick="replaceFromDetail(${id})">바꾸기</button><button class="btn secondary" onclick="closeSheet()">취소</button>`);return}startExperience(id);go('today')}
+function replaceFromDetail(id){const active=activeContent();if(active){active.status='interested';delete active.growth}state.currentId=null;closeSheet();startExperience(id);go('today')}
+function openEditCurrent(){const x=contents.find(c=>c.id===state.detailId);if(!x)return;showSheet(`<h2>콘텐츠 수정</h2><select id="editType"><option value="book" ${x.type==='book'?'selected':''}>책</option><option value="album" ${x.type==='album'?'selected':''}>음반</option><option value="movie" ${x.type==='movie'?'selected':''}>영화</option></select><input id="editTitle" value="${esc(x.title)}"><input id="editCreator" value="${esc(x.creator||'')}"><button class="btn" onclick="saveEditCurrent()">저장</button><button class="btn secondary" onclick="closeSheet()">취소</button>`)}
+function saveEditCurrent(){const x=contents.find(c=>c.id===state.detailId);if(!x)return;x.type=$('editType').value;x.title=$('editTitle').value.trim()||x.title;x.creator=$('editCreator').value.trim();closeSheet();renderDetail();toast('수정했습니다')}
+function deleteCurrentContent(){const x=contents.find(c=>c.id===state.detailId);if(!x)return;showSheet(`<h2>스크랩에서 삭제할까요?</h2><p>사용자 관심 데이터만 삭제하며 콘텐츠 원본 정보 자체를 삭제하지 않습니다.</p><button class="btn" onclick="confirmDelete(${x.id})">삭제</button><button class="btn secondary" onclick="closeSheet()">취소</button>`)}
+function confirmDelete(id){if(state.currentId===id)state.currentId=null;contents=contents.filter(c=>c.id!==id);closeSheet();go('scrap');toast('삭제했습니다')}
+
+function startShareFlow(){state.shareReturn='scrap';go('shareAnalyze')}
+function cancelShare(){go(state.shareReturn||'scrap')}
+function shareHighConfidence(){state.shareCandidate={type:'book',title:'채식주의자',creator:'한강'};renderShareConfirm();go('shareConfirm')}
+function renderShareConfirm(){const x=state.shareCandidate;if(!x)return;const duplicate=contents.find(c=>c.type===x.type&&c.title===x.title&&c.creator===x.creator);$('shareConfirmBody').innerHTML=`<div class="cover small ${coverClass(x.type)}" style="margin-top:16px">${typeLabel(x.type)} COVER</div><h2>${esc(x.title)}</h2><p>${esc(x.creator)} · ${typeLabel(x.type)}</p>${duplicate?`<div class="note">이미 저장된 콘텐츠입니다. 새 항목을 만들지 않고 기존 기록에 연결합니다.</div><button class="btn" onclick="finishDuplicateShare(${duplicate.id})">기존 스크랩 보기</button>`:`<p>관심의 씨앗으로 저장할까요?</p><button class="btn" onclick="confirmShareSave()">관심의 씨앗으로 저장</button>`}<button class="btn secondary" onclick="cancelShare()">취소</button>`}
+function shareLowConfidence(){go('shareCorrect')}
+function chooseShareCandidate(title,creator,type){state.shareCandidate={title,creator,type};renderShareConfirm();go('shareConfirm')}
+function manualShareEdit(){showSheet(`<h2>직접 수정</h2><select id="shareType"><option value="book">책</option><option value="album">음반</option><option value="movie">영화</option></select><input id="shareTitle" value="채식주의자"><input id="shareCreator" value="한강"><button class="btn" onclick="saveManualShareCandidate()">확정</button><button class="btn secondary" onclick="closeSheet()">취소</button>`)}
+function saveManualShareCandidate(){const title=$('shareTitle').value.trim();if(!title){toast('제목을 입력해주세요');return}state.shareCandidate={type:$('shareType').value,title,creator:$('shareCreator').value.trim()};closeSheet();renderShareConfirm();go('shareConfirm')}
+function confirmShareSave(){const x=state.shareCandidate;if(!x)return;let item=contents.find(c=>c.type===x.type&&c.title.toLowerCase()===x.title.toLowerCase()&&(c.creator||'').toLowerCase()===(x.creator||'').toLowerCase());if(!item){item={id:nextId++,type:x.type,title:x.title,creator:x.creator,status:'interested',source:'외부 공유',saved:Date.now()};contents.push(item)}state.detailId=item.id;state.detailFrom='scrap';go('detail');toast('관심의 씨앗으로 저장했습니다')}
+function finishDuplicateShare(id){state.detailId=id;state.detailFrom='scrap';go('detail')}
+
+function forestStage(x){return x.status==='experienced'?4:Math.max(0,Math.min(3,x.growth??0))}
+function renderForest(){const vp=$('forestViewport'),world=$('forestWorld');world.querySelectorAll('.forestTree,.memoryTree,.animal').forEach(x=>x.remove());const cur=activeContent();const inProg=contents.filter(x=>x.status==='in_progress');const done=[...completed()].sort((a,b)=>(b.saved||0)-(a.saved||0));const ordered=[];if(cur)ordered.push(cur);[...inProg,...done].forEach(x=>{if(!ordered.some(o=>o.id===x.id))ordered.push(x)});const walk=ordered.slice(0,10),walkIds=new Set(walk.map(x=>x.id)),memory=done.filter(x=>!walkIds.has(x.id));const anchor=Math.max(170,Math.round((vp.clientWidth||350)*.55)),spacing=128,worldWidth=Math.max(980,anchor+Math.max(0,walk.length-1)*spacing+180);world.style.width=worldWidth+'px';memory.forEach((x,i)=>{const e=document.createElement('span');e.className='memoryTree';e.style.left=Math.min(worldWidth-20,anchor+90+(i%22)*38+((Math.floor(i/22)%2)*15))+'px';e.style.bottom=(31+(i%4)*8)+'px';world.appendChild(e)});const animals=Math.min(10,Math.floor(done.length/6));['새','토끼','개구리'].forEach(()=>{});for(let i=0;i<animals;i++){const a=document.createElement('span');a.className='animal';a.textContent=['새','토끼','개구리'][i%3];a.style.left=Math.min(worldWidth-40,anchor+115+((i*211)%760))+'px';a.style.bottom=(22+(i%3)*14)+'px';world.appendChild(a)}walk.forEach((x,i)=>{const px=anchor+i*spacing,e=document.createElement('button');e.className='forestTree stage-'+['seed','sprout','bush','tree','big'][forestStage(x)];e.dataset.x=px;e.style.left=px+'px';e.onclick=()=>openDetail(x.id,'forest');e.innerHTML=`<span class="forestInfo"><b>${esc(x.title)}</b><span>${esc(x.creator)}</span></span><span class="shape"><i></i></span>`;world.appendChild(e)});state.forestX=walk.length?anchor:anchor;$('forestAvatar').style.left=state.forestX+'px';const counts={book:done.filter(x=>x.type==='book').length,album:done.filter(x=>x.type==='album').length,movie:done.filter(x=>x.type==='movie').length};$('bookStat').textContent=counts.book;$('albumStat').textContent=counts.album;$('movieStat').textContent=counts.movie;const recent=[...inProg,...done.filter(d=>!inProg.some(i=>i.id===d.id))].slice(0,4);$('forestRecentList').innerHTML=recent.length?recent.map(x=>contentCard(x,'forest')).join(''):'<div class="note">아직 경험 기록이 없습니다.</div>';vp.scrollTo({left:0,behavior:'auto'});updateForestActive()}
+function treePositions(){return [...document.querySelectorAll('#forestWorld .forestTree')].map(e=>({e,x:Number(e.dataset.x)})).filter(v=>Number.isFinite(v.x)).sort((a,b)=>a.x-b.x)}
+function moveForest(dir){const vp=$('forestViewport'),trees=treePositions();if(!trees.length)return;let idx=0,best=Infinity;trees.forEach((t,i)=>{const d=Math.abs(t.x-state.forestX);if(d<best){best=d;idx=i}});idx=Math.max(0,Math.min(trees.length-1,idx+(dir>0?1:-1)));state.forestX=trees[idx].x;$('forestAvatar').style.left=state.forestX+'px';vp.scrollTo({left:Math.max(0,state.forestX-vp.clientWidth/2),behavior:'smooth'});updateForestActive()}
+function updateForestActive(){const trees=treePositions();trees.forEach(t=>t.e.classList.remove('active'));if(!trees.length)return;let nearest=trees[0];trees.forEach(t=>{if(Math.abs(t.x-state.forestX)<Math.abs(nearest.x-state.forestX))nearest=t});nearest.e.classList.add('active')}
+function setupForestDrag(){const vp=$('forestViewport');if(vp.dataset.ready)return;vp.dataset.ready='1';let down=false,startX=0,startScroll=0,moved=false;vp.addEventListener('pointerdown',e=>{if(e.target.closest('.forestTree'))return;down=true;moved=false;startX=e.clientX;startScroll=vp.scrollLeft;try{vp.setPointerCapture(e.pointerId)}catch(_){}});vp.addEventListener('pointermove',e=>{if(!down)return;const dx=e.clientX-startX;if(Math.abs(dx)>4)moved=true;vp.scrollLeft=startScroll-dx});const end=e=>{if(!down)return;down=false;const center=vp.scrollLeft+vp.clientWidth/2;state.forestX=center;const trees=treePositions();if(trees.length){let n=trees[0];trees.forEach(t=>{if(Math.abs(t.x-center)<Math.abs(n.x-center))n=t});state.forestX=n.x;$('forestAvatar').style.left=n.x+'px';vp.scrollTo({left:Math.max(0,n.x-vp.clientWidth/2),behavior:'smooth'})}updateForestActive();try{vp.releasePointerCapture(e.pointerId)}catch(_){}};vp.addEventListener('pointerup',end);vp.addEventListener('pointercancel',end);vp.addEventListener('click',e=>{if(moved&&!e.target.closest('.forestTree')){e.preventDefault();e.stopPropagation();moved=false}},true)}
+function setAllForestFilter(v,b){state.allForestFilter=v;document.querySelectorAll('#allForestChips .chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderAllForest()}
+function renderAllForest(){const all=completed(),rows=state.allForestFilter==='all'?all:all.filter(x=>x.type===state.allForestFilter);$('allCount').textContent=all.length;$('allForestGrid').innerHTML=rows.length?rows.map(x=>`<button class="allItem" onclick="openDetail(${x.id},'allForest')"><div class="allTree"></div><div class="allTitle">${esc(x.title)}</div><div class="allMeta">${typeLabel(x.type)}</div></button>`).join(''):'<div class="note" style="grid-column:1/-1">아직 기록이 없습니다.</div>'}
+
+function openProfile(){showSheet(`<h2>프로필</h2><input value="sol" placeholder="닉네임"><input value="test@songlim.kr" disabled><button class="btn" onclick="closeSheet();toast('프로필을 저장했습니다')">저장</button><button class="btn secondary" onclick="closeSheet()">취소</button>`)}
+function toggleNotif(e){e.stopPropagation();state.notifs=!state.notifs;$('notifSwitch').classList.toggle('on',state.notifs);toast(state.notifs?'오늘의 경험 알림을 켰습니다':'오늘의 경험 알림을 껐습니다')}
+function openAccount(){showSheet(`<h2>계정 / 데이터</h2><div class="menu"><div class="menuitem"><span>내 데이터 다운로드</span><span>›</span></div><div class="menuitem"><span>회원 탈퇴</span><span>›</span></div></div><button class="btn secondary" onclick="closeSheet()">닫기</button>`)}
+function openTerms(){showSheet(`<h2>약관</h2><div class="menu"><div class="menuitem"><span>서비스 이용약관</span><span>›</span></div><div class="menuitem"><span>개인정보 처리방침</span><span>›</span></div></div><button class="btn secondary" onclick="closeSheet()">닫기</button>`)}
+
+function demoNewUser(){state.onbIndex=0;state.onbAnswers=0;go('onbIntro')}
+function demoRecommendation(){const cur=activeContent();if(cur){cur.status='interested';delete cur.growth}state.currentId=null;state.skipped.clear();state.returnVisit=false;go('today')}
+function ensureInterested(type){let x=contents.find(c=>c.type===type&&c.status==='interested');if(x)return x;const data=type==='book'?['사피엔스','유발 하라리']:type==='album'?['A Love Supreme','John Coltrane']:['컨택트','드니 빌뇌브'];x={id:nextId++,type,title:data[0],creator:data[1],status:'interested',source:'프로토타입',saved:Date.now()};contents.push(x);return x}
+function demoPick(type){const old=activeContent();if(old){old.status='interested';delete old.growth}state.currentId=null;const x=ensureInterested(type);x.status='in_progress';x.growth=0;state.currentId=x.id;state.returnVisit=false;state.dailyLog[x.id]=undefined;go('today')}
+function advanceDemoDay(){state.day++;state.returnVisit=true;go('today');toast('다음 날 상태로 전환했습니다')}
+
+
+// ===== 콘텐츠 데이터 수집·매칭 정의서 반영 프로토타입 =====
+const providerCatalog=[
+ {key:'book-veg-changbi',type:'book',title:'채식주의자',creator:'한강',year:'2022',extra:'창비 · 개정판',provider:'Kakao/Google Books',providerId:'ISBN 9788936434595',workKey:'book:채식주의자:한강'},
+ {key:'book-greek',type:'book',title:'희랍어 시간',creator:'한강',year:'2011',extra:'문학동네',provider:'Kakao/Google Books',providerId:'ISBN 9788954616515',workKey:'book:희랍어시간:한강'},
+ {key:'book-demian-minum',type:'book',title:'데미안',creator:'헤르만 헤세',year:'2000',extra:'민음사 · 세계문학전집',provider:'Kakao/Google Books',providerId:'ISBN 9788937460449',workKey:'book:데미안:헤르만헤세'},
+ {key:'book-demian-other',type:'book',title:'데미안',creator:'헤르만 헤세',year:'2023',extra:'더스토리 · 초판본 디자인',provider:'Kakao/Google Books',providerId:'ISBN 9791164458424',workKey:'book:데미안:헤르만헤세'},
+ {key:'book-norwegian',type:'book',title:'노르웨이의 숲',creator:'무라카미 하루키',year:'2017',extra:'민음사',provider:'Kakao/Google Books',providerId:'ISBN 9788937434488',workKey:'book:노르웨이의숲:무라카미하루키'},
+ {key:'book-cosmos',type:'book',title:'코스모스',creator:'칼 세이건',year:'2006',extra:'사이언스북스',provider:'Kakao/Google Books',providerId:'ISBN 9788983711892',workKey:'book:코스모스:칼세이건'},
+ {key:'book-humanacts',type:'book',title:'소년이 온다',creator:'한강',year:'2014',extra:'창비',provider:'Kakao/Google Books',providerId:'ISBN 9788936434120',workKey:'book:소년이온다:한강'},
+ {key:'album-rainbows',type:'album',title:'In Rainbows',creator:'Radiohead',year:'2007',extra:'10 tracks',provider:'MusicBrainz',providerId:'MBID release-group',workKey:'album:inrainbows:radiohead',tracks:['15 Step','Bodysnatchers','Nude','Weird Fishes/Arpeggi','All I Need']},
+ {key:'album-blue',type:'album',title:'Blue',creator:'Joni Mitchell',year:'1971',extra:'10 tracks',provider:'MusicBrainz',providerId:'MBID release-group',workKey:'album:blue:jonimitchell'},
+ {key:'album-kindofblue',type:'album',title:'Kind of Blue',creator:'Miles Davis',year:'1959',extra:'5 tracks',provider:'MusicBrainz',providerId:'MBID release-group',workKey:'album:kindofblue:milesdavis'},
+ {key:'album-abbey',type:'album',title:'Abbey Road',creator:'The Beatles',year:'1969',extra:'17 tracks',provider:'MusicBrainz',providerId:'MBID release-group',workKey:'album:abbeyroad:thebeatles'},
+ {key:'album-melodrama',type:'album',title:'Melodrama',creator:'Lorde',year:'2017',extra:'11 tracks',provider:'MusicBrainz',providerId:'MBID release-group',workKey:'album:melodrama:lorde'},
+ {key:'movie-parasite',type:'movie',title:'기생충',creator:'봉준호',year:'2019',extra:'한국 · 131분',provider:'TMDB/KOBIS',providerId:'TMDB 496243',workKey:'movie:기생충:2019'},
+ {key:'movie-decision',type:'movie',title:'헤어질 결심',creator:'박찬욱',year:'2022',extra:'한국 · 138분',provider:'TMDB/KOBIS',providerId:'TMDB 705996',workKey:'movie:헤어질결심:2022'},
+ {key:'movie-perfect',type:'movie',title:'퍼펙트 데이즈',creator:'빔 벤더스',year:'2023',extra:'일본/독일 · 124분',provider:'TMDB',providerId:'TMDB 976893',workKey:'movie:퍼펙트데이즈:2023'},
+ {key:'movie-aftersun',type:'movie',title:'애프터썬',creator:'샬롯 웰스',year:'2022',extra:'영국 · 102분',provider:'TMDB',providerId:'TMDB 965150',workKey:'movie:애프터썬:2022'},
+ {key:'movie-moonlight',type:'movie',title:'문라이트',creator:'배리 젠킨스',year:'2016',extra:'미국 · 111분',provider:'TMDB',providerId:'TMDB 376867',workKey:'movie:문라이트:2016'}
+
+];
+// 직접 제목 검색에서도 실제 Notion 독서목록 212권을 후보 데이터로 사용한다.
+notionBooks.forEach((b)=>{
+  const exists=providerCatalog.some(x=>x.type==='book'&&normSeed(x.title)===normSeed(b.title)&&normSeed(x.creator)===normSeed(b.creator));
+  if(!exists) providerCatalog.push({
+    key:'notion-'+b.id.toLowerCase(),type:'book',title:b.title,creator:b.creator,year:b.year||'',
+    extra:[b.genre,b.status==='Finished'?'읽음':b.status==='Going'?'읽는 중':'읽고 싶음'].filter(Boolean).join(' · '),
+    provider:'Notion QA 원본 · API 연동 전',providerId:b.id,
+    workKey:'book:'+normSeed(b.title)+':'+normSeed(b.creator)
+  });
+});
+state.directReturn='scrap';state.directType='all';state.shareEvidence=[];state.shareCandidates=[];state.shareScore=0;
+
+function norm(v){return String(v||'').toLowerCase().replace(/[\\s·:()\[\]{}'\".,!?\-_/]/g,'')}
+function catalogSearch(q,type='all'){const n=norm(q);if(n.length<2)return[];return providerCatalog.filter(x=>type==='all'||x.type===type).map(x=>{const tn=norm(x.title),cn=norm(x.creator);let score=0;if(tn===n)score+=100;else if(tn.includes(n)||n.includes(tn))score+=70;if(cn.includes(n))score+=45;if(norm(x.extra).includes(n))score+=15;return {x,score}}).filter(v=>v.score>0).sort((a,b)=>b.score-a.score||a.x.title.localeCompare(b.x.title)).slice(0,5).map(v=>v.x)}
+function catalogByKey(key){return providerCatalog.find(x=>x.key===key)}
+function typeGlyph(t){return t==='book'?'책':t==='album'?'음반':'영화'}
+function candidateRowHTML(x,action){return `<button class="candidateRow ${x.type==='album'?'album':''}" onclick="${action}"><div class="thumb ${coverClass(x.type)}">${typeGlyph(x.type)}</div><div class="grow"><div class="title">${esc(x.title)}</div><div class="candidateMeta">${esc(x.creator)} · ${esc(x.year||'')}</div><div class="candidateSub">${esc(x.extra||'')} · ${esc(x.provider||'')}</div></div><span class="chev">›</span></button>`}
+
+function startShareFlow(){state.shareReturn='scrap';showSheet(`<h2>콘텐츠 추가</h2><p>외부에서 발견한 콘텐츠를 확인하거나 제목으로 직접 기록할 수 있습니다.</p><div class="entryChoice"><button class="btn" onclick="closeSheet();startExternalShareDemo()">외부 공유 확인</button><button class="btn secondary" onclick="closeSheet();openDirectEntry('scrap')">제목으로 기록</button></div><button class="btn text" onclick="closeSheet()">취소</button>`)}
+function startExternalShareDemo(example){state.shareReturn='scrap';go('shareAnalyze');if(example)loadShareExample(example)}
+function cancelShare(){go(state.shareReturn||'scrap')}
+function loadShareExample(kind){const app=$('shareSourceApp'),url=$('shareUrlInput'),txt=$('shareTextInput');if(!app||!url||!txt)return;const examples={
+ instagramBook:['Instagram','https://instagram.com/reel/example','한강의 채식주의자 다시 읽는데 이번에는 완전히 다르게 보인다.'],
+ threadsTitle:['Threads','https://threads.net/@sample/post/123','요즘 채식주의자 다시 읽는 중.'],
+ blogMovie:['블로그','https://blog.example.com/perfect-days','영화 퍼펙트 데이즈 후기. 빔 벤더스가 그린 반복되는 하루가 오래 남았다.'],
+ noClue:['Instagram','https://instagram.com/reel/no-metadata','올해 본 것 중 제일 좋았다. 저장해두기.'],
+ storeBook:['교보문고','https://product.kyobobook.co.kr/detail/S000001','채식주의자 | 한강 | 창비']};const e=examples[kind]||examples.instagramBook;app.value=e[0];url.value=e[1];txt.value=e[2];$('shareAnalyzeNote').textContent='예시 payload를 불러왔습니다. 콘텐츠 찾기를 눌러 식별 흐름을 확인하세요.'}
+function analyzeSharedInput(){const app=$('shareSourceApp').value,url=$('shareUrlInput').value.trim(),text=$('shareTextInput').value.trim();const hay=norm(text+' '+url);let candidates=[],score=0,evidence=[];
+ const directStore=/kyobobook|aladin|yes24/.test(url.toLowerCase());
+ const find=(key)=>providerCatalog.find(x=>x.key===key);
+ if(hay.includes(norm('채식주의자'))){candidates=[find('book-veg-changbi')];score+=35;evidence.push('공유 텍스트에서 제목 일치 +35');if(hay.includes(norm('한강'))){score+=25;evidence.push('저자 일치 +25')}score+=30;evidence.push('도서 DB 제목·저자 조합 확인 +30')}
+ else if(hay.includes(norm('퍼펙트데이즈'))){candidates=[find('movie-perfect')];score+=35;evidence.push('공유 텍스트에서 영화 제목 일치 +35');if(hay.includes(norm('빔벤더스'))){score+=25;evidence.push('감독 일치 +25')}score+=30;evidence.push('영화 DB 엔티티 확인 +30')}
+ else if(hay.includes(norm('nude'))||hay.includes(norm('radiohead'))){candidates=[find('album-rainbows')];score+=35;evidence.push('곡/아티스트 단서 +35');if(hay.includes(norm('radiohead'))){score+=25;evidence.push('아티스트 일치 +25')}score+=30;evidence.push('음악 DB에서 소속 음반 확인 +30')}
+ else if(hay.includes(norm('헤어질결심'))){candidates=[find('movie-decision')];score=90;evidence=['영화 제목 일치 +35','감독/연도 후보 검증 +25','영화 DB 엔티티 확인 +30']}
+ else if(hay.includes(norm('박찬욱'))){candidates=[find('movie-decision')];score=45;evidence=['감독 이름만 확인됨','작품명 직접 증거 없음 → 자동 확정 금지']}
+ if(directStore&&candidates.length){score=Math.max(score,95);evidence.unshift('정형 상품 URL에서 직접 식별 단서 확보')}
+ state.shareCandidates=candidates.filter(Boolean);state.shareScore=score;state.shareEvidence=evidence;
+ if(!state.shareCandidates.length){go('shareFallback');return}
+ if(score>=90){state.shareCandidate={...state.shareCandidates[0],sourceApp:app,confidence:score};renderShareConfirm();go('shareConfirm');return}
+ renderShareCandidates();go('shareCorrect')}
+function renderShareCandidates(){const box=$('shareCandidateList');if(!box)return;box.innerHTML=state.shareCandidates.length?state.shareCandidates.map(x=>candidateRowHTML(x,`chooseShareCandidateByKey('${x.key}')`)).join(''):'<div class="emptySearch">후보를 만들지 못했습니다.</div>'}
+function chooseShareCandidateByKey(key){const x=catalogByKey(key);if(!x)return;state.shareCandidate={...x,sourceApp:$('shareSourceApp')?.value||'외부 공유',confidence:state.shareScore};renderShareConfirm();go('shareConfirm')}
+function shareHighConfidence(){loadShareExample('instagramBook');analyzeSharedInput()}
+function shareLowConfidence(){loadShareExample('threadsTitle');analyzeSharedInput()}
+function simulateScreenFind(){state.shareCandidates=[catalogByKey('book-veg-changbi')];state.shareScore=72;state.shareEvidence=['화면 이미지에서 작품명 후보 추출','외부 도서 DB에서 실제 엔티티 확인'];renderShareCandidates();go('shareCorrect');toast('화면에서 책 제목 후보를 찾았습니다 · 프로토타입 시뮬레이션')}
+function renderShareConfirm(){const x=state.shareCandidate;if(!x)return;const duplicate=findExistingContent(x);const ev=(state.shareEvidence||[]).map(v=>`<span class="confidenceBadge">${esc(v)}</span>`).join('');$('shareConfirmBody').innerHTML=`<div class="cover small ${coverClass(x.type)}" style="margin-top:16px">${typeLabel(x.type)} COVER</div><h2>${esc(x.title)}</h2><p>${esc(x.creator)} · ${typeLabel(x.type)}${x.year?' · '+esc(x.year):''}</p><div class="autoMeta"><div><span>데이터 출처</span><b>${esc(x.provider||'외부 DB')}</b></div><div><span>식별자</span><b>${esc(x.providerId||'정규화 매칭')}</b></div></div>${ev?`<div class="evidence"><b>식별 근거</b><br>${ev}</div>`:''}${duplicate?`<div class="note">이미 저장된 콘텐츠입니다. 새 항목을 만들지 않고 기존 기록에 연결합니다.</div><button class="btn" onclick="finishDuplicateShare(${duplicate.id})">기존 스크랩 보기</button>`:`<p>관심의 씨앗으로 저장할까요?</p><button class="btn" onclick="confirmShareSave()">관심의 씨앗으로 저장</button>`}<button class="btn secondary" onclick="go('shareAnalyze')">다시 찾기</button>`}
+function findExistingContent(x){return contents.find(c=>(x.workKey&&c.workKey===x.workKey)||(c.type===x.type&&norm(c.title)===norm(x.title)&&norm(c.creator)===norm(x.creator)))}
+function confirmShareSave(){const x=state.shareCandidate;if(!x)return;let item=findExistingContent(x);if(!item){item={id:nextId++,type:x.type,title:x.title,creator:x.creator,status:'interested',source:x.sourceApp||'외부 공유',saved:Date.now(),provider:x.provider,providerId:x.providerId,year:x.year,extra:x.extra,workKey:x.workKey,tracks:x.tracks};contents.push(item)}else{item.saved=Date.now();item.source=item.source||x.sourceApp||'외부 공유'}state.detailId=item.id;state.detailFrom='scrap';go('detail');toast('관심의 씨앗으로 저장했습니다')}
+function manualShareEdit(){openDirectEntry('share')}
+
+function openDirectEntry(origin='scrap'){state.directReturn=origin;state.directType='all';go('directEntry');setTimeout(()=>{const input=$('directSearchInput');if(input){input.value='';input.focus()}document.querySelectorAll('#directTypeChips .chip').forEach((b,i)=>b.classList.toggle('active',i===0));renderDirectResults()},0)}
+function directBack(){if(state.directReturn==='share')go('shareAnalyze');else if(state.directReturn==='onboarding')go('onboarding');else go('scrap')}
+function setDirectType(v,b){state.directType=v;document.querySelectorAll('#directTypeChips .chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderDirectResults()}
+function renderDirectResults(){const input=$('directSearchInput');const box=$('directResults'),hint=$('directSearchHint');if(!input||!box)return;const q=input.value.trim();if(q.length<2){box.innerHTML='';if(hint)hint.textContent='두 글자 이상 입력하면 후보를 찾습니다. · 실제 Notion 독서목록 212권 포함';return}const rows=catalogSearch(q,state.directType);if(hint)hint.textContent=rows.length?`${rows.length}개의 후보 · 선택하면 기본 정보가 자동으로 채워집니다.`:'일치하는 후보가 없습니다. 다른 제목이나 제작자 이름으로 검색해보세요.';box.innerHTML=rows.length?rows.map(x=>candidateRowHTML(x,`selectDirectCandidate('${x.key}')`)).join(''):'<div class="emptySearch">검색 결과가 없습니다.</div>'}
+function selectDirectCandidate(key){const x=catalogByKey(key);if(!x)return;state.directCandidate=x;const labels=x.type==='book'?['읽고 싶음','읽음','싫음']:x.type==='album'?['들어보고 싶음','들어봄','싫음']:['보고 싶음','봄','싫음'];showSheet(`<h2>${esc(x.title)}</h2><p>${esc(x.creator)} · ${esc(x.year||'')}</p><div class="autoMeta"><div><span>${x.type==='book'?'출판/판본':'정보'}</span><b>${esc(x.extra||'-')}</b></div><div><span>자동완성 출처</span><b>${esc(x.provider)}</b></div><div><span>식별자</span><b>${esc(x.providerId)}</b></div></div><p style="margin-top:14px">현재 상태를 선택해주세요.</p><div class="choices">${labels.map(v=>`<button onclick="saveDirectCandidate('${esc(v)}')">${esc(v)}</button>`).join('')}</div><button class="btn text" onclick="closeSheet()">취소</button>`)}
+function directStatus(type,value){if(value==='싫음')return'dislike';if(type==='book')return value==='읽음'?'experienced':'interested';if(type==='album')return value==='들어봄'?'experienced':'interested';return value==='봄'?'experienced':'interested'}
+function saveDirectCandidate(value){const x=state.directCandidate;if(!x)return;const status=directStatus(x.type,value);let item=findExistingContent(x);const existed=!!item;if(!item){item={id:nextId++,type:x.type,title:x.title,creator:x.creator,status,source:'직접 기록',saved:Date.now(),provider:x.provider,providerId:x.providerId,year:x.year,extra:x.extra,workKey:x.workKey,tracks:x.tracks};contents.push(item)}else{item.status=status;item.saved=Date.now();item.provider=item.provider||x.provider;item.providerId=item.providerId||x.providerId;item.year=item.year||x.year;item.extra=item.extra||x.extra;item.workKey=item.workKey||x.workKey;if(x.tracks&&!item.tracks)item.tracks=x.tracks}
+ if(status==='experienced'){item.growth=4;item.completed='2026.09.08'}else if(status==='dislike'){delete item.growth}
+ closeSheet();if(state.directReturn==='onboarding'){state.onbAnswers++;renderOnboarding();go('onboarding');toast(existed?'기존 기록을 업데이트했습니다':'취향 데이터에 추가했습니다');return}state.detailId=item.id;state.detailFrom='scrap';go('detail');toast(existed?'이미 있던 콘텐츠를 업데이트했습니다':'기본 정보를 자동완성해 기록했습니다')}
+function openManualTaste(){openDirectEntry('onboarding')}
+
+// 상세 화면에 자동완성 메타데이터 표시
+function renderDetail(){const x=contents.find(c=>c.id===state.detailId);if(!x){$('detailBody').innerHTML='<div class="note">콘텐츠를 찾을 수 없습니다.</div>';return}let primary='';if(x.status==='interested')primary=`<button class="btn" onclick="startFromDetail(${x.id})">경험 시작하기</button>`;else if(x.status==='in_progress')primary=`<button class="btn" onclick="go('today')">오늘의 경험으로 이동</button>`;else if(x.status==='experienced')primary=`<button class="btn secondary" onclick="openRating(${x.id})">${x.rating?'평가 수정':'평가하기'}</button>`;$('detailBody').innerHTML=`<div class="cover detailCover ${coverClass(x.type)}">${typeLabel(x.type)} COVER</div><h1 class="hero" style="margin-top:16px">${esc(x.title)}</h1><p>${esc(x.creator)}</p><div class="detailMeta"><div class="line"><span>유형</span><b>${typeLabel(x.type)}</b></div>${x.year?`<div class="line"><span>연도</span><b>${esc(x.year)}</b></div>`:''}${x.extra?`<div class="line"><span>기본 정보</span><b>${esc(x.extra)}</b></div>`:''}<div class="line"><span>최초 저장 출처</span><b>${esc(x.source||'직접 입력')}</b></div>${x.provider?`<div class="line"><span>메타데이터</span><b>${esc(x.provider)}</b></div>`:''}${x.providerId?`<div class="line"><span>외부 식별자</span><b>${esc(x.providerId)}</b></div>`:''}<div class="line"><span>현재 상태</span><b>${statusLabel(x.status)}</b></div>${x.completed?`<div class="line"><span>완료일</span><b>${esc(x.completed)}</b></div>`:''}${x.status==='experienced'?`<div class="line"><span>내 평가</span><b>${x.rating?x.rating+' / 5':'평가 없음'}</b></div>`:''}</div><div class="detailActions">${primary}<button class="btn text" onclick="deleteCurrentContent()">삭제</button></div>`}
+
+// ===== Notion 212권 데이터 적용 안정화 패치 =====
+function cleanNotionText(v){return String(v||'').replace(/\s*\(https:\/\/app\.notion\.com\/[^)]*\)/g,'').replace(/\s*,\s*/g,' · ').trim()}
+function ensureNotionContents(){
+  // 기존 Notion 주입분을 모두 제거한 뒤 현재 notionBooks에서 정확히 한 번 다시 구성한다.
+  contents=contents.filter(x=>x.source!=='Notion 독서목록');
+  notionBooks.forEach((b,idx)=>{
+    const mapped=b.status==='Finished'?'experienced':b.status==='Going'?'in_progress':b.status==='Want to Read'?'interested':'interested';
+    contents.push({
+      id:nextId++,type:'book',title:b.title,creator:b.creator,status:mapped,
+      source:'Notion 독서목록',saved:200000-idx,
+      completed:b.completed||undefined,rating:b.rating||undefined,
+      growth:mapped==='experienced'?4:(mapped==='in_progress'?1:undefined),
+      year:b.year||undefined,extra:cleanNotionText(b.genre||''),provider:'Notion QA 원본',providerId:b.id,
+      workKey:'book:'+normSeed(b.title)+':'+normSeed(b.creator)
+    });
+  });
+}
+function catalogSearch(q,type='all'){
+  const n=norm(q); if(n.length<2)return[];
+  const pool=[]; const seen=new Set();
+  // 실제 Notion 212권을 검색 우선 데이터로 직접 사용
+  notionBooks.forEach(b=>{
+    const x={key:'notion-'+b.id.toLowerCase(),type:'book',title:b.title,creator:b.creator,year:b.year||'',extra:cleanNotionText(b.genre||''),provider:'Notion QA 원본 · API 연동 전',providerId:b.id,workKey:'book:'+normSeed(b.title)+':'+normSeed(b.creator)};
+    const key=x.type+'|'+norm(x.title)+'|'+norm(x.creator); if(!seen.has(key)){seen.add(key);pool.push(x)}
+  });
+  providerCatalog.forEach(x=>{const key=x.type+'|'+norm(x.title)+'|'+norm(x.creator);if(!seen.has(key)){seen.add(key);pool.push(x)}});
+  return pool.filter(x=>type==='all'||x.type===type).map(x=>{
+    const tn=norm(x.title),cn=norm(x.creator),en=norm(x.extra);let score=0;
+    if(tn===n)score+=120; else if(tn.startsWith(n))score+=95; else if(tn.includes(n))score+=85; else if(n.includes(tn))score+=65;
+    if(cn===n)score+=90; else if(cn.includes(n))score+=60;
+    if(en.includes(n))score+=10;
+    return {x,score};
+  }).filter(v=>v.score>0).sort((a,b)=>b.score-a.score||a.x.title.localeCompare(b.x.title,'ko')).slice(0,8).map(v=>v.x)
+}
+function renderScraps(){
+ const q=norm($('searchInput')?.value||'');
+ const arr=[...contents].filter(x=>x.status!=='dislike')
+  .filter(x=>state.statusFilter==='all'||x.status===state.statusFilter)
+  .filter(x=>state.typeFilter==='all'||x.type===state.typeFilter)
+  .filter(x=>!q||norm(x.title).includes(q)||norm(x.creator).includes(q))
+  .sort((a,b)=>(b.saved||0)-(a.saved||0));
+ const notionCount=arr.filter(x=>x.source==='Notion 독서목록').length;
+ const info=(state.typeFilter==='book'||state.typeFilter==='all')?`<div class="small" style="margin:10px 0">현재 ${arr.length}개${notionCount?` · Notion 독서목록 ${notionCount}권 포함`:''}</div>`:'';
+ $('scrapList').innerHTML=info+(arr.length?arr.map(x=>contentCard(x,'scrap')).join(''):'<div class="note">조건에 맞는 스크랩이 없습니다.</div>')
+}
+function renderDirectResults(){
+ const input=$('directSearchInput'),box=$('directResults'),hint=$('directSearchHint');if(!input||!box)return;
+ const q=input.value.trim();if(q.length<2){box.innerHTML='';if(hint)hint.textContent='두 글자 이상 입력하면 후보를 찾습니다. · 실제 Notion 독서목록 212권 포함';return}
+ const rows=catalogSearch(q,state.directType);
+ if(hint)hint.textContent=rows.length?`${rows.length}개의 후보 · 실제 독서목록 기준 결과입니다.`:'일치하는 후보가 없습니다. 다른 제목이나 저자 이름으로 검색해보세요.';
+ box.innerHTML=rows.length?rows.map(x=>candidateRowHTML(x,`selectDirectCandidate('${x.key}')`)).join(''):'<div class="emptySearch">검색 결과가 없습니다.</div>'
+}
+function catalogByKey(key){
+ if(String(key).startsWith('notion-')){
+   const id=String(key).slice(7).toUpperCase(); const b=notionBooks.find(x=>x.id===id);
+   if(b)return {key,type:'book',title:b.title,creator:b.creator,year:b.year||'',extra:cleanNotionText(b.genre||''),provider:'Notion QA 원본 · API 연동 전',providerId:b.id,workKey:'book:'+normSeed(b.title)+':'+normSeed(b.creator)};
+ }
+ return providerCatalog.find(x=>x.key===key)
+}
+function init(){ensureNotionContents();renderOnboarding();setupForestDrag();renderScraps();renderForest();renderAllForest()}
+
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+</script>
+</body>
+</html>
