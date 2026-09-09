@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head><meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>송림 MVP 화면·기능정의서 </title>
+<style>
+*{box-sizing:border-box} body{margin:0;background:#d9d9d9;color:#111;font-family:Arial,"Noto Sans KR",sans-serif}
+.top{padding:28px 34px;background:#111;color:#fff;position:sticky;top:0;z-index:10}
+.top h1{margin:0 0 7px;font-size:22px} .top p{margin:0;color:#ccc;font-size:12px}
+.flow{padding:18px 34px;background:#f3f3f3;border-bottom:1px solid #aaa;font-size:12px;line-height:1.8}
+.canvas{display:flex;flex-direction:column;gap:34px;align-items:center;padding:34px 24px;overflow:visible;counter-reset:screen}
+.board{background:#eee;width:min(980px,100%);min-height:690px;padding:26px;border-top:2px solid #111;counter-increment:screen}
+.board header{height:76px;border-bottom:1px solid #111;display:flex;justify-content:space-between;align-items:flex-start;position:relative;padding-left:54px}.board header:before{content:counter(screen, decimal-leading-zero);position:absolute;left:0;top:0;width:38px;height:38px;border:1.5px solid #111;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;background:#fff}
+.board header div{font-size:11px;color:#555} h2{font-size:17px;margin:0;max-width:430px;text-align:right}
+.content{display:grid;grid-template-columns:330px 1fr;gap:34px;padding-top:25px}
+.wire{display:flex;justify-content:center} .phone{width:245px;height:520px;background:#fff;border:1.5px solid #111;position:relative}
+.status{height:23px;padding:6px 10px;font-size:8px;display:flex;justify-content:space-between;border-bottom:1px solid #ddd}
+.appbar{height:42px;padding:14px 12px 10px;font-size:11px;font-weight:bold;border-bottom:1px solid #111}
+.screenbody{padding:12px;display:flex;flex-direction:column;gap:9px;max-height:425px;overflow:hidden}
+.media{height:108px;border:1px solid #111;background:#e5e5e5;display:flex;align-items:center;justify-content:center;font-size:10px;position:relative}
+.uirow,.lineitem{border:1px solid #777;min-height:34px;padding:10px 8px 8px 28px;font-size:9px;position:relative;background:#fff}
+.lineitem{border-left:0;border-right:0;border-top:0;min-height:28px}
+.num,.specnum{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:#111;color:#fff;font-size:9px;font-weight:bold}
+.num{position:absolute;left:-8px;top:-8px} .homebar{position:absolute;bottom:5px;left:86px;width:70px;border-top:3px solid #111}
+.definition{font-size:11px} .meta{display:grid;grid-template-columns:70px 1fr 60px 1fr;border-bottom:1px solid #111;padding:0 0 10px;gap:4px}
+.meta span{color:#666;font-size:9px} table{width:100%;border-collapse:collapse;margin-top:13px} td{border-bottom:1px solid #aaa;padding:10px 5px;vertical-align:top;line-height:1.45}
+td:first-child{width:30px} .specnum{width:20px;height:20px}
+.note{margin:0 28px 28px;background:#fff;border:1px solid #111;padding:18px;font-size:12px;line-height:1.7}
+@media(max-width:800px){.canvas{padding:16px 10px}.board{width:100%;min-width:0;padding:16px;min-height:auto}.content{grid-template-columns:1fr;gap:24px}.definition{width:100%}.phone{width:245px}.board header{height:auto;min-height:76px}.board header h2{font-size:15px}}.canvas{padding:16px}}
+@media print{.top{position:static}.canvas{display:block;overflow:visible;padding:0}.board{page-break-after:always;width:100%;min-width:0;height:190mm;margin:0}}
+
+.authbody{padding-top:22px}
+.authbody .text{min-height:30px;padding:8px 8px 8px 24px;font-size:9px;position:relative;text-align:center}
+.authbody .input{height:38px;border:1px solid #777;padding:12px 10px 8px 28px;font-size:9px;position:relative}
+.authbody .button,.authbody .social{height:39px;border:1.3px solid #111;padding:12px 10px 8px 28px;font-size:9px;position:relative;text-align:center;font-weight:bold}
+.authbody .social{background:#f2f2f2}
+.authbody .divider{height:22px;border-top:1px solid #bbb;margin-top:8px;text-align:center;font-size:8px;position:relative}
+.authbody .divider span{position:relative;top:-6px;background:#fff;padding:0 8px}
+
+.routebox{margin-top:12px;border:1px solid #111;background:#fff}
+.routebox>div{display:grid;grid-template-columns:92px 1fr;border-bottom:1px solid #bbb;min-height:42px}
+.routebox>div:last-child{border-bottom:0}
+.routebox span{padding:10px 8px;font-size:9px;color:#555;border-right:1px solid #bbb;letter-spacing:.4px}
+.routebox b{padding:9px 10px;font-size:10px;line-height:1.5;font-weight:600}
+.tabbar{position:absolute;left:0;right:0;bottom:12px;height:49px;border-top:1px solid #111;background:#fff;display:grid;grid-template-columns:repeat(4,1fr);z-index:3}
+.tab{font-size:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#777}
+.tab.active{color:#111;font-weight:bold}
+.tabicon{display:block;width:14px;height:12px;line-height:10px;text-align:center;font-size:9px}
+.withtabs{max-height:365px!important;padding-bottom:58px!important}
+.legend{padding:13px 34px;background:#fff;border-bottom:1px solid #aaa;font-size:10px;line-height:1.6}
+.todayboard{min-height:1030px}
+.stateintro{margin-top:18px;padding:12px;border:1px solid #111;background:#fff;font-size:10px}
+.states{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:22px 0}
+.state{display:flex;flex-direction:column;align-items:center}
+.statelabel{width:245px;border:1px solid #111;border-bottom:0;background:#111;color:#fff;padding:8px 10px;font-size:9px;font-weight:bold}
+.todayboard .phone{height:500px}
+.todayboard .screenbody{max-height:400px}
+.compactmedia{height:70px;border:1px solid #111;background:#e5e5e5;display:flex;align-items:center;justify-content:center;font-size:9px;position:relative}
+.sectiongap{height:5px;border-top:2px solid #111;margin:4px 0}
+.muted{color:#777;background:#eee}
+.tall{min-height:58px}
+.definition.wide{width:100%;margin-top:8px}
+@media(max-width:900px){.states{grid-template-columns:1fr}.todayboard{min-height:auto}.statelabel{width:245px}}
+
+.secondary{min-height:28px;padding:8px 8px 8px 28px;font-size:8px;position:relative;color:#666;text-align:center;border-top:1px solid #ccc}
+
+html{scroll-behavior:smooth;}
+section[id]{scroll-margin-top:72px;}
+</style>
+<style id="mobile-font-fix">
+html,body{
+ font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif !important;
+ font-synthesis:none;
+ -webkit-text-size-adjust:100%;
+ text-size-adjust:100%;
+ word-break:keep-all;
+ overflow-wrap:break-word;
+}
+body{overflow-x:hidden !important}
+*{max-width:100%}
+header h1,header h2,h1,h2,h3,h4,p,li,td,th,div,span,b,strong{
+ font-family:inherit !important;
+ letter-spacing:-0.02em;
+}
+.canvas{
+ width:100% !important;
+ max-width:1180px !important;
+ margin:0 auto !important;
+ padding-left:24px !important;
+ padding-right:24px !important;
+}
+.board{
+ width:100% !important;
+ min-width:0 !important;
+}
+.board .content{
+ min-width:0 !important;
+}
+table{
+ width:100% !important;
+ table-layout:fixed !important;
+}
+td,th{
+ overflow-wrap:anywhere !important;
+}
+@media(max-width:700px){
+ body{font-size:14px !important;line-height:1.58 !important}
+ .canvas{padding:0 !important}
+ .board{
+ margin:0 !important;
+ border-left:0 !important;
+ border-right:0 !important;
+ }
+ .board>header{
+ padding:24px 20px !important;
+ }
+ .board>header h1,.board>header h2{
+ font-size:25px !important;
+ line-height:1.25 !important;
+ margin:6px 0 0 !important;
+ }
+ .board>header div{
+ font-size:12px !important;
+ line-height:1.45 !important;
+ }
+ .board .content{
+ display:block !important;
+ padding:22px 20px 30px !important;
+ }
+ .definition{
+ width:100% !important;
+ min-width:0 !important;
+ padding:0 !important;
+ }
+ .definition h3{
+ font-size:18px !important;
+ line-height:1.35 !important;
+ margin:28px 0 12px !important;
+ }
+ .definition h3:first-child{margin-top:0 !important}
+ p,li,td,th{
+ font-size:14px !important;
+ line-height:1.58 !important;
+ }
+ ul,ol{
+ padding-left:20px !important;
+ margin-left:0 !important;
+ }
+ li{margin-bottom:7px !important}
+ .routebox{
+ display:block !important;
+ }
+ .routebox>div{
+ display:block !important;
+ padding:12px 0 !important;
+ }
+ .routebox span,.routebox b{
+ display:block !important;
+ width:100% !important;
+ }
+ table,tbody,tr,td,th{
+ max-width:100% !important;
+ }
+ td,th{
+ padding:9px 7px !important;
+ }
+}
+</style>
+<style id="mobile-table-fix">
+@media(max-width:700px){
+  .definition table,
+  .definition tbody,
+  .definition tr,
+  .definition td,
+  .definition th{
+    display:block !important;
+    width:100% !important;
+    max-width:100% !important;
+  }
+
+  .definition table{
+    table-layout:auto !important;
+    border-collapse:collapse !important;
+    margin:16px 0 28px !important;
+  }
+
+  .definition tr{
+    padding:14px 0 !important;
+    border-bottom:1px solid #bdbdbd !important;
+  }
+
+  .definition tr:first-child{
+    border-top:1px solid #777 !important;
+  }
+
+  .definition td,
+  .definition th{
+    border:0 !important;
+    padding:0 !important;
+    word-break:keep-all !important;
+    overflow-wrap:break-word !important;
+    white-space:normal !important;
+  }
+
+  .definition td:first-child,
+  .definition th:first-child{
+    margin-bottom:7px !important;
+    font-weight:700 !important;
+    font-size:14px !important;
+    line-height:1.45 !important;
+  }
+
+  .definition td:not(:first-child),
+  .definition th:not(:first-child){
+    font-size:14px !important;
+    line-height:1.58 !important;
+  }
+}
+</style>
+<style id="final-layout-cleanup">
+/* 문서 공통 */
+.board{
+  position:relative;
+}
+.board header{
+  height:auto !important;
+  min-height:72px !important;
+  padding:0 0 18px 0 !important;
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(260px,430px) !important;
+  gap:20px !important;
+  align-items:start !important;
+}
+.board header::before{
+  display:none !important;
+  content:none !important;
+}
+.board header div{
+  min-width:0 !important;
+  padding:0 !important;
+  font-size:11px !important;
+  line-height:1.45 !important;
+  color:#555 !important;
+}
+.board header h2{
+  min-width:0 !important;
+  margin:0 !important;
+  text-align:right !important;
+  font-size:17px !important;
+  line-height:1.35 !important;
+}
+.dev-common header{
+  grid-template-columns:1fr minmax(260px,430px) !important;
+}
+.dev-common header div{
+  font-weight:700 !important;
+  color:#333 !important;
+}
+
+/* 설명부의 작은 메타 영역도 좁아지지 않게 */
+.meta{
+  grid-template-columns:70px minmax(0,1fr) !important;
+}
+.content,
+.definition,
+.wire,
+.states,
+.state{
+  min-width:0 !important;
+}
+
+/* 모바일 */
+@media(max-width:700px){
+  .top{
+    position:relative !important;
+    padding:24px 20px !important;
+  }
+  .top h1{
+    font-size:22px !important;
+    line-height:1.3 !important;
+  }
+  .flow{
+    padding:16px 20px !important;
+    font-size:12px !important;
+    line-height:1.7 !important;
+  }
+  .canvas{
+    gap:22px !important;
+    padding:0 !important;
+  }
+  .board{
+    padding:22px 20px 28px !important;
+    min-height:0 !important;
+  }
+  .board header,
+  .dev-common header{
+    display:flex !important;
+    flex-direction:column !important;
+    gap:7px !important;
+    min-height:0 !important;
+    padding:0 0 18px 0 !important;
+    margin:0 0 4px 0 !important;
+  }
+  .board header div{
+    width:100% !important;
+    font-size:11px !important;
+    line-height:1.4 !important;
+  }
+  .board header h2{
+    width:100% !important;
+    max-width:none !important;
+    text-align:left !important;
+    font-size:23px !important;
+    line-height:1.28 !important;
+    margin:0 !important;
+  }
+  .board .content{
+    padding:18px 0 0 !important;
+  }
+  .wire{
+    padding:0 !important;
+  }
+  .phone{
+    width:245px !important;
+    max-width:100% !important;
+  }
+
+  /* 화면 설명 메타: 두 칸씩 세로 배치 */
+  .meta{
+    display:grid !important;
+    grid-template-columns:74px minmax(0,1fr) !important;
+    gap:7px 8px !important;
+    padding-bottom:12px !important;
+  }
+
+  /* 공통 정책 박스 */
+  .note{
+    margin:0 !important;
+    padding:16px !important;
+  }
+
+  /* 오늘 화면 여러 상태 */
+  .states{
+    grid-template-columns:1fr !important;
+    gap:20px !important;
+  }
+  .state{
+    width:100% !important;
+  }
+  .statelabel{
+    width:245px !important;
+    max-width:100% !important;
+  }
+
+  /* 정의 표: 제목 → 설명 순서의 세로형 */
+  .definition table,
+  .definition tbody,
+  .definition tr,
+  .definition td,
+  .definition th{
+    display:block !important;
+    width:100% !important;
+  }
+  .definition tr{
+    padding:14px 0 !important;
+  }
+  .definition td:first-child,
+  .definition th:first-child{
+    margin-bottom:7px !important;
+    white-space:normal !important;
+    word-break:keep-all !important;
+  }
+
+  /* 라우팅/정책 박스 */
+  .routebox>div{
+    display:block !important;
+    padding:12px 0 !important;
+  }
+  .routebox span,
+  .routebox b{
+    display:block !important;
+    width:100% !important;
+    border-right:0 !important;
+    padding:3px 10px !important;
+  }
+}
+
+/* 아주 작은 화면 */
+@media(max-width:390px){
+  .board{
+    padding-left:18px !important;
+    padding-right:18px !important;
+  }
+  .top,
+  .flow{
+    padding-left:18px !important;
+    padding-right:18px !important;
+  }
+}
+</style>
+<style id="pc-readability-fix">
+/* PC 가독성 */
+body{font-size:14px;line-height:1.6}
+.canvas{max-width:1240px!important;padding-left:28px!important;padding-right:28px!important}
+.board{width:min(1160px,100%)!important}
+.definition{font-size:13px!important;line-height:1.6}
+.definition h3{font-size:16px!important;margin:24px 0 10px}
+.definition table td{font-size:13px!important;line-height:1.6!important;padding:11px 8px!important}
+.definition table td:first-child{width:150px!important;word-break:keep-all!important;overflow-wrap:normal!important}
+.routebox>div{grid-template-columns:130px minmax(0,1fr)!important}
+.routebox span{font-size:12px!important;line-height:1.5!important}
+.routebox b{font-size:13px!important;line-height:1.65!important}
+.meta span{font-size:11px!important}
+.meta b{font-size:12px!important}
+
+/* 개발 공통 정의는 화면 목업이 없으므로 설명 영역을 전체 폭 사용 */
+.dev-common .content{display:block!important;padding-top:24px!important}
+.dev-common .definition{width:100%!important;max-width:none!important}
+.dev-common table{table-layout:auto!important}
+.dev-common table td:first-child{width:170px!important}
+.dev-common .routebox{margin-top:18px!important}
+
+/* 문서 하단 공통 정책 */
+.note{max-width:1160px!important;margin:0 auto 28px!important;font-size:13px!important;line-height:1.75!important}
+
+/* 마지막 성장 정책 섹션: 기존 CSS 누락 보완 */
+.section{width:min(1160px,calc(100% - 56px));margin:0 auto 34px;background:#eee;border-top:2px solid #111;padding:26px}
+.section-head{border-bottom:1px solid #111;padding-bottom:16px;margin-bottom:20px}
+.section-head .eyebrow{font-size:11px;color:#555;margin-bottom:5px}
+.section-head h2{max-width:none!important;text-align:left!important;font-size:18px!important;line-height:1.4!important;margin:0!important}
+.section .card{background:#fff;border:1px solid #999;padding:20px 22px}
+.section .card h3{font-size:16px;margin:0 0 12px}
+.section .card ul{margin:0;padding-left:22px}
+.section .card li{font-size:13px;line-height:1.7;margin:6px 0}
+
+@media(max-width:700px){
+ .definition table td:first-child{width:100%!important}
+ .dev-common table td:first-child{width:100%!important}
+ .routebox>div{display:block!important}
+ .section{width:100%!important;margin:0!important;padding:22px 20px!important}
+ .section .card{padding:16px!important}
+ .section .card li{font-size:14px!important;line-height:1.65!important}
+}
+</style>
+<style id="left-header-cleanup">
+.board header,
+.dev-common header{
+  display:block !important;
+  min-height:0 !important;
+  padding:0 0 16px 0 !important;
+}
+.board header div,
+.dev-common header div{
+  display:block !important;
+  margin:0 0 5px 0 !important;
+  padding:0 !important;
+  text-align:left !important;
+}
+.board header h2,
+.dev-common header h2{
+  display:block !important;
+  max-width:none !important;
+  margin:0 !important;
+  padding:0 !important;
+  text-align:left !important;
+}
+</style>
+<style id="docnav-style">
+.docnav{position:sticky;top:78px;z-index:9;display:flex;gap:7px;overflow-x:auto;white-space:nowrap;padding:9px 18px;background:#fff;border-bottom:1px solid #aaa;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.docnav::-webkit-scrollbar{display:none}
+.docnav a{flex:0 0 auto;display:inline-block;padding:6px 9px;border:1px solid #999;background:#fff;color:#111;text-decoration:none;font-size:11px;font-weight:700;line-height:1}
+.docnav a:hover{background:#111;color:#fff;border-color:#111}
+section[id]{scroll-margin-top:138px}
+@media(max-width:700px){.top{position:sticky!important;top:0!important;z-index:10!important}.docnav{top:70px;padding:8px 12px}.docnav a{font-size:11px;padding:7px 9px}section[id]{scroll-margin-top:124px}}
+</style>
+
+<style id="readability-redesign-20260909">
+:root{--doc-bg:#f4f4f2;--paper:#fff;--ink:#151515;--muted:#666;--line:#d6d6d2;--soft:#f8f8f6}
+body{background:var(--doc-bg)!important;color:var(--ink)!important;line-height:1.65!important}
+.top{position:sticky!important;top:0!important;padding:20px 28px!important;background:#111!important;box-shadow:0 1px 0 rgba(0,0,0,.15)}
+.top h1{font-size:20px!important;margin:0!important;letter-spacing:-.03em!important}
+.docnav{top:61px!important;padding:9px max(18px,calc((100vw - 1160px)/2))!important;border-bottom:1px solid var(--line)!important;background:rgba(255,255,255,.97)!important}
+.docnav a{border:0!important;border-radius:999px!important;background:#f1f1ef!important;padding:7px 11px!important;font-weight:700!important}
+.docnav a:hover{background:#111!important;color:#fff!important}
+.flow{max-width:1160px;margin:22px auto 0;padding:18px 22px!important;background:#fff!important;border:1px solid var(--line)!important;border-radius:10px!important;font-size:12.5px!important}
+.note{background:#fff!important;border:1px solid var(--line)!important;border-radius:10px!important}
+.quick-overview{width:min(1160px,calc(100% - 48px));margin:18px auto 6px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px}
+.overview-head{display:flex;justify-content:space-between;gap:20px;padding-bottom:15px;border-bottom:1px solid var(--line)}
+.overview-head b{display:block;font-size:16px}.overview-head span{display:block;color:#777;font-size:12px;margin-top:4px}
+.overview-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:16px}
+.overview-grid>div{padding:14px;border:1px solid var(--line);background:var(--soft);border-radius:8px;min-height:92px}
+.overview-grid b{display:block;font-size:12px;margin-bottom:7px}.overview-grid span{font-size:12px;color:#555;line-height:1.55}
+.overview-tabs{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:14px;font-size:11px}.overview-tabs span{border:1px solid var(--line);padding:6px 9px;border-radius:999px;background:#fff}
+.canvas{max-width:1160px!important;margin:0 auto!important;padding:20px 0 60px!important;gap:20px!important}
+.board{width:100%!important;min-height:0!important;background:#fff!important;border:1px solid var(--line)!important;border-top:3px solid #111!important;border-radius:12px!important;padding:24px 26px 28px!important;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+.board header,.dev-common header{padding:0 0 16px!important;margin-bottom:0!important;border-bottom:1px solid var(--line)!important}
+.board header div{font-size:11px!important;color:#777!important;margin-bottom:5px!important}.board header h2{font-size:20px!important;letter-spacing:-.03em!important}
+.content{grid-template-columns:300px minmax(0,1fr)!important;gap:30px!important;padding-top:22px!important;align-items:start!important}
+.phone{width:245px!important;border-color:#777!important;box-shadow:0 10px 28px rgba(0,0,0,.06)}
+.definition{font-size:12.5px!important}.definition h3{margin:24px 0 8px!important;font-size:14px!important;border-left:3px solid #111;padding-left:9px}
+.meta{display:grid!important;grid-template-columns:90px minmax(0,1fr)!important;border:0!important;background:var(--soft);padding:10px 12px!important;border-radius:7px!important;margin-bottom:10px!important}.meta span{font-size:10px!important;color:#777!important}.meta b{font-size:12px!important}
+.routebox{border:1px solid var(--line)!important;border-radius:8px!important;overflow:hidden!important;background:#fff!important}.routebox>div{grid-template-columns:110px minmax(0,1fr)!important;border-bottom:1px solid var(--line)!important}.routebox span{background:var(--soft)!important;border-right:1px solid var(--line)!important;font-size:10px!important;color:#666!important}.routebox b{font-size:11.5px!important;font-weight:600!important}
+.definition table{margin-top:14px!important;border-top:1px solid #999!important}.definition td{border-bottom:1px solid var(--line)!important;padding:12px 8px!important;font-size:12px!important;line-height:1.65!important}.definition td:first-child{width:42px!important;text-align:center!important}.dev-common .definition td:first-child{width:180px!important;text-align:left!important}.specnum{background:#111!important}
+.todayboard{min-height:0!important}.stateintro{border:1px solid var(--line)!important;background:var(--soft)!important;border-radius:8px!important}.states{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px!important}.state{align-items:center!important;border:1px solid var(--line)!important;border-radius:10px!important;padding:14px!important;background:var(--soft)!important}.statelabel{width:245px!important;max-width:100%!important;border:0!important;background:#111!important;border-radius:6px 6px 0 0!important}
+.section{background:#fff!important;border:1px solid var(--line)!important;border-top:3px solid #111!important;border-radius:12px!important}.section .card{border:1px solid var(--line)!important;border-radius:8px!important}
+@media(max-width:800px){
+ .top{padding:18px 18px!important}.docnav{top:58px!important;padding:8px 12px!important}.flow{margin:14px 14px 0!important}.quick-overview{width:calc(100% - 28px)!important;margin:14px auto!important;padding:16px!important}.overview-grid{grid-template-columns:1fr!important}.canvas{padding:0 14px 40px!important}.board{padding:20px 16px 24px!important;border-radius:10px!important}.content{display:block!important}.wire{margin-bottom:22px!important}.states{grid-template-columns:1fr!important}.definition table,.definition tbody,.definition tr,.definition td{display:block!important;width:100%!important}.definition tr{padding:12px 0!important;border-bottom:1px solid var(--line)!important}.definition td{border:0!important;padding:2px 0!important}.definition td:first-child,.dev-common .definition td:first-child{width:100%!important;text-align:left!important;margin-bottom:4px!important}.routebox>div{display:block!important}.routebox span,.routebox b{display:block!important;border-right:0!important;padding:6px 10px!important}.routebox span{border-bottom:1px solid var(--line)!important}.section{width:calc(100% - 28px)!important;margin:14px auto!important}
+}
+</style>
+
+<style id="sticky-nav-fix-20260909">
+:root{--topbar-h:64px;--docnav-gap:8px}
+.top{min-height:64px!important;display:flex!important;align-items:center!important;padding:0 28px!important;z-index:30!important}
+.top h1{line-height:1.2!important}
+.docnav{position:sticky!important;top:calc(var(--topbar-h) + var(--docnav-gap))!important;z-index:20!important;padding-top:10px!important;padding-bottom:10px!important;box-shadow:0 1px 0 rgba(0,0,0,.04)!important}
+.flow{margin-top:18px!important}
+section[id]{scroll-margin-top:130px!important}
+@media(max-width:800px){
+  :root{--topbar-h:56px;--docnav-gap:8px}
+  .top{min-height:56px!important;padding:0 18px!important}
+  .docnav{top:calc(var(--topbar-h) + var(--docnav-gap))!important;padding:8px 12px 10px!important}
+  section[id]{scroll-margin-top:118px!important}
+}
+</style>
+
+<style id="planner-clean-20260909">
+/* 기획 검토용: 장식 최소화, 정보 위계와 가독성 우선 */
+:root{
+  --bg:#fff;
+  --ink:#111;
+  --sub:#666;
+  --line:#d8d8d8;
+  --line-strong:#999;
+  --soft:#f7f7f7;
+  --top-h:58px;
+  --nav-h:44px;
+}
+html,body{background:var(--bg)!important;color:var(--ink)!important}
+body{font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif!important;line-height:1.62!important}
+*{box-shadow:none!important;text-shadow:none!important;border-radius:0!important}
+
+/* 상단 제목 */
+.top{
+  position:sticky!important;top:0!important;z-index:30!important;
+  min-height:var(--top-h)!important;height:var(--top-h)!important;
+  padding:0 28px!important;background:#fff!important;color:#111!important;
+  border-bottom:1px solid #111!important;display:flex!important;align-items:center!important;
+}
+.top h1{font-size:18px!important;font-weight:700!important;letter-spacing:-.02em!important;margin:0!important}
+.top p{display:none!important}
+
+/* 바로가기: 버튼 디자인 제거 */
+.docnav{
+  position:sticky!important;top:var(--top-h)!important;z-index:25!important;
+  height:var(--nav-h)!important;padding:0 28px!important;background:#fff!important;
+  border-bottom:1px solid var(--line)!important;display:flex!important;align-items:center!important;
+  gap:18px!important;overflow-x:auto!important;white-space:nowrap!important;
+}
+.docnav a{
+  border:0!important;background:transparent!important;padding:0!important;
+  color:#555!important;font-size:12px!important;font-weight:600!important;text-decoration:none!important;
+}
+.docnav a:hover{color:#111!important;text-decoration:underline!important}
+section[id]{scroll-margin-top:118px!important}
+
+/* 문서 요약 */
+.flow,.note,.quick-overview{
+  width:min(1100px,calc(100% - 48px))!important;max-width:none!important;margin:18px auto 0!important;
+  background:#fff!important;border:0!important;border-bottom:1px solid var(--line)!important;
+  padding:0 0 18px!important;
+}
+.flow{font-size:13px!important;line-height:1.75!important}
+.note{font-size:13px!important;line-height:1.7!important}
+.quick-overview{padding-bottom:22px!important}
+.overview-head{display:block!important;border:0!important;padding:0 0 10px!important}
+.overview-head b{font-size:15px!important}.overview-head span{font-size:12px!important;color:var(--sub)!important}
+.overview-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:0!important;margin-top:12px!important;border-top:1px solid var(--line)!important;border-left:1px solid var(--line)!important}
+.overview-grid>div{min-height:0!important;padding:14px!important;background:#fff!important;border:0!important;border-right:1px solid var(--line)!important;border-bottom:1px solid var(--line)!important}
+.overview-grid b{font-size:12px!important;margin-bottom:5px!important}.overview-grid span{font-size:12px!important;line-height:1.55!important;color:#555!important}
+.overview-tabs{margin-top:12px!important;gap:12px!important;font-size:12px!important}
+.overview-tabs span{border:0!important;background:transparent!important;padding:0!important;color:#555!important}
+
+/* 본문 레이아웃 */
+.canvas{width:min(1100px,calc(100% - 48px))!important;max-width:none!important;margin:0 auto!important;padding:22px 0 60px!important;gap:0!important}
+.board,.section{
+  width:100%!important;margin:0!important;padding:34px 0!important;background:#fff!important;
+  border:0!important;border-bottom:1px solid var(--line)!important;
+}
+.board header,.dev-common header,.section-head{
+  padding:0 0 14px!important;margin:0 0 20px!important;border-bottom:1px solid #111!important;
+}
+.board header div,.dev-common header div,.section-head .eyebrow{font-size:11px!important;color:#777!important;margin:0 0 4px!important}
+.board header h2,.dev-common header h2,.section-head h2{font-size:20px!important;line-height:1.35!important;font-weight:700!important;text-align:left!important;margin:0!important;letter-spacing:-.025em!important}
+
+.content{display:grid!important;grid-template-columns:280px minmax(0,1fr)!important;gap:36px!important;padding-top:0!important;align-items:start!important}
+.dev-common .content{display:block!important}
+.definition{font-size:13px!important;line-height:1.65!important}
+.definition h3{font-size:15px!important;margin:26px 0 10px!important;padding:0!important;border:0!important;font-weight:700!important}
+.definition h3:first-child{margin-top:0!important}
+
+/* 화면 목업: 기능 확인용 최소 선 */
+.wire{justify-content:flex-start!important}
+.phone{width:245px!important;height:520px!important;background:#fff!important;border:1px solid #777!important}
+.status{border-bottom:1px solid #ddd!important;color:#555!important}
+.appbar{border-bottom:1px solid #999!important;background:#fff!important}
+.media,.compactmedia,.uirow,.lineitem,.authbody .input,.authbody .button,.authbody .social,.secondary{
+  background:#fff!important;border-color:#aaa!important;color:#111!important;
+}
+.media,.compactmedia{background:#f5f5f5!important}
+.statelabel{background:#111!important;color:#fff!important;border:0!important}
+.state{background:#fff!important;border:0!important;padding:0!important}
+.states{gap:28px!important}
+.stateintro{background:#fff!important;border:0!important;border-bottom:1px solid var(--line)!important;padding:0 0 12px!important}
+.tabbar{background:#fff!important;border-top:1px solid #999!important}
+.num,.specnum{background:#111!important;color:#fff!important}
+
+/* 메타 / 경로 / 표 */
+.meta{display:grid!important;grid-template-columns:90px minmax(0,1fr)!important;gap:6px!important;background:#fff!important;border:0!important;border-bottom:1px solid var(--line)!important;padding:0 0 10px!important;margin-bottom:12px!important}
+.meta span{font-size:10px!important;color:#777!important}.meta b{font-size:12px!important}
+.routebox{border:1px solid var(--line)!important;background:#fff!important;overflow:visible!important}
+.routebox>div{display:grid!important;grid-template-columns:110px minmax(0,1fr)!important;min-height:0!important;border-bottom:1px solid var(--line)!important}
+.routebox>div:last-child{border-bottom:0!important}
+.routebox span{padding:9px 10px!important;background:#f7f7f7!important;border-right:1px solid var(--line)!important;color:#666!important;font-size:10px!important}
+.routebox b{padding:9px 11px!important;font-size:12px!important;line-height:1.55!important;font-weight:500!important}
+.definition table{width:100%!important;margin:14px 0 0!important;border-collapse:collapse!important;border-top:1px solid #999!important;table-layout:auto!important}
+.definition td{border-bottom:1px solid var(--line)!important;padding:11px 8px!important;font-size:12.5px!important;line-height:1.6!important;vertical-align:top!important}
+.definition td:first-child{width:42px!important;text-align:center!important}
+.dev-common .definition td:first-child{width:180px!important;text-align:left!important;font-weight:600!important}
+.section .card{background:#fff!important;border:0!important;padding:0!important}
+.section .card h3{font-size:15px!important;margin:0 0 10px!important}
+.section .card li{font-size:13px!important;line-height:1.65!important}
+
+/* 불필요한 장식 제거 */
+.legend{background:#fff!important;border:0!important;border-bottom:1px solid var(--line)!important}
+.homebar{border-color:#111!important}
+
+@media(max-width:800px){
+  :root{--top-h:54px;--nav-h:42px}
+  .top{padding:0 18px!important}.top h1{font-size:17px!important}
+  .docnav{padding:0 18px!important;gap:16px!important}
+  section[id]{scroll-margin-top:106px!important}
+  .flow,.note,.quick-overview,.canvas{width:calc(100% - 32px)!important}
+  .overview-grid{grid-template-columns:1fr!important}
+  .content{display:block!important}.wire{justify-content:center!important;margin-bottom:26px!important}
+  .board,.section{padding:28px 0!important}
+  .board header h2,.dev-common header h2,.section-head h2{font-size:19px!important}
+  .states{grid-template-columns:1fr!important}
+  .definition table,.definition tbody,.definition tr,.definition td{display:block!important;width:100%!important}
+  .definition tr{padding:12px 0!important;border-bottom:1px solid var(--line)!important}
+  .definition td{border:0!important;padding:2px 0!important}
+  .definition td:first-child,.dev-common .definition td:first-child{width:100%!important;text-align:left!important;margin-bottom:5px!important}
+  .routebox>div{display:block!important}
+  .routebox span,.routebox b{display:block!important;border-right:0!important}
+  .routebox span{border-bottom:1px solid var(--line)!important}
+}
+</style>
+
+
+<style id="planner-nav-fix-20260909">
+/* 기획 문서용 네비게이션: 장식 없이 현재 위치만 선으로 표시 */
+.top{position:static!important;height:auto!important;min-height:0!important;padding:30px 28px 22px!important;border-bottom:1px solid #111!important}
+.top h1{font-size:19px!important;line-height:1.3!important}
+.docnav{
+  position:sticky!important;top:0!important;z-index:50!important;height:auto!important;min-height:48px!important;
+  padding:0 28px!important;background:#fff!important;border-bottom:1px solid #cfcfcf!important;
+  display:flex!important;align-items:stretch!important;gap:0!important;overflow-x:auto!important;scrollbar-width:none!important;
+}
+.docnav::-webkit-scrollbar{display:none!important}
+.docnav a{
+  flex:0 0 auto!important;display:flex!important;align-items:center!important;min-height:48px!important;
+  padding:0 12px!important;margin:0!important;border:0!important;border-bottom:2px solid transparent!important;
+  background:transparent!important;color:#666!important;text-decoration:none!important;font-size:12px!important;font-weight:600!important;
+  outline:none!important;-webkit-tap-highlight-color:transparent!important;user-select:none!important;
+}
+.docnav a:hover{color:#111!important;text-decoration:none!important;background:#fafafa!important}
+.docnav a:focus,.docnav a:focus-visible,.docnav a:active{color:#111!important;background:transparent!important;outline:none!important;box-shadow:none!important}
+.docnav a[aria-current="true"]{color:#111!important;border-bottom-color:#111!important;font-weight:700!important;background:transparent!important}
+section[id]{scroll-margin-top:60px!important}
+.flow{margin-top:22px!important}
+@media(max-width:800px){
+  .top{padding:24px 18px 18px!important}
+  .docnav{padding:0 10px!important;min-height:44px!important}
+  .docnav a{min-height:44px!important;padding:0 10px!important;font-size:11.5px!important}
+  section[id]{scroll-margin-top:54px!important}
+}
+</style>
+
+<style id="plain-nav-final">
+/* 기획 문서용: 장식/선택표시 제거, 단순 목차 링크만 유지 */
+.top{position:static!important;min-height:auto!important;padding:26px 34px 20px!important;background:#fff!important;color:#111!important;border-bottom:1px solid #111!important;box-shadow:none!important}
+.top h1{font-size:24px!important;line-height:1.3!important;margin:0!important}
+.docnav{position:static!important;display:flex!important;flex-wrap:wrap!important;gap:0!important;overflow:visible!important;white-space:normal!important;padding:12px 34px!important;background:#fff!important;border-bottom:1px solid #ddd!important;box-shadow:none!important}
+.docnav a{display:inline-block!important;padding:4px 12px 4px 0!important;margin:0 12px 0 0!important;border:0!important;border-radius:0!important;background:transparent!important;color:#444!important;text-decoration:none!important;font-size:13px!important;font-weight:600!important;line-height:1.5!important}
+.docnav a:hover,.docnav a:focus,.docnav a:focus-visible,.docnav a:active,.docnav a[aria-current="true"]{background:transparent!important;color:#111!important;border:0!important;outline:none!important;box-shadow:none!important;text-decoration:underline!important;text-underline-offset:3px!important}
+section[id]{scroll-margin-top:20px!important}
+@media(max-width:800px){
+ .top{padding:22px 18px 16px!important}
+ .top h1{font-size:21px!important}
+ .docnav{padding:10px 18px!important}
+ .docnav a{font-size:12.5px!important;padding-right:10px!important;margin-right:8px!important}
+}
+</style>
+
+<style id="songlim-unified-doc-tone-20260909">
+:root{
+  --songlim-ink:#111;
+  --songlim-text:#2b2b2b;
+  --songlim-sub:#666;
+  --songlim-muted:#858585;
+  --songlim-line:#d7d7d7;
+  --songlim-line-strong:#9a9a9a;
+  --songlim-soft:#f7f7f5;
+  --songlim-paper:#fff;
+}
+html,body{
+  background:var(--songlim-paper)!important;
+  color:var(--songlim-ink)!important;
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",Arial,sans-serif!important;
+  -webkit-font-smoothing:antialiased;
+  font-synthesis:none;
+}
+body{letter-spacing:-.018em!important}
+*{box-shadow:none!important;text-shadow:none!important}
+a{color:inherit}
+</style>
+
+<style id="songlim-feature-tone-20260909">
+/* 기능정의서: 장식보다 탐색/이해 우선 */
+body{font-size:14px!important;line-height:1.62!important}
+.top{
+  position:static!important;
+  background:#fff!important;color:#111!important;
+  padding:30px 36px 20px!important;
+  border-bottom:1px solid #111!important;
+}
+.top h1{font-size:25px!important;line-height:1.25!important;font-weight:750!important;margin:0!important;letter-spacing:-.035em!important}
+.docnav{
+  position:static!important;
+  display:flex!important;flex-wrap:wrap!important;gap:0!important;
+  padding:11px 36px 12px!important;
+  background:#fff!important;border-bottom:1px solid var(--songlim-line)!important;
+  overflow:visible!important;white-space:normal!important;
+}
+.docnav a{
+  display:inline-block!important;
+  margin:0 18px 0 0!important;padding:5px 0!important;
+  border:0!important;background:transparent!important;
+  color:#555!important;text-decoration:none!important;
+  font-size:13px!important;font-weight:650!important;line-height:1.45!important;
+  outline:none!important;
+}
+.docnav a:hover,.docnav a:focus,.docnav a:focus-visible,.docnav a:active,.docnav a[aria-current="true"]{
+  color:#111!important;background:transparent!important;border:0!important;outline:0!important;text-decoration:none!important;
+}
+section[id]{scroll-margin-top:20px!important}
+.flow,.note,.quick-overview{
+  width:min(1120px,calc(100% - 64px))!important;max-width:none!important;
+  margin:20px auto 0!important;padding:0 0 20px!important;
+  background:#fff!important;border:0!important;border-bottom:1px solid var(--songlim-line)!important;
+  border-radius:0!important;
+}
+.flow,.note{font-size:13px!important;line-height:1.72!important}
+.quick-overview{padding-bottom:24px!important}
+.overview-head{display:block!important;padding:0 0 12px!important;border:0!important}
+.overview-head b{font-size:16px!important}.overview-head span{font-size:12px!important;color:var(--songlim-sub)!important}
+.overview-grid{
+  display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:0!important;
+  margin-top:12px!important;border-top:1px solid var(--songlim-line)!important;border-left:1px solid var(--songlim-line)!important;
+}
+.overview-grid>div{
+  min-height:0!important;padding:15px 14px!important;background:#fff!important;border:0!important;
+  border-right:1px solid var(--songlim-line)!important;border-bottom:1px solid var(--songlim-line)!important;
+  border-radius:0!important;
+}
+.overview-grid b{font-size:12px!important;margin-bottom:6px!important}.overview-grid span{font-size:12px!important;line-height:1.55!important;color:#555!important}
+.overview-tabs{margin-top:12px!important;gap:14px!important;font-size:12px!important}.overview-tabs span{border:0!important;background:transparent!important;padding:0!important;color:#555!important}
+.canvas{width:min(1120px,calc(100% - 64px))!important;max-width:none!important;margin:0 auto!important;padding:24px 0 64px!important;gap:0!important}
+.board,.section{
+  width:100%!important;margin:0!important;padding:36px 0!important;background:#fff!important;
+  border:0!important;border-bottom:1px solid var(--songlim-line)!important;border-radius:0!important;
+}
+.board header,.dev-common header,.section-head{padding:0 0 14px!important;margin:0 0 22px!important;border-bottom:1px solid #111!important}
+.board header div,.dev-common header div,.section-head .eyebrow{font-size:11px!important;color:#777!important;margin:0 0 5px!important}
+.board header h2,.dev-common header h2,.section-head h2{font-size:21px!important;line-height:1.35!important;font-weight:750!important;text-align:left!important;margin:0!important;letter-spacing:-.03em!important}
+.content{display:grid!important;grid-template-columns:285px minmax(0,1fr)!important;gap:38px!important;padding-top:0!important;align-items:start!important}.dev-common .content{display:block!important}
+.definition{font-size:13px!important;line-height:1.66!important}.definition h3{font-size:15px!important;margin:28px 0 10px!important;padding:0!important;border:0!important;font-weight:750!important}.definition h3:first-child{margin-top:0!important}
+.wire{justify-content:flex-start!important}.phone{width:245px!important;height:520px!important;border:1px solid #8f8f8f!important;background:#fff!important;box-shadow:none!important}
+.status{border-bottom:1px solid #ddd!important;color:#555!important}.appbar{background:#fff!important;border-bottom:1px solid #999!important}
+.media,.compactmedia{background:var(--songlim-soft)!important;border-color:#aaa!important}.uirow,.lineitem,.authbody .input,.authbody .button,.authbody .social,.secondary{background:#fff!important;border-color:#aaa!important;color:#111!important}
+.state{background:#fff!important;border:0!important;padding:0!important}.states{gap:30px!important}.statelabel{background:#111!important;color:#fff!important;border:0!important;border-radius:0!important}.stateintro{background:#fff!important;border:0!important;border-bottom:1px solid var(--songlim-line)!important;padding:0 0 12px!important}
+.tabbar{background:#fff!important;border-top:1px solid #999!important}.num,.specnum{background:#111!important;color:#fff!important}
+.meta{display:grid!important;grid-template-columns:92px minmax(0,1fr)!important;gap:6px!important;background:#fff!important;border:0!important;border-bottom:1px solid var(--songlim-line)!important;padding:0 0 11px!important;margin-bottom:13px!important;border-radius:0!important}.meta span{font-size:10px!important;color:#777!important}.meta b{font-size:12px!important}
+.routebox{border:1px solid var(--songlim-line)!important;background:#fff!important;border-radius:0!important;overflow:visible!important}.routebox>div{display:grid!important;grid-template-columns:112px minmax(0,1fr)!important;min-height:0!important;border-bottom:1px solid var(--songlim-line)!important}.routebox>div:last-child{border-bottom:0!important}.routebox span{padding:9px 10px!important;background:var(--songlim-soft)!important;border-right:1px solid var(--songlim-line)!important;color:#666!important;font-size:10px!important}.routebox b{padding:9px 11px!important;font-size:12px!important;line-height:1.58!important;font-weight:500!important}
+.definition table{width:100%!important;margin:15px 0 0!important;border-collapse:collapse!important;border-top:1px solid var(--songlim-line-strong)!important;table-layout:auto!important}.definition td{border-bottom:1px solid var(--songlim-line)!important;padding:11px 8px!important;font-size:12.5px!important;line-height:1.62!important;vertical-align:top!important}.definition td:first-child{width:42px!important;text-align:center!important}.dev-common .definition td:first-child{width:184px!important;text-align:left!important;font-weight:650!important}
+.section .card{background:#fff!important;border:0!important;padding:0!important;border-radius:0!important}.section .card h3{font-size:15px!important;margin:0 0 10px!important}.section .card li{font-size:13px!important;line-height:1.65!important}
+@media(max-width:800px){
+ .top{padding:24px 18px 16px!important}.top h1{font-size:22px!important}.docnav{padding:9px 18px 10px!important}.docnav a{font-size:12.5px!important;margin-right:14px!important}
+ .flow,.note,.quick-overview,.canvas{width:calc(100% - 36px)!important}.overview-grid{grid-template-columns:1fr!important}.content{display:block!important}.wire{justify-content:center!important;margin-bottom:28px!important}
+ .board,.section{padding:30px 0!important}.board header h2,.dev-common header h2,.section-head h2{font-size:20px!important}.states{grid-template-columns:1fr!important}
+ .definition table,.definition tbody,.definition tr,.definition td{display:block!important;width:100%!important}.definition tr{padding:12px 0!important;border-bottom:1px solid var(--songlim-line)!important}.definition td{border:0!important;padding:2px 0!important}.definition td:first-child,.dev-common .definition td:first-child{width:100%!important;text-align:left!important;margin-bottom:5px!important}
+ .routebox>div{display:block!important}.routebox span,.routebox b{display:block!important;border-right:0!important}.routebox span{border-bottom:1px solid var(--songlim-line)!important}
+}
+</style>
+
+<style id="routebox-gap-fix-20260909">
+/* SCREEN ID 아래 라우팅 정보가 바로 이어지도록 불필요한 흰 여백 제거 */
+.definition > .meta{margin-bottom:0!important;}
+.definition > .routebox{margin-top:0!important;}
+@media(max-width:800px){
+  .definition > .meta{margin-bottom:0!important;padding-bottom:11px!important;}
+  .definition > .routebox{margin-top:0!important;}
+}
+</style>
+
+<style id="planner-final-clean-20260909">
+/* 최종 정리: 화면 정보는 하나의 블록으로, 기능 항목은 평평한 목록으로 */
+.definition > .meta{
+  display:grid!important;
+  grid-template-columns:92px minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:0!important;
+  min-height:44px!important;
+  margin:0!important;
+  padding:0!important;
+  background:#f7f7f5!important;
+  border:1px solid #d7d7d7!important;
+  border-bottom:0!important;
+}
+.definition > .meta span,
+.definition > .meta b{
+  display:block!important;
+  margin:0!important;
+  padding:11px 12px!important;
+  line-height:1.35!important;
+}
+.definition > .meta span{
+  color:#777!important;
+  font-size:10px!important;
+  font-weight:600!important;
+}
+.definition > .meta b{
+  color:#111!important;
+  font-size:13px!important;
+  font-weight:750!important;
+}
+.definition > .routebox{
+  margin:0 0 22px!important;
+  border:1px solid #d7d7d7!important;
+  background:#fff!important;
+}
+.definition > .routebox > div{
+  display:grid!important;
+  grid-template-columns:112px minmax(0,1fr)!important;
+  border-bottom:1px solid #d7d7d7!important;
+}
+.definition > .routebox > div:last-child{border-bottom:0!important}
+.definition > .routebox span{
+  display:block!important;
+  padding:11px 12px!important;
+  background:#f7f7f5!important;
+  border:0!important;
+  border-right:1px solid #d7d7d7!important;
+  color:#777!important;
+  font-size:10px!important;
+  font-weight:650!important;
+  line-height:1.4!important;
+}
+.definition > .routebox b{
+  display:block!important;
+  padding:11px 13px!important;
+  color:#222!important;
+  font-size:12.5px!important;
+  line-height:1.55!important;
+  font-weight:500!important;
+}
+/* 기능 번호는 검은 박스 대신 문서형 번호로 단순화 */
+.definition table{margin-top:0!important;border-top:1px solid #aaa!important}
+.definition td:first-child{width:48px!important;text-align:left!important;padding-left:0!important}
+.specnum{
+  width:auto!important;height:auto!important;min-width:0!important;
+  border-radius:0!important;background:transparent!important;color:#777!important;
+  font-size:11px!important;font-weight:700!important;line-height:1.4!important;
+}
+.definition td:nth-child(2){padding-left:4px!important}
+.definition td:nth-child(2) b{font-size:13px!important}
+
+@media(max-width:800px){
+  .definition > .meta{
+    grid-template-columns:84px minmax(0,1fr)!important;
+    min-height:42px!important;
+  }
+  .definition > .meta span,.definition > .meta b{padding:10px 11px!important}
+  .definition > .routebox{margin-bottom:24px!important}
+  .definition > .routebox > div{
+    display:grid!important;
+    grid-template-columns:84px minmax(0,1fr)!important;
+    padding:0!important;
+  }
+  .definition > .routebox span{
+    display:flex!important;align-items:center!important;
+    padding:12px 10px!important;
+    border-right:1px solid #d7d7d7!important;
+    border-bottom:0!important;
+  }
+  .definition > .routebox b{padding:12px 12px!important;font-size:13px!important;line-height:1.5!important}
+  .definition table{border-top:1px solid #aaa!important}
+  .definition tr{padding:16px 0!important;border-bottom:1px solid #ddd!important}
+  .definition td:first-child{width:100%!important;margin:0 0 7px!important;padding:0!important}
+  .definition td:nth-child(2){padding:0!important}
+  .specnum{font-size:11px!important;color:#777!important}
+  .definition td:nth-child(2) b{font-size:15px!important}
+}
+</style>
+
+<style id="growth-section-alignment-fix-20260909">
+/* 마지막 성장 규칙도 다른 본문 섹션과 같은 문서 폭/제목 위계로 맞춤 */
+.section#growth{
+  width:min(1120px,calc(100% - 64px))!important;
+  margin:0 auto!important;
+  padding:36px 0 64px!important;
+  border:0!important;
+  background:#fff!important;
+}
+.section#growth .section-head{
+  margin:0 0 18px!important;
+  padding:0 0 12px!important;
+  border-bottom:1px solid #111!important;
+}
+.section#growth .section-head h2{
+  font-size:20px!important;
+  line-height:1.35!important;
+  font-weight:750!important;
+  letter-spacing:-.03em!important;
+}
+.section#growth .card{padding:0!important}
+.section#growth .card ul{margin:0!important;padding-left:20px!important;max-width:none!important}
+.section#growth .card li{font-size:13px!important;line-height:1.7!important;margin:7px 0!important}
+@media(max-width:800px){
+  .section#growth{
+    width:calc(100% - 36px)!important;
+    margin:0 auto!important;
+    padding:30px 0 46px!important;
+  }
+  .section#growth .section-head{margin-bottom:16px!important;padding-bottom:10px!important}
+  .section#growth .section-head h2{font-size:18px!important;line-height:1.4!important}
+  .section#growth .card ul{padding-left:18px!important}
+  .section#growth .card li{font-size:13.5px!important;line-height:1.65!important;margin:7px 0!important}
+}
+</style>
+</head>
+<body>
+<div class="top"><h1>송림 MVP 화면·기능정의서 </h1></div><nav aria-label="기능정의서 바로가기" class="docnav"><a href="#dev-common">공통정의</a><a href="#auth">회원</a><a href="#onboarding">온보딩</a><a href="#today">금주의 추천</a><a href="#scrap">스크랩</a><a href="#share">공유 저장</a><a href="#forest">나의 숲</a><a href="#my">MY</a><a href="#common">공통</a><a href="#growth">성장 규칙</a></nav>
+<div class="flow"><b>핵심 흐름</b>　로그인 / 회원가입 → 초기 취향(책·음반·영화) → 관심의 씨앗 → 경험할 하나 선택 → 금주의 추천 선택 → 오늘의 경험 → 콘텐츠별 감상 완료 → 선택 평가 → 다음 추천 + 나의 숲 기록<br/>
+<b>외부 유입</b>　SNS/웹 콘텐츠 공유 → AI 인식·정규화 → 동일 엔티티 매칭 → 관심 씨앗 저장　　<b>콘텐츠 단위</b> BOOK / ALBUM / MOVIE (TRACK은 음반 오늘의 경험의 하위 경험 단위)</div>
+<div class="note" style="margin:0 auto 18px;max-width:1180px"><b>공통 동작</b> 앱 실행 시 별도 스플래시 화면 없이 세션을 확인한다. 로그인 세션이 있으면 TODAY-01, 없으면 AUTH-01로 진입한다. 신규 가입자는 온보딩을 거치며, 최소 응답 기준 충족 후 ‘송림 시작하기’를 누르면 별도 완료 화면 없이 TODAY-01로 바로 이동한다.</div>
+<section class="quick-overview" aria-label="문서 빠른 보기">
+  <div class="overview-head">
+    <div><b>프로토타입 기준 빠른 보기</b><span>화면 구조와 상태 전이부터 보고, 세부 정책은 아래 화면별 정의에서 확인</span></div>
+  </div>
+  <div class="overview-grid">
+    <div><b>1. 진입</b><span>로그인/회원가입 → 온보딩 10개 이상 응답 → 금주의 추천</span></div>
+    <div><b>2. 저장</b><span>외부 공유 → AI 인식 → 중복 확인 → 관심의 씨앗 저장</span></div>
+    <div><b>3. 경험</b><span>경험 전 콘텐츠 1개 선택 → 책/음반/영화별 경험 동작</span></div>
+    <div><b>4. 기록</b><span>완료 → 선택 평가 → 큰 나무 → 나의 숲/전체 숲에 동일 기록 반영</span></div>
+  </div>
+  <div class="overview-tabs"><b>하단 탭</b><span>금주의 추천</span><span>나의 숲</span><span>스크랩</span><span>MY</span></div>
+</section><div class="canvas"><section class="board dev-common" id="dev-common">
+<header>
+<div>개발 공통 정의</div>
+<h2>구현 전 공통으로 확인할 규칙</h2>
+</header>
+<div class="content">
+<div class="definition" style="width:100%">
+<h3>1. 핵심 데이터</h3>
+<table><tr><td><b>MVP 콘텐츠 범위</b></td><td>BOOK / ALBUM / MOVIE. 화면 표기는 책 / 음반 / 영화로 통일한다. TRACK은 음반의 오늘의 곡에서만 사용하는 하위 단위다.</td></tr>
+<tr><td><b>Content</b></td><td>콘텐츠 원본 엔티티. type = BOOK / ALBUM / MOVIE. TRACK은 ALBUM의 ‘오늘의 곡’에서만 사용하는 하위 단위.</td></tr>
+<tr><td><b>UserContent</b></td><td>사용자와 콘텐츠의 관계. status = INTERESTED / IN_PROGRESS / EXPERIENCED / DISLIKE. 온보딩의 건너뛰기는 저장하지 않는다. 스크랩·금주의 추천·나의 숲·완료 기록은 모두 동일한 UserContent를 참조하며, 화면별로 별도 콘텐츠/완료 레코드를 복제하지 않는다.</td></tr>
+<tr><td><b>현재 추천</b></td><td>사용자가 경험을 시작한 콘텐츠 1개. 별도 추천 콘텐츠를 새로 생성하지 않고 UserContent의 경험 전 콘텐츠를 사용한다.</td></tr>
+<tr><td><b>성장 상태</b></td><td>씨앗 → 싹 → 덤불 → 나무 → 큰 나무. 책의 ‘오늘 독서 완료’와 음반의 일일 경험 기록으로는 나무까지만 성장하며, 큰 나무는 콘텐츠별 최종 감상 완료 액션에서만 가능.</td></tr>
+</table>
+<h3>2. 상태 전이</h3>
+<table>
+<tr><td><b>관심 표시 / 외부 저장</b></td><td>INTERESTED(경험 전)</td></tr>
+<tr><td><b>경험 시작하기</b></td><td>INTERESTED → IN_PROGRESS · 성장 상태 씨앗 생성</td></tr>
+<tr><td><b>오늘의 경험 기록</b></td><td>책·음반만 적용한다. 사용자 로컬 날짜 기준 하루 최대 1회 성장하며 씨앗 → 싹 → 덤불 → 나무까지만 진행한다. 영화는 일일 성장 단계를 두지 않는다.</td></tr>
+<tr><td><b>최종 감상 완료</b></td><td>책 ‘이 책 감상 완료’ / 음반 ‘이 앨범 감상 완료’ / 영화 ‘이 작품 감상 완료’. 현재 성장 단계와 관계없이 EXPERIENCED + 큰 나무 처리 후 나의 숲 완료 기록에 저장한다.</td></tr>
+<tr><td><b>평가</b></td><td>완료 후 1~5점 선택 입력. 건너뛸 수 있고 완료 기록 상세에서 나중에 입력/수정 가능.</td></tr>
+</table>
+<h3>3. 콘텐츠 유형별 경험 로직</h3>
+<table>
+<tr><td><b>책</b></td><td>경험 시작 후 ‘오늘의 페이지’를 보여주며, 해당 영역 안에 책 표지·제목·저자 정보를 표시한다. 별도의 감성 문구를 책 정보 대신 사용하지 않는다. 행동은 ① ‘서점 페이지’ ② ‘오늘 독서 완료’ ③ ‘이 책 감상 완료’로 구성한다. ‘서점 페이지’는 외부 서점의 구매·정보 확인 페이지로 연결한다. ‘오늘 독서 완료’는 사용자 로컬 날짜 기준 하루 1회 성장에 반영한다. 책 전체를 다 읽었다면 언제든 ‘이 책 감상 완료’를 눌러 EXPERIENCED + 큰 나무로 완료할 수 있다.</td></tr>
+<tr><td><b>음반</b></td><td>경험 시작 후 ‘오늘의 곡’을 보여준다. 행동은 ① ‘이 곡 듣기’ ② ‘다음 곡’ ③ ‘이 앨범 감상 완료’로 구성한다. ‘이 곡 듣기’는 Spotify 등 외부 음원 서비스의 해당 곡 재생 페이지로 연결한다. ‘다음 곡’은 오늘의 곡을 다른 곡으로 변경하는 동작이며 자체로는 성장이나 완료 처리하지 않는다. 음반의 일일 경험은 사용자 로컬 날짜 기준 하루 1회 성장에 반영하며, 앨범 전체 감상을 마쳤다면 ‘이 앨범 감상 완료’를 눌러 EXPERIENCED + 큰 나무로 완료한다.</td></tr>
+<tr><td><b>영화</b></td><td>책·음반과 달리 일일 성장 단계를 두지 않는다. 행동은 ① ‘보러가기’ ② ‘이 작품 감상 완료’로 구성한다. ‘보러가기’는 OTT 등 외부 시청처 또는 검색 페이지로 연결한다. 영화를 다 본 뒤 ‘이 작품 감상 완료’를 누르면 바로 EXPERIENCED + 큰 나무로 완료한다.</td></tr>
+<tr><td><b>최종 완료 버튼</b></td><td>콘텐츠 유형에 따라 문구를 구분한다. 책은 ‘이 책 감상 완료’, 음반은 ‘이 앨범 감상 완료’, 영화는 ‘이 작품 감상 완료’를 사용한다. 실행 시 현재 성장 단계와 관계없이 EXPERIENCED + 큰 나무로 처리한다.</td></tr>
+</table>
+<h3>4. 금주의 추천 규칙</h3>
+<ul>
+<li>후보는 사용자가 직접 관심을 표시하거나 저장한 INTERESTED 콘텐츠만 사용한다.</li>
+<li>사용자가 저장하지 않은 새 콘텐츠를 송림이 임의로 추천하지 않는다.</li>
+<li>‘이번에는 넘기기’는 현재 후보를 해당 추천 세션에서 제외하고 다음 후보 1개를 보여주는 동작이다. 같은 세션에서 넘긴 후보는 반복 노출하지 않는다. 남은 후보가 없으면 ‘이번 추천은 여기까지’ 상태와 ‘처음부터 다시 보기’를 제공한다. 후보가 1개뿐이면 넘기기를 노출하지 않는다.</li>
+<li>경험을 시작하면 해당 콘텐츠가 현재 경험 콘텐츠가 되며 나의 숲에도 성장 중 상태로 표시한다.</li>
+<li>완료하면 현재 추천 상태를 종료하고 다음 후보를 확인할 수 있다.</li>
+</ul>
+<h3>5. 공통 예외 처리</h3>
+<ul>
+<li>공유 콘텐츠 자동 인식 신뢰도가 낮거나 정보가 부족하면 사용자 확인/수정 화면으로 보낸다.</li>
+<li>동일 콘텐츠가 이미 저장되어 있으면 새 항목을 중복 생성하지 않고 기존 UserContent에 연결한다.</li>
+<li>오늘의 경험을 같은 날 반복 입력해도 성장 상태는 추가로 증가하지 않는다.</li>
+<li>추천 후보가 없으면 빈 상태를 보여주고 스크랩 추가를 안내한다.</li>
+<li>온보딩은 최소 응답 기준 충족 후 바로 종료할 수 있으며, 별도 완료 화면 없이 금주의 추천으로 이동한다.</li>
+</ul>
+<div class="routebox">
+<div><span>날짜 기준</span><b>사용자 로컬 날짜 기준 1일 1회 성장</b></div>
+<div><span>나의 숲 표현</span><b>2D 가로 스크롤형 단일 숲. 사용자는 숲 자체를 좌우 드래그/스와이프하며 콘텐츠별 개체를 돌아본다. 경험 중 콘텐츠는 현재 성장 단계로, 완료 콘텐츠는 큰 나무 상태로 숲에 함께 표시한다.</b></div>
+<div><span>숲 범위</span><b>나의 숲은 실제 콘텐츠 경험의 누적을 보여주는 기록 시각화다. 작은 사용자 위치 표시는 MVP에 포함하며 숲 안을 좌우로 이동해 현재 보고 있는 개체 위치를 나타낸다. 점프·레벨·아이템·도감·수집·보상·재화·퀘스트는 포함하지 않는다. 새·토끼·개구리 등 작은 동물은 숲의 환경 요소로 일부 방문에서 가볍게 랜덤 노출할 수 있다. 숲이 깊어질수록 숲에서 나타나는 애니메이션이 다양해진다. 동물은 수집·보상·성장 조건과 연결하지 않고 숲을 보는 재미를 더하는 비필수 연출로만 사용한다.</b></div>
+<div><span>화면 용어</span><b>금주의 추천 / 오늘의 페이지 / 오늘의 곡 / 서점 페이지 / 오늘 독서 완료 / 이 책 감상 완료 / 이 곡 듣기 / 다음 곡 / 이 앨범 감상 완료 / 보러가기 / 이 작품 감상 완료</b></div>
+<div><span>내부 키</span><b>개발 구현 시 내부 enum·변수명은 자유롭게 사용하되 화면 문구와 분리</b></div>
+</div>
+</div>
+</div>
+</section>
+<section class="board" id="auth">
+<header><div><b>AUTH-01</b> · 회원</div><h2>로그인하기</h2></header>
+<div class="content">
+<div class="wire"><div class="phone">
+<div class="status">9:41 <span>●●●</span></div>
+<div class="appbar">로그인하기</div>
+<div class="screenbody authbody">
+<div class="text"><span class="num">1</span>송림<br/>취향이 자라는 숲</div>
+<div class="social"><span class="num">2</span>카카오로 로그인</div>
+<div class="social">Apple로 로그인</div>
+<div class="divider"><span>또는</span></div>
+<div class="input"><span class="num">3</span>이메일</div>
+<div class="input">비밀번호</div>
+<div class="button">로그인</div>
+<div class="text"><span class="num">4</span>비밀번호를 잊으셨나요?</div>
+<div class="text"><span class="num">5</span>처음이신가요? 회원가입</div>
+</div>
+<div class="homebar"></div>
+</div></div>
+<div class="definition">
+<div class="meta"><span>SCREEN ID</span><b>AUTH-01</b></div>
+<div class="routebox">
+<div><span>ENTRY</span><b>앱 실행 시 세션 확인 · AUTH-02/03/04의 ‘로그인으로 돌아가기’</b></div>
+<div><span>NEXT / EXIT</span><b>로그인 성공(기존 사용자) → TODAY-01 · 회원가입 → AUTH-02 · 비밀번호 찾기 → AUTH-04</b></div>
+<div><span>NAVIGATION</span><b>하단 탭 없음 · 집중형/인증 흐름</b></div>
+</div><table><tr><td><span class="specnum">1</span></td><td><b>브랜드 영역</b><br/>서비스명과 한 줄 설명을 하나의 영역으로 표시한다.</td></tr><tr><td><span class="specnum">2</span></td><td><b>소셜 로그인</b><br/>카카오·Apple 로그인을 같은 기능군으로 제공한다. 기존 계정은 로그인하고, 가입 이력이 없으면 가입 동의 흐름으로 연결한다.</td></tr><tr><td><span class="specnum">3</span></td><td><b>이메일 로그인</b><br/>이메일·비밀번호 입력과 로그인 버튼을 하나의 로그인 폼으로 구성한다. 입력 오류와 네트워크 오류는 폼 가까이에 표시한다.</td></tr><tr><td><span class="specnum">4</span></td><td><b>비밀번호 찾기</b><br/>AUTH-04로 이동한다.</td></tr><tr><td><span class="specnum">5</span></td><td><b>회원가입</b><br/>신규 사용자는 AUTH-02로 이동한다.</td></tr></table>
+</div>
+</div>
+</section>
+<section class="board">
+<header><div><b>AUTH-02</b> · 회원</div><h2>회원가입</h2></header>
+<div class="content">
+<div class="wire"><div class="phone">
+<div class="status">9:41 <span>●●●</span></div>
+<div class="appbar">회원가입</div>
+<div class="screenbody authbody">
+<div class="text"><span class="num">1</span>송림 시작하기<br/>가입 방법을 선택해주세요</div>
+<div class="social"><span class="num">2</span>카카오로 회원가입</div>
+<div class="social">Apple로 회원가입</div>
+<div class="divider"><span>또는</span></div>
+<div class="button"><span class="num">3</span>이메일로 회원가입</div>
+<div class="text"><span class="num">4</span>이미 계정이 있나요? 로그인</div>
+</div>
+<div class="homebar"></div>
+</div></div>
+<div class="definition">
+<div class="meta"><span>SCREEN ID</span><b>AUTH-02</b></div>
+<div class="routebox">
+<div><span>ENTRY</span><b>AUTH-01 &gt; 회원가입</b></div>
+<div><span>NEXT / EXIT</span><b>SNS 가입 성공 → ONB-01 · 이메일 가입 → AUTH-03 · 로그인 → AUTH-01</b></div>
+<div><span>NAVIGATION</span><b>하단 탭 없음 · 집중형/인증 흐름</b></div>
+</div><table><tr><td><span class="specnum">1</span></td><td><b>가입 안내</b><br/>회원가입 화면의 목적과 가입 방법을 간단히 안내한다.</td></tr><tr><td><span class="specnum">2</span></td><td><b>소셜 회원가입</b><br/>카카오·Apple 인증 → 필수 약관 동의 → 계정 생성 → ONB-01 순으로 진행한다. 이미 가입된 계정이면 새 계정을 만들지 않고 로그인 안내를 보여준다.</td></tr><tr><td><span class="specnum">3</span></td><td><b>이메일 회원가입</b><br/>AUTH-03으로 이동한다.</td></tr><tr><td><span class="specnum">4</span></td><td><b>로그인 이동</b><br/>이미 계정이 있는 사용자는 AUTH-01로 돌아간다.</td></tr></table>
+</div>
+</div>
+</section>
+<section class="board">
+<header><div><b>AUTH-03</b> · 회원</div><h2>이메일로 회원가입</h2></header>
+<div class="content">
+<div class="wire"><div class="phone">
+<div class="status">9:41 <span>●●●</span></div>
+<div class="appbar">이메일로 회원가입</div>
+<div class="screenbody authbody">
+<div class="input"><span class="num">1</span>이메일</div>
+<div class="button">인증번호 받기</div>
+<div class="input">인증번호</div>
+<div class="input"><span class="num">2</span>비밀번호</div>
+<div class="input">비밀번호 확인</div>
+<div class="text"><span class="num">3</span>필수 약관 전체 동의</div>
+<div class="button"><span class="num">4</span>가입 완료</div>
+<div class="text"><span class="num">5</span>로그인으로 돌아가기</div>
+</div>
+<div class="homebar"></div>
+</div></div>
+<div class="definition">
+<div class="meta"><span>SCREEN ID</span><b>AUTH-03</b></div>
+<div class="routebox">
+<div><span>ENTRY</span><b>AUTH-02 &gt; 이메일로 회원가입</b></div>
+<div><span>NEXT / EXIT</span><b>가입 성공 → ONB-01 · 로그인으로 돌아가기 → AUTH-01</b></div>
+<div><span>NAVIGATION</span><b>하단 탭 없음 · 집중형/인증 흐름</b></div>
+</div><table><tr><td><span class="specnum">1</span></td><td><b>이메일 인증</b><br/>이메일 형식과 기존 가입 여부를 확인하고 인증번호를 발송한다. 인증 성공 전에는 가입을 완료할 수 없다.</td></tr><tr><td><span class="specnum">2</span></td><td><b>비밀번호</b><br/>비밀번호와 확인값을 함께 입력하며 일치 여부를 즉시 안내한다.</td></tr><tr><td><span class="specnum">3</span></td><td><b>약관</b><br/>필수/선택 약관을 구분하고 필수 미동의 시 가입할 수 없다.</td></tr><tr><td><span class="specnum">4</span></td><td><b>가입 완료</b><br/>계정 생성 성공 후 ONB-01로 이동한다.</td></tr><tr><td><span class="specnum">5</span></td><td><b>로그인 이동</b><br/>입력 중 데이터가 있으면 이탈 확인 후 AUTH-01로 돌아간다.</td></tr></table>
+</div>
+</div>
+</section>
+<section class="board">
+<header><div><b>AUTH-04</b> · 회원</div><h2>비밀번호 찾기</h2></header>
+<div class="content">
+<div class="wire"><div class="phone">
+<div class="status">9:41 <span>●●●</span></div>
+<div class="appbar">비밀번호 찾기</div>
+<div class="screenbody authbody">
+<div class="text"><span class="num">1</span>비밀번호 재설정<br/>가입한 이메일로 안내를 보냅니다</div>
+<div class="input"><span class="num">2</span>가입한 이메일</div>
+<div class="button">재설정 메일 보내기</div>
+<div class="text"><span class="num">3</span>로그인으로 돌아가기</div>
+</div>
+<div class="homebar"></div>
+</div></div>
+<div class="definition">
+<div class="meta"><span>SCREEN ID</span><b>AUTH-04</b></div>
+<div class="routebox">
+<div><span>ENTRY</span><b>AUTH-01 &gt; 비밀번호를 잊으셨나요?</b></div>
+<div><span>NEXT / EXIT</span><b>재설정 요청 완료 · 로그인으로 돌아가기 → AUTH-01</b></div>
+<div><span>NAVIGATION</span><b>하단 탭 없음 · 집중형/인증 흐름</b></div>
+</div><table><tr><td><span class="specnum">1</span></td><td><b>안내</b><br/>비밀번호 재설정 방법을 한 영역에서 안내한다.</td></tr><tr><td><span class="specnum">2</span></td><td><b>재설정 요청</b><br/>가입 이메일을 입력하고 재설정 메일을 요청한다. 계정 존재 여부 노출은 보안 정책에 맞춰 처리한다.</td></tr><tr><td><span class="specnum">3</span></td><td><b>로그인 이동</b><br/>AUTH-01로 돌아간다.</td></tr></table>
+</div>
+</div>
+</section>
+<section class="board" id="onboarding">
+<header><div><b>ONB-01</b> · 온보딩</div><h2>취향 시작 안내</h2></header>
+<div class="content">
+<div class="wire"><div class="phone">
+<div class="status">9:41 <span>●●●</span></div>
+<div class="appbar">취향 시작 안내</div>
+<div class="screenbody">
+<div class="lineitem"><span class="num">1</span>책·음반·영화 취향 입력<br/>아는 콘텐츠에만 응답 · 약 10개 응답 후 시작 가능</div>
+<div class="uirow"><span class="num">2</span>시작하기</div>
+</div>
+<div class="homebar"></div>
+</div></div>
+<div class="definition">
+<div class="meta"><span>SCREEN ID</span><b>ONB-01</b></div>
+<div class="routebox">
+<div><span>ENTRY</span><b>신규 가입 완료 · 로그인 후 onboarding_completed = false</b></div>
+<div><span>NEXT / EXIT</span><b>시작 → ONB-02 · 진행 중 이탈 시 다음 진입에서 이어하기</b></div>
+<div><span>NAVIGATION</span><b>하단 탭 없음 · 집중형/인증 흐름</b></div>
+</div><table><tr><td><span class="specnum">1</span></td><td><b>온보딩 안내</b><br/>책·음반·영화에 대한 초기 관심·경험 데이터를 만드는 과정이다. 모르는 콘텐츠는 건너뛸 수 있고 약 10개 응답부터 앱을 시작할 수 있다. TRACK은 온보딩 대상이 아니다.</td></tr><tr><td><span class="specnum">2</span></td><td><b>시작</b><br/>ONB-02로 이동한다.</td></tr><tr><td></td><td><b>중단</b><br/>진행 상태는 저장하며 재진입 시 이어서 진행한다.</td></tr></table>
+</div>
+</div>
+</section>
+<section class="board">
+<header><div><b>ONB-02</b> · 온보딩</div><h2>취향 선택</h2></header>
+<div class="content">
+<div class="wire"><div class="phone">
+<div class="status">9:41 <span>●●●</span></div>
+<div class="appbar">취향 선택</div>
+<div class="screenbody">
+<div class="lineitem"><span class="num">1</span>취향 파악 중 · n개 응답 · 10개 응답 후 시작 가능</div>
+<div class="media"><span class="num">2</span><span>책·음반·영화 표지/커버<br/>제목 · 저자/아티스트/감독</span></div>
+<div class="uirow"><span class="num">3</span>읽고 싶음 / 읽음 / 싫음<br/>들어보고 싶음 / 들어봄 / 싫음<br/>보고 싶음 / 봄 / 싫음</div>
+<div class="uirow"><span class="num">4</span>건너뛰기</div>
+<div class="uirow"><span class="num">5</span>원하는 책·음반·영화 직접 입력</div>
+</div>
+<div class="homebar"></div>
+</div></div>
+<div class="definition">
+<div class="meta"><span>SCREEN ID</span><b>ONB-02</b></div>
+<div class="routebox">
+<div><span>ENTRY</span><b>ONB-01 · 온보딩 진행 중</b></div>
+<div><span>NEXT / EXIT</span><b>상태 선택/건너뛰기 → 다음 온보딩 카드 · 송림 시작하기 → TODAY-01</b></div>
+<div><span>NAVIGATION</span><b>하단 탭 없음 · 집중형/인증 흐름</b></div>
+</div><table><tr><td><span class="specnum">1</span></td><td><b>진행 상태</b><br/>응답 수를 표시하고 약 10개 이상 응답하면 ‘송림 시작하기’를 활성화한다.</td></tr><tr><td><span class="specnum">2</span></td><td><b>콘텐츠 카드</b><br/>BOOK / ALBUM / MOVIE 후보를 1개씩 섞어 노출한다. 표지/커버와 제목, 저자/아티스트/감독을 한 카드로 묶는다. 같은 콘텐츠는 한 세션에서 중복 노출하지 않는다.</td></tr><tr><td><span class="specnum">3</span></td><td><b>상태 선택</b><br/>책은 읽고 싶음 / 읽음 / 싫음, 음반은 들어보고 싶음 / 들어봄 / 싫음, 영화는 보고 싶음 / 봄 / 싫음을 사용하며 동일 UserContent의 상태로 저장한다.</td></tr><tr><td><span class="specnum">4</span></td><td><b>건너뛰기</b><br/>모르는 콘텐츠는 신호를 저장하지 않고 다음으로 이동한다. 응답 수에 포함하지 않는다.</td></tr><tr><td><span class="specnum">5</span></td><td><b>직접 입력</b><br/>목록에 없는 책·음반·영화를 직접 추가한다. 유형·제목·저자/아티스트/감독·상태를 입력하며 응답 수와 동일 UserContent에 반영한다.</td></tr></table>
+</div>
+</div>
+</section>
+<section class="board todayboard" id="today">
+<header><div><b>TODAY-01</b> · 금주의 추천</div><h2>금주의 추천 + 오늘의 경험 통합 화면</h2></header>
+<div class="stateintro"><b>하나의 화면, 4개 상태</b>　화면 이동 없이 금주의 추천 선택 전/책 선택/음반 선택/영화 선택 상태에 따라 같은 탭의 내용만 변경한다.</div>
+<div class="states">
+<div class="state"><div class="statelabel">STATE A · 미선택</div><div class="phone">
+<div class="status">9:41 <span>●●●</span></div>
+<div class="appbar">금주의 추천</div>
+<div class="screenbody withtabs">
+<div class="compactmedia"><span class="num">1</span>책 / 음반 / 영화<br/>표지·제목·저자/아티스트/감독</div>
+<div class="uirow"><span class="num">2</span>경험 시작하기 · 이번에는 넘기기</div>
+<div class="lineitem muted"><span class="num">3</span>오늘의 경험 · 선택 후 활성</div>
+</div>
+<div class="tabbar">
+<div class="tab active"><span class="tabicon">□</span>금주의 추천</div>
+<div class="tab"><span class="tabicon">□</span>나의 숲</div>
+<div class="tab"><span class="tabicon">□</span>스크랩</div>
+<div class="tab"><span class="tabicon">□</span>MY</div>
+</div><div class="homebar"></div>
+</div></div>
+<div class="state"><div class="statelabel">STATE B · 음반 선택 당일</div><div class="phone">
+<div class="status">9:41 <span>●●●</span></div>
+<div class="appbar">금주의 추천</div>
+<div class="screenbody withtabs">
+<div class="compactmedia"><span class="num">1</span>현재 음반 · 커버·음반명·아티스트</div>
+<div class="uirow"><span class="num">3</span>오늘의 곡 · 곡 정보 · 이 곡 듣기 · 다음 곡</div>
+<div class="secondary"><span class="num">4</span>이 앨범 감상 완료</div>
+</div>
+<div class="tabbar">
+<div class="tab active"><span class="tabicon">□</span>금주의 추천</div>
+<div class="tab"><span class="tabicon">□</span>나의 숲</div>
+<div class="tab"><span class="tabicon">□</span>스크랩</div>
+<div class="tab"><span class="tabicon">□</span>MY</div>
+</div><div class="homebar"></div>
+</div></div>
+<div class="state"><div class="statelabel">STATE C · 책 선택 당일</div><div class="phone">
+<div class="status">9:41 <span>●●●</span></div>
+<div class="appbar">금주의 추천</div>
+<div class="screenbody withtabs">
+<div class="compactmedia"><span class="num">1</span>현재 책 · 표지·책 제목·작가</div>
+<div class="uirow tall"><span class="num">3</span>오늘의 페이지 · 책 정보(표지·제목·저자) · 서점 페이지 · 오늘 독서 완료</div>
+<div class="secondary"><span class="num">4</span>이 책 감상 완료</div>
+</div>
+<div class="tabbar">
+<div class="tab active"><span class="tabicon">□</span>금주의 추천</div>
+<div class="tab"><span class="tabicon">□</span>나의 숲</div>
+<div class="tab"><span class="tabicon">□</span>스크랩</div>
+<div class="tab"><span class="tabicon">□</span>MY</div>
+</div><div class="homebar"></div>
+</div></div>
+<div class="state"><div class="statelabel">STATE D · 영화 선택</div><div class="phone">
+<div class="status">9:41 <span>●●●</span></div>
+<div class="appbar">금주의 추천</div>
+<div class="screenbody withtabs">
+<div class="compactmedia"><span class="num">1</span>현재 영화 · 포스터·영화 제목·감독</div>
+<div class="uirow"><span class="num">3</span>보러가기</div><div class="secondary"><span class="num">4</span>이 작품 감상 완료</div>
+</div>
+<div class="tabbar">
+<div class="tab active"><span class="tabicon">□</span>금주의 추천</div><div class="tab"><span class="tabicon">□</span>나의 숲</div><div class="tab"><span class="tabicon">□</span>스크랩</div><div class="tab"><span class="tabicon">□</span>MY</div>
+</div><div class="homebar"></div>
+</div></div>
+</div>
+<div class="definition wide">
+<div class="meta"><span>SCREEN ID</span><b>TODAY-01</b></div>
+<div class="routebox">
+<div><span>ENTRY</span><b>하단탭 &gt; 금주의 추천 · TODAY-01 완료 직후 · 로그인 사용자의 기본 메인 진입</b></div>
+<div><span>NEXT / EXIT</span><b>금주의 추천 선택 → 같은 화면에서 유형별 오늘의 경험 활성 · BOOK 서점 페이지 / 오늘 독서 완료 / 이 책 감상 완료 · ALBUM 이 곡 듣기 / 다음 곡 / 이 앨범 감상 완료 · MOVIE 보러가기 / 이 작품 감상 완료 → 완료 피드백 + 선택 평가 + 다음 금주의 추천</b></div>
+<div><span>NAVIGATION</span><b>하단 탭 유지 · 별도 오늘의 경험 화면으로 이동하지 않음</b></div>
+</div>
+<table>
+<tr><td><span class="specnum">1</span></td><td><b>금주의 콘텐츠 표시</b><br/>INTERESTED BOOK / ALBUM / MOVIE 중 후보 1개만 크게 보여준다. 책은 표지·제목·작가, 음반은 커버·앨범명·아티스트, 영화는 포스터·영화명·감독을 표시한다. 미선택 상태에서는 ‘경험 시작하기’를 주 행동으로, 후보가 2개 이상일 때 ‘이번에는 넘기기’를 보조 행동으로 둔다.</td></tr>
+<tr><td><span class="specnum">2</span></td><td><b>선택 후 화면 전환</b><br/>‘경험 시작하기’를 누르면 해당 UserContent가 IN_PROGRESS가 되고 별도 화면 이동 없이 같은 TODAY-01에서 현재 콘텐츠 카드 + 유형별 오늘의 경험 영역으로 바뀐다.</td></tr>
+<tr><td><span class="specnum">3</span></td><td><b>책 · 오늘의 페이지</b><br/>상단의 현재 경험 콘텐츠 카드와 별개로 ‘오늘의 페이지’ 영역에도 책 표지·제목·저자 정보를 표시한다. ‘읽던 곳부터 이어가세요’ 같은 대체 문구는 사용하지 않는다. 행동은 ‘서점 페이지’, ‘오늘 독서 완료’, ‘이 책 감상 완료’다. ‘서점 페이지’는 외부 서점의 구매·정보 확인 페이지로 연결한다. ‘오늘 독서 완료’는 사용자 로컬 날짜 기준 하루 1회 성장에 반영한다. ‘이 책 감상 완료’는 일일 기록 여부와 관계없이 사용할 수 있으며 실행 시 EXPERIENCED + 큰 나무로 처리한다.</td></tr>
+<tr><td><span class="specnum">4</span></td><td><b>음반 · 오늘의 곡</b><br/>상단에 현재 음반 정보를 축약해 보여주고 아래에 ‘오늘의 곡’의 곡명·아티스트 정보를 표시한다. 행동은 ‘이 곡 듣기’, ‘다음 곡’, ‘이 앨범 감상 완료’다. ‘이 곡 듣기’는 Spotify 등 외부 음원 서비스의 해당 곡 재생 페이지로 연결한다. ‘다음 곡’은 오늘의 곡을 다른 곡으로 변경하며 자체로는 성장 또는 완료 처리하지 않는다. 음반의 일일 경험은 사용자 로컬 날짜 기준 하루 1회 성장에 반영하고, ‘이 앨범 감상 완료’ 실행 시 EXPERIENCED + 큰 나무로 처리한다.</td></tr>
+<tr><td><span class="specnum">5</span></td><td><b>영화 · 보러가기</b><br/>상단에 현재 영화 정보를 축약해 보여주고 ‘보러가기’를 주요 행동으로 제공한다. 영화는 별도 일일 경험 기록이나 중간 성장을 두지 않는다. ‘보러가기’는 MVP에서 OTT별 실시간 제공 여부를 자체 판별하는 기능이 아니라 OTT 등 외부 시청처 또는 검색 페이지 연결을 우선 범위로 한다. 감상을 마치면 ‘이 작품 감상 완료’를 실행해 EXPERIENCED + 큰 나무로 처리한다.</td></tr>
+<tr><td><span class="specnum">6</span></td><td><b>콘텐츠별 감상 완료</b><br/>책은 ‘이 책 감상 완료’, 음반은 ‘이 앨범 감상 완료’, 영화는 ‘이 작품 감상 완료’를 사용한다. 책·음반은 당일 일일 경험 기록 여부와 관계없이 언제든 사용할 수 있다. 실행하면 즉시 EXPERIENCED + 큰 나무로 처리하고 완료 피드백과 선택 평가를 보여준 뒤 다음 추천 후보를 확인할 수 있게 한다.</td></tr>
+<tr><td><span class="specnum">7</span></td><td><b>주기·재방문</b><br/>미완료 콘텐츠는 주가 바뀌어도 자동 종료하지 않는다. 선택 다음 날부터는 오늘의 경험을 상단 우선 영역으로 올리고 현재 금주의 콘텐츠는 축약해 표시한다. 책·음반에서 같은 날 완료 버튼을 반복 눌러도 추가 성장하지 않는다.</td></tr>
+<tr><td><span class="specnum">8</span></td><td><b>평가</b><br/>콘텐츠별 감상 완료 이후 1~5점 평가는 선택 입력이며 건너뛸 수 있다. 이후 완료 기록 상세에서 입력하거나 수정할 수 있다.</td></tr>
+</table>
+</div>
+</section>
+<section class="board" id="scrap">
+<header><div><b>SCRAP-01</b> · 스크랩</div><h2>관심 씨앗 목록</h2></header>
+<div class="content">
+<div class="wire"><div class="phone">
+<div class="status">9:41 <span>●●●</span></div>
+<div class="appbar">스크랩</div>
+<div class="screenbody withtabs">
+<div class="lineitem"><span class="num">1</span>경험 상태 · 콘텐츠 유형 필터</div>
+<div class="lineitem"><span class="num">2</span>검색 · 최근 저장순</div>
+<div class="lineitem"><span class="num">3</span>저장한 콘텐츠 목록 · 현재 상태 · 평가</div>
+</div>
+<div class="tabbar"><div class="tab"><span class="tabicon">□</span>금주의 추천</div><div class="tab"><span class="tabicon">□</span>나의 숲</div><div class="tab active"><span class="tabicon">□</span>스크랩</div><div class="tab"><span class="tabicon">□</span>MY</div></div><div class="homebar"></div>
+</div></div>
+<div class="definition">
+<div class="meta"><span>SCREEN ID</span><b>SCRAP-01</b></div>
+<div class="routebox">
+<div><span>ENTRY</span><b>하단탭 &gt; 스크랩 · 외부 공유 저장 완료 후 ‘스크랩 보기’</b></div>
+<div><span>NEXT / EXIT</span><b>콘텐츠 탭 → SCRAP-02 · 하단탭으로 최상위 화면 이동</b></div>
+<div><span>NAVIGATION</span><b>하단 탭 유지</b></div>
+</div><table><tr><td><span class="specnum">1</span></td><td><b>필터</b><br/>경험 상태는 전체 / 경험 전 / 경험 중 / 경험 완료, 콘텐츠 유형은 전체 / 책 / 음반 / 영화로 제공하며 함께 적용할 수 있다. TRACK 필터는 제공하지 않는다.</td></tr><tr><td><span class="specnum">2</span></td><td><b>검색·정렬</b><br/>제목과 저자/아티스트/감독으로 검색하며 기본 정렬은 최근 저장순이다.</td></tr><tr><td><span class="specnum">3</span></td><td><b>목록</b><br/>외부 공유와 온보딩으로 생성된 동일 UserContent를 표시한다. 상태는 경험 전 / 경험 중 / 경험 완료로 통일하고, 완료 항목은 평가가 있으면 ‘내 평가 n/5’, 없으면 ‘평가 없음’을 표시한다. 선택 시 SCRAP-02로 이동한다.</td></tr><tr><td></td><td><b>빈 상태</b><br/>저장 콘텐츠가 없거나 필터 결과가 없으면 해당 빈 상태를 표시한다.</td></tr></table>
+</div>
+</div>
+</section>
+<section class="board">
+<header><div><b>SCRAP-02</b> · 스크랩</div><h2>콘텐츠 상세</h2></header>
+<div class="content">
+<div class="wire"><div class="phone">
+<div class="status">9:41 <span>●●●</span></div>
+<div class="appbar">콘텐츠 상세</div>
+<div class="screenbody withtabs">
+<div class="media"><span class="num">1</span><span>표지/커버 · 제목 · 저자/아티스트/감독<br/>출처 · 현재 상태</span></div>
+<div class="uirow"><span class="num">2</span>경험 시작</div>
+<div class="lineitem"><span class="num">3</span>수정 / 삭제</div>
+</div>
+<div class="tabbar"><div class="tab"><span class="tabicon">□</span>금주의 추천</div><div class="tab"><span class="tabicon">□</span>나의 숲</div><div class="tab active"><span class="tabicon">□</span>스크랩</div><div class="tab"><span class="tabicon">□</span>MY</div></div><div class="homebar"></div>
+</div></div>
+<div class="definition">
+<div class="meta"><span>SCREEN ID</span><b>SCRAP-02</b></div>
+<div class="routebox">
+<div><span>ENTRY</span><b>SCRAP-01 콘텐츠 선택 · TODAY 화면의 콘텐츠 전체 보기 · SHARE-02 저장 완료</b></div>
+<div><span>NEXT / EXIT</span><b>경험 시작 → TODAY-01 · 뒤로 → 직전 화면 · 수정 → SHARE-03</b></div>
+<div><span>NAVIGATION</span><b>하단 탭 유지</b></div>
+</div><table><tr><td><span class="specnum">1</span></td><td><b>콘텐츠 정보</b><br/>정규화된 BOOK / ALBUM / MOVIE 정보, 최초 저장 출처, 현재 UserContent 상태와 완료 평가를 한 상세 영역에서 표시한다.</td></tr><tr><td><span class="specnum">2</span></td><td><b>경험 시작</b><br/>INTERESTED 콘텐츠에서 시작할 수 있다. 기존 활성 경험이 있으면 교체 확인을 거친다.</td></tr><tr><td><span class="specnum">3</span></td><td><b>수정·삭제</b><br/>AI 인식 정보가 틀리면 수정하고, 삭제 시 사용자 관심 데이터만 삭제하며 canonical content 자체 삭제와 구분한다.</td></tr></table>
+</div>
+</div>
+</section>
+<section class="board" id="share">
+<header><div><b>SHARE-01</b> · 공유 저장</div><h2>외부 공유 수신 / 분석 중</h2></header>
+<div class="content">
+<div class="wire"><div class="phone">
+<div class="status">9:41 <span>●●●</span></div>
+<div class="appbar">외부 공유 수신 / 분석 중</div>
+<div class="screenbody">
+<div class="lineitem"><span class="num">1</span>공유된 URL/텍스트 · 분석 중</div>
+<div class="lineitem"><span class="num">2</span>취소</div>
+</div>
+<div class="homebar"></div>
+</div></div>
+<div class="definition">
+<div class="meta"><span>SCREEN ID</span><b>SHARE-01</b></div>
+<div class="routebox">
+<div><span>ENTRY</span><b>외부 앱/웹 &gt; OS 공유 &gt; 송림</b></div>
+<div><span>NEXT / EXIT</span><b>고신뢰 인식 → SHARE-02 · 확인 필요 → SHARE-03 · 취소 → 원래 앱/직전 상태</b></div>
+<div><span>NAVIGATION</span><b>하단 탭 없음 · 집중형/인증 흐름</b></div>
+</div><table><tr><td><span class="specnum">1</span></td><td><b>분석</b><br/>OS Share Sheet로 받은 URL/텍스트에서 OG·공유 텍스트·메타데이터를 추출하고 BOOK / ALBUM / MOVIE를 분류한 뒤 기존 canonical content와 매칭한다. 고신뢰는 SHARE-02, 확인이 필요하면 SHARE-03으로 이동한다.</td></tr><tr><td><span class="specnum">2</span></td><td><b>취소</b><br/>분석을 중단하고 원래 앱 또는 직전 상태로 돌아간다.</td></tr></table>
+</div>
+</div>
+</section>
+<section class="board">
+<header><div><b>SHARE-02</b> · 공유 저장</div><h2>저장 확인</h2></header>
+<div class="content">
+<div class="wire"><div class="phone">
+<div class="status">9:41 <span>●●●</span></div>
+<div class="appbar">저장 확인</div>
+<div class="screenbody">
+<div class="lineitem"><span class="num">1</span>인식한 콘텐츠 · 책/음반/영화</div>
+<div class="lineitem"><span class="num">2</span>관심의 씨앗으로 저장 · 이미 저장됨</div>
+</div>
+<div class="homebar"></div>
+</div></div>
+<div class="definition">
+<div class="meta"><span>SCREEN ID</span><b>SHARE-02</b></div>
+<div class="routebox">
+<div><span>ENTRY</span><b>SHARE-01 인식 성공</b></div>
+<div><span>NEXT / EXIT</span><b>저장 완료 → 원래 앱 복귀 또는 SCRAP-02 · 이미 저장됨 → 기존 SCRAP-02</b></div>
+<div><span>NAVIGATION</span><b>하단 탭 없음 · 집중형/인증 흐름</b></div>
+</div><table><tr><td><span class="specnum">1</span></td><td><b>인식 결과</b><br/>인식한 canonical content와 유형을 확인한다.</td></tr><tr><td><span class="specnum">2</span></td><td><b>저장 결과</b><br/>신규 UserContent는 INTERESTED로 저장한다. 같은 content_id가 있으면 중복 생성하지 않고 기존 데이터에 연결하며, 이미 EXPERIENCED라면 상태를 되돌리지 않는다. 저장 후 상세 또는 이전 앱으로 돌아간다.</td></tr></table>
+</div>
+</div>
+</section>
+<section class="board">
+<header><div><b>SHARE-03</b> · 공유 저장</div><h2>콘텐츠 확인 / 정정</h2></header>
+<div class="content">
+<div class="wire"><div class="phone">
+<div class="status">9:41 <span>●●●</span></div>
+<div class="appbar">콘텐츠 확인 / 정정</div>
+<div class="screenbody">
+<div class="lineitem"><span class="num">1</span>후보 콘텐츠 · 이게 맞아요 / 다른 후보</div>
+<div class="lineitem"><span class="num">2</span>직접 수정</div>
+</div>
+<div class="homebar"></div>
+</div></div>
+<div class="definition">
+<div class="meta"><span>SCREEN ID</span><b>SHARE-03</b></div>
+<div class="routebox">
+<div><span>ENTRY</span><b>SHARE-01 저신뢰/복수 후보 · SCRAP-02 &gt; 정보 수정</b></div>
+<div><span>NEXT / EXIT</span><b>확정 → SHARE-02 또는 SCRAP-02 · 취소 → 이전 화면</b></div>
+<div><span>NAVIGATION</span><b>하단 탭 없음 · 집중형/인증 흐름</b></div>
+</div><table><tr><td><span class="specnum">1</span></td><td><b>후보 확인</b><br/>인식 신뢰도가 낮거나 후보가 여러 개일 때 후보를 보여주고 맞는 콘텐츠를 선택하게 한다. 선택 결과는 canonical mapping 정정 데이터로 저장한다.</td></tr><tr><td><span class="specnum">2</span></td><td><b>직접 수정</b><br/>제목·저자/아티스트/감독·콘텐츠 유형 등 최소 필드를 수정한다. BOOK / ALBUM / MOVIE로 판단할 수 없으면 MVP 미지원 상태를 안내한다.</td></tr></table>
+</div>
+</div>
+</section>
+<section class="board" id="forest">
+<header><div><b>FOREST-01</b> · 나의 숲</div><h2>나의 숲 메인</h2></header>
+<div class="content">
+<div class="wire"><div class="phone">
+<div class="status">9:41 <span>●●●</span></div>
+<div class="appbar">나의 숲 메인</div>
+<div class="screenbody withtabs">
+<div class="media"><span class="num">1</span><span>나의 숲 · 현재 금주의 콘텐츠부터 시작<br/>최근 최대 10개 개별 개체 · 사용자 위치</span></div>
+<div class="lineitem"><span class="num">2</span>도서 · 음반 · 영화 완료 수 / 전체 숲 보기</div>
+<div class="lineitem"><span class="num">3</span>최근 기록</div>
+</div>
+<div class="tabbar"><div class="tab"><span class="tabicon">□</span>금주의 추천</div><div class="tab active"><span class="tabicon">□</span>나의 숲</div><div class="tab"><span class="tabicon">□</span>스크랩</div><div class="tab"><span class="tabicon">□</span>MY</div></div><div class="homebar"></div>
+</div></div>
+<div class="definition">
+<div class="meta"><span>SCREEN ID</span><b>FOREST-01</b></div>
+<div class="routebox">
+<div><span>ENTRY</span><b>하단탭 &gt; 나의 숲</b></div>
+<div><span>NEXT / EXIT</span><b>숲의 개체 또는 최근 기록 선택 → SCRAP-02 · 전체 숲 보기 → FOREST-03 · 하단탭으로 최상위 화면 이동</b></div>
+<div><span>NAVIGATION</span><b>하단 탭 유지</b></div>
+</div><table><tr><td><span class="specnum">1</span></td><td><b>나의 숲</b><br/>숲을 열면 현재 금주의 콘텐츠가 첫 기준점에 오고 왼쪽은 비워둔다. 오른쪽으로 최근 최대 10개 개별 개체를 배치하며, 드래그/스와이프 또는 ‹ › 버튼으로 이전·다음 개체 위치로 이동한다. 현재 위치는 작은 점으로 표시하고, 해당 개체 위에 제목과 저자/아티스트/감독을 표시한다. 이전 완료 기록은 배경 숲의 밀도로 누적되며 전체 완료 경험이 늘수록 환경 동물 수도 증가한다.</td></tr><tr><td><span class="specnum">2</span></td><td><b>완료 수·전체 숲</b><br/>동일 UserContent 중 EXPERIENCED인 BOOK / ALBUM / MOVIE 수를 실시간 집계한다. 요약 행 전체를 FOREST-03 전체 숲 보기 진입로로 사용한다.</td></tr><tr><td><span class="specnum">3</span></td><td><b>최근 기록</b><br/>최근 경험 중·완료 기록을 스크랩과 동일한 카드 형식으로 표시하며 선택 시 동일 UserContent의 SCRAP-02로 이동한다.</td></tr></table>
+</div>
+</div>
+</section>
+<section class="board">
+<header><div><b>FOREST-03</b> · 나의 숲</div><h2>전체 숲 보기</h2></header>
+<div class="content">
+<div class="wire"><div class="phone">
+<div class="status">9:41 <span>●●●</span></div>
+<div class="appbar">전체 숲</div>
+<div class="screenbody withtabs">
+<div class="lineitem"><span class="num">1</span>총 경험 수 · 전체 / 도서 / 음반 / 영화 필터</div>
+<div class="media"><span class="num">2</span><span>완료 콘텐츠 큰 나무 전체</span></div>
+</div>
+<div class="tabbar"><div class="tab"><span class="tabicon">□</span>금주의 추천</div><div class="tab active"><span class="tabicon">□</span>나의 숲</div><div class="tab"><span class="tabicon">□</span>스크랩</div><div class="tab"><span class="tabicon">□</span>MY</div></div><div class="homebar"></div>
+</div></div>
+<div class="definition">
+<div class="meta"><span>SCREEN ID</span><b>FOREST-03</b></div>
+<div class="routebox"><div><span>ENTRY</span><b>FOREST-01 &gt; 완료 수 요약 행 / 전체 숲 보기</b></div><div><span>NEXT / EXIT</span><b>개별 나무 선택 → SCRAP-02 · 뒤로 → FOREST-01</b></div><div><span>NAVIGATION</span><b>하단 탭 유지</b></div></div>
+<table><tr><td><span class="specnum">1</span></td><td><b>집계·필터</b><br/>EXPERIENCED UserContent 기준으로 총 경험 수와 도서/음반/영화별 수를 실시간 집계하고 전체 / 도서 / 음반 / 영화 필터를 제공한다.</td></tr><tr><td><span class="specnum">2</span></td><td><b>전체 기록</b><br/>완료 콘텐츠 1개를 큰 나무 1그루로 표시한다. 나무를 선택하면 동일 UserContent의 SCRAP-02로 이동하며 완료일과 평가를 확인·수정할 수 있다.</td></tr><tr><td></td><td><b>범위</b><br/>별도 게임 맵이나 수집 시스템이 아니라 누적 경험 기록을 확인하는 화면으로 한정한다.</td></tr></table>
+</div></div></section>
+<section class="board" id="my">
+<header><div><b>MY-01</b> · MY</div><h2>마이페이지</h2></header>
+<div class="content">
+<div class="wire"><div class="phone">
+<div class="status">9:41 <span>●●●</span></div>
+<div class="appbar">마이페이지</div>
+<div class="screenbody withtabs">
+<div class="lineitem"><span class="num">1</span>프로필</div>
+<div class="lineitem"><span class="num">2</span>오늘의 경험 알림</div>
+<div class="uirow"><span class="num">3</span>취향 데이터 더 입력하기</div>
+<div class="lineitem"><span class="num">4</span>계정 / 데이터</div>
+<div class="lineitem"><span class="num">5</span>약관</div>
+</div>
+<div class="tabbar"><div class="tab"><span class="tabicon">□</span>금주의 추천</div><div class="tab"><span class="tabicon">□</span>나의 숲</div><div class="tab"><span class="tabicon">□</span>스크랩</div><div class="tab active"><span class="tabicon">□</span>MY</div></div><div class="homebar"></div>
+</div></div>
+<div class="definition">
+<div class="meta"><span>SCREEN ID</span><b>MY-01</b></div>
+<div class="routebox">
+<div><span>ENTRY</span><b>하단탭 &gt; MY</b></div>
+<div><span>NEXT / EXIT</span><b>알림/취향 데이터/계정 설정의 하위 화면 · 로그아웃 → AUTH-01</b></div>
+<div><span>NAVIGATION</span><b>하단 탭 유지</b></div>
+</div><table><tr><td><span class="specnum">1</span></td><td><b>프로필</b><br/>기본 계정 정보를 확인한다.</td></tr><tr><td><span class="specnum">2</span></td><td><b>알림</b><br/>오늘의 경험 알림을 ON/OFF한다. 알림 시간 정책은 추후 확정한다.</td></tr><tr><td><span class="specnum">3</span></td><td><b>취향 데이터</b><br/>초기 온보딩 응답과 현재 관심 상태를 확인하고, 약 10개 응답 이후에도 취향 데이터를 추가로 보강할 수 있다.</td></tr><tr><td><span class="specnum">4</span></td><td><b>계정·데이터</b><br/>로그아웃·탈퇴 및 데이터 처리 정책을 제공한다.</td></tr><tr><td><span class="specnum">5</span></td><td><b>약관</b><br/>서비스 약관과 개인정보 관련 문서를 확인한다.</td></tr></table>
+</div>
+</div>
+</section>
+<section class="board" id="common">
+<header><div><b>COMMON-01</b> · 공통</div><h2>하단 탭 / 공통 상태</h2></header>
+<div class="content">
+<div class="wire"><div class="phone">
+<div class="status">9:41 <span>●●●</span></div>
+<div class="appbar">하단 탭 / 공통 상태</div>
+<div class="screenbody withtabs">
+<div class="uirow"><span class="num">1</span>금주의 추천 · 나의 숲 · 스크랩 · MY</div>
+</div>
+<div class="tabbar"><div class="tab"><span class="tabicon">□</span>금주의 추천</div><div class="tab"><span class="tabicon">□</span>나의 숲</div><div class="tab"><span class="tabicon">□</span>스크랩</div><div class="tab"><span class="tabicon">□</span>MY</div></div><div class="homebar"></div>
+</div></div>
+<div class="definition">
+<div class="meta"><span>SCREEN ID</span><b>COMMON-01</b></div>
+<div class="routebox">
+<div><span>ENTRY</span><b>앱 메인 영역의 모든 최상위/상세 화면</b></div>
+<div><span>NEXT / EXIT</span><b>금주의 추천 / 나의 숲 / 스크랩 / MY 간 1탭 이동</b></div>
+<div><span>NAVIGATION</span><b>하단 탭 유지</b></div>
+</div><table><tr><td><span class="specnum">1</span></td><td><b>하단 탭</b><br/>금주의 추천 → 나의 숲 → 스크랩 → MY 순서로 고정한다. 현재 탭만 활성 표시하며 한 번의 탭으로 최상위 화면을 이동한다.</td></tr><tr><td></td><td><b>공통 예외</b><br/>네트워크 오류, 데이터 없음, 로딩, 재시도 상태를 각 화면에서 처리한다.</td></tr><tr><td></td><td><b>스크롤</b><br/>모바일 본문 스크롤바는 시각적으로 숨기되 스크롤 동작은 유지한다.</td></tr></table>
+</div>
+</div>
+</section></div>
+<section class="section" id="growth"><div class="section-head"><div><h2>오늘의 경험 기록 · 나무 성장</h2></div></div><div class="card"><ul>
+<li>금주의 추천을 시작하면 씨앗이 생성된다.</li>
+<li>책 ‘오늘 독서 완료’와 음반의 일일 경험 기록은 사용자 로컬 날짜 기준 하루 1회만 성장에 반영한다.</li>
+<li>일일 기록으로는 씨앗 → 싹 → 덤불 → 나무까지만 성장한다.</li>
+<li>책 ‘이 책 감상 완료’, 음반 ‘이 앨범 감상 완료’, 영화 ‘이 작품 감상 완료’를 실행하면 현재 단계와 관계없이 큰 나무가 된다.</li>
+<li>영화는 중간 성장 단계를 두지 않는다.</li>
+<li>완료 후 1~5점 평가는 선택 사항이며 성장 단계와 별개로 저장한다.</li>
+</ul></div></section>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  document.querySelectorAll('.docnav a[href^="#"]').forEach(function(link){
+    link.addEventListener('click',function(){ this.blur(); });
+  });
+});
+</script></body></html>
