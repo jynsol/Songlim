@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="googlebot" content="noindex, nofollow, noarchive">
+<title>송림 콘텐츠 데이터 수집·매칭 정의서</title>
+<style>
+:root{--ink:#111;--text:#2d2d2d;--sub:#666;--line:#d7d7d7;--soft:#f7f7f5;--paper:#fff;--warn:#f3f3f0}
+*{box-sizing:border-box}
+html{background:#fff;scroll-behavior:smooth}
+body{margin:0;background:#fff;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",Arial,sans-serif;font-size:15px;line-height:1.72;letter-spacing:-.018em;word-break:keep-all}
+a{color:inherit;text-underline-offset:3px}.doc{width:min(1040px,calc(100% - 48px));margin:0 auto;padding:54px 0 90px}
+.cover{padding-bottom:42px;border-bottom:1px solid #111}.eyebrow{font-size:12px;color:#777;margin-bottom:24px}.cover h1{margin:0;font-size:39px;line-height:1.12;letter-spacing:-.045em;color:#111}.subtitle{margin-top:10px;font-size:18px;color:#555}.meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:38px;padding-top:16px;border-top:1px solid var(--line);font-size:13px}.meta b{display:block;font-size:11px;color:#777;margin-bottom:4px}
+nav{padding:14px 0;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:6px 18px}nav a{text-decoration:none;font-size:12.5px;font-weight:650;color:#555}
+section{padding:46px 0;border-bottom:1px solid var(--line);scroll-margin-top:20px}h2{margin:0 0 22px;font-size:27px;line-height:1.3;letter-spacing:-.04em;color:#111}h3{margin:32px 0 12px;font-size:18px;line-height:1.4;color:#111}h4{margin:24px 0 8px;font-size:15px;color:#111}p{max-width:820px;margin:0 0 16px}.lede{font-size:17px;line-height:1.68;color:#222}.callout{margin:22px 0;padding:14px 0 14px 15px;border-left:2px solid #111}.soft{background:var(--soft);padding:16px 18px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:20px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin:22px 0}.grid>div{padding-top:12px;border-top:1px solid #aaa}.k{font-size:11px;color:#777;font-weight:700}.v{font-size:19px;line-height:1.35;color:#111;font-weight:750;margin-top:4px}.s{font-size:12px;color:#666;margin-top:5px}
+table{width:100%;border-collapse:collapse;table-layout:fixed;margin:20px 0;font-size:13px;line-height:1.55}th,td{padding:11px 9px;vertical-align:top;text-align:left;border-bottom:1px solid var(--line);overflow-wrap:anywhere}th{border-top:1px solid #888;color:#111;font-weight:750}.status{font-weight:750}.ok{color:#111}.cond{color:#555}.no{color:#777}.small{font-size:12px;color:#666}.flow{margin:22px 0;padding:14px 0;border-top:1px solid #999;border-bottom:1px solid #999;font-weight:650;line-height:1.9;color:#222}.schema{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre-wrap;background:#fafafa;border:1px solid var(--line);padding:16px;font-size:12px;line-height:1.6;overflow:auto}.rulelist{margin:10px 0 0;padding-left:20px}.rulelist li{margin:6px 0}.source-list{font-size:12.5px}.source-list li{margin:8px 0}.tag{display:inline-block;border:1px solid #aaa;padding:2px 6px;margin-right:4px;font-size:10px;color:#444}
+@media(max-width:760px){.doc{width:calc(100% - 36px);padding-top:34px}.cover h1{font-size:31px}.meta,.grid{grid-template-columns:1fr}.meta{gap:12px}section{padding:38px 0}h2{font-size:23px}table,thead,tbody,tr,th,td{display:block;width:100%}thead{display:none}tr{padding:12px 0;border-bottom:1px solid var(--line)}td{border:0;padding:4px 0}td:before{content:attr(data-label);display:block;font-size:10px;color:#777;font-weight:700;margin-bottom:2px}}
+</style>
+
+<style id="songlim-copyright-style">
+.songlim-copyright{
+  width:min(920px,calc(100% - 40px));
+  margin:46px auto 0;
+  padding:18px 0 30px;
+  border-top:1px solid #eee;
+  color:#888;
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",Arial,sans-serif;
+  font-size:11px;
+  line-height:1.6;
+  word-break:keep-all;
+}
+.songlim-copyright p{margin:0;max-width:none;}
+.songlim-copyright p:first-child{margin-bottom:4px;font-weight:600;color:#555;}
+@media(max-width:640px){
+  .songlim-copyright{width:min(100% - 32px,920px);margin-top:36px;padding-bottom:24px;}
+}
+</style>
+</head>
+<body>
+<main class="doc">
+<header class="cover">
+<div class="eyebrow">송림 · 개발 기준 문서</div>
+<h1>콘텐츠 데이터 수집·매칭 정의서</h1>
+<div class="subtitle">책 · 음반 · 영화 데이터의 수집원, 정규화, 동일 콘텐츠 식별 및 Fallback 기준</div>
+<div class="meta"><div><b>검증 기준일</b>2026-09-08</div><div><b>대상</b>MVP · BOOK / ALBUM / MOVIE</div><div><b>문서 목적</b>실제 개발 및 외부 API 의존성 판단</div></div>
+</header>
+<nav><a href="#summary">핵심 결론</a><a href="#architecture">전체 구조</a><a href="#book">책</a><a href="#album">음반</a><a href="#movie">영화</a><a href="#source">공유 유입</a><a href="#sns-pipeline">SNS 식별</a><a href="#manual-entry">직접 기록</a><a href="#schema">데이터 구조</a><a href="#matching">매칭 규칙</a><a href="#risk">정책·리스크</a><a href="#test">연동 검증</a><a href="#todo">구현 순서</a></nav>
+<section id="summary">
+<h2>1. 핵심 결론</h2>
+<p class="lede">송림은 특정 플랫폼 하나의 API를 마스터 DB처럼 쓰면 안 된다. <strong>송림 자체 Content ID를 중심으로, 카테고리별 복수 공급자의 식별자를 연결하는 구조</strong>가 가장 안전하다.</p>
+<table>
+<thead><tr><th>분야</th><th>MVP 주 데이터원</th><th>보조 데이터원</th><th>판정</th><th>핵심 이유</th></tr></thead>
+<tbody>
+<tr><td data-label="분야">책</td><td data-label="MVP 주 데이터원"><strong>Kakao Daum 책 검색 API</strong></td><td data-label="보조 데이터원">Google Books<br/>알라딘은 제휴 후</td><td class="status ok" data-label="판정">가능</td><td data-label="핵심 이유">한국 도서 검색, ISBN·저자·출판사·썸네일 확보. 현재 책 검색 쿼터 30,000회/일.</td></tr>
+<tr><td data-label="분야">음반</td><td data-label="MVP 주 데이터원"><strong>MusicBrainz</strong></td><td data-label="보조 데이터원">Cover Art Archive<br/>Spotify는 선택적</td><td class="status cond" data-label="판정">가능 · 속도 설계 필요</td><td data-label="핵심 이유">핵심 메타데이터가 CC0이며 자체 ID를 확보하기 좋음. 공개 API는 평균 1 req/s라 캐시·큐가 필요.</td></tr>
+<tr><td data-label="분야">영화</td><td data-label="MVP 주 데이터원"><strong>TMDB + KOBIS</strong></td><td data-label="보조 데이터원">Wikidata 등 공개 식별자 보조</td><td class="status cond" data-label="판정">기술 가능 · 상업 라이선스 확인 필수</td><td data-label="핵심 이유">TMDB는 글로벌 검색 품질이 좋고 KOBIS는 국내 영화 보완에 유리. TMDB 상업 이용은 별도 계약 대상.</td></tr>
+<tr><td data-label="분야">외부 공유</td><td data-label="MVP 주 데이터원"><strong>Share Sheet의 URL·텍스트</strong></td><td data-label="보조 데이터원">OG / JSON-LD / 공개 페이지 메타데이터 / AI 추출</td><td class="status cond" data-label="판정">출처별 편차 큼</td><td data-label="핵심 이유">직접 상품·작품 URL은 강하지만 Instagram 등은 공유 결과에 실제 작품명이 없을 수 있어 사용자 확인이 필요.</td></tr>
+</tbody></table>
+<div class="callout"><strong>중요한 수정</strong><br/>초기 검토에서 생각했던 “알라딘을 책 메인, Spotify를 음반 메인” 구조는 <strong>프로덕션 핵심 의존성으로는 부적합</strong>하다. 알라딘 일반 OpenAPI는 영리 서비스 이용이 불가하고 별도 제휴가 필요하며, Spotify 신규 앱의 Extended Quota는 현재 매우 높은 진입 조건이 있다. 따라서 송림 MVP의 기본 설계는 이 둘 없이도 작동해야 한다.</div>
+</section>
+<section id="architecture">
+<h2>2. 전체 데이터 수집 구조</h2>
+<div class="flow">외부 공유 → Source Parser → 후보 추출 → Provider Search → Entity Resolution → Confidence 판정 → 송림 Content → UserContent</div>
+<div class="grid"><div><div class="k">원칙 01</div><div class="v">AI는 검색어를 만든다</div><div class="s">LLM이 최종 사실 DB가 되지 않는다. 제목·제작자·유형 후보를 구조화하는 데 사용한다.</div></div><div><div class="k">원칙 02</div><div class="v">외부 ID는 여러 개 보관한다</div><div class="s">ISBN, MBID, ISRC, TMDB ID, KOBIS movieCd 등을 송림 내부 ID 밑에 연결한다.</div></div><div><div class="k">원칙 03</div><div class="v">낮은 신뢰도는 자동 병합 금지</div><div class="s">동명이작·재발매·번역판 때문에 “비슷함”만으로 병합하지 않는다.</div></div><div><div class="k">원칙 04</div><div class="v">API 장애가 저장 실패가 되지 않게 한다</div><div class="s">최소 제목·유형만으로 임시 Content를 만든 뒤 비동기로 보완할 수 있다.</div></div></div>
+</section>
+<section id="book">
+<h2>3. 책 데이터</h2>
+<h3>3.1 MVP 권장: Kakao Daum 책 검색 API</h3>
+<p>현재 공식 문서 기준 <code>GET https://dapi.kakao.com/v3/search/book</code>가 제공되며 REST API 키로 호출한다. 제목 검색과 정확도순 결과를 사용할 수 있고, 책 검색 일일 무료 쿼터는 30,000회다. 네이버 책 검색 API는 2026년 7월 31일 종료되어 후보에서 제외한다.</p>
+<table><thead><tr><th>송림 필드</th><th>권장 원천</th><th>용도</th></tr></thead><tbody>
+<tr><td data-label="송림 필드">title</td><td data-label="권장 원천">Kakao</td><td data-label="용도">표시명·검색</td></tr><tr><td data-label="송림 필드">authors[]</td><td data-label="권장 원천">Kakao</td><td data-label="용도">동명이책 구분</td></tr><tr><td data-label="송림 필드">isbn</td><td data-label="권장 원천">Kakao / Google Books</td><td data-label="용도">최우선 동일 판본 식별</td></tr><tr><td data-label="송림 필드">publisher</td><td data-label="권장 원천">Kakao</td><td data-label="용도">판본 구분</td></tr><tr><td data-label="송림 필드">published_date</td><td data-label="권장 원천">Kakao / Google Books</td><td data-label="용도">판본 구분</td></tr><tr><td data-label="송림 필드">thumbnail_url</td><td data-label="권장 원천">Kakao</td><td data-label="용도">목록·상세 이미지. 공개 출시 전 이미지 사용조건 재확인.</td></tr>
+</tbody></table>
+<h3>3.2 Google Books</h3><p>보조 조회로 사용한다. 공식 API는 <code>intitle:</code>, <code>inauthor:</code>, <code>isbn:</code> 검색을 지원한다. Kakao 결과가 없거나 ISBN 교차검증이 필요할 때 적합하다.</p>
+<h3>3.3 알라딘은 “제휴 후” 사용</h3><p>알라딘 OpenAPI 자체는 검색·상품 조회와 ISBN13 조회를 제공하지만, 공식 이용 안내상 <strong>도서 정보를 기반으로 하는 법인·기업·단체 서비스 및 영리 목적 서비스는 일반 OpenAPI 이용이 불가</strong>하다. 기업/제휴 경로는 별도로 존재하므로 구매 연계 BM을 붙일 시점에 제휴를 신청한다.</p>
+<div class="soft"><strong>책 MVP 결론</strong><br/>Kakao → Google Books → 사용자 보정. 알라딘은 상품 구매 제휴가 성립한 뒤 공급자와 구매 링크 소스로 추가한다.</div>
+</section>
+<section id="album">
+<h2>4. 음반 데이터</h2>
+<h3>4.1 MVP 권장: MusicBrainz</h3>
+<p>MusicBrainz 핵심 DB에는 Artist, Release Group, Release, Recording, Label 등 음악 카탈로그 구조가 있고 핵심 데이터는 CC0다. 송림의 상위 콘텐츠는 <strong>ALBUM</strong>, 하위 일일 경험은 <strong>TRACK</strong>이므로 Release Group/Release와 Recording 구조를 매핑하기 좋다.</p>
+<table><thead><tr><th>송림 필드</th><th>MusicBrainz 매핑</th><th>비고</th></tr></thead><tbody>
+<tr><td data-label="송림 필드">album_title</td><td data-label="MusicBrainz 매핑">Release Group / Release name</td><td data-label="비고">사용자에게는 대표 앨범 단위로 노출</td></tr><tr><td data-label="송림 필드">artists[]</td><td data-label="MusicBrainz 매핑">Artist / artist-credit</td><td data-label="비고">복수 아티스트 지원</td></tr><tr><td data-label="송림 필드">release_group_mbid</td><td data-label="MusicBrainz 매핑">Release Group MBID</td><td data-label="비고">송림의 앨범 작품 단위에 가까움</td></tr><tr><td data-label="송림 필드">release_mbid</td><td data-label="MusicBrainz 매핑">Release MBID</td><td data-label="비고">실제 판본·발매 구분</td></tr><tr><td data-label="송림 필드">tracks[]</td><td data-label="MusicBrainz 매핑">Medium / Track / Recording</td><td data-label="비고">오늘의 곡 제공</td></tr><tr><td data-label="송림 필드">isrc</td><td data-label="MusicBrainz 매핑">Recording ISRC 관계</td><td data-label="비고">트랙 식별 보조</td></tr><tr><td data-label="송림 필드">cover_url</td><td data-label="MusicBrainz 매핑">Cover Art Archive</td><td data-label="비고">권리 고지는 별도 검토. 없으면 placeholder 허용.</td></tr>
+</tbody></table>
+<p>공개 Web Service는 평균 1회/초 제한이 있으므로 사용자가 검색할 때마다 여러 요청을 연쇄적으로 날리면 안 된다. <strong>서버 캐시 + 요청 큐 + 검색 결과 재사용</strong>을 기본으로 하고, 성장 후에는 CC0 core dump를 자체 인덱싱하는 방향도 가능하다.</p>
+<h3>4.2 Cover Art Archive</h3><p>Release/Release Group MBID로 대표 커버와 250/500/1200 썸네일을 조회할 수 있다. 공식 API 문서상 현재 별도 rate limit 규칙은 없지만, 이미지 자체의 권리는 서비스가 보증하지 않으므로 공개 상용 서비스에서는 법무·라이선스 검토가 필요하다.</p>
+<h3>4.3 Spotify는 핵심 의존성에서 제외</h3>
+<p>기술적으로 Search, Album, Track, ISRC/UPC 데이터는 매우 좋고 Client Credentials 방식의 서버 간 인증도 가능하다. 다만 2026년 현재 신규 Development Mode는 실험·개인 프로젝트 성격이며 앱 소유자 Premium 요건과 최대 5명의 인증 사용자 제한이 있다. Extended Quota는 법인, 출시 서비스, 최소 250k MAU 등 높은 기준을 명시한다. 따라서 초기 송림이 공개 사용자 대상으로 Spotify를 핵심 데이터 공급자로 삼는 구조는 현실적으로 위험하다.</p>
+<div class="soft"><strong>음반 MVP 결론</strong><br/>MusicBrainz core metadata → Cover Art Archive → 필요 시 Spotify URL을 외부 링크로 보관. Spotify API는 내부 프로토타입 또는 향후 파트너 승인 후 보조 공급자로 추가한다.</div>
+</section>
+<section id="movie">
+<h2>5. 영화 데이터</h2>
+<h3>5.1 TMDB</h3>
+<p>TMDB는 원제·번역 제목·대체 제목을 대상으로 영화 검색을 제공하고, 상세·크레딧·외부 ID까지 연결하기 쉬워 글로벌 영화 엔티티 매칭에 가장 적합하다. 다만 공식 FAQ에서 수익을 목적으로 하는 프로젝트는 commercial로 보며, 무료 developer API는 비상업 용도로 설명하고 있다. <strong>송림은 상용 출시 전에 TMDB commercial licensing을 문의해야 한다.</strong></p>
+<h3>5.2 KOBIS</h3>
+<p>영화진흥위원회 OpenAPI에는 영화 목록·영화 상세 조회가 존재하며 키 발급 후 REST/SOAP 방식으로 호출할 수 있다. 국내 개봉 영화명, 감독, 제작정보와 <code>movieCd</code>를 보완 식별자로 사용한다.</p>
+<table><thead><tr><th>송림 필드</th><th>주 원천</th><th>설명</th></tr></thead><tbody>
+<tr><td data-label="송림 필드">title_ko / title_original</td><td data-label="주 원천">TMDB</td><td data-label="설명">한국어 표시명 + 원제</td></tr><tr><td data-label="송림 필드">release_date / year</td><td data-label="주 원천">TMDB / KOBIS</td><td data-label="설명">동명 영화 구분</td></tr><tr><td data-label="송림 필드">directors[] / cast[]</td><td data-label="주 원천">TMDB credits / KOBIS</td><td data-label="설명">매칭 및 상세 표시</td></tr><tr><td data-label="송림 필드">tmdb_id</td><td data-label="주 원천">TMDB</td><td data-label="설명">글로벌 공급자 ID</td></tr><tr><td data-label="송림 필드">kobis_movie_cd</td><td data-label="주 원천">KOBIS</td><td data-label="설명">국내 보조 ID</td></tr><tr><td data-label="송림 필드">poster_url</td><td data-label="주 원천">TMDB</td><td data-label="설명">상업 라이선스 및 attribution 조건 충족 후 사용</td></tr>
+</tbody></table>
+<div class="soft"><strong>영화 MVP 결론</strong><br/>기술 검증에서는 TMDB + KOBIS가 가장 현실적이다. 다만 실제 상용 출시의 Go/No-Go 항목에 “TMDB 상업 사용 조건 확정”을 반드시 넣는다.</div>
+</section>
+<section id="source">
+<h2>6. 외부 공유 유입 정책</h2>
+<p class="lede">송림의 주 유입은 교보문고·음악 서비스 같은 정형 상품 페이지보다 <strong>Instagram, Threads, 블로그, YouTube 등에서 발견한 콘텐츠 공유</strong>를 전제로 한다. SNS를 데이터베이스처럼 크롤링하지 않고, 사용자가 Share Sheet로 넘긴 URL·텍스트와 접근 가능한 공개 메타데이터를 단서로 정식 콘텐츠 DB에서 엔티티를 찾아 확정한다.</p>
+<div class="callout"><strong>제품 약속</strong><br/>“어떤 SNS 게시물이든 100% 자동으로 알아낸다”가 아니라, <strong>공유하면 자동 식별을 우선 시도하고 확실하지 않을 때만 1회 확인하며, 자동 식별이 불가능한 경우에도 화면에서 찾기·제목 검색으로 반드시 저장을 완료할 수 있게 한다.</strong></div>
+<table><thead><tr><th>유입</th><th>1차 단서</th><th>추가 보강</th><th>기본 UX</th></tr></thead><tbody>
+<tr><td data-label="유입">Instagram / Threads</td><td data-label="1차 단서">Share Sheet URL·공유 텍스트·출처 앱</td><td data-label="추가 보강">공개 title/OG/검색 가능한 문맥 → 후보 추출 → 콘텐츠 DB 교차검증</td><td data-label="기본 UX">고신뢰 자동 저장 / 중신뢰 1탭 확인 / 실패 시 화면에서 찾기</td></tr>
+<tr><td data-label="유입">일반 블로그·기사</td><td data-label="1차 단서">URL, title, OG, JSON-LD, 공유 텍스트</td><td data-label="추가 보강">페이지의 공개 구조화 정보 및 검색 문맥 → 콘텐츠 DB</td><td data-label="기본 UX">대부분 자동 또는 1탭 확인</td></tr>
+<tr><td data-label="유입">YouTube</td><td data-label="1차 단서">공유 URL·제목·설명에 포함된 단서</td><td data-label="추가 보강">제목/아티스트/작품 후보 추출 → 콘텐츠 DB</td><td data-label="기본 UX">후보 확인 가능성 높음</td></tr>
+<tr><td data-label="유입">도서 상품 URL</td><td data-label="1차 단서">상품 URL/메타데이터</td><td data-label="추가 보강">ISBN 또는 제목·저자 → 책 API</td><td data-label="기본 UX">자동 저장 우선</td></tr>
+<tr><td data-label="유입">음악 서비스 URL</td><td data-label="1차 단서">서비스 URL/ID/공유 텍스트</td><td data-label="추가 보강">앨범·트랙 후보 → MusicBrainz 등 교차검증</td><td data-label="기본 UX">자동 또는 1탭 확인</td></tr>
+<tr><td data-label="유입">영화 상세/기사 URL</td><td data-label="1차 단서">title·OG·본문 공개 메타</td><td data-label="추가 보강">제목·연도·감독 → TMDB/KOBIS</td><td data-label="기본 UX">자동 또는 1탭 확인</td></tr>
+<tr><td data-label="유입">이미지/영상 화면에만 정보 존재</td><td data-label="1차 단서">Share Sheet만으로 작품 단서가 없을 수 있음</td><td data-label="추가 보강">사용자가 스크린샷/이미지를 별도로 전달한 경우 이미지·텍스트 인식 → 후보 검색</td><td data-label="기본 UX">화면에서 찾기 → 후보 확인 → 저장</td></tr>
+</tbody></table>
+<p class="small">보호된 페이지·로그인이 필요한 본문·플랫폼이 제공하지 않는 비공개 데이터는 우회 수집하지 않는다. 원본 앱이 Share Sheet에 어떤 데이터를 제공하는지는 출처별로 달라질 수 있으므로, SNS 유입은 실제 기기에서 payload를 수집해 검증해야 한다.</p>
+</section>
+<section id="sns-pipeline">
+<h2>7. SNS·웹 유입 식별 파이프라인</h2>
+<p class="lede">송림의 핵심 기술은 “SNS를 긁는 것”이 아니라 <strong>불완전한 공유 단서를 실제 콘텐츠 엔티티로 안전하게 변환하는 것</strong>이다. 정확도는 단일 AI 호출이 아니라 여러 증거를 합쳐 올린다.</p>
+<h3>7.1 처리 순서</h3>
+<pre class="schema">1. Share Input
+- source_app
+- source_url
+- shared_text
+- captured_at
+
+2. Direct Parser
+- URL host / known provider ID
+- page title / OG metadata
+- JSON-LD / schema.org (공개된 경우)
+
+3. Candidate Extraction
+- type_candidate: BOOK | ALBUM | MOVIE
+- title_candidate
+- creator_candidate
+- year_candidate?
+- evidence[]
+
+4. Context Enrichment
+- 공개 웹/블로그 문맥
+- 검색 가능한 제목/설명 단서
+- 원천 서비스의 공개 메타정보
+
+5. Provider Verification
+- BOOK  → Kakao Book → Google Books
+- ALBUM → MusicBrainz → Cover Art / 보조 공급자
+- MOVIE → TMDB → KOBIS
+
+6. Entity Resolution
+- 강한 식별자 + 제목 + 제작자 + 연도 교차검증
+
+7. Decision
+- HIGH   → 자동 저장
+- MEDIUM → 후보 1개 또는 2~3개 1탭 확인
+- LOW    → 화면에서 찾기 / 제목 검색
+
+8. Feedback
+- 사용자의 정정·선택 결과를 SourceEvidence와 MatchLog에 기록</pre>
+<h3>7.2 AI 사용 원칙</h3>
+<ul class="rulelist"><li>AI는 존재하지 않는 콘텐츠를 만들어 DB에 넣지 않는다.</li><li><strong>공유 문맥에서 타입·제목·제작자 후보를 추출하고, 여러 실제 DB 후보를 랭킹하는 역할</strong>로 제한한다.</li><li>최종 자동 확정은 외부 DB에서 실제 엔티티가 확인되고 증거 점수가 기준을 넘은 경우만 허용한다.</li><li>작품명이 없는 “박찬욱 작품 중 이게 제일 좋음” 같은 문장은 사람 이름만으로 특정 영화를 추측 저장하지 않는다.</li></ul>
+<h3>7.3 증거 기반 점수 예시</h3>
+<table><thead><tr><th>증거</th><th>예시 가중치</th><th>의미</th></tr></thead><tbody>
+<tr><td data-label="증거">표준 식별자 직접 확보</td><td data-label="예시 가중치">즉시 높은 신뢰</td><td data-label="의미">ISBN, MBID/ISRC, TMDB/KOBIS ID 등</td></tr>
+<tr><td data-label="증거">공유 텍스트 제목 정확 일치</td><td data-label="예시 가중치">+35</td><td data-label="의미">작품명이 명시됨</td></tr>
+<tr><td data-label="증거">주 제작자 정확 일치</td><td data-label="예시 가중치">+25</td><td data-label="의미">동명 작품 오탐 감소</td></tr>
+<tr><td data-label="증거">페이지 title/OG 제목 일치</td><td data-label="예시 가중치">+20</td><td data-label="의미">웹 문맥의 직접 증거</td></tr>
+<tr><td data-label="증거">외부 DB의 제목+제작자 조합 일치</td><td data-label="예시 가중치">+30</td><td data-label="의미">실제 엔티티 존재 검증</td></tr>
+<tr><td data-label="증거">제목만 일치 / 제작자 불일치</td><td data-label="예시 가중치">-30</td><td data-label="의미">자동 확정 금지 방향</td></tr>
+<tr><td data-label="증거">복수 후보 동점</td><td data-label="예시 가중치">자동 확정 금지</td><td data-label="의미">사용자 확인 필요</td></tr>
+</tbody></table>
+<p class="small">가중치는 초기 설계값이며 실제 150건 이상 테스트 결과로 조정한다. 중요한 목표는 자동화율 자체보다 오답 자동 저장률을 낮추는 것이다.</p>
+<h3>7.4 실패 없는 Fallback UX</h3>
+<table><thead><tr><th>상태</th><th>사용자 화면</th><th>추가 행동</th></tr></thead><tbody>
+<tr><td data-label="상태">고신뢰</td><td data-label="사용자 화면">“채식주의자 · 한강” 저장 완료</td><td data-label="추가 행동">없음</td></tr>
+<tr><td data-label="상태">중신뢰, 후보 1개</td><td data-label="사용자 화면">“이 콘텐츠가 맞나요?”</td><td data-label="추가 행동">맞아요 1탭</td></tr>
+<tr><td data-label="상태">중신뢰, 후보 다수</td><td data-label="사용자 화면">후보 2~3개</td><td data-label="추가 행동">하나 선택</td></tr>
+<tr><td data-label="상태">공유 데이터에 작품 단서 없음</td><td data-label="사용자 화면">“콘텐츠를 찾지 못했어요”</td><td data-label="추가 행동">화면에서 찾기 / 제목 검색</td></tr>
+<tr><td data-label="상태">이미지 분석도 실패</td><td data-label="사용자 화면">카테고리 + 제목 검색</td><td data-label="추가 행동">최소 입력으로 저장 완료</td></tr>
+</tbody></table>
+<div class="callout"><strong>핵심 KPI</strong><br/>① 자동 식별 성공률 ② 후보 생성 성공률 ③ 자동 확정률 ④ 사용자 보정률 ⑤ 오답 자동 저장률 ⑥ 공유 시작→저장 완료율 ⑦ 저장 완료 시간. <strong>오답 자동 저장률은 1~2% 이하를 초기 품질 목표로 두고, 자동 식별이 실패해도 최종 저장 완료율은 최대한 100%에 가깝게 만든다.</strong></div>
+<h3>7.5 반드시 해야 할 실제 기기 검증</h3>
+<p>Instagram·Threads 등은 문서만 보고 성공률을 확정할 수 없다. <strong>iPhone 실제 Share Sheet에서 출처별로 어떤 payload가 넘어오는지를 먼저 기록</strong>해야 한다.</p>
+<table><thead><tr><th>출처</th><th>초기 표본</th><th>기록할 것</th></tr></thead><tbody>
+<tr><td data-label="출처">Instagram</td><td data-label="초기 표본">50건</td><td data-label="기록할 것">URL, shared_text, 메타 접근 가능 여부, 자동 후보, 정답 여부</td></tr>
+<tr><td data-label="출처">Threads</td><td data-label="초기 표본">30건</td><td data-label="기록할 것">동일</td></tr>
+<tr><td data-label="출처">블로그/기사</td><td data-label="초기 표본">30건</td><td data-label="기록할 것">title/OG/JSON-LD 존재 여부 및 매칭 결과</td></tr>
+<tr><td data-label="출처">YouTube·서점·기타</td><td data-label="초기 표본">40건</td><td data-label="기록할 것">직접 식별/후보 검색/사용자 확인 비율</td></tr>
+</tbody></table>
+<p class="small">총 150건의 정답 세트를 만든 뒤 출처별 성공률을 따로 계산한다. 전체 평균만 보면 쉬운 서점 링크가 SNS 실패를 가릴 수 있으므로 반드시 출처별 지표를 유지한다.</p>
+</section><section id="manual-entry">
+<h2>8. 직접 기록·검색 기반 메타데이터 자동완성</h2>
+<p class="lede">송림은 외부 공유뿐 아니라 독서·음반·영화 기록 앱처럼 직접 콘텐츠를 추가하는 경로를 제공한다. 사용자는 제목 몇 글자만 입력하고 후보를 선택하며, 저자·아티스트·감독·출판사·발매일·표지·외부 식별자 등은 Provider 검색 결과로 자동완성한다.</p>
+<div class="callout"><strong>원칙</strong><br/>사용자가 메타데이터를 일일이 입력하게 하지 않는다. 직접 기록은 “검색어 입력 → 후보 선택 → 자동완성 → 상태 저장”의 짧은 흐름으로 처리하고, 외부 공유와 동일한 Content 엔티티에 연결한다.</div>
+<h3>8.1 기본 UX</h3>
+<div class="flow">제목 입력 → 콘텐츠 유형 추정/선택 → Provider 검색 → 후보 3~5개 → 1탭 선택 → 메타데이터 자동완성 → UserContent 상태 저장</div>
+<table>
+<thead><tr><th>유형</th><th>사용자 입력 예</th><th>자동완성 항목</th><th>후보 구분 기준</th></tr></thead>
+<tbody>
+<tr><td>책</td><td>채식주의자</td><td>저자, 출판사, 출간일, ISBN, 표지, 설명</td><td>제목 + 저자 + 출판사/판본</td></tr>
+<tr><td>음반</td><td>In Rainbows</td><td>아티스트, 발매일, 커버, 트랙 수/목록, MBID 등</td><td>앨범명 + 아티스트 + 발매연도</td></tr>
+<tr><td>영화</td><td>헤어질 결심</td><td>감독, 개봉연도, 포스터, 원제, 외부 ID</td><td>제목 + 감독 + 개봉연도</td></tr>
+</tbody>
+</table>
+<h3>8.2 책은 작품(Work)과 판본(Edition)을 분리 가능하게 설계</h3>
+<p>동일 작품이 여러 출판사·번역·개정판으로 존재하므로 사용자 경험은 <strong>작품 중심</strong>으로 단순하게 보여주되, 내부 데이터는 판본을 구분할 수 있게 설계한다. MVP에서는 ISBN 단위 Provider 레코드를 우선 저장하고, 정규화된 제목·저자 기준으로 동일 작품 후보를 묶을 수 있도록 <code>work_key</code> 또는 별도 Work 엔티티 확장 여지를 둔다.</p>
+<pre>Work: 데미안 / 헤르만 헤세
+ ├─ Edition A: 민음사 / ISBN ...
+ ├─ Edition B: 문예출판사 / ISBN ...
+ └─ Edition C: 기타 출판사 / ISBN ...</pre>
+<p class="small">MVP에서 판본 선택을 강제하지 않는다. 사용자가 특정 ISBN·서점 링크에서 유입된 경우에는 해당 판본을 연결하고, 제목 검색만 한 경우에는 대표 후보를 선택하게 한다.</p>
+<h3>8.3 외부 공유와 직접 기록은 같은 데이터로 합친다</h3>
+<p>직접 기록으로 생성된 콘텐츠와 Instagram·Threads·블로그·서점 공유로 생성된 콘텐츠를 별도 목록으로 관리하지 않는다. ProviderIdentifier와 정규화 필드를 이용해 동일 Content로 매칭하고, 사용자의 상태만 UserContent에서 관리한다.</p>
+<div class="routebox">
+<div><span>직접 기록</span><b>검색어 → Provider 후보 → Content → UserContent</b></div>
+<div><span>외부 공유</span><b>Source → 후보 추출 → Provider 검증 → Content → UserContent</b></div>
+<div><span>중복 시</span><b>새 Content를 만들지 않고 기존 Content에 Source/ProviderIdentifier만 추가</b></div>
+</div>
+<h3>8.4 자동 확정보다 후보 선택을 우선</h3>
+<p>제목이 유일하고 Provider 결과가 명확할 때는 자동 선택할 수 있지만, 동명 작품·여러 판본·리마스터/재발매처럼 복수 후보가 존재하면 자동 확정하지 않는다. 사용자가 후보 카드 1개를 탭하면 필요한 메타데이터가 모두 채워지는 방식으로 정확도와 입력 편의성을 함께 확보한다.</p>
+<h3>8.5 MVP 검증 지표</h3>
+<table>
+<thead><tr><th>지표</th><th>의미</th><th>MVP 목표</th></tr></thead>
+<tbody>
+<tr><td>검색 후보 생성 성공률</td><td>제목 입력 후 1개 이상의 유효 후보가 반환되는 비율</td><td>카테고리별 측정 후 기준 확정</td></tr>
+<tr><td>첫 화면 정답 포함률</td><td>상위 3~5개 후보 안에 사용자가 찾는 콘텐츠가 포함되는 비율</td><td>외부 공유 식별률과 별도 관리</td></tr>
+<tr><td>선택 후 자동완성 성공률</td><td>후보 선택 후 핵심 필드가 정상 저장되는 비율</td><td>거의 전건 성공을 목표</td></tr>
+<tr><td>직접 수정률</td><td>후보 선택 뒤 제목·제작자 등 사용자가 수동 수정한 비율</td><td>낮을수록 좋음</td></tr>
+<tr><td>저장 완료 시간</td><td>검색 시작부터 UserContent 저장까지 걸린 시간</td><td>10초 이내 목표와 함께 측정</td></tr>
+</tbody>
+</table>
+</section>
+<section id="schema">
+<h2>9. 송림 표준 Content Schema</h2>
+<pre class="schema">Content
+- id: UUID                 // 송림 내부 영구 ID
+- type: BOOK | ALBUM | MOVIE
+- canonical_title
+- original_title?
+- creators[]               // 저자 / 아티스트 / 감독
+- release_date?
+- release_year?
+- image_url?
+- image_provider?
+- metadata_status: VERIFIED | PARTIAL | USER_ONLY
+- created_at / updated_at
+
+ProviderIdentifier
+- content_id
+- provider: KAKAO_BOOK | GOOGLE_BOOKS | ALADIN | MUSICBRAINZ_RELEASE_GROUP |
+            MUSICBRAINZ_RELEASE | SPOTIFY | TMDB | KOBIS | OTHER
+- provider_id
+- identifier_type: ISBN13 | MBID | ISRC | UPC | TMDB_ID | KOBIS_MOVIE_CD | PROVIDER_ID
+- value
+- is_primary
+- verified_at
+
+Source
+- user_content_id
+- source_app?
+- source_url?
+- shared_text?
+- source_domain?
+- captured_at
+
+SourceEvidence
+- source_id
+- evidence_type: SHARED_TEXT | PAGE_TITLE | OG | JSON_LD | SEARCH_CONTEXT | IMAGE_TEXT | PROVIDER_RESULT
+- raw_value?
+- normalized_value?
+- confidence?
+
+MatchLog
+- source_id
+- candidate_content_id?
+- candidate_type
+- candidate_title?
+- candidate_creator?
+- score
+- decision: AUTO_CONFIRMED | USER_CONFIRMED | USER_CORRECTED | MANUAL_SEARCH | FAILED
+- created_at
+
+UserContent
+- user_id
+- content_id
+- status: INTERESTED | IN_PROGRESS | EXPERIENCED | DISLIKE
+- saved_at
+- started_at?
+- completed_at?
+- rating?
+- user_corrected: boolean
+
+Track (ALBUM only)
+- album_content_id
+- recording_mbid?
+- title
+- artists[]
+- disc_no?
+- track_no?
+- isrc?</pre>
+<div class="callout"><strong>저장 원칙</strong><br/>외부 공급자의 객체를 그대로 DB 구조로 복사하지 않는다. 송림 스키마로 정규화하고, 원천 ID와 출처를 별도 테이블에 남긴다.</div>
+</section>
+<section id="matching">
+<h2>10. 동일 콘텐츠 매칭 규칙</h2>
+<h3>10.1 강한 식별자 우선</h3>
+<ul class="rulelist"><li><strong>책:</strong> ISBN13 정확 일치 → 동일 판본</li><li><strong>음반:</strong> MusicBrainz Release Group MBID 정확 일치 → 동일 앨범 작품. Release MBID는 판본 구분.</li><li><strong>트랙:</strong> Recording MBID 또는 ISRC + 아티스트 보조</li><li><strong>영화:</strong> TMDB ID 또는 KOBIS movieCd 정확 일치</li></ul>
+<h3>10.2 식별자가 없을 때</h3>
+<table><thead><tr><th>단계</th><th>비교 요소</th><th>처리</th></tr></thead><tbody>
+<tr><td data-label="단계">A</td><td data-label="비교 요소">정규화 제목 + 주 제작자 정확 일치</td><td data-label="처리">연도/출판사/발매일 확인 후 높은 신뢰도</td></tr><tr><td data-label="단계">B</td><td data-label="비교 요소">제목 유사 + 제작자 정확 + 연도 근접</td><td data-label="처리">후보 자동 확정 가능하나 로그 남김</td></tr><tr><td data-label="단계">C</td><td data-label="비교 요소">제목만 유사</td><td data-label="처리">자동 병합 금지, 후보 확인</td></tr><tr><td data-label="단계">D</td><td data-label="비교 요소">공급자 검색 실패</td><td data-label="처리">USER_ONLY 임시 엔티티 생성 후 추후 보완</td></tr>
+</tbody></table>
+<h3>10.3 Confidence</h3>
+<ul class="rulelist"><li><strong>0.90 이상 + 상충 증거 없음:</strong> 자동 저장</li><li><strong>0.65~0.89:</strong> 후보 1~3개 확인</li><li><strong>0.65 미만 또는 후보 충돌:</strong> 화면에서 찾기 / 제목 검색</li></ul>
+<p class="small">Confidence는 LLM의 자기평가값이 아니라 SourceEvidence와 Provider 검증 결과를 조합한 점수로 계산한다. 임계값은 초기값이며 실제 사용자 보정 로그로 재조정한다. 자동 확정률보다 <strong>오답 자동 저장률</strong>을 우선 관리한다.</p>
+</section>
+<section id="risk">
+<h2>11. 정책·라이선스·운영 리스크</h2>
+<table><thead><tr><th>공급자</th><th>현재 확인된 제약</th><th>송림 대응</th></tr></thead><tbody>
+<tr><td data-label="공급자">Kakao Daum Search</td><td data-label="현재 확인된 제약">앱 등록·REST API 키·일간 쿼터. 쿼터 상향은 협의.</td><td data-label="송림 대응">책 1순위. 서버 캐시. 공개 출시 전 이미지/콘텐츠 표시 약관 재점검.</td></tr>
+<tr><td data-label="공급자">Google Books</td><td data-label="현재 확인된 제약">쿼터·API 정책 준수 필요.</td><td data-label="송림 대응">Fallback 및 ISBN 교차검증.</td></tr>
+<tr><td data-label="공급자">Aladin</td><td data-label="현재 확인된 제약"><strong>일반 OpenAPI는 영리·법인 서비스 이용 불가.</strong> 기업/제휴는 사전 허가 필요.</td><td data-label="송림 대응">MVP 코어에서 제외. 구매 링크 BM 시 제휴 협상.</td></tr>
+<tr><td data-label="공급자">MusicBrainz</td><td data-label="현재 확인된 제약">공개 API 평균 1 req/s. Core는 CC0, supplementary는 다른 라이선스.</td><td data-label="송림 대응">Core 위주 사용, 캐시·큐. 성장 시 dump 자체 인덱싱 검토.</td></tr>
+<tr><td data-label="공급자">Cover Art Archive</td><td data-label="현재 확인된 제약">이미지 저작권을 서비스가 보증하지 않음.</td><td data-label="송림 대응">MVP 커버 미존재 허용. 상용 공개 전 이미지 권리 정책 확정.</td></tr>
+<tr><td data-label="공급자">Spotify</td><td data-label="현재 확인된 제약">Development Mode는 좁은 사용자 범위, Extended Quota는 높은 자격 조건. 이미지 원형 유지·attribution·AI 학습 금지.</td><td data-label="송림 대응">프로덕션 핵심 공급자에서 제외. 외부 링크/향후 승인 시 보조.</td></tr>
+<tr><td data-label="공급자">TMDB</td><td data-label="현재 확인된 제약">비상업 무료, 상업 서비스는 commercial license 문의. attribution 필수.</td><td data-label="송림 대응">기술 검증용. 상용 출시 Go 조건에 계약 확정 포함.</td></tr>
+<tr><td data-label="공급자">KOBIS</td><td data-label="현재 확인된 제약">회원가입·API key 필요.</td><td data-label="송림 대응">국내 영화 보조 식별자로 사용.</td></tr>
+</tbody></table>
+</section>
+<section id="test">
+<h2>12. 실제 연동 가능성 점검</h2>
+<p class="lede">공식 문서와 현재 활성 엔드포인트 기준으로 기술 연동 가능성을 확인했다. 인증키가 필요한 공급자는 이 문서 작성 환경에서 실제 키를 발급받아 호출하지 않았으므로, <strong>“문서상 활성 확인”과 “송림 계정으로 실호출 확인”을 구분</strong>한다.</p>
+<table><thead><tr><th>공급자</th><th>공식 API 활성</th><th>인증 방식</th><th>실서비스 적합성</th><th>개발 전 해야 할 것</th></tr></thead><tbody>
+<tr><td data-label="공급자">Kakao 책</td><td data-label="공식 API 활성">확인</td><td data-label="인증 방식">REST API Key</td><td data-label="실서비스 적합성">높음</td><td data-label="개발 전 해야 할 것">앱 생성 → 키 발급 → 한국 도서 30~50건 품질 테스트</td></tr>
+<tr><td data-label="공급자">Google Books</td><td data-label="공식 API 활성">확인</td><td data-label="인증 방식">공개/Key</td><td data-label="실서비스 적합성">보조</td><td data-label="개발 전 해야 할 것">한국 ISBN 누락률 측정</td></tr>
+<tr><td data-label="공급자">MusicBrainz</td><td data-label="공식 API 활성">확인</td><td data-label="인증 방식">공개 API + User-Agent</td><td data-label="실서비스 적합성">높음(캐시 전제)</td><td data-label="개발 전 해야 할 것">한국/해외 음반 50장 매칭률·응답시간 측정</td></tr>
+<tr><td data-label="공급자">Cover Art Archive</td><td data-label="공식 API 활성">확인</td><td data-label="인증 방식">공개</td><td data-label="실서비스 적합성">이미지 권리 검토 필요</td><td data-label="개발 전 해야 할 것">커버 존재율과 404 비율 측정</td></tr>
+<tr><td data-label="공급자">Spotify</td><td data-label="공식 API 활성">확인</td><td data-label="인증 방식">OAuth 2.0 / Client Credentials</td><td data-label="실서비스 적합성">초기 공개 서비스 코어로 부적합</td><td data-label="개발 전 해야 할 것">필요 시 5인 내부 테스트에 한정</td></tr>
+<tr><td data-label="공급자">TMDB</td><td data-label="공식 API 활성">확인</td><td data-label="인증 방식">API Key/Bearer</td><td data-label="실서비스 적합성">계약 전 조건부</td><td data-label="개발 전 해야 할 것">상업 이용 문의 + 한국어 검색 샘플 테스트</td></tr>
+<tr><td data-label="공급자">KOBIS</td><td data-label="공식 API 활성">확인</td><td data-label="인증 방식">API Key</td><td data-label="실서비스 적합성">국내 보조</td><td data-label="개발 전 해야 할 것">키 발급 → 최근/고전 한국영화 검색 테스트</td></tr>
+<tr><td data-label="공급자">Aladin</td><td data-label="공식 API 활성">확인</td><td data-label="인증 방식">TTB Key</td><td data-label="실서비스 적합성">제휴 전 불가</td><td data-label="개발 전 해야 할 것">BM 단계에서 기업 제휴 문의</td></tr>
+</tbody></table>
+<h3>12.1 실제 작동 검증용 샘플 세트</h3>
+<p>개발자가 API 키를 발급받으면 임의 검색어가 아니라 아래처럼 <strong>정답을 이미 아는 고정 샘플</strong>로 자동화 테스트를 만든다.</p>
+<ul class="rulelist"><li>콘텐츠 DB 품질: 책 50종, 음반 50종, 영화 50종을 별도 정답 세트로 유지</li><li>SNS/웹 유입 실증: Instagram 50건 + Threads 30건 + 블로그/기사 30건 + YouTube·서점·기타 40건 = 150건</li><li>각 공유 샘플에 실제 작품 정답, Share Sheet payload, 추출 증거, 후보 목록, 최종 선택, 사용자 보정 여부를 기록</li><li>출처별 자동 식별률·후보 생성률·오답 자동 저장률·최종 저장 완료율·완료 시간을 각각 계산</li></ul>
+<p class="small">전체 평균만 보지 않는다. Instagram/Threads처럼 송림의 핵심 유입 채널은 별도 Go/No-Go 지표로 관리한다.</p>
+</section>
+<section id="todo">
+<h2>13. MVP 구현 순서</h2>
+<ol class="rulelist"><li><strong>Content / ProviderIdentifier / Source / SourceEvidence / MatchLog / UserContent 스키마부터 확정</strong></li><li>직접 기록 검색: 제목 입력 → 카테고리별 Provider 후보 → 1탭 선택 → 메타데이터 자동완성 → 기존 Content와 중복 병합</li><li>Kakao 책 검색 API 연동 + Google Books fallback</li><li>MusicBrainz 검색·Release Group/Release 매핑 + 요청 큐·캐시</li><li>Cover Art Archive 커버 연결, 커버 없을 때 placeholder 처리</li><li>TMDB 기술 연동 샘플 + KOBIS 보조. 동시에 TMDB 상업 라이선스 문의</li><li>iPhone 실제 Share Sheet payload 로거부터 구현하여 Instagram·Threads·블로그·YouTube 150건 수집</li><li>Share Sheet 입력 파서: source_url / shared_text / source_app 저장</li><li>OG / JSON-LD 파서와 후보 추출기</li><li>AI는 BOOK/ALBUM/MOVIE + title + creator 후보만 구조화</li><li>Provider 검색 결과 점수화 → 자동 확정 / 후보 확인 / 직접 수정</li><li>화면에서 찾기: 사용자가 스크린샷/이미지를 명시적으로 전달한 경우 이미지·텍스트 단서 추출 → 동일 후보 파이프라인으로 연결</li><li>수정 이력을 SourceEvidence/MatchLog에 저장하여 매칭 룰 개선</li><li>출처별 성공률 대시보드: 직접 식별 성공률, 후보 검색 성공률, 자동 확정률, 사용자 보정률, 오답 자동 저장률, 최종 저장 완료율, 저장 완료 시간</li></ol>
+<div class="callout"><strong>MVP Go 기준 제안</strong><br/>“모든 공유를 85% 자동 인식” 하나로 보지 않는다. <strong>직접 식별 가능한 링크군은 95%+ 자동 식별, 일반 웹/YouTube는 후보 생성 80%+, Instagram·Threads는 자동 식별률과 별개로 1탭 확인/화면에서 찾기까지 포함한 최종 저장 완료율 95%+를 목표</strong>로 둔다. 자동 저장된 결과의 오답률은 1~2% 이하를 우선 목표로 하고, 공유 시작→저장 완료의 중앙값은 10초 이내를 검증한다.</div>
+</section>
+<section>
+<h2>14. 공식 근거</h2>
+<ul class="source-list">
+<li>Kakao Developers · Daum Search Book API: <a href="https://developers.kakao.com/docs/ko/daum-search/dev-guide">developers.kakao.com/docs/ko/daum-search/dev-guide</a></li>
+<li>Kakao Developers · Quota: <a href="https://developers.kakao.com/docs/ko/getting-started/quota">developers.kakao.com/docs/ko/getting-started/quota</a></li>
+<li>NAVER Developers · 책 검색 API 종료 공지: <a href="https://developers.naver.com/notice/article/32564">developers.naver.com/notice/article/32564</a></li>
+<li>Google Books API: <a href="https://developers.google.com/books/docs/v1/using">developers.google.com/books/docs/v1/using</a></li>
+<li>알라딘 OpenAPI 이용 안내: <a href="https://blog.aladin.co.kr/openapi/popup/5353304">blog.aladin.co.kr/openapi/popup/5353304</a></li>
+<li>MusicBrainz Web Service: <a href="https://musicbrainz.org/doc/Web_Service">musicbrainz.org/doc/Web_Service</a></li>
+<li>MusicBrainz Data License: <a href="https://musicbrainz.org/doc/About/Data_License">musicbrainz.org/doc/About/Data_License</a></li>
+<li>MusicBrainz Database Download: <a href="https://musicbrainz.org/doc/MusicBrainz_Database/Download">musicbrainz.org/doc/MusicBrainz_Database/Download</a></li>
+<li>Cover Art Archive API: <a href="https://musicbrainz.org/doc/Cover_Art_Archive/API">musicbrainz.org/doc/Cover_Art_Archive/API</a></li>
+<li>Spotify Search API: <a href="https://developer.spotify.com/documentation/web-api/reference/search">developer.spotify.com/documentation/web-api/reference/search</a></li>
+<li>Spotify Quota Modes: <a href="https://developer.spotify.com/documentation/web-api/concepts/quota-modes">developer.spotify.com/documentation/web-api/concepts/quota-modes</a></li>
+<li>Spotify Client Credentials: <a href="https://developer.spotify.com/documentation/web-api/tutorials/client-credentials-flow">developer.spotify.com/documentation/web-api/tutorials/client-credentials-flow</a></li>
+<li>TMDB Movie Search: <a href="https://developer.themoviedb.org/reference/search-movie">developer.themoviedb.org/reference/search-movie</a></li>
+<li>TMDB FAQ / Commercial &amp; Attribution: <a href="https://developer.themoviedb.org/docs/faq">developer.themoviedb.org/docs/faq</a></li>
+<li>KOBIS OpenAPI Web Service: <a href="https://kobis.or.kr/kobisopenapi/webservice">kobis.or.kr/kobisopenapi/webservice</a></li>
+</ul>
+<p class="small">정책·쿼터·라이선스는 변경될 수 있으므로 실제 출시 직전 다시 확인한다. 특히 이미지 사용권과 상업 이용 조건은 API 기술 연동과 별개의 검토 항목이다.</p>
+</section>
+</main>
+
+<footer class="songlim-copyright">
+  <p>Copyright (c) 2026 진선민. All rights reserved.</p>
+  <p>본 저작물의 무단 전재, 복제, 배포 및 상업적 목적의 이용은 저작권법 등 관련 법령에 의해 엄격히 금지되며, 위반 시 법적 책임을 물을 수 있습니다.</p>
+</footer>
+</body>
+</html>

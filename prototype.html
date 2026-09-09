@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-    <meta name="robots" content="noindex, nofollow, noarchive"><meta name="googlebot" content="noindex, nofollow, noarchive">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="googlebot" content="noindex, nofollow, noarchive">
 <title>송림 프로토타입 · 기능정의서 기준</title>
 <style>
 :root{--ink:#111;--sub:#666;--line:#c8c8c2;--soft:#f5f5f2;--paper:#fff;--accent:#1f3a2d}
@@ -154,6 +155,30 @@ textarea:focus{border-color:#111;box-shadow:inset 0 0 0 1px #111}
 .sourceExamples button{flex:0 0 auto;border:1px solid #a6a6a6;background:#fff;padding:6px 8px;font-size:10px}
 .candidateList{border-top:1px solid #aaa;margin-top:12px}.candidateRow{width:100%;border:0;border-bottom:1px solid #d7d7d7;background:#fff;text-align:left;padding:12px 0;display:flex;gap:11px;align-items:center}.candidateRow .thumb{width:46px;height:58px}.candidateRow.album .thumb{height:46px}.candidateMeta{font-size:11px;color:#666;line-height:1.45;margin-top:3px}.candidateSub{font-size:10px;color:#888;margin-top:4px}.evidence{border-top:1px solid #d7d7d7;border-bottom:1px solid #d7d7d7;padding:10px 0;margin:12px 0;font-size:11px;color:#555;line-height:1.55}.evidence b{color:#111}.confidenceBadge{display:inline-block;border:1px solid #999;padding:3px 6px;font-size:10px;margin:0 4px 4px 0;background:#fff}.autoMeta{border-top:1px solid #bbb;margin-top:12px}.autoMeta div{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #ddd;font-size:11px}.autoMeta span{color:#777}.emptySearch{padding:18px 0;color:#777;font-size:12px}
 @media(max-width:700px){.entryChoice{grid-template-columns:1fr}.sourceExamples{margin-right:-18px;padding-right:18px}}
+</style>
+
+<style id="songlim-copyright-style">
+.songlim-copyright{
+  width:min(920px,calc(100% - 40px));
+  margin:46px auto 0;
+  padding:18px 0 30px;
+  border-top:1px solid #eee;
+  color:#888;
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",Arial,sans-serif;
+  font-size:11px;
+  line-height:1.6;
+  word-break:keep-all;
+}
+.songlim-copyright p{margin:0;max-width:none;}
+.songlim-copyright p:first-child{margin-bottom:4px;font-weight:600;color:#555;}
+@media(max-width:640px){
+  .songlim-copyright{width:min(100% - 32px,920px);margin-top:36px;padding-bottom:24px;}
+}
+</style>
+
+<style id="songlim-prototype-footer-layout">
+body{flex-direction:column;align-items:center;}
+.songlim-copyright{width:min(390px,calc(100% - 32px));margin-top:20px;}
 </style>
 </head>
 <body>
@@ -669,5 +694,10 @@ function init(){ensureNotionContents();renderOnboarding();setupForestDrag();rend
 
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 </script>
+
+<footer class="songlim-copyright">
+  <p>Copyright (c) 2026 진선민. All rights reserved.</p>
+  <p>본 저작물의 무단 전재, 복제, 배포 및 상업적 목적의 이용은 저작권법 등 관련 법령에 의해 엄격히 금지되며, 위반 시 법적 책임을 물을 수 있습니다.</p>
+</footer>
 </body>
 </html>
