@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-
+html
 <html lang="ko">
 <head>
 <meta charset="utf-8"/>
@@ -25,7 +24,7 @@ table{width:100%;border-collapse:collapse;table-layout:fixed;margin:20px 0;font-
 <div class="eyebrow">송림 · 개발 기준 문서</div>
 <h1>콘텐츠 데이터 수집·매칭 정의서</h1>
 <div class="subtitle">기능정의서 기준 · 책 · 음반 · 영화의 공유·이미지 가져오기·직접 검색, 정규화, 동일 콘텐츠 식별 및 Fallback</div>
-<div class="meta"><div><b>검증 기준일</b>2026-09-09</div><div><b>대상</b>MVP · BOOK / ALBUM / MOVIE</div><div><b>기준 기능정의서</b>송림_기능정의서_20260909-1544</div></div>
+<div class="meta"><div><b>검증 기준일</b>2026-09-09</div><div><b>대상</b>MVP · BOOK / ALBUM / MOVIE</div><div><b>기준 기능정의서</b>송림_기능정의서_20260909-1612</div></div>
 </header>
 <nav><a href="#summary">핵심 결론</a><a href="#architecture">전체 구조</a><a href="#book">책</a><a href="#album">음반</a><a href="#movie">영화</a><a href="#source">공유 유입</a><a href="#import">이미지·목록 가져오기</a><a href="#sns-pipeline">SNS 식별</a><a href="#manual-entry">직접 기록</a><a href="#schema">데이터 구조</a><a href="#matching">매칭 규칙</a><a href="#risk">정책·리스크</a><a href="#test">연동 검증</a><a href="#todo">구현 순서</a></nav>
 <section id="summary">
@@ -48,7 +47,7 @@ table{width:100%;border-collapse:collapse;table-layout:fixed;margin:20px 0;font-
 </section>
 <section id="architecture">
 <h2>2. 전체 데이터 수집 구조</h2>
-<div class="flow">외부 공유 / 이미지 가져오기 / 직접 검색 / 온보딩 직접 선택 → Input Adapter → 후보 추출·검색 → Provider Verification → Entity Resolution → 사용자 확인 → Content / UserContent → SaveEvent·경험 상태 → 월간/연간 집계 → 올해의 숲·지난 숲·리포트</div>
+<div class="flow">외부 공유 / 이미지 가져오기 / 직접 검색 / 온보딩 직접 선택 → Input Adapter → 후보 추출·검색 → Provider Verification → Entity Resolution → 사용자 확인 → Content / UserContent → SaveEvent·경험 상태 → 월간 집계·연도별 완료 수 → 올해의 숲·월간 기록·숲 기록</div>
 <div class="grid"><div><div class="k">원칙 01</div><div class="v">AI는 검색어를 만든다</div><div class="s">LLM이 최종 사실 DB가 되지 않는다. 제목·제작자·유형 후보를 구조화하는 데 사용한다.</div></div><div><div class="k">원칙 02</div><div class="v">외부 ID는 여러 개 보관한다</div><div class="s">ISBN, MBID, ISRC, TMDB ID, KOBIS movieCd 등을 송림 내부 ID 밑에 연결한다.</div></div><div><div class="k">원칙 03</div><div class="v">낮은 신뢰도는 자동 병합 금지</div><div class="s">동명이작·재발매·번역판 때문에 “비슷함”만으로 병합하지 않는다.</div></div><div><div class="k">원칙 04</div><div class="v">API 장애가 저장 실패가 되지 않게 한다</div><div class="s">최소 제목·유형만으로 임시 Content를 만든 뒤 비동기로 보완할 수 있다.</div></div><div><div class="k">원칙 05</div><div class="v">여러 건은 Batch로 다룬다</div><div class="s">장바구니·찜 목록 캡처처럼 한 화면에 여러 작품이 있을 때는 항목별 후보를 독립 검증한 뒤 한 번에 확인·저장한다.</div></div></div><h3>2.1 기능 화면 ↔ 데이터 처리</h3><table>
 <thead><tr><th>기능정의서 화면</th><th>데이터 처리</th><th>저장 결과</th></tr></thead>
 <tbody>
@@ -59,10 +58,9 @@ table{width:100%;border-collapse:collapse;table-layout:fixed;margin:20px 0;font-
 <tr><td>SHARE-02 / SHARE-03</td><td>인식 결과 확인 또는 후보 선택·최소 정정</td><td>신규는 INTERESTED. 동일 content_id가 있으면 기존 UserContent 재사용.</td></tr>
 <tr><td>SCRAP-01 + 저장</td><td>이미지 가져오기 또는 직접 검색 진입</td><td>모든 유입 경로를 하나의 UserContent 목록에서 표시. 기본 정렬은 save_count DESC → last_saved_at DESC.</td></tr>
 <tr><td>TODAY-02</td><td>INTERESTED 콘텐츠에서 사용자가 직접 경험할 하나 선택. save_count DESC → last_saved_at DESC로 기본 노출.</td><td>content_id는 그대로 사용하고 selection_source=USER_DIRECT 이벤트만 별도 기록.</td></tr>
-<tr><td>FOREST-01 올해의 숲</td><td>현재 연도 completed_at 기준 EXPERIENCED 전체 + 현재 IN_PROGRESS를 조회. 경험 수는 완료 건수만 집계.</td><td>별도 콘텐츠 복제 없음. 숲은 UserContent 상태와 연도별 테마 정의를 조합해 렌더링.</td></tr>
-<tr><td>FOREST-02 월간 기록</td><td>선택 월 counted SaveEvent의 고유 content_id 수, completed_at 기준 완료 수, 카테고리 완료 수, 주차별 완료 수, 기간 내 반복 저장·저장→경험 하이라이트 집계.</td><td>원본 이벤트를 집계해 표시. MVP에서는 월간 리포트 전용 영구 레코드를 별도로 만들지 않음.</td></tr>
-<tr><td>FOREST-03 / 04 지난 숲</td><td>과거 연도의 경험 완료 수 + 연도별 숲 테마/버전을 조회해 대표 숲 이미지를 표시.</td><td>ForestYearSnapshot으로 theme_id/theme_version과 대표 이미지 상태를 보존. 과거 개별 콘텐츠 탐색은 하지 않음.</td></tr>
-<tr><td>FOREST-05 연간 리포트</td><td>선택 연도의 저장 고유 수, 완료 수, 카테고리별 완료 수, 월별 완료 추이, 가장 많이 저장한 콘텐츠, 저장→경험 사례, 연간 완료 콘텐츠 목록 집계.</td><td>SaveEvent + UserContent에서 기간 조건으로 계산. 필요 시 캐시 가능하나 원본 이벤트가 source of truth.</td></tr>
+<tr><td>FOREST-01 올해의 숲</td><td>현재 연도 completed_local_date 기준 EXPERIENCED 전체 + 현재 IN_PROGRESS를 조회하고, EXPERIENCED를 BOOK / ALBUM / MOVIE로 group by하여 카테고리 수를 집계한다. 최근 완료 1~2개는 completed_at DESC로 별도 조회한다.</td><td>별도 콘텐츠 복제 없음. 숲은 UserContent 상태와 현재 연도 ForestThemeDefinition을 조합해 렌더링한다.</td></tr>
+<tr><td>FOREST-02 월간 기록</td><td>선택 월 counted SaveEvent의 고유 content_id 수, completed_local_date 기준 경험 완료 수, BOOK / ALBUM / MOVIE별 완료 수, 주차별 완료 수, 선택 월 완료 콘텐츠 목록을 조회한다.</td><td>원본 SaveEvent와 UserContent를 기간 조건으로 집계해 표시한다. 월간 기록 전용 영구 레코드는 만들지 않는다.</td></tr>
+<tr><td>FOREST-03 / 04 숲 기록</td><td>현재 연도를 포함한 연도별 EXPERIENCED 총 수와 해당 연도의 forest_theme_id / theme_version, 숲 장면 asset을 조회한다.</td><td>현재 연도는 실시간 완료 집계 + 현재 테마로 표시하고, 종료된 연도는 ForestYearSnapshot으로 theme_id/theme_version과 숲 장면 asset 상태를 보존한다. 상세 화면은 해당 장면을 좌우 pan하여 감상한다.</td></tr>
 </tbody>
 </table>
 </section>
@@ -196,7 +194,6 @@ table{width:100%;border-collapse:collapse;table-layout:fixed;margin:20px 0;font-
 <li><strong>이미지 안의 “읽음/봤음/완료” 문구:</strong> MVP 가져오기 상태를 자동 EXPERIENCED로 만들기 위한 근거로 사용하지 않는다. 경험 여부는 기능정의서의 명시적 사용자 행동으로 관리한다.</li>
 <li><strong>DISLIKE:</strong> 가져오기에서 자동 추론하지 않는다.</li>
 </ul>
-
 <h3>7.4 온보딩과 연결</h3>
 <div class="flow">신규 가입 → 10개 직접 선택 또는 저장 콘텐츠 가져오기 → 직접 응답 + 가져오기 저장 확정 항목 합산 → 유효 취향 신호 10개 이상 → TODAY-01</div>
 <ul class="rulelist"><li><strong>직접 선택: </strong>관심 있음 / 경험함 / 싫음의 유효 응답 1건 = 신호 1개. 건너뛰기는 저장·카운트하지 않는다.</li><li><strong>가져오기: </strong>IMPORT-02에서 실제 저장 확정한 신규/기존 콘텐츠 1건 = 신호 1개. 가져오기 항목의 신규 상태는 INTERESTED다.</li><li><strong>혼합: </strong>두 경로를 합산한다. 예: 직접 선택 4개 + 가져오기 확정 6개 = 10개.</li><li><strong>이어하기: </strong>온보딩 중 이탈하면 현재 유효 신호 수와 진행 위치를 저장하고 다음 진입에서 이어간다.</li><li><strong>완료: </strong>10개 이상이면 별도 완료 화면 없이 TODAY-01로 이동할 수 있다.</li></ul>
@@ -502,14 +499,14 @@ ForestYearSnapshot
 - forest_year                  // 예: 2025
 - forest_theme_id              // 해당 연도의 기본 테마
 - theme_version                // 과거 숲 재현용 버전 고정
-- representative_image_ref?    // 생성된 대표 이미지 또는 캐시 위치
+- representative_image_ref?    // 가로형 숲 장면 asset 또는 렌더 캐시 위치. 목록은 축소 표시, 상세는 좌우 pan
 - image_status: NONE | READY | FAILED
 - completed_count_cache?       // 선택 캐시. source of truth는 UserContent
 - generated_at?
 - updated_at
 // user_id + forest_year는 1개.
 // 과거 연도 숲은 이후 기본 테마가 바뀌어도 theme_version을 유지한다.
-// 대표 이미지는 재생성할 수 있으나 동일 forest_theme_id/theme_version을 사용한다.
+// 숲 장면 asset은 재생성할 수 있으나 동일 forest_theme_id/theme_version을 사용한다.
 
 ForestThemeDefinition (app config 또는 테이블)
 - forest_theme_id
@@ -530,10 +527,9 @@ Track (ALBUM only)
 - track_no?
 - isrc?</pre>
 <div class="callout"><strong>저장 원칙</strong><br/>외부 공급자의 객체를 그대로 DB 구조로 복사하지 않는다. 송림 스키마로 정규화하고, 원천 ID와 출처를 별도 테이블에 남긴다.</div>
-
-<h3>10.1 월간·연간 기록 집계 규칙</h3>
+<h3>10.1 월간 기록·연도별 경험 수 집계 규칙</h3>
 <div class="soft"><strong>핵심 원칙</strong><br/>
-월간/연간 숫자는 별도의 수기 통계 테이블을 source of truth로 두지 않는다.
+월간 기록과 연도별 경험 수는 별도의 수기 통계 테이블을 source of truth로 두지 않는다.
 <strong>저장은 SaveEvent, 경험 완료는 UserContent.completed_at / completed_local_date</strong>를 기준으로 집계한다.
 MVP 트래픽에서는 조회 시 계산해도 되고, 성능 문제가 생기면 동일 규칙으로 캐시/집계 테이블을 추가한다.
 </div>
@@ -544,38 +540,31 @@ MVP 트래픽에서는 조회 시 계산해도 되고, 성능 문제가 생기�
 <tr><td>월간 경험한 콘텐츠 수</td><td><code>completed_local_date</code>가 선택 월에 속하는 EXPERIENCED 고유 content_id 수</td><td>‘시작’이 아니라 최종 감상 완료 기준.</td></tr>
 <tr><td>월간 카테고리 완료 수</td><td>선택 월 완료 콘텐츠를 Content.type = BOOK / ALBUM / MOVIE로 group by</td><td>TRACK은 별도 콘텐츠 완료 수로 세지 않음.</td></tr>
 <tr><td>주차별 경험 수</td><td>선택 월 completed_local_date를 월내 주차 버킷으로 묶은 완료 수</td><td>주차 정의는 월요일 시작 기준으로 통일. 월 경계 밖 날짜는 해당 월 그래프에서 제외.</td></tr>
-<tr><td>월간 가장 많이 저장한 콘텐츠</td><td>선택 월 counted SaveEvent를 content_id별 count하여 1위 선택</td><td><strong>lifetime UserContent.save_count가 아니라 해당 월 SaveEvent 수</strong>를 사용. 동률이면 해당 월 last occurred_at 최신 순.</td></tr>
-<tr><td>월간 저장→경험 하이라이트</td><td>선택 월에 완료된 콘텐츠 중 완료 시점 이전 counted SaveEvent 누적이 2회 이상인 항목</td><td>여러 개면 완료 전 저장 횟수 높은 순 → 마지막 저장 시점 최신 순. 없으면 영역 숨김.</td></tr>
-<tr><td>연간 저장한 콘텐츠 수</td><td>선택 연도에 counted SaveEvent가 1회 이상 존재하는 고유 content_id 수</td><td>월간과 동일한 unique 규칙.</td></tr>
-<tr><td>연간 경험한 콘텐츠 수</td><td>completed_local_date의 연도가 선택 연도인 EXPERIENCED 고유 content_id 수</td><td>지난 숲의 ‘n개의 경험’과 연간 리포트의 완료 수가 동일해야 함.</td></tr>
-<tr><td>월별 경험 추이</td><td>선택 연도 completed_local_date를 1~12월로 group by</td><td>현재 연도는 현재 월까지만 표시. 미래 월을 0으로 채워 성과 저하처럼 보이게 하지 않음.</td></tr>
-<tr><td>연간 가장 많이 저장한 콘텐츠</td><td>선택 연도 counted SaveEvent를 content_id별 count하여 1위 선택</td><td>lifetime save_count와 분리.</td></tr>
-<tr><td>연간 저장→경험 하이라이트</td><td>선택 연도에 완료된 콘텐츠 중 완료 전 counted SaveEvent 누적 2회 이상</td><td>대표 1개를 기본 노출. 전체 후보는 필요 시 확장.</td></tr>
+
+
+<tr><td>월간 경험 콘텐츠 목록</td><td><code>completed_local_date</code>가 선택 월에 속하는 EXPERIENCED 콘텐츠</td><td><code>completed_at DESC</code>로 정렬해 표지/커버, 제목, 유형, 완료일을 표시한다.</td></tr><tr><td>연도별 총 경험 수</td><td>completed_local_date의 연도가 선택 연도인 EXPERIENCED 고유 content_id 수</td><td>숲 기록 목록과 연도별 숲 상세의 ‘n개의 경험’에 동일하게 사용.</td></tr>
 </tbody>
 </table>
-
 <h3>10.2 기간 경계·타임존 규칙</h3>
 <ul class="rulelist">
 <li><strong>이벤트 저장:</strong> 서버에는 UTC timestamp를 저장하고, 발생 당시 사용자 로컬 날짜를 <code>occurred_local_date</code> / <code>completed_local_date</code>로 함께 확정한다.</li>
-<li><strong>이유:</strong> 사용자가 이후 해외 이동·타임존 변경을 해도 과거 월간/연간 기록의 날짜 버킷이 바뀌지 않게 한다.</li>
+<li><strong>이유:</strong> 사용자가 이후 해외 이동·타임존 변경을 해도 과거 월간 기록과 연도별 경험 수의 날짜 버킷이 바뀌지 않게 한다.</li>
 <li><strong>경험 완료:</strong> 최종 감상 완료 액션 시 <code>completed_at</code>과 <code>completed_local_date</code>를 같은 트랜잭션에서 기록한다.</li>
 <li><strong>중복 완료:</strong> 이미 EXPERIENCED인 동일 UserContent에 대해 완료 버튼 재시도로 completed_at이 바뀌지 않도록 idempotency를 적용한다.</li>
 </ul>
-
-<h3>10.3 올해의 숲 / 지난 숲 데이터 규칙</h3>
+<h3>10.3 올해의 숲 / 숲 기록 데이터 규칙</h3>
 <table>
 <thead><tr><th>화면</th><th>조회 기준</th><th>렌더링 원칙</th></tr></thead>
 <tbody>
-<tr><td>올해의 숲</td><td>현재 연도 완료 콘텐츠 전체 + 현재 status=IN_PROGRESS 콘텐츠</td><td>완료 콘텐츠는 큰 나무, IN_PROGRESS는 현재 성장 상태. ‘n개의 경험’은 완료 콘텐츠 수만 사용.</td></tr>
-<tr><td>지난 숲 목록</td><td>현재 연도 이전 중 completed_local_date가 1개 이상 존재하는 연도</td><td>연도별 ForestYearSnapshot 대표 이미지 + 완료 수. 상세 데이터는 목록에서 최소화.</td></tr>
-<tr><td>지난 숲 상세</td><td>선택 연도의 ForestYearSnapshot + 연간 완료 집계</td><td>대표 숲 이미지가 화면 중심. 과거 개별 나무 탐색용 좌표 데이터는 요구하지 않음.</td></tr>
-<tr><td>연간 리포트</td><td>선택 연도 SaveEvent + UserContent 완료 기록</td><td>저장/경험 수, 카테고리, 월별 추이, 하이라이트, 완료 콘텐츠 목록.</td></tr>
+<tr><td>올해의 숲</td><td>현재 연도 completed_local_date 기준 EXPERIENCED 전체 + 현재 status=IN_PROGRESS 콘텐츠</td><td>완료 콘텐츠는 큰 나무, IN_PROGRESS는 현재 성장 상태로 렌더링한다. 숲 아래 카테고리 요약은 EXPERIENCED를 BOOK / ALBUM / MOVIE로 집계한다. 최근 완료 1~2개는 completed_at DESC로 조회한다.</td></tr>
+<tr><td>숲 기록 목록</td><td>현재 연도를 포함해 completed_local_date가 1개 이상 존재하는 연도</td><td>현재 연도는 현재 테마 + 실시간 총 경험 수를 사용하고, 종료 연도는 ForestYearSnapshot의 forest_theme_id / theme_version / representative_image_ref와 연도별 총 경험 수를 사용한다.</td></tr>
+<tr><td>숲 기록 상세</td><td>선택 연도. 현재 연도는 현재 테마 + 실시간 완료 집계, 종료 연도는 ForestYearSnapshot + 연도별 총 경험 수</td><td>가로형 숲 장면 asset을 화면 대부분에 표시하고 드래그/스와이프로 좌우 pan한다. 화면 하단에는 연도별 총 경험 수만 표시한다. 개별 나무 선택용 좌표 데이터는 요구하지 않는다.</td></tr>
 </tbody>
 </table>
 <div class="callout"><strong>연도 종료 처리</strong><br/>
 연도 변경 시 과거 숲을 별도 콘텐츠 DB로 복제하지 않는다. 해당 연도 완료 UserContent는 그대로 두고,
 <strong>ForestYearSnapshot에 forest_theme_id / theme_version을 고정</strong>한다.
-대표 숲 이미지는 연말 배치, 사용자의 첫 ‘지난 숲’ 진입 시 lazy generation, 또는 클라이언트 렌더 후 업로드 중 한 방식을 선택할 수 있다.
+가로형 숲 장면 asset는 연말 배치, 사용자의 첫 ‘숲 기록’ 진입 시 lazy generation, 또는 클라이언트 렌더 후 업로드 중 한 방식을 선택할 수 있다.
 MVP에서는 구현 복잡도가 낮은 방식으로 시작하되, 재생성 시 항상 동일 theme_version을 사용한다.
 </div>
 </section>
@@ -653,12 +642,11 @@ MVP에서는 구현 복잡도가 낮은 방식으로 시작하되, 재생성 시
 <tr><td>같은 책을 다른 날 Instagram에서 다시 공유</td><td>UserContent 중복 생성 없음, SaveEvent 추가, save_count +1, last_saved_at 갱신.</td></tr>
 <tr><td>같은 장바구니 Batch에서 화면 겹침으로 같은 책 3회 검출</td><td>ImportCandidate는 병합 가능, counted SaveEvent 1회, save_count +1만 반영.</td></tr>
 <tr><td>INTERESTED 3개가 save_count 5 / 3 / 1</td><td>금주의 추천·SCRAP 기본·TODAY-02 직접 선택 목록은 5 → 3 → 1 순. 동률이면 last_saved_at 최신 순.</td></tr>
-<tr><td>9월에 A를 5회, B를 1회 저장</td><td>FOREST-02 월간 상단 ‘저장한 콘텐츠’ = 2. ‘가장 많이 저장한 콘텐츠’ = A · 이번 달 5번 저장.</td></tr>
-<tr><td>8월에 3회 저장한 A를 9월에 완료</td><td>9월 경험 수에 A 포함. 9월 저장 수에는 9월 SaveEvent가 없다면 A 미포함. 저장→경험 하이라이트에는 완료 전 누적 저장 3회 기준으로 A 표시 가능.</td></tr>
+<tr><td>9월에 A를 5회, B를 1회 저장</td><td>FOREST-02의 ‘저장한 콘텐츠’ = 2. 반복 저장 횟수는 SaveEvent / UserContent.save_count에 유지하지만 월간 기록 화면에는 별도 하이라이트로 표시하지 않는다.</td></tr>
+<tr><td>8월에 3회 저장한 A를 9월에 완료</td><td>9월 경험 수와 9월 경험 콘텐츠 목록에 A 포함. 9월에 SaveEvent가 없다면 9월 저장 수에는 A를 포함하지 않는다.</td></tr>
 <tr><td>9월 완료 13개: 책4/음반6/영화3</td><td>월간 경험=13, 카테고리 합계도 13. 주차별 완료 수 합계도 13.</td></tr>
-<tr><td>2025 완료 62개 후 2026 진입</td><td>지난 숲 목록에 2025 표시. ForestYearSnapshot의 theme_id/theme_version으로 대표 이미지 재현. 2025 완료 수=62.</td></tr>
+<tr><td>2025 완료 62개 후 2026 진입</td><td>숲 기록에 2025 표시. ForestYearSnapshot의 theme_id/theme_version과 숲 장면 asset으로 재현하며 총 경험 수=62.</td></tr>
 <tr><td>2025 기본 테마가 앱 업데이트로 v2가 됨</td><td>이미 생성된/확정된 2025 ForestYearSnapshot은 기존 theme_version을 유지. 과거 숲 이미지가 자동 변경되지 않음.</td></tr>
-<tr><td>2026 현재 연간 리포트 조회</td><td>1월~현재 월 데이터만 집계. 미래 월을 강제로 0값 시리즈로 표시하지 않음.</td></tr>
 </tbody>
 </table></section>
 <section id="todo">
@@ -666,10 +654,9 @@ MVP에서는 구현 복잡도가 낮은 방식으로 시작하되, 재생성 시
 <ol class="rulelist"><li><strong>공통 스키마 확정:</strong> Content / ProviderIdentifier / UserContent / SaveEvent / Source / ImportBatch / SourceAsset / ImportCandidate / SourceEvidence / MatchLog / OnboardingProgress / ExperienceSelectionEvent / ForestYearSnapshot / ForestThemeDefinition</li><li><strong>ONB 데이터 규칙:</strong> 직접 응답 + IMPORT 저장 확정 항목을 유효 신호로 합산, 건너뛰기 제외, 10개 이상 완료</li><li><strong>IMPORT-01 입력:</strong> iOS 사진 선택, 여러 장 입력, 임시 원본 처리·삭제 정책</li><li><strong>IMPORT-02 1차 vertical slice:</strong> 책 장바구니·보관함 → 다건 추출 → Kakao/Google Books 검증 → 항목별 확인 → 일괄 INTERESTED 저장</li><li>직접 검색: 제목 입력 → Provider 후보 → 사용자 선택 → Content/UserContent 중복 병합</li><li>Kakao 책 검색 API + Google Books fallback 품질 테스트</li><li>MusicBrainz 검색·Release Group/Release 매핑 + 요청 큐·캐시</li><li>Cover Art Archive 커버 연결, 커버 미존재 placeholder 처리</li><li>TMDB 기술 연동 샘플 + KOBIS 보조 및 상용 조건 확인</li><li><strong>SHARE-01~03:</strong> 실제 iPhone Share Sheet payload 수집 → Source parser → 후보 추출 → 고신뢰 SHARE-02 / 확인 필요 SHARE-03</li><li>OG / JSON-LD / 공개 메타데이터 파서</li><li>공통 Candidate Extraction / Provider Verification / Entity Resolution 모듈로 SHARE·IMPORT·직접 검색을 통합</li><li>AI는 BOOK/ALBUM/MOVIE + title + creator 후보 구조화와 후보 랭킹에만 사용</li><li>중복 정책 구현: 동일 user_id + content_id는 UserContent 1개, 새 유입으로 기존 상태 자동 변경 금지</li>
 <li><strong>반복 저장 집계:</strong> SaveEvent dedupe/idempotency 구현, 같은 ImportBatch 중복 제외, save_count / first_saved_at / last_saved_at 갱신</li>
 <li><strong>노출 우선순위:</strong> INTERESTED 조회 기본 정렬을 save_count DESC → last_saved_at DESC로 공통 모듈화</li><li><strong>TODAY-02 데이터:</strong> SONGLIM_RECOMMENDATION / USER_DIRECT 선택 출처 이벤트 구분 기록</li>
-<li><strong>기간 집계 공통 모듈:</strong> SaveEvent.occurred_local_date + UserContent.completed_local_date 기준 월/연 필터, unique 저장 수, 완료 수, 카테고리/주차/월별 group by 구현</li>
-<li><strong>월간 리캡 쿼리:</strong> FOREST-02용 기간 내 저장 고유 수 / 완료 수 / 주차별 완료 / 월간 top saved / pre-completion repeated-save 하이라이트</li>
-<li><strong>연간 리포트 쿼리:</strong> FOREST-05용 연간 저장 고유 수 / 완료 수 / 월별 완료 추이 / top saved / 저장→경험 / 완료 콘텐츠 목록</li>
-<li><strong>연도별 숲 스냅샷:</strong> ForestYearSnapshot 생성·재생성 규칙, forest_theme_id/theme_version 고정, 대표 이미지 캐시/실패 fallback 구현</li><li>출처별 품질 대시보드: SHARE와 IMPORT를 분리해 후보 생성률·매칭 정답률·사용자 보정률·오답 자동 매칭률·최종 저장 완료율·완료 시간 관리</li></ol>
+<li><strong>기간 집계 공통 모듈:</strong> SaveEvent.occurred_local_date + UserContent.completed_local_date 기준 월 필터, 월간 unique 저장 수, 완료 수, 카테고리/주차 group by, 연도별 총 경험 수 집계 구현</li>
+<li><strong>월간 기록 쿼리:</strong> FOREST-02용 저장 고유 수 / 완료 수 / BOOK·ALBUM·MOVIE별 완료 수 / 주차별 완료 수 / 선택 월 경험 콘텐츠 목록 조회</li>
+<li><strong>연도별 숲 스냅샷:</strong> 현재 연도는 실시간 테마/완료 집계로 노출하고, 연도 종료 시 ForestYearSnapshot 생성·재생성 규칙, forest_theme_id/theme_version 고정, 가로형 숲 장면 asset 캐시/실패 fallback 구현</li><li>출처별 품질 대시보드: SHARE와 IMPORT를 분리해 후보 생성률·매칭 정답률·사용자 보정률·오답 자동 매칭률·최종 저장 완료율·완료 시간 관리</li></ol>
 <div class="callout"><strong>MVP Go 기준 제안</strong><br/>Share Sheet와 Screenshot Import를 같은 평균으로 섞지 않는다. <strong>책 장바구니·보관함 같은 정형 이미지에서는 항목 단위 정답률과 최종 저장 완료율을 먼저 높이고, SNS 비정형 이미지는 후보 확인까지 포함한 완료율을 우선 관리한다.</strong> 오답 자동 매칭률은 1~2% 이하를 최우선 품질 목표로 유지한다.</div>
 </section>
 <section>
