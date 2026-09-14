@@ -118,7 +118,7 @@ main h1:focus{outline:none}
   <script>
 const CORRECT_PASSWORD="1117";
 const input=document.getElementById('password-input'),error=document.getElementById('auth-error');
-function unlockPage(){document.getElementById('auth-screen').hidden=true;document.getElementById('main-content').style.display='block';input.value='';error.hidden=true;input.removeAttribute('aria-invalid');try{sessionStorage.setItem('songlim_auth','true')}catch(_){}const title=document.querySelector('main h1');title.tabIndex=-1;title.focus();}
+function unlockPage(){document.getElementById('auth-screen').hidden=true;document.getElementById('main-content').style.display='block';input.value='';error.hidden=true;input.removeAttribute('aria-invalid');try{sessionStorage.setItem('songlim_auth','true')}catch(_){}if(document.activeElement instanceof HTMLElement)document.activeElement.blur();}
 function checkPassword(event){event.preventDefault();if(input.value===CORRECT_PASSWORD)unlockPage();else{error.hidden=false;input.setAttribute('aria-invalid','true');input.select();input.focus();}}
 function lockPage(){try{sessionStorage.removeItem('songlim_auth')}catch(_){}document.getElementById('main-content').style.display='none';document.getElementById('auth-screen').hidden=false;input.value='';error.hidden=true;input.removeAttribute('aria-invalid');input.focus();}
 input.addEventListener('input',()=>{error.hidden=true;input.removeAttribute('aria-invalid')});
