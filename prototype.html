@@ -172,7 +172,8 @@ function metadataFields(c){return '<label for="contentGenre">세부 장르 · �
 document.addEventListener('change',e=>{if(e.target.id==='contentType'){$('contentGenre').innerHTML=genreOptions({type:e.target.value,genre:''});$('contentLength').value='';$('lengthLabel').textContent=(e.target.value==='book'?'전체 쪽수':'전체 재생시간 · 분')+' · 선택'}if(['contentType','contentGenre'].includes(e.target.id))$('genreTreePreview').textContent='나무 분류 · '+mappedCategory($('contentType').value,$('contentGenre').value).label});
 function detailMetadata(c){const days=new Set(c.logs.map(l=>l.date));if(c.type==='movie'&&Model.validDate(c.completed))days.add(c.completed);
  const metric=v=>v?'<strong>'+v+'</strong>':'<strong class="unset">미입력</strong>';
- return '<div class="detail-metrics"><div><small>장르</small>'+metric(c.genre?esc(c.genre.replace(/_/g,' · ')):'')+'<small>'+category(c).label+' 나무</small></div><div><small>'+(c.type==='book'?'길이 · 쪽수':'길이 · 재생시간')+'</small>'+metric(c.length?c.length+(c.type==='book'?'쪽':'분'):'')+'</div><div><small>'+({book:'읽은',album:'들은',movie:'본'}[c.type])+' 일수</small><strong>'+days.size+'일</strong><small>기록한 날짜 기준</small></div></div>'}
+ const catalog=c.type==='book'&&(c.publisher||c.isbn)?'<div class="note" style="margin-top:12px">'+(c.publisher?'<div><strong>출판사</strong> · '+esc(c.publisher)+'</div>':'')+(c.isbn?'<div><strong>ISBN</strong> · '+esc(c.isbn)+'</div>':'')+'</div>':c.type==='album'&&(c.releaseDate||c.trackCount||c.providerId)?'<div class="note" style="margin-top:12px">'+(c.releaseDate?'<div><strong>발매</strong> · '+esc(c.releaseDate.slice(0,10))+'</div>':'')+(c.trackCount?'<div><strong>트랙</strong> · '+esc(c.trackCount)+'곡</div>':'')+(c.providerId?'<div><strong>앨범 ID</strong> · '+esc(c.providerId)+'</div>':'')+'</div>':'';
+ return '<div class="detail-metrics"><div><small>장르</small>'+metric(c.genre?esc(c.genre.replace(/_/g,' · ')):'')+'<small>'+category(c).label+' 나무</small></div><div><small>'+(c.type==='book'?'길이 · 쪽수':'길이 · 재생시간')+'</small>'+metric(c.length?c.length+(c.type==='book'?'쪽':'분'):'')+'</div><div><small>'+({book:'읽은',album:'들은',movie:'본'}[c.type])+' 일수</small><strong>'+days.size+'일</strong><small>기록한 날짜 기준</small></div></div>'+catalog}
 function recentCompleted(){if(!state.items.length)return '';const items=state.items.filter(c=>c.completed).sort((a,b)=>(b.completed==='unknown'?'':b.completed).localeCompare(a.completed==='unknown'?'':a.completed)||(b.completedAt||0)-(a.completedAt||0)||b.id.localeCompare(a.id)).slice(0,2);return '<section class="recent-completed"><div class="row between"><h3>최근 완료</h3><span class="muted">나의 숲에 남은 경험</span></div><div class="space"></div><div class="stack">'+(items.length?items.map(c=>'<button class="content-row" data-action="detail" '+attr(c.id)+'><svg width="56" height="74" viewBox="-35 -65 70 85" aria-hidden="true">'+treeArt(c)+'</svg><div class="grow"><small>'+esc(category(c).label)+'</small><div class="title">'+esc(c.title)+'</div><small>'+(c.completed==='unknown'?'완료일 미상':esc(c.completed))+(c.rating?' · ★ '+c.rating:' · 평점 미등록')+'</small></div><span>›</span></button>').join(''):'<div class="card"><h3>아직 쌓인 나무가 없어요!</h3><p class="creator">콘텐츠를 완료하면 이곳에 남아요.</p></div>')+'</div></section>'}
 function renderToday(){return renderTodayBase()+recentCompleted()}
 function averageStars(value){
@@ -194,8 +195,9 @@ const Model=(()=>{
  const get=(s,id)=>s.items.find(c=>c.id===id);
  const uid=()=>globalThis.crypto?.randomUUID?.()||Date.now().toString(36)+Math.random().toString(36).slice(2);
  const add=(s,data,request=uid())=>{
-  let c=s.items.find(c=>c.type===data.type&&norm(c.title)===norm(data.title)&&norm(c.creator)===norm(data.creator));
-  if(!c){c={id:uid(),type:data.type,title:data.title.trim(),creator:(data.creator||'').trim(),...contentMetadata(data),tracks:data.tracks||[],logs:[],completed:null,rating:null,saves:[],cover:data.cover||'',source:data.source||'',trackIndex:0};s.items.push(c)}
+  const providerId=String(data.providerId??data.provider_id??'').trim(),provider=String(data.provider||'').trim();
+  let c=(data.type==='album'&&providerId?s.items.find(c=>c.type==='album'&&String(c.providerId||'')===providerId&&String(c.provider||'')===(provider||'apple')):null) || s.items.find(c=>c.type===data.type&&norm(c.title)===norm(data.title)&&norm(c.creator)===norm(data.creator));
+  if(!c){c={id:uid(),type:data.type,title:data.title.trim(),creator:(data.creator||'').trim(),...contentMetadata(data),tracks:data.tracks||[],logs:[],completed:null,rating:null,saves:[],cover:data.cover||'',source:data.source||'',publisher:String(data.publisher||''),isbn:String(data.isbn||''),catalogUrl:String(data.catalogUrl||''),publishedAt:String(data.publishedAt||''),provider:provider,providerId:providerId,releaseDate:String(data.releaseDate||data.release_date||''),trackCount:Number(data.trackCount??data.track_count)||null,copyright:String(data.copyright||''),trackIndex:0};s.items.push(c)}
   if(!c.saves.some(e=>e.id===request))c.saves.push({id:request,at:Date.now(),source:data.source||'직접 입력'});
   return c;
  };
@@ -213,7 +215,7 @@ const Model=(()=>{
    if(!c||typeof c.id!=='string'||!['book','album','movie'].includes(c.type)||typeof c.title!=='string'||!c.title.trim()||!Array.isArray(c.logs)||!Array.isArray(c.saves))throw Error('콘텐츠 형식이 올바르지 않아요.');
    if(c.completed&&c.completed!=='unknown'&&!validDate(c.completed))throw Error('완료 날짜가 올바르지 않아요.');
    if(c.logs.some(l=>!validDate(l.date)||typeof l.id!=='string')||new Set(c.logs.map(l=>l.date)).size!==c.logs.length)throw Error('경험 기록 날짜를 확인해주세요.');
-   return {...c,...contentMetadata(c),rating:validRating(c.rating),creator:String(c.creator||''),logs:c.logs.map(l=>({...l,page:String(l.page||''),memo:String(l.memo||'')})),tracks:Array.isArray(c.tracks)?c.tracks.map(String):[],saves:c.saves.map(e=>({id:String(e.id),at:Number(e.at)||0,source:String(e.source||'')})),cover:/^data:image\/(png|jpeg|webp);base64,/.test(c.cover||'')?c.cover:'',source:String(c.source||'')};
+   return {...c,...contentMetadata(c),rating:validRating(c.rating),creator:String(c.creator||''),logs:c.logs.map(l=>({...l,page:String(l.page||''),memo:String(l.memo||'')})),tracks:Array.isArray(c.tracks)?c.tracks.map(String):[],saves:c.saves.map(e=>({id:String(e.id),at:Number(e.at)||0,source:String(e.source||'')})),cover:/^(?:data:image\/(png|jpeg|webp);base64,|https:\/\/)/.test(c.cover||'')?String(c.cover):'',source:String(c.source||''),publisher:String(c.publisher||''),isbn:String(c.isbn||''),catalogUrl:/^https:\/\//.test(c.catalogUrl||'')?String(c.catalogUrl):'',publishedAt:String(c.publishedAt||''),provider:String(c.provider||''),providerId:String(c.providerId||''),releaseDate:String(c.releaseDate||''),trackCount:Number(c.trackCount)||null,copyright:String(c.copyright||'')};
   });
   if(new Set(s.items.map(c=>c.id)).size!==s.items.length)throw Error('중복된 콘텐츠 ID가 있어요.');
   s.selected=s.items.some(c=>c.id===raw.selected)?raw.selected:null;
@@ -445,7 +447,7 @@ function renderCalendar(){
 }
 function renderMy(){
  const stats=Model.stats(state.items.filter(c=>c.completed));
- return '<section><div class="page-heading"><h1 class="page-title">'+esc(state.profile.name)+'의 기록</h1></div><p class="creator page-description">스크랩 '+state.items.length+'개 · 완료 '+stats.n+'개</p><div class="space"></div>'+button('프로필 <span>›</span>','profile','menu-row')+button('취향 추가 <span>›</span>','tastes','menu-row')+button('오늘의 경험 알림 <span class="muted">체험 안내</span>','notifications','menu-row')+button('데이터 백업 <span>↓</span>','backup','menu-row')+button('백업 복원 <span>↑</span>','restore','menu-row')+'<input id="restoreFile" class="offscreen" type="file" accept="application/json,.json">'+button('서비스·개인정보 안내 <span>›</span>','terms','menu-row')+button('처음 이용 흐름 다시 보기 <span>›</span>','flowReplay','menu-row')+'<div class="rule"></div>'+button('로그아웃','flowLogout','menu-row danger')+'<details class="dev"><summary>프로토타입 체험 도구</summary><div class="note">기록은 이 브라우저에 저장됩니다. 실제 회원가입·외부 작품 검색·서버 알림은 연결되어 있지 않습니다. 사진의 글자 인식은 이 기기에서 실행합니다.</div><p class="summary">체험 날짜: '+now()+(state.offset?' · 실제 날짜 +'+state.offset+'일':'')+'</p>'+button('다음 날로 체험하기','nextDay','secondary')+button('실제 날짜로 돌아가기','realDay','textbtn')+button('테스트 데이터 복원','restoreDemo','menu-row')+button('기존 독서 데이터로 테스트','legacyDemo','menu-row')+button('데이터 삭제 (전체 초기화)','clear','menu-row danger')+'<p class="tiny muted">테스트 복원은 현재 데이터를 대체합니다. 백업 후 사용하세요. 면적 비교의 생활 공간 수치는 체험용 설정값입니다.</p></details></section>';
+ return '<section><div class="page-heading"><h1 class="page-title">'+esc(state.profile.name)+'의 기록</h1></div><p class="creator page-description">스크랩 '+state.items.length+'개 · 완료 '+stats.n+'개</p><div class="space"></div>'+button('프로필 <span>›</span>','profile','menu-row')+button('취향 추가 <span>›</span>','tastes','menu-row')+button('오늘의 경험 알림 <span class="muted">체험 안내</span>','notifications','menu-row')+button('데이터 백업 <span>↓</span>','backup','menu-row')+button('백업 복원 <span>↑</span>','restore','menu-row')+'<input id="restoreFile" class="offscreen" type="file" accept="application/json,.json">'+button('서비스·개인정보 안내 <span>›</span>','terms','menu-row')+button('처음 이용 흐름 다시 보기 <span>›</span>','flowReplay','menu-row')+'<div class="rule"></div>'+button('로그아웃','flowLogout','menu-row danger')+'<details class="dev"><summary>프로토타입 체험 도구</summary><div class="note">기록은 이 브라우저에 저장됩니다. 책 검색은 카카오, 음악 검색은 Apple Music/iTunes 데이터를 송림의 Supabase Edge Function을 통해 불러옵니다. 회원가입·서버 알림은 아직 체험용이며, 사진의 글자 인식은 이 기기에서 실행합니다.</div><p class="summary">체험 날짜: '+now()+(state.offset?' · 실제 날짜 +'+state.offset+'일':'')+'</p>'+button('다음 날로 체험하기','nextDay','secondary')+button('실제 날짜로 돌아가기','realDay','textbtn')+button('테스트 데이터 복원','restoreDemo','menu-row')+button('기존 독서 데이터로 테스트','legacyDemo','menu-row')+button('데이터 삭제 (전체 초기화)','clear','menu-row danger')+'<p class="tiny muted">테스트 복원은 현재 데이터를 대체합니다. 백업 후 사용하세요. 면적 비교의 생활 공간 수치는 체험용 설정값입니다.</p></details></section>';
 }
 function showModal(title,html,kind='generic'){
  dismissToast();modal=kind;$('overlay').innerHTML='<div class="sheet-back" data-action="backdrop"><section class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"><div class="sheet-head"><h2 id="sheetTitle">'+esc(title)+'</h2>'+button(icon('close'),'close','iconbtn','aria-label="닫기"')+'</div>'+html+'</section></div>';
@@ -454,13 +456,84 @@ function showModal(title,html,kind='generic'){
 function closeModal(){if(ocrBusy){ocrGeneration++;ocrBusy=false;localWorker?.terminate();localWorker=null}modal=null;$('overlay').innerHTML='';document.body.style.overflow='';}
 function confirmBox(title,text,onConfirm,label='확인'){window.pendingConfirm=onConfirm;showModal(title,'<p>'+esc(text)+'</p>'+button(label,'confirm')+button('취소','close','textbtn'),'confirm')}
 function pick(){picking=true;view='scrap';closeModal();render();window.scrollTo(0,0)}
-function addMenu(){showModal('스크랩 추가','<p class="muted">보고 싶은 콘텐츠를 모아두세요.</p>'+button('제목으로 검색','searchAdd','menu-row')+button('링크 붙여넣기','linkAdd','menu-row')+button('사진에서 가져오기','photoAdd','menu-row'),'add')}
-function searchAdd(q=''){
- showModal('콘텐츠 검색','<input id="catalogSearch" type="search" value="'+esc(q)+'" placeholder="제목·제작자" aria-label="검색어"><p class="summary">체험용 작품 목록에서 검색합니다.</p><div id="catalogResults"></div>','search');searchResults(q);
+function addMenu(){showModal('스크랩 추가','<p class="muted">보고 싶은 콘텐츠를 모아두세요.</p>'+button('책 검색','searchAdd','menu-row')+button('음악 검색','musicSearchAdd','menu-row')+button('링크 붙여넣기','linkAdd','menu-row')+button('사진에서 가져오기','photoAdd','menu-row'),'add')}
+const BOOK_SEARCH_ENDPOINT='https://gytfefnvpqqxveryhopw.supabase.co/functions/v1/super-service';
+const BOOK_SEARCH_KEY_STORAGE='_songrimSupabaseAnonKey';
+let remoteBookResults=[],bookSearchSeq=0,bookSearchTimer=null;
+const MUSIC_SEARCH_ENDPOINT='https://gytfefnvpqqxveryhopw.supabase.co/functions/v1/music-search';
+let remoteAlbumResults=[],musicSearchSeq=0,musicSearchTimer=null;
+function getBookSearchKey(){try{return (localStorage.getItem(BOOK_SEARCH_KEY_STORAGE)||'').trim()}catch{return ''}}
+function saveBookSearchKey(value){try{localStorage.setItem(BOOK_SEARCH_KEY_STORAGE,String(value||'').trim());return true}catch{return false}}
+function bookSearchSetup(message=''){
+ showModal('책 검색 연결','<p class="muted">Supabase Settings에서 복사한 <strong>anon key</strong>를 이 기기에 한 번만 입력해주세요. 카카오 API 키가 아닙니다.</p>'+(message?'<p class="form-error">'+esc(message)+'</p>':'')+'<label for="bookSearchAnonKey">Supabase anon key</label><input id="bookSearchAnonKey" type="text" autocomplete="off" spellcheck="false" placeholder="복사한 anon key 붙여넣기"><p class="muted tiny">이 값은 이 프로토타입의 브라우저 저장소에만 보관합니다.</p>'+button('저장하고 책 검색 열기','saveBookSearchKey','primary'),'book-search-setup');
 }
-function searchResults(q){
- const results=CATALOG.filter(c=>Model.norm(c.title+' '+c.creator).includes(Model.norm(q))).slice(0,12);
- $('catalogResults').innerHTML=results.length?results.map(c=>'<div class="row history"><div class="grow"><h3>'+esc(c.title)+'</h3><p class="creator">'+typeName[c.type]+' · '+esc(c.creator)+'</p></div>'+button('스크랩','addCatalog','textbtn','data-catalog="'+CATALOG.indexOf(c)+'"')+'</div>').join(''):'<p class="creator">검색 결과가 없어요.</p>'+button('직접 입력하기','manual','secondary');
+function searchAdd(q=''){
+ if(!getBookSearchKey()){bookSearchSetup();return}
+ showModal('책 검색','<input id="catalogSearch" type="search" value="'+esc(q)+'" placeholder="책 제목·저자 검색" aria-label="책 검색어" autocomplete="off"><p class="summary">카카오 책 검색 데이터를 송림 서버를 통해 불러옵니다.</p><div id="catalogResults"></div>'+button('검색 서버 연결 설정','bookSearchSettings','textbtn'),'search');searchResults(q);
+}
+function unwrapBookDocuments(payload){
+ if(Array.isArray(payload))return payload;
+ const candidates=[payload?.documents,payload?.books,payload?.items,payload?.results,payload?.data?.documents,payload?.data?.books,payload?.data?.items,payload?.body?.documents];
+ return candidates.find(Array.isArray)||[];
+}
+function normalizeRemoteBook(d){
+ const creators=Array.isArray(d?.authors)?d.authors:Array.isArray(d?.author)?d.author:[d?.author||d?.creator||''];
+ return {type:'book',title:String(d?.title||d?.bookTitle||'').trim(),creator:creators.filter(Boolean).join(', ').trim(),publisher:String(d?.publisher||'').trim(),isbn:String(d?.isbn||d?.isbn13||d?.isbn10||'').trim(),cover:String(d?.thumbnail||d?.cover||d?.image||'').trim(),catalogUrl:String(d?.url||d?.link||'').trim(),publishedAt:String(d?.datetime||d?.publishedAt||d?.pubdate||'').trim(),source:'카카오 책 검색'};
+}
+function renderRemoteBooks(results,message=''){
+ const el=$('catalogResults');if(!el)return;
+ if(message){el.innerHTML='<p class="creator">'+esc(message)+'</p>'+button('직접 입력하기','manual','secondary');return}
+ el.innerHTML=results.length?'<div class="content-list">'+results.map((c,i)=>'<div class="content-row" style="align-items:flex-start">'+cover(c)+'<div class="grow"><div class="title">'+esc(c.title)+'</div><div class="creator">'+esc(c.creator||'저자 미확인')+'</div>'+(c.publisher?'<div class="badge">'+esc(c.publisher)+'</div>':'')+(c.isbn?'<div class="badge">ISBN '+esc(c.isbn)+'</div>':'')+'</div>'+button('스크랩','addRemoteBook','textbtn','data-index="'+i+'"')+'</div>').join('')+'</div>':'<p class="creator">검색 결과가 없어요.</p>'+button('직접 입력하기','manual','secondary');
+}
+async function searchResults(q){
+ const query=String(q||'').trim(),seq=++bookSearchSeq;
+ if(!query){remoteBookResults=[];renderRemoteBooks([], '책 제목이나 저자를 입력해주세요.');return}
+ const el=$('catalogResults');if(el)el.innerHTML='<p class="creator">검색 중…</p>';
+ try{
+  const requestUrl=BOOK_SEARCH_ENDPOINT+'?query='+encodeURIComponent(query)+'&q='+encodeURIComponent(query);
+  const anonKey=getBookSearchKey();
+  if(!anonKey){bookSearchSetup('Supabase anon key를 먼저 저장해주세요.');return}
+  const res=await fetch(requestUrl,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json','apikey':anonKey,'Authorization':'Bearer '+anonKey},body:JSON.stringify({query,q:query})});
+  const text=await res.text();let payload={};try{payload=text?JSON.parse(text):{}}catch{payload={message:text}}
+  if(!res.ok){const detail=payload?.error||payload?.message||('HTTP '+res.status);if(res.status===401)throw Error('Supabase anon key 인증에 실패했어요. 검색 서버 연결 설정에서 키를 다시 붙여넣어주세요.');throw Error(detail)}
+  if(seq!==bookSearchSeq||!$('catalogResults'))return;
+  remoteBookResults=unwrapBookDocuments(payload).map(normalizeRemoteBook).filter(c=>c.title).slice(0,12);
+  renderRemoteBooks(remoteBookResults);
+ }catch(err){if(seq!==bookSearchSeq||!$('catalogResults'))return;remoteBookResults=[];renderRemoteBooks([],err?.message||'책 검색 서버에 연결하지 못했어요.');}
+}
+function musicSearchAdd(q=''){
+ if(!getBookSearchKey()){bookSearchSetup('책과 음악 검색에 같은 Supabase anon key를 사용합니다.');return}
+ showModal('음악 검색','<input id="musicCatalogSearch" type="search" value="'+esc(q)+'" placeholder="앨범명·아티스트 검색" aria-label="음악 검색어" autocomplete="off"><p class="summary">Apple Music/iTunes 앨범 데이터를 송림 서버를 통해 불러옵니다.</p><div id="musicCatalogResults"></div>'+button('검색 서버 연결 설정','bookSearchSettings','textbtn'),'music-search');musicSearchResults(q);
+}
+function unwrapAlbums(payload){
+ if(Array.isArray(payload))return payload;
+ const candidates=[payload?.albums,payload?.results,payload?.items,payload?.data?.albums,payload?.data?.results];
+ return candidates.find(Array.isArray)||[];
+}
+function normalizeRemoteAlbum(d){
+ const providerId=d?.provider_id??d?.providerId??d?.collectionId??'';
+ const release=String(d?.release_date||d?.releaseDate||'').trim();
+ return {type:'album',title:String(d?.title||d?.collectionName||'').trim(),creator:String(d?.artist||d?.artistName||d?.creator||'').trim(),cover:String(d?.cover_url||d?.artworkUrl100||d?.cover||'').trim(),genre:String(d?.genre||d?.primaryGenreName||'').trim(),provider:String(d?.provider||'apple').trim(),providerId:String(providerId||'').trim(),releaseDate:release,trackCount:Number(d?.track_count??d?.trackCount)||null,copyright:String(d?.copyright||'').trim(),catalogUrl:String(d?.external_url||d?.collectionViewUrl||d?.catalogUrl||'').trim(),source:'Apple Music 앨범 검색'};
+}
+function renderRemoteAlbums(results,message=''){
+ const el=$('musicCatalogResults');if(!el)return;
+ if(message){el.innerHTML='<p class="creator">'+esc(message)+'</p>'+button('직접 입력하기','manual','secondary');return}
+ el.innerHTML=results.length?'<div class="content-list">'+results.map((c,i)=>'<div class="content-row" style="align-items:flex-start">'+cover(c)+'<div class="grow"><div class="title">'+esc(c.title)+'</div><div class="creator">'+esc(c.creator||'아티스트 미확인')+'</div>'+(c.genre?'<div class="badge">'+esc(c.genre)+'</div>':'')+(c.releaseDate?'<div class="badge">'+esc(c.releaseDate.slice(0,4))+(c.trackCount?' · '+c.trackCount+'곡':'')+'</div>':(c.trackCount?'<div class="badge">'+c.trackCount+'곡</div>':''))+'</div>'+button('스크랩','addRemoteAlbum','textbtn','data-index="'+i+'"')+'</div>').join('')+'</div>':'<p class="creator">검색 결과가 없어요.</p>'+button('직접 입력하기','manual','secondary');
+}
+async function musicSearchResults(q){
+ const query=String(q||'').trim(),seq=++musicSearchSeq;
+ if(!query){remoteAlbumResults=[];renderRemoteAlbums([], '앨범명이나 아티스트를 입력해주세요.');return}
+ const el=$('musicCatalogResults');if(el)el.innerHTML='<p class="creator">검색 중…</p>';
+ try{
+  const anonKey=getBookSearchKey();
+  if(!anonKey){bookSearchSetup('Supabase anon key를 먼저 저장해주세요.');return}
+  const res=await fetch(MUSIC_SEARCH_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json','apikey':anonKey,'Authorization':'Bearer '+anonKey},body:JSON.stringify({query})});
+  const text=await res.text();let payload={};try{payload=text?JSON.parse(text):{}}catch{payload={message:text}}
+  if(!res.ok){const detail=payload?.error||payload?.message||('HTTP '+res.status);if(res.status===401)throw Error('Supabase anon key 인증에 실패했어요. 검색 서버 연결 설정에서 키를 다시 붙여넣어주세요.');throw Error(detail)}
+  if(seq!==musicSearchSeq||!$('musicCatalogResults'))return;
+  remoteAlbumResults=unwrapAlbums(payload).map(normalizeRemoteAlbum).filter(c=>c.title).slice(0,12);
+  renderRemoteAlbums(remoteAlbumResults);
+ }catch(err){if(seq!==musicSearchSeq||!$('musicCatalogResults'))return;remoteAlbumResults=[];renderRemoteAlbums([],err?.message||'음악 검색 서버에 연결하지 못했어요.');}
 }
 function infoForm(c=null,source=''){
  const d=c||{type:'book',title:$('catalogSearch')?.value||'',creator:'',source};
@@ -469,6 +542,8 @@ function infoForm(c=null,source=''){
 }
 function saved(c,eventId){state.onboarded=true;dismissToast();closeModal();commit()}
 function addCatalog(index){const d=CATALOG[index],id=Model.uid(),c=Model.add(state,d,id);saved(c,id)}
+function addRemoteBook(index){const d=remoteBookResults[index];if(!d)return;const id=Model.uid(),c=Model.add(state,d,id);saved(c,id)}
+function addRemoteAlbum(index){const d=remoteAlbumResults[index];if(!d)return;const id=Model.uid(),c=Model.add(state,d,id);saved(c,id)}
 function record(id){
  const c=get(id);if(!c||c.completed)return;
  if(c.type==='movie'){complete(id);return}
@@ -635,6 +710,14 @@ document.addEventListener('click',async e=>{
  if(a==='toastUndo'){const fn=undoAction;undoAction=null;$('toast').innerHTML='';fn?.();return}
  if(a==='add'){addMenu();return}
  if(a==='searchAdd'){searchAdd();return}
+ if(a==='musicSearchAdd'){musicSearchAdd();return}
+ if(a==='bookSearchSettings'){bookSearchSetup();return}
+ if(a==='saveBookSearchKey'){
+  const key=$('bookSearchAnonKey')?.value?.trim()||'';
+  if(key.length<20){bookSearchSetup('복사한 anon key 전체를 붙여넣어주세요.');return}
+  if(!saveBookSearchKey(key)){bookSearchSetup('브라우저 저장소에 키를 저장하지 못했어요.');return}
+  searchAdd();return
+ }
  if(a==='manual'){infoForm();return}
  if(a==='linkAdd'){linkAdd();return}
  if(a==='photoAdd'){photoAdd();return}
@@ -651,6 +734,8 @@ document.addEventListener('click',async e=>{
   chosen.forEach((c,i)=>Model.add(state,c,batch+'-'+i));state.onboarded=true;closeModal();dismissToast();commit();return
  }
  if(a==='addCatalog'){addCatalog(Number(b.dataset.catalog));return}
+ if(a==='addRemoteBook'){addRemoteBook(Number(b.dataset.index));return}
+ if(a==='addRemoteAlbum'){addRemoteAlbum(Number(b.dataset.index));return}
  if(a==='choose'){if(c&&!c.completed){state.selected=c.id;state.onboarded=true;go('today');persist()}return}
  if(a==='pick'){pick();return}
  if(a==='cancelPick'){go('today');return}
@@ -687,7 +772,7 @@ document.addEventListener('click',async e=>{
  if(a==='editCompletion'){editCompletion(id);return}
  if(a==='external'){
   const query=c.type==='album'&&c.tracks.length?c.creator+' '+c.tracks[c.trackIndex%c.tracks.length]:c.title+' '+c.creator;
-  const url=c.type==='book'?'https://search.kyobobook.co.kr/search?keyword='+encodeURIComponent(query):c.type==='album'?'https://www.youtube.com/results?search_query='+encodeURIComponent(query):'https://search.naver.com/search.naver?query='+encodeURIComponent(query+' 영화');
+  const url=c.type==='book'?'https://search.kyobobook.co.kr/search?keyword='+encodeURIComponent(query):c.type==='album'?(c.catalogUrl||('https://www.youtube.com/results?search_query='+encodeURIComponent(query))):'https://search.naver.com/search.naver?query='+encodeURIComponent(query+' 영화');
   window.open(url,'_blank','noopener,noreferrer');return
  }
  if(a==='track'){c.trackIndex=Number(b.dataset.index);commit();return}
@@ -716,7 +801,7 @@ document.addEventListener('click',async e=>{
  if(a==='profile'){showModal('프로필','<form id="profileForm"><label for="profileName">이름</label><input id="profileName" maxlength="30" required value="'+esc(state.profile.name)+'"><button class="primary" type="submit">저장</button></form>','profile');return}
  if(a==='tastes'){tasteStart();return}
  if(a==='notifications'){showModal('오늘의 경험 알림','<p>이 HTML 체험본은 앱을 닫은 뒤 정시 알림을 보낼 수 없어요.</p><p class="creator">실제 앱에서는 기본 꺼짐으로 시작하고, 알림을 켤 때 시간과 권한을 설정합니다.</p>'+button('확인','close','secondary'),'notifications');return}
- if(a==='terms'){showModal('프로토타입 안내','<p>실제 회원가입과 결제는 진행하지 않습니다. 입력한 스크랩·기록·사진은 이 브라우저에서 처리하며 서버로 전송하지 않습니다.</p><div class="space"></div><p>외부 검색 링크를 누르면 해당 서비스로 이동합니다. 데이터 보관을 위해 MY에서 백업을 다운로드할 수 있습니다.</p><p class="creator">계정 서비스용 약관과 개인정보 처리방침은 정식 서비스에서 별도로 제공합니다.</p>','terms');return}
+ if(a==='terms'){showModal('프로토타입 안내','<p>실제 회원가입과 결제는 진행하지 않습니다. 스크랩·경험 기록은 이 브라우저에 저장합니다. 책·음악 검색어는 검색 결과를 받기 위해 송림의 Supabase Edge Function으로 전송됩니다.</p><div class="space"></div><p>외부 검색 링크를 누르면 해당 서비스로 이동합니다. 데이터 보관을 위해 MY에서 백업을 다운로드할 수 있습니다.</p><p class="creator">계정 서비스용 약관과 개인정보 처리방침은 정식 서비스에서 별도로 제공합니다.</p>','terms');return}
  if(a==='backup'){exportBackup();return}
  if(a==='restore'){$('restoreFile').click();return}
  if(a==='nextDay'){state.offset++;persist();render();toast('체험 날짜를 '+now()+'로 바꿨어요.');return}
@@ -733,7 +818,8 @@ document.addEventListener('input',e=>{
   const input=e.target,position=input.selectionStart,q=input.value;state.filters.q=q;persist();
   const scroll=window.scrollY;render();$('search').focus();try{$('search').setSelectionRange(position,position)}catch{}window.scrollTo(0,scroll)
  }
- if(e.target.id==='catalogSearch')searchResults(e.target.value);
+ if(e.target.id==='catalogSearch'){clearTimeout(bookSearchTimer);const value=e.target.value;bookSearchTimer=setTimeout(()=>searchResults(value),320);}
+ if(e.target.id==='musicCatalogSearch'){clearTimeout(musicSearchTimer);const value=e.target.value;musicSearchTimer=setTimeout(()=>musicSearchResults(value),320);}
 });
 document.addEventListener('change',async e=>{
  const el=e.target;
