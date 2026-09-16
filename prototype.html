@@ -524,7 +524,7 @@ function confirmBox(title,text,onConfirm,label='확인'){window.pendingConfirm=o
 function pick(){picking=true;view='scrap';closeModal();render();window.scrollTo(0,0)}
 function addMenu(){showModal('스크랩 추가','<p class="muted">보고 싶은 콘텐츠를 모아두세요.</p>'+button('책 검색','searchAdd','menu-row')+button('음악 검색','musicSearchAdd','menu-row')+button('영화 검색','movieSearchAdd','menu-row')+button('링크 붙여넣기','linkAdd','menu-row')+button('사진에서 가져오기','photoAdd','menu-row'),'add')}
 const BOOK_SEARCH_ENDPOINT='https://gytfefnvpqqxveryhopw.supabase.co/functions/v1/super-service';
-const BOOK_SEARCH_KEY_STORAGE='_songrimSupabaseAnonKey_v2';
+const BOOK_SEARCH_KEY_STORAGE='_songrimSupabaseAnonKey';
 let remoteBookResults=[],bookSearchSeq=0,bookSearchTimer=null;
 const MUSIC_SEARCH_ENDPOINT='https://gytfefnvpqqxveryhopw.supabase.co/functions/v1/music-search';
 const MOVIE_SEARCH_ENDPOINT='https://gytfefnvpqqxveryhopw.supabase.co/functions/v1/movie-search';
@@ -532,12 +532,11 @@ const IMAGE_OCR_ENDPOINT='https://gytfefnvpqqxveryhopw.supabase.co/functions/v1/
 let remoteAlbumResults=[],musicSearchSeq=0,musicSearchTimer=null;
 let remoteMovieResults=[],movieSearchSeq=0,movieSearchTimer=null;
 let searchSetupTarget='book';
-try{localStorage.removeItem('_songrimSupabaseApiKey')}catch{}
 function getBookSearchKey(){try{return (localStorage.getItem(BOOK_SEARCH_KEY_STORAGE)||'').trim()}catch{return ''}}
 function saveBookSearchKey(value){try{localStorage.setItem(BOOK_SEARCH_KEY_STORAGE,String(value||'').trim());return true}catch{return false}}
 function bookSearchSetup(message='',target=searchSetupTarget){
  searchSetupTarget=target||'book';
- showModal('검색 서버 연결','<p class="muted">책·음악·영화·사진 검색에서 사용할 <strong>Supabase Legacy anon key</strong>를 이 기기에 한 번만 입력해주세요. 현재 Edge Function의 <strong>Verify JWT with legacy secret</strong> 설정에 맞는 키입니다.</p>'+(message?'<p class="form-error">'+esc(message)+'</p>':'')+'<label for="bookSearchAnonKey">Legacy anon key</label><input id="bookSearchAnonKey" type="password" autocomplete="off" spellcheck="false" placeholder="eyJ... 로 시작하는 anon key 붙여넣기"><p class="muted tiny">sb_publishable_... 키나 OCR.Space 키가 아닙니다. 값은 이 브라우저 저장소에만 보관합니다.</p>'+button('저장하고 검색 열기','saveBookSearchKey','primary'),'book-search-setup');
+ showModal('검색 서버 연결','<p class="muted">책·음악·영화 검색에서 사용하던 <strong>Supabase anon key</strong>를 사용합니다.</p>'+(message?'<p class="form-error">'+esc(message)+'</p>':'')+'<label for="bookSearchAnonKey">Supabase anon key</label><input id="bookSearchAnonKey" type="password" autocomplete="off" spellcheck="false" placeholder="기존에 사용하던 anon key 붙여넣기"><p class="muted tiny">기존 검색 기능과 동일한 키를 사용합니다.</p>'+button('저장하고 검색 열기','saveBookSearchKey','primary'),'book-search-setup');
 }
 function searchAdd(q=''){
  searchSetupTarget='book';
@@ -888,12 +887,7 @@ async function requestServerOCR(file){
  const imageBase64=await fileToOCRDataURL(file);
  const res=await fetch(IMAGE_OCR_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json','apikey':anonKey,'Authorization':'Bearer '+anonKey},body:JSON.stringify({imageBase64})});
  const raw=await res.text();let payload={};try{payload=raw?JSON.parse(raw):{}}catch{payload={message:raw}}
- if(!res.ok){
-  if(res.status===401){
-    throw Error('Supabase 인증에 실패했어요. 검색 서버 연결 설정에서 eyJ...로 시작하는 Legacy anon key를 다시 저장해주세요.');
-  }
-  throw Error(payload?.error||payload?.message||('OCR 서버 오류 · HTTP '+res.status));
-}
+ if(!res.ok)throw Error(payload?.error||payload?.message||('OCR 서버 오류 · HTTP '+res.status));
  if(payload?.error)throw Error(payload.error);
  const text=String(payload?.text||'').trim();
  if(!text)throw Error('사진에서 읽을 수 있는 글자를 찾지 못했어요.');
