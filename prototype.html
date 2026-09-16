@@ -513,13 +513,13 @@ function renderCalendar(){
 }
 function renderMy(){
  const stats=Model.stats(state.items.filter(c=>c.completed));
- return '<section><div class="page-heading"><h1 class="page-title">'+esc(state.profile.name)+'의 기록</h1></div><p class="creator page-description">스크랩 '+state.items.length+'개 · 완료 '+stats.n+'개</p><div class="space"></div>'+button('프로필 <span>›</span>','profile','menu-row')+button('취향 추가 <span>›</span>','tastes','menu-row')+button('오늘의 경험 알림 <span class="muted">체험 안내</span>','notifications','menu-row')+button('데이터 백업 <span>↓</span>','backup','menu-row')+button('백업 복원 <span>↑</span>','restore','menu-row')+'<input id="restoreFile" class="offscreen" type="file" accept="application/json,.json">'+button('서비스·개인정보 안내 <span>›</span>','terms','menu-row')+button('처음 이용 흐름 다시 보기 <span>›</span>','flowReplay','menu-row')+'<div class="rule"></div>'+button('로그아웃','flowLogout','menu-row danger')+'<details class="dev"><summary>프로토타입 체험 도구</summary><div class="note">기록은 이 브라우저에 저장됩니다. 책은 Kakao, 음악은 Apple Music/iTunes, 영화는 TMDB 데이터를 송림의 Supabase Edge Function을 통해 불러옵니다. 회원가입·서버 알림은 아직 체험용이며, 사진의 글자 인식은 이 기기에서 실행합니다.</div><p class="summary">체험 날짜: '+now()+(state.offset?' · 실제 날짜 +'+state.offset+'일':'')+'</p>'+button('다음 날로 체험하기','nextDay','secondary')+button('실제 날짜로 돌아가기','realDay','textbtn')+button('테스트 데이터 복원','restoreDemo','menu-row')+button('기존 독서 데이터로 테스트','legacyDemo','menu-row')+button('데이터 삭제 (전체 초기화)','clear','menu-row danger')+'<p class="tiny muted">테스트 복원은 현재 데이터를 대체합니다. 백업 후 사용하세요. 면적 비교의 생활 공간 수치는 체험용 설정값입니다.</p></details></section>';
+ return '<section><div class="page-heading"><h1 class="page-title">'+esc(state.profile.name)+'의 기록</h1></div><p class="creator page-description">스크랩 '+state.items.length+'개 · 완료 '+stats.n+'개</p><div class="space"></div>'+button('프로필 <span>›</span>','profile','menu-row')+button('취향 추가 <span>›</span>','tastes','menu-row')+button('오늘의 경험 알림 <span class="muted">체험 안내</span>','notifications','menu-row')+button('데이터 백업 <span>↓</span>','backup','menu-row')+button('백업 복원 <span>↑</span>','restore','menu-row')+'<input id="restoreFile" class="offscreen" type="file" accept="application/json,.json">'+button('서비스·개인정보 안내 <span>›</span>','terms','menu-row')+button('처음 이용 흐름 다시 보기 <span>›</span>','flowReplay','menu-row')+'<div class="rule"></div>'+button('로그아웃','flowLogout','menu-row danger')+'<details class="dev"><summary>프로토타입 체험 도구</summary><div class="note">기록은 이 브라우저에 저장됩니다. 책은 Kakao, 음악은 Apple Music/iTunes, 영화는 TMDB 데이터를 송림의 Supabase Edge Function을 통해 불러옵니다. 회원가입·서버 알림은 아직 체험용이며, 사진의 글자 인식은 Supabase를 통해 OCR.Space에서 처리합니다.</div><p class="summary">체험 날짜: '+now()+(state.offset?' · 실제 날짜 +'+state.offset+'일':'')+'</p>'+button('다음 날로 체험하기','nextDay','secondary')+button('실제 날짜로 돌아가기','realDay','textbtn')+button('테스트 데이터 복원','restoreDemo','menu-row')+button('기존 독서 데이터로 테스트','legacyDemo','menu-row')+button('데이터 삭제 (전체 초기화)','clear','menu-row danger')+'<p class="tiny muted">테스트 복원은 현재 데이터를 대체합니다. 백업 후 사용하세요. 면적 비교의 생활 공간 수치는 체험용 설정값입니다.</p></details></section>';
 }
 function showModal(title,html,kind='generic'){
  dismissToast();modal=kind;$('overlay').innerHTML='<div class="sheet-back" data-action="backdrop"><section class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"><div class="sheet-head"><h2 id="sheetTitle">'+esc(title)+'</h2>'+button(icon('close'),'close','iconbtn','aria-label="닫기"')+'</div>'+html+'</section></div>';
  document.body.style.overflow='hidden';setTimeout(()=>$('overlay').querySelector('button')?.focus(),30);
 }
-function closeModal(){if(ocrBusy){ocrGeneration++;ocrBusy=false;localWorker?.terminate();localWorker=null}modal=null;$('overlay').innerHTML='';document.body.style.overflow='';}
+function closeModal(){if(ocrBusy){ocrGeneration++;ocrBusy=false}modal=null;$('overlay').innerHTML='';document.body.style.overflow='';}
 function confirmBox(title,text,onConfirm,label='확인'){window.pendingConfirm=onConfirm;showModal(title,'<p>'+esc(text)+'</p>'+button(label,'confirm')+button('취소','close','textbtn'),'confirm')}
 function pick(){picking=true;view='scrap';closeModal();render();window.scrollTo(0,0)}
 function addMenu(){showModal('스크랩 추가','<p class="muted">보고 싶은 콘텐츠를 모아두세요.</p>'+button('책 검색','searchAdd','menu-row')+button('음악 검색','musicSearchAdd','menu-row')+button('영화 검색','movieSearchAdd','menu-row')+button('링크 붙여넣기','linkAdd','menu-row')+button('사진에서 가져오기','photoAdd','menu-row'),'add')}
@@ -528,6 +528,7 @@ const BOOK_SEARCH_KEY_STORAGE='_songrimSupabaseAnonKey';
 let remoteBookResults=[],bookSearchSeq=0,bookSearchTimer=null;
 const MUSIC_SEARCH_ENDPOINT='https://gytfefnvpqqxveryhopw.supabase.co/functions/v1/music-search';
 const MOVIE_SEARCH_ENDPOINT='https://gytfefnvpqqxveryhopw.supabase.co/functions/v1/movie-search';
+const IMAGE_OCR_ENDPOINT='https://gytfefnvpqqxveryhopw.supabase.co/functions/v1/image-ocr';
 let remoteAlbumResults=[],musicSearchSeq=0,musicSearchTimer=null;
 let remoteMovieResults=[],movieSearchSeq=0,movieSearchTimer=null;
 let searchSetupTarget='book';
@@ -718,32 +719,57 @@ async function ocrWorker(){
  })().finally(()=>workerLoading=null);
  return workerLoading;
 }
-function photoAdd(){photoFiles=[];candidates=[];showModal('사진에서 가져오기','<p class="muted">표지·책장·목록 사진을 선택하세요. 글자를 읽은 뒤 책·음악·영화 검색에서 가장 가능성 높은 콘텐츠를 한 번에 찾아드려요.</p><label for="photoFiles">사진 선택 · 최대 10장</label><input id="photoFiles" type="file" accept="image/*" multiple><div id="photoThumbs" class="thumbs"></div><div id="ocrProgress" class="summary"></div>'+button('사진 분석하기','runOCR','primary','id="ocrButton" disabled')+button('직접 입력하기','manual','textbtn'),'photo')}
-function ocrCleanLine(line){return String(line||'').replace(/[|_~`^=*<>\\]/g,' ').replace(/\s+/g,' ').trim()}
+function photoAdd(){photoFiles=[];candidates=[];showModal('사진에서 가져오기','<p class="muted">표지·책장·목록 사진을 선택하세요. 서버 OCR로 글자를 읽은 뒤 책·음악·영화 검색에서 가장 가능성 높은 콘텐츠를 한 번에 찾아드려요.</p><label for="photoFiles">사진 선택 · 최대 10장</label><input id="photoFiles" type="file" accept="image/*" multiple><div id="photoThumbs" class="thumbs"></div><div id="ocrProgress" class="summary"></div>'+button('사진 분석하기','runOCR','primary','id="ocrButton" disabled')+button('직접 입력하기','manual','textbtn'),'photo')}
+function ocrCleanLine(line){return String(line||'').replace(/[|_~`^=*<>\\]/g,' ').replace(/[•●■□◆◇▶▷◀◁→←↑↓]/g,' ').replace(/\s+/g,' ').trim()}
+const OCR_UI_WORDS=new Set(['서재','기본책장','내책장','내 책장','다운로드','필터','편집','소장','서점','my','검색','메뉴','공유','저장','취소','확인','완료','홈','home','search','share','save','cancel','menu']);
 function ocrUsefulLine(line){
- const s=ocrCleanLine(line);if(s.length<2||s.length>60)return false;
+ const s=ocrCleanLine(line);if(s.length<2||s.length>48)return false;
  if(!/[A-Za-z가-힣]/.test(s))return false;
- const norm=s.toLowerCase();
- if(/^(yes|no|ok|menu|home|search|share|save|cancel|완료|저장|검색|메뉴|공유|취소|확인)$/.test(norm))return false;
+ const compact=s.toLowerCase().replace(/\s+/g,'');
+ if(OCR_UI_WORDS.has(s.toLowerCase())||OCR_UI_WORDS.has(compact))return false;
+ if(/^\d{1,3}(권|개)?$/.test(s)||/^\d{1,2}:\d{2}$/.test(s)||/^\d{1,3}%$/.test(s))return false;
+ if(/^(lte|5g|wifi|battery)$/i.test(s))return false;
  if((s.match(/[A-Za-z가-힣]/g)||[]).length<2)return false;
+ const letters=(s.match(/[A-Za-z가-힣]/g)||[]).length;
+ if(letters/Math.max(1,s.length)<.42)return false;
  return true;
 }
+function ocrContextType(text){
+ const n=String(text||'').toLowerCase();
+ if(/서재|책장|도서|읽는 중|읽고 싶|독서|소장/.test(n))return 'book';
+ if(/앨범|음악|재생|아티스트|곡/.test(n))return 'album';
+ if(/영화|상영|감독|개봉/.test(n))return 'movie';
+ return '';
+}
 function ocrQueriesFromText(text){
- const raw=String(text||'').split(/\n+/).map(ocrCleanLine).filter(ocrUsefulLine);
- const seen=new Set(), scored=[];
+ const lines=String(text||'').split(/\n+/).map(ocrCleanLine);
+ const raw=lines.filter(ocrUsefulLine), seen=new Set(), scored=[];
  for(let i=0;i<raw.length;i++){
-  const line=raw[i];
-  const norm=Model.norm(line);if(!norm||seen.has(norm))continue;seen.add(norm);
-  let score=Math.min(28,line.length);
-  if(line.length>=4&&line.length<=32)score+=14;
-  if(/[가-힣]{2,}/.test(line))score+=4;
-  if(/[A-Za-z]{3,}/.test(line))score+=3;
-  if(/[·:：\-]/.test(line))score+=2;
-  if(/^\d{4}$/.test(line))score-=30;
+  const line=raw[i],norm=Model.norm(line);if(!norm||seen.has(norm))continue;seen.add(norm);
+  let score=30;
+  if(line.length>=3&&line.length<=22)score+=24;
+  else if(line.length<=32)score+=12;
+  if(/[가-힣]{2,}/.test(line))score+=12;
+  if(/[A-Za-z]{3,}/.test(line))score+=7;
+  if(/^[가-힣A-Za-z][가-힣A-Za-z0-9\s'’·:：\-]+$/.test(line))score+=8;
+  if(/\b(저자|작가|감독|지음|옮김|출판|소장)\b/.test(line))score-=25;
+  if(/[©@<>_=]/.test(line))score-=25;
   scored.push({text:line,score,index:i});
  }
- // Nearby short lines are often creator names; preserve them for scoring context but search only the strongest phrases.
- return scored.sort((a,b)=>b.score-a.score||a.index-b.index).slice(0,10).map(x=>x.text);
+ // Keep visual/order information: list screenshots often alternate title → creator.
+ const ordered=scored.filter(x=>x.score>=36).sort((a,b)=>a.index-b.index);
+ const queries=[];
+ // First pass: each clean line by itself. Exact title-only searches are much more reliable than noisy merged OCR.
+ ordered.forEach(x=>queries.push(x.text));
+ // Second pass: nearby title + creator pairs. Useful when title is short/ambiguous.
+ for(let i=0;i<ordered.length-1;i++){
+  const a=ordered[i].text,b=ordered[i+1].text;
+  if(a.length<=28&&b.length<=22&&Model.norm(a)!==Model.norm(b))queries.push(a+' '+b);
+ }
+ // Deduplicate, then keep strongest likely titles early while preserving enough list order.
+ const uniq=[],keys=new Set();
+ for(const q of queries){const k=Model.norm(q);if(k&&!keys.has(k)){keys.add(k);uniq.push(q)}}
+ return uniq.slice(0,18);
 }
 function ocrStringSimilarity(a,b){
  const x=Model.norm(a),y=Model.norm(b);if(!x||!y)return 0;if(x===y)return 1;
@@ -752,13 +778,13 @@ function ocrStringSimilarity(a,b){
  const A=grams(x),B=grams(y);let hit=0;A.forEach(v=>{if(B.has(v))hit++});return hit/Math.max(1,A.size+B.size-hit);
 }
 function ocrCandidateKey(c){return [c.type,c.provider||'',c.providerId||'',Model.norm(c.title),Model.norm(c.creator)].join('|')}
-function ocrScoreCandidate(c,query,fullText,rank){
- const title=ocrStringSimilarity(c.title,query), fullTitle=ocrStringSimilarity(c.title,fullText);
- const creator=c.creator?ocrStringSimilarity(c.creator,fullText):0;
- let score=title*72+Math.min(.26,fullTitle)*35+Math.min(.35,creator)*24+Math.max(0,6-rank)*1.5;
- const qn=Model.norm(query),tn=Model.norm(c.title),fn=Model.norm(fullText);
- if(qn&&tn&&qn===tn)score+=18;else if(qn&&tn&&(qn.includes(tn)||tn.includes(qn)))score+=10;
- if(c.creator&&fn.includes(Model.norm(c.creator)))score+=12;
+function ocrScoreCandidate(c,query,fullText,rank,preferredType=''){
+ const title=ocrStringSimilarity(c.title,query), creator=c.creator?ocrStringSimilarity(c.creator,fullText):0;
+ let score=title*76+Math.min(.38,creator)*26+Math.max(0,6-rank)*1.4;
+ const qn=Model.norm(query),tn=Model.norm(c.title),fn=Model.norm(fullText),cn=Model.norm(c.creator||'');
+ if(qn&&tn&&qn===tn)score+=24;else if(qn&&tn&&(qn.includes(tn)||tn.includes(qn)))score+=14;
+ if(cn&&fn.includes(cn))score+=18;
+ if(preferredType&&c.type===preferredType)score+=10;
  if(c.type==='book'&&c.isbn&&fn.includes(Model.norm(c.isbn)))score+=30;
  if(c.type==='movie'&&c.releaseDate){const y=String(c.releaseDate).slice(0,4);if(/^\d{4}$/.test(y)&&fullText.includes(y))score+=7}
  if(c.type==='album'&&c.releaseDate){const y=String(c.releaseDate).slice(0,4);if(/^\d{4}$/.test(y)&&fullText.includes(y))score+=5}
@@ -770,51 +796,87 @@ async function ocrFetch(endpoint,query,unwrap,normalize){
  const res=await fetch(requestUrl,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json','apikey':anonKey,'Authorization':'Bearer '+anonKey},body:JSON.stringify({query,q:query})});
  const text=await res.text();let payload={};try{payload=text?JSON.parse(text):{}}catch{payload={message:text}}
  if(!res.ok)throw Error(payload?.error||payload?.message||('HTTP '+res.status));
- return unwrap(payload).map(normalize).filter(c=>c.title).slice(0,5);
+ return unwrap(payload).map(normalize).filter(c=>c.title).slice(0,7);
 }
-async function ocrSearchAll(query){
- const jobs=[
-  ocrFetch(BOOK_SEARCH_ENDPOINT,query,unwrapBookDocuments,normalizeRemoteBook),
-  ocrFetch(MUSIC_SEARCH_ENDPOINT,query,unwrapAlbums,normalizeRemoteAlbum),
-  ocrFetch(MOVIE_SEARCH_ENDPOINT,query,unwrapMovies,normalizeRemoteMovie)
- ];
- const settled=await Promise.allSettled(jobs),all=[];settled.forEach(r=>{if(r.status==='fulfilled')all.push(...r.value)});return all;
+async function ocrSearchAll(query,preferredType=''){
+ const configs={
+  book:[BOOK_SEARCH_ENDPOINT,unwrapBookDocuments,normalizeRemoteBook],
+  album:[MUSIC_SEARCH_ENDPOINT,unwrapAlbums,normalizeRemoteAlbum],
+  movie:[MOVIE_SEARCH_ENDPOINT,unwrapMovies,normalizeRemoteMovie]
+ };
+ const all=[];
+ // For obvious book/music/movie screenshots, search that catalogue first. If it finds something, avoid unrelated noise.
+ if(preferredType&&configs[preferredType]){
+  try{const primary=await ocrFetch(...configs[preferredType].slice(0,1),query,...configs[preferredType].slice(1));if(primary.length)return primary}catch{}
+ }
+ const jobs=Object.values(configs).map(c=>ocrFetch(c[0],query,c[1],c[2]));
+ const settled=await Promise.allSettled(jobs);settled.forEach(r=>{if(r.status==='fulfilled')all.push(...r.value)});return all;
 }
-function ocrConfidence(score){if(score>=72)return {label:'일치 높음',level:'high',selected:true};if(score>=50)return {label:'확인 필요',level:'medium',selected:true};return {label:'가능성 낮음',level:'low',selected:false}}
+function ocrConfidence(score){if(score>=68)return {label:'일치 높음',level:'high',selected:true};if(score>=42)return {label:'확인 필요',level:'medium',selected:true};return {label:'가능성 낮음',level:'low',selected:false}}
+async function fileToOCRDataURL(file){
+ if(!file)throw Error('사진을 선택해주세요.');
+ if(!file.type.startsWith('image/'))throw Error('이미지 파일만 사용할 수 있어요.');
+ const url=URL.createObjectURL(file);
+ try{
+  const img=await loadImage(url);
+  const maxSide=1800;
+  let scale=Math.min(1,maxSide/Math.max(img.width,img.height));
+  let width=Math.max(1,Math.round(img.width*scale)),height=Math.max(1,Math.round(img.height*scale));
+  let quality=.84,data='';
+  for(let attempt=0;attempt<8;attempt++){
+   const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;
+   const ctx=canvas.getContext('2d',{alpha:false});ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height);ctx.drawImage(img,0,0,width,height);
+   data=canvas.toDataURL('image/jpeg',quality);
+   const approxBytes=Math.ceil((data.length-data.indexOf(',')-1)*3/4);
+   if(approxBytes<=850000)return data;
+   if(quality>.56)quality-=.08;else{width=Math.max(900,Math.round(width*.82));height=Math.max(900,Math.round(height*.82));quality=.72}
+  }
+  return data;
+ }finally{URL.revokeObjectURL(url)}
+}
+async function requestServerOCR(file){
+ const anonKey=getBookSearchKey();if(!anonKey)throw Error('검색 서버 연결 설정에서 Supabase anon key를 먼저 저장해주세요.');
+ const imageBase64=await fileToOCRDataURL(file);
+ const res=await fetch(IMAGE_OCR_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json','apikey':anonKey,'Authorization':'Bearer '+anonKey},body:JSON.stringify({imageBase64})});
+ const raw=await res.text();let payload={};try{payload=raw?JSON.parse(raw):{}}catch{payload={message:raw}}
+ if(!res.ok)throw Error(payload?.error||payload?.message||('OCR 서버 오류 · HTTP '+res.status));
+ if(payload?.error)throw Error(payload.error);
+ const text=String(payload?.text||'').trim();
+ if(!text)throw Error('사진에서 읽을 수 있는 글자를 찾지 못했어요.');
+ return {name:file.name,text,lines:Array.isArray(payload?.lines)?payload.lines:[],words:Array.isArray(payload?.words)?payload.words:[]};
+}
 async function runOCR(){
  if(!photoFiles.length||ocrBusy)return;
  if(!getBookSearchKey()){$('ocrProgress').textContent='사진 검색에는 검색 서버 연결이 필요해요. 먼저 Supabase anon key를 설정해주세요.';return}
- ocrBusy=true;const ticket=++ocrGeneration;$('ocrButton').disabled=true;$('ocrProgress').textContent='사진 인식을 준비하고 있어요…';let results=[];
+ ocrBusy=true;const ticket=++ocrGeneration;$('ocrButton').disabled=true;$('ocrProgress').textContent='사진을 OCR 서버로 보내고 있어요…';let results=[];
  try{
-  const w=await ocrWorker();
   for(let fi=0;fi<photoFiles.length;fi++){
-   if(ticket!==ocrGeneration)return;$('ocrProgress').textContent='글자를 읽고 있어요 · '+(fi+1)+'/'+photoFiles.length+'장';
-   const {data}=await w.recognize(photoFiles[fi]);results.push({name:photoFiles[fi].name,text:data.text})
+   if(ticket!==ocrGeneration)return;
+   $('ocrProgress').textContent='글자를 읽고 있어요 · '+(fi+1)+'/'+photoFiles.length+'장';
+   const result=await requestServerOCR(photoFiles[fi]);results.push(result);
   }
   if(ticket!==ocrGeneration)return;
-  const text=results.map(r=>r.text).join('\n'),queries=ocrQueriesFromText(text);
+  const text=results.map(r=>r.text).join('\n'),queries=ocrQueriesFromText(text),preferredType=ocrContextType(text);
   if(!queries.length)throw Error('검색할 만한 제목을 읽지 못했어요. 더 선명한 사진으로 다시 시도해주세요.');
   $('ocrProgress').textContent='읽은 글자로 콘텐츠를 찾고 있어요…';
-  const pool=new Map();
-  // Avoid excessive requests: strongest OCR phrases first, up to 8 phrases across all images.
-  for(let qi=0;qi<Math.min(8,queries.length);qi++){
-   if(ticket!==ocrGeneration)return;$('ocrProgress').textContent='콘텐츠 검색 중 · '+(qi+1)+'/'+Math.min(8,queries.length);
-   const found=await ocrSearchAll(queries[qi]);
-   found.forEach((c,rank)=>{const score=ocrScoreCandidate(c,queries[qi],text,rank),key=ocrCandidateKey(c),prev=pool.get(key);if(!prev||score>prev.score)pool.set(key,{...c,score,matchedQuery:queries[qi]})});
+  const pool=new Map(),limit=Math.min(18,queries.length);
+  for(let qi=0;qi<limit;qi++){
+   if(ticket!==ocrGeneration)return;$('ocrProgress').textContent='콘텐츠 검색 중 · '+(qi+1)+'/'+limit;
+   const found=await ocrSearchAll(queries[qi],preferredType);
+   found.forEach((c,rank)=>{const score=ocrScoreCandidate(c,queries[qi],text,rank,preferredType),key=ocrCandidateKey(c),prev=pool.get(key);if(!prev||score>prev.score)pool.set(key,{...c,score,matchedQuery:queries[qi]})});
   }
   if(ticket!==ocrGeneration)return;
-  const ranked=[...pool.values()].sort((a,b)=>b.score-a.score);
-  // Keep distinct strong matches rather than ten variants of the same OCR phrase.
-  const picked=[];
+  const ranked=[...pool.values()].sort((a,b)=>b.score-a.score),picked=[];
   for(const c of ranked){
-   if(c.score<34)continue;
-   const duplicate=picked.some(p=>p.type===c.type&&(ocrStringSimilarity(p.title,c.title)>.9||Model.norm(p.title)===Model.norm(c.title)));
+   if(c.score<24)continue;
+   const duplicate=picked.some(p=>p.type===c.type&&(ocrStringSimilarity(p.title,c.title)>.91||Model.norm(p.title)===Model.norm(c.title)));
    if(duplicate)continue;
-   const conf=ocrConfidence(c.score);picked.push({...c,selected:conf.selected,confidence:conf.label,confidenceLevel:conf.level,source:'사진 자동 인식'});if(picked.length>=12)break;
+   const conf=ocrConfidence(c.score);picked.push({...c,selected:conf.selected,confidence:conf.label,confidenceLevel:conf.level,source:'사진 자동 인식 · OCR.Space'});if(picked.length>=18)break;
   }
   candidates=picked;
   const auto=candidates.filter(c=>c.selected&&c.confidenceLevel==='high').length,review=candidates.filter(c=>c.selected&&c.confidenceLevel==='medium').length;
-  showModal('사진에서 찾은 콘텐츠','<div class="ocr-scan-status"><strong>'+candidates.length+'개를 찾았어요</strong><span>자동 선택 '+(auto+review)+'개</span></div><div class="ocr-review-note">일치도가 높은 항목은 미리 선택했어요. 애매한 항목만 확인하고, 필요 없는 항목은 체크를 끄면 됩니다.</div><div id="candidateRows"></div><details class="collapse"><summary>인식한 글자 보기</summary><p style="white-space:pre-wrap;overflow-wrap:anywhere">'+esc(text||'글자를 찾지 못했어요.')+'</p></details><details class="collapse ocr-unmatched"><summary>직접 추가하기</summary><label for="ocrTitle">작품 제목</label><input id="ocrTitle" placeholder="제목 입력"><label for="ocrCreator">제작자 · 선택</label><input id="ocrCreator"><select id="ocrType" aria-label="콘텐츠 유형"><option value="book">책</option><option value="album">음반</option><option value="movie">영화</option></select>'+button('후보에 추가','candidateManual','secondary')+'</details>'+button('선택한 콘텐츠 한 번에 스크랩','saveCandidates','primary','id="saveCandidates"'),'review');renderCandidates();
+  const contextLabel=preferredType==='book'?'책장 화면으로 인식해 책 검색을 우선했어요.':preferredType==='album'?'음악 화면으로 인식해 앨범 검색을 우선했어요.':preferredType==='movie'?'영화 화면으로 인식해 영화 검색을 우선했어요.':'';
+  showModal('사진에서 찾은 콘텐츠','<div class="ocr-scan-status"><strong>'+candidates.length+'개를 찾았어요</strong><span>자동 선택 '+(auto+review)+'개</span></div>'+(contextLabel?'<div class="ocr-review-note">'+contextLabel+'</div>':'')+'<div class="ocr-review-note">OCR.Space로 글자를 읽고, 제목을 실제 검색 서버에서 찾아 가장 가능성 높은 결과를 자동 선택했어요. 맞지 않는 항목만 체크를 끄면 됩니다.</div><div id="candidateRows"></div><details class="collapse"><summary>검색에 사용한 글자 보기</summary><p class="muted">'+esc(queries.join(' · '))+'</p></details><details class="collapse"><summary>전체 OCR 글자 보기</summary><p style="white-space:pre-wrap;overflow-wrap:anywhere">'+esc(text||'글자를 찾지 못했어요.')+'</p></details><details class="collapse ocr-unmatched"><summary>직접 추가하기</summary><label for="ocrTitle">작품 제목</label><input id="ocrTitle" placeholder="제목 입력"><label for="ocrCreator">제작자 · 선택</label><input id="ocrCreator"><select id="ocrType" aria-label="콘텐츠 유형"><option value="book">책</option><option value="album">음반</option><option value="movie">영화</option></select>'+button('후보에 추가','candidateManual','secondary')+'</details>'+button('선택한 콘텐츠 한 번에 스크랩','saveCandidates','primary','id="saveCandidates"'),'review');renderCandidates();
  }catch(e){if(ticket===ocrGeneration){$('ocrProgress').textContent=e?.message||'사진을 읽지 못했어요. 다시 시도하거나 직접 입력해주세요.';$('ocrButton').disabled=false}}finally{ocrBusy=false}
 }
 function renderCandidates(){
