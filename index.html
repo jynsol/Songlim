@@ -8,12 +8,100 @@
   <title>송림 | 프로젝트 자료</title>
   <meta name="description" content="송림 프로젝트의 지원서, 사업계획서, 기능정의서, 콘텐츠 데이터 정의서, 프로토타입 자료입니다." />
   <style>
-:root{--ink:#202124;--muted:#737d85;--line:#e4e9ec;--paper:#fafbfc;--card:#fff;--blue:#5d91a2;--teal:#6ab8ac;--gradient:linear-gradient(110deg,#599bb1 0%,#6ab8ac 100%);--shadow:0 10px 28px rgba(32,71,103,.06)}
-*{box-sizing:border-box}html{min-height:100%;background:var(--paper)}body{margin:0;min-height:100svh;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;word-break:keep-all;line-height:1.6;letter-spacing:-.025em}a{color:inherit}button,input{font:inherit}button,a,input{-webkit-tap-highlight-color:transparent}a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid rgba(93,145,162,.3);outline-offset:3px}[hidden]{display:none!important}
-.wrap{width:min(100% - 40px,980px);margin:auto;padding:68px 0 34px}.brand{display:block;margin-bottom:22px}.eyebrow{font-size:12px;font-weight:750;color:var(--blue);margin:0;letter-spacing:.1em}.eyebrow:before{content:"";display:block;width:48px;height:3px;margin-bottom:18px;border-radius:3px;background:var(--gradient)}.hero{display:flex;align-items:flex-end;justify-content:space-between;gap:30px}.hero-copy{max-width:630px}h1{font-size:clamp(38px,6vw,60px);letter-spacing:-.06em;line-height:1.1;margin:0}.title-accent{color:var(--ink)}.intro{font-size:17px;color:var(--muted);margin:18px 0 0;line-height:1.75}header{padding-bottom:44px}.hero-badge{flex:0 0 auto;padding:9px 14px;border:1px solid var(--line);border-radius:999px;background:#fff;color:#71838b;font-size:11px;font-weight:700;box-shadow:none}
-.list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.item{position:relative;display:grid;grid-template-columns:48px minmax(0,1fr) 28px;gap:16px;align-items:center;min-height:128px;padding:24px;text-decoration:none;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:none;overflow:hidden;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}.item:first-child{grid-column:1/-1}.item:before{content:"";position:absolute;left:0;top:22px;bottom:22px;width:3px;border-radius:0 4px 4px 0;background:var(--gradient);opacity:0;transition:opacity .2s ease}.item:hover{transform:translateY(-2px);border-color:#cfdde2;box-shadow:var(--shadow)}.item:hover:before{opacity:1}.num{width:44px;height:44px;display:grid;place-items:center;border-radius:12px;background:#f1f6f8;color:var(--blue);font-size:12px;font-weight:800;font-variant-numeric:tabular-nums}.item:nth-child(3n) .num{background:#f1f7f6;color:#62978e}.text strong{display:block;font-size:18px;font-weight:700;line-height:1.4;letter-spacing:-.035em}.text span{display:block;font-size:13px;color:var(--muted);margin-top:6px;line-height:1.55}.open{width:28px;height:28px;display:grid;place-items:center;border-radius:50%;color:#929da3;font-size:18px;transition:background .2s,color .2s,transform .2s}.item:hover .open{background:#f0f6f8;color:var(--blue);transform:translateX(2px)}footer{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-top:28px;color:#8390a0;font-size:11px}.lock{border:1px solid var(--line);background:#fff;color:#647488;padding:9px 14px;border-radius:10px;cursor:pointer;min-height:40px}.lock:hover{border-color:#cddce8;color:var(--blue)}
-#auth-screen{min-height:100svh;display:grid;place-items:center;padding:32px 20px}.auth-wrap{width:100%;max-width:420px;padding:40px;background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:0 18px 48px rgba(32,71,103,.07)}.auth-head{margin-bottom:30px}.auth-head .brand{margin-bottom:22px}.auth-head h1{font-size:44px}.auth-head .intro{font-size:14px;margin-top:12px}.auth-label{display:block;font-size:12px;margin-bottom:8px;color:#65757c;font-weight:700}.auth-box input{width:100%;height:54px;padding:0 16px;border:1px solid #d8e1e5;border-radius:12px;background:#fbfcfc;color:var(--ink);transition:border-color .2s,box-shadow .2s}.auth-box input::placeholder{color:#a2adba}.auth-box input:focus{outline:none;border-color:#8ebbc8;box-shadow:0 0 0 4px rgba(93,145,162,.09);background:#fff}.auth-box button{width:100%;min-height:54px;margin-top:12px;border:0;border-radius:12px;background:var(--gradient);color:#fff;font-weight:750;cursor:pointer;box-shadow:none}.auth-box button:hover{filter:saturate(1.04) brightness(.98)}.auth-error{margin:12px 2px 0;color:#c75252;font-size:13px}#main-content{display:none}
-@media(max-width:700px){.wrap{width:min(100% - 32px,980px);padding:42px 0 28px}.hero{display:block}.hero-badge{display:none}header{padding-bottom:30px}.list{grid-template-columns:1fr;gap:12px}.item:first-child{grid-column:auto}.item{grid-template-columns:42px minmax(0,1fr) 24px;gap:13px;padding:20px 18px;min-height:112px;border-radius:18px}.num{width:40px;height:40px;border-radius:12px}.text strong{font-size:16px}.text span{font-size:12px}.intro{font-size:14px}.auth-wrap{padding:30px 24px;border-radius:24px}.auth-head h1{font-size:40px}}
+:root{
+  --ink:#252b27;
+  --muted:#70806f;
+  --line:#e1e9de;
+  --paper:#fafbf7;
+  --card:#fff;
+  --primary:#3f8554;
+  --primary-2:#4b8c58;
+  --sky:#dceef8;
+  --bud:#e4f2da;
+  --butter:#f6e5a6;
+  --gradient:linear-gradient(120deg,var(--primary) 0%,var(--primary-2) 100%);
+  --bloom:linear-gradient(100deg,var(--sky) 0%,var(--bud) 55%,#fbf3d5 100%);
+  --shadow:0 12px 30px rgba(37,43,39,.07);
+}
+*{box-sizing:border-box}
+html{min-height:100%;background:var(--paper)}
+body{margin:0;min-height:100svh;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;word-break:keep-all;line-height:1.6;letter-spacing:-.02em}
+a{color:inherit}
+button,input{font:inherit}
+button,a,input{-webkit-tap-highlight-color:transparent}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid rgba(63,133,84,.28);outline-offset:3px}
+[hidden]{display:none!important}
+
+/* ---------- shared brand mark ---------- */
+.mark{display:inline-flex;align-items:center;gap:9px}
+.mark svg{flex:0 0 auto;display:block}
+.mark span{font-size:14px;font-weight:800;letter-spacing:.02em;color:var(--ink)}
+.eyebrow{font-size:11px;font-weight:700;color:var(--primary);margin:0 0 20px;letter-spacing:.14em}
+
+/* ---------- layout ---------- */
+.wrap{width:min(100% - 40px,960px);margin:auto;padding:64px 0 40px}
+header{padding-bottom:0}
+.hero{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;padding-bottom:30px}
+.hero-copy{max-width:600px}
+h1{font-size:clamp(36px,5.6vw,56px);letter-spacing:-.045em;line-height:1.14;margin:0;font-weight:800}
+.title-accent{position:relative;color:var(--primary)}
+.intro{font-size:16px;color:var(--muted);margin:16px 0 0;line-height:1.75}
+.hero-badge{flex:0 0 auto;padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--muted);font-size:11px;font-weight:700}
+
+.bloom-strip{height:5px;border-radius:6px;background:var(--bloom);margin-bottom:44px}
+
+/* ---------- document list ---------- */
+.list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.item{position:relative;display:grid;grid-template-columns:46px minmax(0,1fr) 26px;gap:16px;align-items:center;min-height:122px;padding:22px;text-decoration:none;background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease,background .18s ease}
+.item:first-child{grid-column:1/-1;background:linear-gradient(180deg,#fff 0%,var(--bud) 260%)}
+.item:hover{transform:translateY(-2px);border-color:#c9dfcd;box-shadow:var(--shadow)}
+.num{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:var(--bud);color:var(--primary);font-size:12px;font-weight:800;font-variant-numeric:tabular-nums}
+.item:nth-child(3n) .num{background:var(--sky);color:#3e7b93}
+.item:nth-child(4n) .num{background:var(--butter);color:#8a6d1f}
+.text strong{display:block;font-size:17px;font-weight:750;line-height:1.4;letter-spacing:-.03em}
+.text span{display:block;font-size:13px;color:var(--muted);margin-top:5px;line-height:1.55}
+.open{width:26px;height:26px;display:grid;place-items:center;border-radius:50%;color:#a3b0a1;font-size:17px;transition:background .18s,color .18s,transform .18s}
+.item:hover .open{background:var(--bud);color:var(--primary);transform:translateX(2px)}
+
+footer{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-top:30px;color:#8b9a89;font-size:11px}
+.lock{border:1px solid var(--line);background:#fff;color:var(--muted);padding:9px 14px;border-radius:10px;cursor:pointer;min-height:40px;font-weight:600}
+.lock:hover{border-color:#bcd9c4;color:var(--primary)}
+
+/* ---------- auth screen ---------- */
+#auth-screen{min-height:100svh;display:grid;place-items:center;padding:32px 20px;background:
+  radial-gradient(680px 420px at 12% -8%, var(--sky) 0%, transparent 60%),
+  radial-gradient(680px 420px at 108% 8%, var(--butter) 0%, transparent 55%),
+  var(--paper);}
+.auth-wrap{width:100%;max-width:420px;padding:40px;background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:0 20px 50px rgba(37,43,39,.08)}
+.auth-head{margin-bottom:28px}
+.auth-head .mark{margin-bottom:22px}
+.auth-head h1{font-size:38px}
+.auth-head .intro{font-size:14px;margin-top:10px}
+.auth-label{display:block;font-size:12px;margin-bottom:8px;color:var(--muted);font-weight:700}
+.auth-box input{width:100%;height:54px;padding:0 16px;border:1px solid #d9e4dc;border-radius:13px;background:#fbfcf9;color:var(--ink);transition:border-color .2s,box-shadow .2s}
+.auth-box input::placeholder{color:#a6b4a4}
+.auth-box input:focus{outline:none;border-color:#8fbf9e;box-shadow:0 0 0 4px rgba(63,133,84,.1);background:#fff}
+.auth-box button{width:100%;min-height:54px;margin-top:12px;border:0;border-radius:13px;background:var(--gradient);color:#fff;font-weight:750;cursor:pointer}
+.auth-box button:hover{filter:saturate(1.05) brightness(.98)}
+.auth-error{margin:12px 2px 0;color:#c75252;font-size:13px}
+#main-content{display:none}
+
+@media(max-width:700px){
+  .wrap{width:min(100% - 32px,960px);padding:40px 0 30px}
+  .hero{display:block}
+  .hero-badge{display:none}
+  .hero-copy{max-width:none}
+  .bloom-strip{margin-bottom:32px}
+  .list{grid-template-columns:1fr;gap:11px}
+  .item:first-child{grid-column:auto}
+  .item{grid-template-columns:40px minmax(0,1fr) 22px;gap:13px;padding:19px 17px;min-height:108px;border-radius:18px}
+  .num{width:38px;height:38px;border-radius:12px}
+  .text strong{font-size:16px}
+  .text span{font-size:12px}
+  .intro{font-size:14px}
+  .auth-wrap{padding:28px 22px;border-radius:22px}
+  .auth-head h1{font-size:34px}
+}
 @media(prefers-reduced-motion:reduce){.item,.open{transition:none}}
 </style>
 </head>
@@ -24,11 +112,12 @@
   <div id="auth-screen">
     <div class="auth-wrap">
       <div class="auth-head">
-        <div class="brand"><p class="eyebrow">SONGLIM</p></div>
+        <div class="mark">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2L6 11h3.2L5 19h6v3h2v-3h6l-4.2-8H18L12 2z" fill="#3f8554"/></svg>
+          <span>SONGLIM</span>
+        </div>
         <h1>취향이 자라는 <span class="title-accent">송림</span></h1>
-        <p class="intro">
-          비밀번호를 입력하면 자료를 볼 수 있어요.
-        </p>
+        <p class="intro">비밀번호를 입력하면 자료를 볼 수 있어요.</p>
       </div>
 
       <div class="auth-form-area auth-box">
@@ -49,8 +138,6 @@
         <div id="auth-error" class="auth-error" role="alert" hidden>
           비밀번호가 일치하지 않습니다. 다시 확인해 주세요.
         </div>
-
-        
       </div>
     </div>
   </div>
@@ -58,10 +145,20 @@
   <!-- 메인 콘텐츠 -->
   <main id="main-content" class="wrap">
     <header>
-      <div class="brand"><p class="eyebrow">SONGLIM</p></div>
-      <div class="hero"><div class="hero-copy"><h1>취향이 자라는 <span class="title-accent">송림</span></h1>
-      <p class="intro">보고 싶은 것은 스크랩하고, 하나씩 경험하고, 나의 숲으로 남깁니다.</p></div><span class="hero-badge">PROJECT ARCHIVE · 2026</span></div>
+      <div class="mark" style="margin-bottom:26px">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2L6 11h3.2L5 19h6v3h2v-3h6l-4.2-8H18L12 2z" fill="#3f8554"/></svg>
+        <span>SONGLIM</span>
+      </div>
+      <div class="hero">
+        <div class="hero-copy">
+          <h1>취향이 자라는 <span class="title-accent">송림</span></h1>
+          <p class="intro">보고 싶은 것은 스크랩하고, 하나씩 경험하고, 나의 숲으로 남깁니다.</p>
+        </div>
+        <span class="hero-badge">PROJECT ARCHIVE · 2026</span>
+      </div>
     </header>
+
+    <div class="bloom-strip"></div>
 
     <section class="list" aria-label="송림 프로젝트 자료 목록">
       <a class="item" href="application.pdf">
