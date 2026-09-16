@@ -414,8 +414,10 @@ function forestSVG(items,theme='basic',animated=true){
 <script>
 
 const SUPABASE_URL='https://gytfefnvpqqxveryhopw.supabase.co';
+const DELETE_ACCOUNT_ENDPOINT=SUPABASE_URL+'/functions/v1/delete-account';
 const CLOUD_PUBLIC_KEY_STORAGE='songrim.supabase.publishable-key.v1';
 const CLOUD_SESSION_STORAGE='songrim.supabase.session.v1';
+const CLOUD_LAST_EMAIL_STORAGE='songrim.supabase.last-email.v1';
 let cloudSession=null,cloudApplying=false,cloudSyncTimer=null,cloudSyncStatus='local';
 
 function cloudPublicKey(){try{return localStorage.getItem(CLOUD_PUBLIC_KEY_STORAGE)||''}catch{return ''}}
@@ -461,6 +463,40 @@ async function cloudLogout(){
  }catch{}
  clearCloudSession();
 }
+
+async function deleteSongrimAccount(){
+ if(!cloudSession?.access_token)throw Error('다시 로그인한 뒤 회원탈퇴를 진행해주세요.');
+ const key=cloudPublicKey();
+ if(!key)throw Error('Supabase 연결 설정이 필요해요.');
+
+ const res=await fetch(DELETE_ACCOUNT_ENDPOINT,{
+  method:'POST',
+  headers:{
+   'Content-Type':'application/json',
+   'apikey':key,
+   'Authorization':'Bearer '+cloudSession.access_token
+  },
+  body:JSON.stringify({confirm:true})
+ });
+
+ let payload=null,text='';
+ try{text=await res.text();payload=text?JSON.parse(text):null}catch{payload={message:text}}
+
+ if(!res.ok)throw Error(payload?.message||payload?.error||('회원탈퇴 처리 실패 · HTTP '+res.status));
+
+ // 서버 삭제 성공 후 이 기기의 로그인/사용자 상태도 정리한다.
+ clearCloudSession();
+ authSession={signedIn:false,finished:false};
+ try{
+  localStorage.removeItem(KEY);
+  localStorage.removeItem(SESSION_KEY);
+  localStorage.removeItem(CLOUD_LAST_EMAIL_STORAGE);
+ }catch{}
+ state=Model.empty();
+ authRoute='welcome';
+ view='today';
+ return true;
+}
 async function cloudFetchState(){
  if(!cloudSession?.access_token||!cloudSession?.user?.id)return null;
  const path='/rest/v1/songrim_user_states?select=state,updated_at&user_id=eq.'+encodeURIComponent(cloudSession.user.id)+'&limit=1';
@@ -500,29 +536,63 @@ async function cloudLoadForSignedInUser(){
   try{
    cloudApplying=true;
    state=Model.validate(row.state);
+   // 이전 테스트 버전이 빈 계정에 onboarded=true를 잘못 올린 경우 자동 복구.
+   if(state.onboarded===true && (!Array.isArray(state.items) || state.items.length===0)){
+    state.onboarded=false;
+   }
    localStorage.setItem(KEY,JSON.stringify(state));
   }finally{cloudApplying=false}
  }else{
+  // 신규 계정은 이 브라우저에 남아 있던 이전 테스트 상태를 가져가지 않는다.
+  // 항상 빈 송림에서 시작한다.
+  const rememberedName=authSession?.name||'';
+  try{
+   cloudApplying=true;
+   state=Model.empty();
+   if(rememberedName)state.profile.name=rememberedName;
+   state.onboarded=false;
+   localStorage.setItem(KEY,JSON.stringify(state));
+  }finally{cloudApplying=false}
   await cloudUpsertState();
  }
 }
 async function cloudBootstrap(){
  cloudSession=loadCloudSession();
- if(!cloudSession?.access_token)return;
+
+ // 실제 Supabase 로그인 세션이 없으면 서비스 소개/시작 화면부터 보여준다.
+ if(!cloudSession?.access_token){
+  authSession.signedIn=false;
+  authRoute='welcome';
+  saveSession();
+  return;
+ }
+
  try{
   const exp=Number(cloudSession.expires_at||0)*1000;
   if(exp&&Date.now()>exp-60000)await cloudRefresh();
-  if(cloudSession?.access_token){
-   authSession.signedIn=true;
-   authSession.method='이메일';
-   await cloudLoadForSignedInUser();
-   authSession.name=state.profile?.name||authSession.name||'';
+
+  if(!cloudSession?.access_token){
+   authSession.signedIn=false;
+   authRoute='welcome';
    saveSession();
-   authRoute=authSession.finished?'app':(state.onboarded?'app':'onboard');
+   return;
   }
+
+  authSession.signedIn=true;
+  authSession.method='이메일';
+  await cloudLoadForSignedInUser();
+  authSession.name=state.profile?.name||authSession.name||'';
+  authSession.finished=state.onboarded===true;
+  saveSession();
+
+  // 실제 로그인 세션이 있을 때만 앱/초기설정으로 진입한다.
+  authRoute=authSession.finished?'app':'profile';
  }catch(err){
   console.warn(err);
   clearCloudSession();
+  authSession.signedIn=false;
+  authRoute='welcome';
+  saveSession();
  }
 }
 function cloudSetupModal(message=''){
@@ -635,7 +705,7 @@ function renderCalendar(){
 }
 function renderMy(){
  const stats=Model.stats(state.items.filter(c=>c.completed));
- return '<section><div class="page-heading"><h1 class="page-title">'+esc(state.profile.name)+'의 기록</h1></div><p class="creator page-description">스크랩 '+state.items.length+'개 · 완료 '+stats.n+'개</p><div class="space"></div>'+button('프로필 <span>›</span>','profile','menu-row')+button('취향 추가 <span>›</span>','tastes','menu-row')+button('오늘의 경험 알림 <span class="muted">체험 안내</span>','notifications','menu-row')+button('데이터 백업 <span>↓</span>','backup','menu-row')+button('백업 복원 <span>↑</span>','restore','menu-row')+'<input id="restoreFile" class="offscreen" type="file" accept="application/json,.json">'+button('서비스·개인정보 안내 <span>›</span>','terms','menu-row')+button('처음 이용 흐름 다시 보기 <span>›</span>','flowReplay','menu-row')+'<div class="rule"></div>'+button('로그아웃','flowLogout','menu-row danger')+'<details class="dev"><summary>프로토타입 체험 도구</summary><div class="note">기록은 이 브라우저에 저장됩니다. 책은 Kakao, 음악은 Apple Music/iTunes, 영화는 TMDB 데이터를 송림의 Supabase Edge Function을 통해 불러오며, 사진의 글자 인식은 OCR.Space에서 처리합니다.</div><p class="summary">체험 날짜: '+now()+(state.offset?' · 실제 날짜 +'+state.offset+'일':'')+'</p>'+button('다음 날로 체험하기','nextDay','secondary')+button('실제 날짜로 돌아가기','realDay','textbtn')+button('데이터 삭제 (전체 초기화)','clear','menu-row danger')+'<p class="tiny muted">면적 비교의 생활 공간 수치는 체험용 설정값입니다.</p></details></section>';
+ return '<section><div class="page-heading"><h1 class="page-title">'+esc(state.profile.name)+'의 기록</h1></div><p class="creator page-description">스크랩 '+state.items.length+'개 · 완료 '+stats.n+'개</p><div class="space"></div>'+button('프로필 <span>›</span>','profile','menu-row')+button('취향 추가 <span>›</span>','tastes','menu-row')+button('오늘의 경험 알림 <span class="muted">체험 안내</span>','notifications','menu-row')+button('데이터 백업 <span>↓</span>','backup','menu-row')+button('백업 복원 <span>↑</span>','restore','menu-row')+'<input id="restoreFile" class="offscreen" type="file" accept="application/json,.json">'+button('서비스·개인정보 안내 <span>›</span>','terms','menu-row')+button('처음 이용 흐름 다시 보기 <span>›</span>','flowReplay','menu-row')+'<div class="rule"></div>'+button('로그아웃','flowLogout','menu-row danger')+button('회원탈퇴','deleteAccount','menu-row danger')+'<details class="dev"><summary>프로토타입 체험 도구</summary><div class="note">기록은 이 브라우저에 저장됩니다. 책은 Kakao, 음악은 Apple Music/iTunes, 영화는 TMDB 데이터를 송림의 Supabase Edge Function을 통해 불러오며, 사진의 글자 인식은 OCR.Space에서 처리합니다.</div><p class="summary">체험 날짜: '+now()+(state.offset?' · 실제 날짜 +'+state.offset+'일':'')+'</p>'+button('다음 날로 체험하기','nextDay','secondary')+button('실제 날짜로 돌아가기','realDay','textbtn')+button('데이터 삭제 (전체 초기화)','clear','menu-row danger')+'<p class="tiny muted">면적 비교의 생활 공간 수치는 체험용 설정값입니다.</p></details></section>';
 }
 function showModal(title,html,kind='generic'){
  dismissToast();modal=kind;$('overlay').innerHTML='<div class="sheet-back" data-action="backdrop"><section class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"><div class="sheet-head"><h2 id="sheetTitle">'+esc(title)+'</h2>'+button(icon('close'),'close','iconbtn','aria-label="닫기"')+'</div>'+html+'</section></div>';
@@ -1392,7 +1462,10 @@ function entryNote(){
  const cloud=cloudPublicKey()?'<span>Supabase 사용자 데이터 동기화 연결됨</span>':'<button type="button" class="textbtn" data-action="cloudSetup">Supabase 연결 설정</button>';
  return '<p class="entry-note">'+cloud+' · 로그인한 계정의 기록은 클라우드와 동기화됩니다.</p>'
 }
-function loginFields(){return '<label for="flowEmail">이메일</label><input id="flowEmail" type="email" required autocomplete="email" placeholder="you@example.com"><label for="flowPassword">비밀번호</label><input id="flowPassword" type="password" required minlength="6" autocomplete="current-password" placeholder="6자 이상">'}
+function loginFields(){
+ let lastEmail='';try{lastEmail=localStorage.getItem(CLOUD_LAST_EMAIL_STORAGE)||''}catch{}
+ return '<label for="flowEmail">이메일</label><input id="flowEmail" type="email" required autocomplete="email" value="'+esc(lastEmail)+'" placeholder="you@example.com"><label for="flowPassword">비밀번호</label><input id="flowPassword" type="password" required minlength="6" autocomplete="current-password" placeholder="6자 이상">'
+}
 function socialStartButton(provider){
  const logos={
  kakao:'<path fill="currentColor" d="M12 3C6.48 3 2 6.48 2 10.78c0 2.77 1.86 5.2 4.65 6.57l-.93 3.4c-.08.29.25.52.5.36l4.07-2.7c.56.08 1.13.12 1.71.12 5.52 0 10-3.48 10-7.75S17.52 3 12 3Z"/>',
@@ -1447,7 +1520,7 @@ function tasteChoose(){flowTo('taste')}
 function response(type){const c=window.tasteCandidate;state.profile.responses??={};state.profile.responses[c.type+':'+c.title]=type;persist()}
 function nextTaste(){tasteIndex++;flowTo(tasteSeen>=3?'ready':'taste')}
 function finishEntry(){authSession.finished=true;state.onboarded=true;saveSession();persist();view='today';flowTo('app')}
-document.addEventListener('click',e=>{
+document.addEventListener('click',async e=>{
  const b=e.target.closest('[data-action]');if(!b||b.disabled)return;const a=b.dataset.action;
  if(a==='flowOptionalTaste')startTaste();
  if(a==='flowFirstScrap'){finishEntry();addMenu()}
@@ -1469,6 +1542,35 @@ document.addEventListener('click',e=>{
  if(a==='flowSkip')nextTaste();
  if(a==='flowExperienced'){const c=Model.add(state,window.tasteCandidate);if(!c.completed){c.completed='unknown';c.completedAt=Date.now()}response('experienced');nextTaste()}
  if(a==='flowLogout'){confirmBox('로그아웃할까요?','클라우드 기록은 유지되고 이 기기의 로그인 상태만 해제됩니다.',async()=>{await cloudLogout();authSession={signedIn:false,finished:false};saveSession();state=Model.empty();try{localStorage.removeItem(KEY)}catch{}authRoute='welcome';view='today';render()},'로그아웃')}
+ if(a==='deleteAccount'){
+  if(!cloudSession?.access_token){toast('다시 로그인한 뒤 회원탈퇴를 진행해주세요.');return}
+  showModal(
+   '회원탈퇴',
+   '<p><strong>송림 계정과 저장한 기록을 모두 삭제할까요?</strong></p>'+
+   '<p class="muted">스크랩, 경험 기록, 완료 기록, 별점과 클라우드 사용자 데이터가 삭제됩니다. 이 작업은 되돌릴 수 없습니다.</p>'+
+   '<label for="deleteAccountConfirm">확인을 위해 <strong>탈퇴</strong>를 입력해주세요.</label>'+
+   '<input id="deleteAccountConfirm" autocomplete="off" placeholder="탈퇴">'+
+   '<div id="deleteAccountError" class="entry-error" role="alert"></div>'+
+   button('계정과 데이터 삭제','deleteAccountConfirm','primary danger')+
+   button('취소','close','textbtn'),
+   'delete-account'
+  );
+ }
+ if(a==='deleteAccountConfirm'){
+  const input=$('deleteAccountConfirm'),err=$('deleteAccountError');
+  if(!input||input.value.trim()!=='탈퇴'){if(err)err.textContent='확인을 위해 “탈퇴”를 입력해주세요.';return}
+  const btn=e.target.closest('button');if(btn)btn.disabled=true;
+  if(err)err.textContent='계정과 데이터를 삭제하는 중이에요…';
+  try{
+   await deleteSongrimAccount();
+   closeModal();
+   render();
+   toast('회원탈퇴가 완료됐어요.');
+  }catch(ex){
+   if(err)err.textContent=ex.message||'회원탈퇴를 완료하지 못했어요.';
+   if(btn)btn.disabled=false;
+  }
+ }
  if(a==='flowReplay'){authSession.finished=false;saveSession();flowTo('profile')}
 });
 document.addEventListener('submit',async e=>{
@@ -1491,19 +1593,30 @@ document.addEventListener('submit',async e=>{
     const name=$('flowName').value.trim();if(!name)throw Error('이름을 입력해주세요.');
     const data=await cloudSignup(email,password);
     authSession.name=name;state.profile.name=name;persist();
+    try{localStorage.setItem(CLOUD_LAST_EMAIL_STORAGE,email)}catch{}
+
+    // 가입 직후에는 자동 진입하지 않고 로그인 화면으로 이동.
+    // Supabase에서 이메일 확인이 켜져 있으면 메일 인증 후 로그인하면 된다.
     if(data?.access_token){
-     saveCloudSession(data);authSession.signedIn=true;authSession.method='이메일';saveSession();
-     await cloudLoadForSignedInUser();flowTo('profile');
+     saveCloudSession(data);
+     await cloudLogout();
     }else{
-     $('flowError').textContent='가입 메일을 확인한 뒤 이메일 인증을 완료하고 로그인해주세요.';
+     clearCloudSession();
     }
+    authSession.signedIn=false;
+    authSession.method='이메일';
+    authSession.finished=false;
+    saveSession();
+    flowTo('login');
+    setTimeout(()=>toast(data?.access_token?'가입이 완료됐어요. 로그인해주세요.':'가입이 완료됐어요. 이메일 인증 후 로그인해주세요.'),50);
    }else{
     const data=await cloudLogin(email,password);
     authSession.signedIn=true;authSession.method='이메일';
     await cloudLoadForSignedInUser();
-    authSession.name=state.profile?.name||data?.user?.user_metadata?.name||'';
+    authSession.name=state.profile?.name||data?.user?.user_metadata?.name||authSession.name||'';
     authSession.finished=state.onboarded===true;
-    saveSession();flowTo(authSession.finished?'app':'profile');
+    saveSession();
+    flowTo(authSession.finished?'app':'profile');
    }
   }catch(err){$('flowError').textContent=err.message||'로그인 정보를 확인해주세요.'}
   finally{if(f.isConnected)submit.disabled=false}
@@ -1515,6 +1628,7 @@ document.addEventListener('submit',async e=>{
 });
 document.addEventListener('input',e=>{if(e.target.id==='flowProfileName')e.target.setCustomValidity('')});
 window.addEventListener('storage',e=>{if(e.key===AUTH_KEY){try{const a=JSON.parse(e.newValue||'null');authSession=a||{signedIn:false,finished:false};flowTo(authSession.signedIn?(authSession.finished?'app':'onboard'):'welcome')}catch{}}});
+authRoute='welcome';
 render();
 cloudBootstrap().then(()=>render());
 </script>
