@@ -412,6 +412,129 @@ function forestSVG(items,theme='basic',animated=true){
 
 </script>
 <script>
+
+const SUPABASE_URL='https://gytfefnvpqqxveryhopw.supabase.co';
+const CLOUD_PUBLIC_KEY_STORAGE='songrim.supabase.publishable-key.v1';
+const CLOUD_SESSION_STORAGE='songrim.supabase.session.v1';
+let cloudSession=null,cloudApplying=false,cloudSyncTimer=null,cloudSyncStatus='local';
+
+function cloudPublicKey(){try{return localStorage.getItem(CLOUD_PUBLIC_KEY_STORAGE)||''}catch{return ''}}
+function saveCloudPublicKey(v){try{localStorage.setItem(CLOUD_PUBLIC_KEY_STORAGE,String(v||'').trim())}catch{}}
+function clearCloudSession(){cloudSession=null;try{localStorage.removeItem(CLOUD_SESSION_STORAGE)}catch{}}
+function saveCloudSession(session){cloudSession=session||null;try{session?localStorage.setItem(CLOUD_SESSION_STORAGE,JSON.stringify(session)):localStorage.removeItem(CLOUD_SESSION_STORAGE)}catch{}}
+function loadCloudSession(){try{return JSON.parse(localStorage.getItem(CLOUD_SESSION_STORAGE)||'null')}catch{return null}}
+function cloudAuthHeaders(token=''){
+ const key=cloudPublicKey(),h={'Content-Type':'application/json','apikey':key};
+ if(token)h.Authorization='Bearer '+token;
+ return h;
+}
+async function cloudRequest(path,options={}){
+ const key=cloudPublicKey();
+ if(!key)throw Error('Supabase Publishable key 연결이 필요해요.');
+ const res=await fetch(SUPABASE_URL+path,{...options,headers:{...cloudAuthHeaders(options.token||''),...(options.headers||{})}});
+ let body=null,text='';
+ try{text=await res.text();body=text?JSON.parse(text):null}catch{body=text}
+ if(!res.ok)throw Error(body?.msg||body?.message||body?.error_description||body?.error||('Supabase 오류 · HTTP '+res.status));
+ return body;
+}
+async function cloudRefresh(){
+ if(!cloudSession?.refresh_token)return false;
+ try{
+  const data=await cloudRequest('/auth/v1/token?grant_type=refresh_token',{method:'POST',body:JSON.stringify({refresh_token:cloudSession.refresh_token})});
+  saveCloudSession(data);return true;
+ }catch{clearCloudSession();return false}
+}
+async function cloudLogin(email,password){
+ const data=await cloudRequest('/auth/v1/token?grant_type=password',{method:'POST',body:JSON.stringify({email,password})});
+ saveCloudSession(data);return data;
+}
+async function cloudSignup(email,password){
+ return cloudRequest('/auth/v1/signup',{method:'POST',body:JSON.stringify({email,password})});
+}
+async function cloudRecover(email){
+ const redirect=(location.protocol==='http:'||location.protocol==='https:')?location.origin+location.pathname:undefined;
+ return cloudRequest('/auth/v1/recover',{method:'POST',body:JSON.stringify(redirect?{email,redirect_to:redirect}:{email})});
+}
+async function cloudLogout(){
+ try{
+  if(cloudSession?.access_token)await cloudRequest('/auth/v1/logout',{method:'POST',token:cloudSession.access_token,body:'{}'});
+ }catch{}
+ clearCloudSession();
+}
+async function cloudFetchState(){
+ if(!cloudSession?.access_token||!cloudSession?.user?.id)return null;
+ const path='/rest/v1/songrim_user_states?select=state,updated_at&user_id=eq.'+encodeURIComponent(cloudSession.user.id)+'&limit=1';
+ try{
+  const rows=await cloudRequest(path,{method:'GET',token:cloudSession.access_token,headers:{Accept:'application/json'}});
+  return Array.isArray(rows)&&rows.length?rows[0]:null;
+ }catch(err){
+  if(/JWT|token|401/i.test(String(err.message))&&await cloudRefresh())return cloudFetchState();
+  throw err;
+ }
+}
+async function cloudUpsertState(){
+ if(cloudApplying||!cloudSession?.access_token||!cloudSession?.user?.id||!cloudPublicKey())return false;
+ cloudSyncStatus='syncing';
+ try{
+  await cloudRequest('/rest/v1/songrim_user_states?on_conflict=user_id',{
+   method:'POST',
+   token:cloudSession.access_token,
+   headers:{Prefer:'resolution=merge-duplicates,return=minimal'},
+   body:JSON.stringify({user_id:cloudSession.user.id,state})
+  });
+  cloudSyncStatus='synced';return true;
+ }catch(err){
+  cloudSyncStatus='error';
+  console.warn('Songrim cloud sync failed:',err);
+  return false;
+ }
+}
+function scheduleCloudSync(){
+ if(cloudApplying||!cloudSession?.access_token)return;
+ clearTimeout(cloudSyncTimer);
+ cloudSyncTimer=setTimeout(()=>cloudUpsertState(),500);
+}
+async function cloudLoadForSignedInUser(){
+ const row=await cloudFetchState();
+ if(row?.state){
+  try{
+   cloudApplying=true;
+   state=Model.validate(row.state);
+   localStorage.setItem(KEY,JSON.stringify(state));
+  }finally{cloudApplying=false}
+ }else{
+  await cloudUpsertState();
+ }
+}
+async function cloudBootstrap(){
+ cloudSession=loadCloudSession();
+ if(!cloudSession?.access_token)return;
+ try{
+  const exp=Number(cloudSession.expires_at||0)*1000;
+  if(exp&&Date.now()>exp-60000)await cloudRefresh();
+  if(cloudSession?.access_token){
+   authSession.signedIn=true;
+   authSession.method='이메일';
+   await cloudLoadForSignedInUser();
+   authSession.name=state.profile?.name||authSession.name||'';
+   saveSession();
+   authRoute=authSession.finished?'app':(state.onboarded?'app':'onboard');
+  }
+ }catch(err){
+  console.warn(err);
+  clearCloudSession();
+ }
+}
+function cloudSetupModal(message=''){
+ showModal('Supabase 사용자 데이터 연결',
+  '<p class="muted">브라우저용 <strong>Publishable key</strong>를 한 번 저장하면 이 기기에서는 다시 입력하지 않아도 됩니다.</p>'+
+  (message?'<p class="form-error">'+esc(message)+'</p>':'')+
+  '<form id="cloudConfigForm"><label for="cloudPublicKey">Supabase Publishable key</label>'+
+  '<input id="cloudPublicKey" type="password" autocomplete="off" spellcheck="false" placeholder="sb_publishable_...">'+
+  '<p class="muted tiny">OCR.Space 키나 service_role 키를 넣지 마세요.</p>'+
+  '<button class="primary" type="submit">연결 저장</button></form>','cloud-config');
+}
+
 const KEY='songrim.prototype.v3';
 const typeName={book:'책',album:'음반',movie:'영화'},statusName={saved:'아직 안 본 것',active:'경험 중',done:'완료'};
 let state=Model.empty(),view='today',detailId=null,detailOrigin='scrap',picking=false,year=String(new Date().getFullYear()),month=Model.today().slice(0,7),modal=null,zoomState={scale:1,x:0,y:0},storageOK=true,toastTimer,undoAction=null,shareBlob=null,shareURL=null,photoFiles=[],ocrGeneration=0,ocrBusy=false,candidates=[],authMode=false;
@@ -420,7 +543,7 @@ function load(){
  try{const raw=localStorage.getItem(KEY);if(raw){const previous=JSON.parse(raw);state=Model.validate(previous);if(previous.items.some((c,i)=>c.genreMappingVersion!==1||c.genre!==state.items[i].genre||c.treeCategory!==state.items[i].treeCategory)){if(!localStorage.getItem(KEY+'.before-genre-mapping-v1'))localStorage.setItem(KEY+'.before-genre-mapping-v1',raw);persist()}}else{const legacy=localStorage.getItem('songrim.records.v1');if(legacy){state=migrateLegacy(JSON.parse(legacy));persist()}}}
  catch(e){storageOK=false;$('storageAlert').innerHTML='<div class="storage-alert">기존 데이터를 읽지 못했어요. MY에서 백업을 복원하거나 새로 시작할 수 있어요.</div>'}
 }
-function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(e){storageOK=false;$('storageAlert').innerHTML='<div class="storage-alert">브라우저에 저장하지 못했어요. MY에서 백업을 다운로드해주세요.</div>';return false}}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));scheduleCloudSync();return true}catch(e){storageOK=false;$('storageAlert').innerHTML='<div class="storage-alert">브라우저에 저장하지 못했어요. MY에서 백업을 다운로드해주세요.</div>';return false}}
 function now(){return Model.today(state.offset)}
 function selected(){return Model.get(state,state.selected)}
 function get(id){return Model.get(state,id)}
@@ -1013,9 +1136,12 @@ function purgeOldPrototypeTestData(){
  if(state.items.length!==before)persist();
 }
 purgeOldPrototypeTestData();
-function resetAll(){
- const keys=[];try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(/^songrim|^songlim/i.test(k))keys.push(k)}keys.forEach(k=>localStorage.removeItem(k))}catch{}
- photoFiles=[];candidates=[];ocrGeneration++;localWorker?.terminate();localWorker=null;undoAction=null;clearTimeout(toastTimer);$('toast').innerHTML='';state=Model.empty();authSession={signedIn:false,finished:false};authRoute='welcome';persist();view='today';closeModal();render();toast('모든 스크랩과 기록을 삭제했어요.');
+async function resetAll(){
+ photoFiles=[];candidates=[];ocrGeneration++;localWorker?.terminate();localWorker=null;undoAction=null;clearTimeout(toastTimer);$('toast').innerHTML='';
+ state=Model.empty();state.profile.name=authSession.name||'나';state.onboarded=authSession.finished===true;
+ try{localStorage.setItem(KEY,JSON.stringify(state))}catch{}
+ await cloudUpsertState();
+ view='today';closeModal();render();toast('모든 스크랩과 기록을 삭제했어요.');
 }
 function inlinePicker(label,kind,options,value){return '<div class="inline-picker">'+button(esc(label)+' ▾','inlinePicker',kind==='sort'?'sort-button':'textbtn','data-picker="'+kind+'" aria-expanded="false" aria-controls="picker-'+kind+'"')+'<div id="picker-'+kind+'" class="inline-picker-panel '+(kind==='year'?'year-picker':'')+'" role="group" aria-label="'+(kind==='year'?'연도 선택':'정렬')+'" hidden>'+options.map(([key,text])=>button('<span>'+esc(text)+'</span><span aria-hidden="true">'+(key===value?'✓':'')+'</span>',kind==='year'?'year':'inlineSort','','data-'+(kind==='year'?'year':'value')+'="'+esc(key)+'" aria-pressed="'+(key===value)+'"')).join('')+'</div></div>'}
 function closeInlinePickers(){document.querySelectorAll('.inline-picker').forEach(el=>{el.querySelector('button').setAttribute('aria-expanded','false');el.querySelector('.inline-picker-panel').hidden=true})}
@@ -1133,7 +1259,7 @@ document.addEventListener('click',async e=>{
  if(a==='profile'){showModal('프로필','<form id="profileForm"><label for="profileName">이름</label><input id="profileName" maxlength="30" required value="'+esc(state.profile.name)+'"><button class="primary" type="submit">저장</button></form>','profile');return}
  if(a==='tastes'){tasteStart();return}
  if(a==='notifications'){showModal('오늘의 경험 알림','<p>이 HTML 체험본은 앱을 닫은 뒤 정시 알림을 보낼 수 없어요.</p><p class="creator">실제 앱에서는 기본 꺼짐으로 시작하고, 알림을 켤 때 시간과 권한을 설정합니다.</p>'+button('확인','close','secondary'),'notifications');return}
- if(a==='terms'){showModal('프로토타입 안내','<p>실제 회원가입과 결제는 진행하지 않습니다. 스크랩·경험 기록은 이 브라우저에 저장합니다. 책·음악 검색어는 검색 결과를 받기 위해 송림의 Supabase Edge Function으로 전송됩니다.</p><div class="space"></div><p>외부 검색 링크를 누르면 해당 서비스로 이동합니다. 데이터 보관을 위해 MY에서 백업을 다운로드할 수 있습니다.</p><p class="creator">계정 서비스용 약관과 개인정보 처리방침은 정식 서비스에서 별도로 제공합니다.</p>','terms');return}
+ if(a==='terms'){showModal('프로토타입 안내','<p>결제는 진행하지 않습니다. 로그인한 사용자의 스크랩·경험 기록은 브라우저에 저장하면서 Supabase에도 동기화합니다. 책·음악 검색어는 검색 결과를 받기 위해 송림의 Supabase Edge Function으로 전송됩니다.</p><div class="space"></div><p>외부 검색 링크를 누르면 해당 서비스로 이동합니다. 데이터 보관을 위해 MY에서 백업을 다운로드할 수 있습니다.</p><p class="creator">계정 서비스용 약관과 개인정보 처리방침은 정식 서비스에서 별도로 제공합니다.</p>','terms');return}
  if(a==='backup'){exportBackup();return}
  if(a==='restore'){$('restoreFile').click();return}
  if(a==='nextDay'){state.offset++;persist();render();toast('체험 날짜를 '+now()+'로 바꿨어요.');return}
@@ -1262,8 +1388,11 @@ function saveSession(){try{localStorage.setItem(AUTH_KEY,JSON.stringify(authSess
 function flowTo(route){closeModal();authRoute=route;render();window.scrollTo(0,0)}
 function authScreen(){flowTo('welcome')}
 function entrySteps(n){return '<div class="entry-steps" aria-label="3단계 중 '+n+'단계">'+[1,2,3].map(i=>'<span class="'+(i<=n?'on':'')+'"></span>').join('')+'</div>'}
-function entryNote(){return '<p class="entry-note">UX 확인용 로그인입니다. 실제 계정·메일·외부 인증은 연결되지 않으며, 기록은 이 브라우저에 보관됩니다.</p>'}
-function loginFields(){return '<label for="flowEmail">이메일</label><input id="flowEmail" type="email" required autocomplete="off" value="demo@songrim.app"><label for="flowPassword">비밀번호</label><input id="flowPassword" type="password" required value="songrim123" autocomplete="off"><p class="creator">테스트 계정: demo@songrim.app / songrim123</p>'}
+function entryNote(){
+ const cloud=cloudPublicKey()?'<span>Supabase 사용자 데이터 동기화 연결됨</span>':'<button type="button" class="textbtn" data-action="cloudSetup">Supabase 연결 설정</button>';
+ return '<p class="entry-note">'+cloud+' · 로그인한 계정의 기록은 클라우드와 동기화됩니다.</p>'
+}
+function loginFields(){return '<label for="flowEmail">이메일</label><input id="flowEmail" type="email" required autocomplete="email" placeholder="you@example.com"><label for="flowPassword">비밀번호</label><input id="flowPassword" type="password" required minlength="6" autocomplete="current-password" placeholder="6자 이상">'}
 function socialStartButton(provider){
  const logos={
  kakao:'<path fill="currentColor" d="M12 3C6.48 3 2 6.48 2 10.78c0 2.77 1.86 5.2 4.65 6.57l-.93 3.4c-.08.29.25.52.5.36l4.07-2.7c.56.08 1.13.12 1.71.12 5.52 0 10-3.48 10-7.75S17.52 3 12 3Z"/>',
@@ -1281,9 +1410,9 @@ function renderEntry(){
  if(authRoute==='welcome')h='<div class="entry-hero"><div class="entry-kicker">A FOREST OF YOUR OWN</div><h1>보고 싶은 것들이<br>나의 숲이 되도록.</h1><p class="creator">책 한 권, 영화 한 편, 좋아하는 음악까지.<br>모아두고, 경험하고, 오래 기억해요.</p>'+growth(3,{type:'book',genre:'문학'})+'</div>'+'<div class="social-start-list">'+socialStartButton('kakao')+socialStartButton('apple')+socialStartButton('google')+'</div>'+button('이메일로 로그인','flowEmailLogin','secondary')+'<div class="center">'+button('이메일로 회원가입','flowSignup','textbtn')+'</div>'+entryNote();
  if(authRoute==='login')h='<div class="entry-hero"><h1>다시 만나 반가워요</h1><p class="creator">이어가던 경험과 나의 숲이 기다려요.</p></div><form id="flowLoginForm">'+loginFields()+'<div id="flowError" class="entry-error" role="alert"></div><button class="primary" type="submit">로그인</button></form>'+button('비밀번호를 잊으셨나요?','flowRecover','textbtn')+entryNote();
  if(authRoute==='social')h='<div class="entry-hero"><h1>'+esc(authSession.method)+'로 시작하기</h1><p class="creator">이 계정으로 송림을 이용할까요?</p></div><div class="flow-account"><strong>송림 테스트 계정</strong><small>demo@songrim.app</small></div>'+button('동의하고 계속하기','flowSocialConfirm')+button('다른 방법으로 로그인','flowWelcome','textbtn')+'<p class="entry-note">외부 로그인 동의 단계를 재현한 화면입니다. 실제 '+esc(authSession.method)+' 계정에 연결하지 않습니다.</p>';
- if(authRoute==='signup')h='<div class="entry-hero"><h1>나만의 숲을 시작해요</h1><p class="creator">테스트 계정으로 가입 과정을 확인해보세요.</p></div><form id="flowSignupForm"><label for="flowName">이름</label><input id="flowName" required maxlength="30" placeholder="숲에서 불릴 이름">'+loginFields()+button('인증번호 받기','flowSendCode','secondary')+'<div id="flowCodeNotice" class="creator" aria-live="polite"></div><label for="flowCode">이메일 인증번호</label><input id="flowCode" required inputmode="numeric" pattern="123456" maxlength="6" placeholder="6자리 인증번호"><label for="flowPasswordConfirm">비밀번호 확인</label><input id="flowPasswordConfirm" required type="password" autocomplete="off"><label class="checkrow"><input id="flowTerms" type="checkbox" required>이용약관 및 개인정보 안내에 동의합니다</label>'+button('이용 안내 보기','terms','textbtn')+'<div id="flowError" class="entry-error" role="alert"></div><button class="primary" type="submit">가입하고 시작하기</button></form>'+entryNote();
- if(authRoute==='recover')h='<div class="entry-hero"><h1>비밀번호를 잊으셨나요?</h1><p class="creator">가입한 이메일을 입력해주세요.</p></div><form id="flowRecoverForm"><label for="recoveryEmail">이메일</label><input id="recoveryEmail" type="email" required value="demo@songrim.app"><div id="flowError" class="entry-error" role="alert"></div><button class="primary" type="submit">재설정 안내 받기</button></form>'+entryNote();
- if(authRoute==='recoverSent')h='<div class="entry-hero"><h1>로그인 정보를 확인해요</h1><p class="creator">테스트 계정의 비밀번호는 songrim123입니다.<br>실제 메일은 발송하지 않았어요.</p></div>'+button('로그인으로 돌아가기','flowEmailLogin');
+ if(authRoute==='signup')h='<div class="entry-hero"><h1>나만의 숲을 시작해요</h1><p class="creator">이 계정으로 PC와 아이폰의 기록을 이어서 볼 수 있어요.</p></div><form id="flowSignupForm"><label for="flowName">이름</label><input id="flowName" required maxlength="30" placeholder="숲에서 불릴 이름">'+loginFields()+'<label for="flowPasswordConfirm">비밀번호 확인</label><input id="flowPasswordConfirm" required type="password" minlength="6" autocomplete="new-password"><label class="checkrow"><input id="flowTerms" type="checkbox" required>이용약관 및 개인정보 안내에 동의합니다</label>'+button('이용 안내 보기','terms','textbtn')+'<div id="flowError" class="entry-error" role="alert"></div><button class="primary" type="submit">가입하고 시작하기</button></form>'+entryNote();
+ if(authRoute==='recover')h='<div class="entry-hero"><h1>비밀번호를 잊으셨나요?</h1><p class="creator">가입한 이메일로 재설정 안내를 보내요.</p></div><form id="flowRecoverForm"><label for="recoveryEmail">이메일</label><input id="recoveryEmail" type="email" required autocomplete="email"><div id="flowError" class="entry-error" role="alert"></div><button class="primary" type="submit">재설정 안내 받기</button></form>'+entryNote();
+ if(authRoute==='recoverSent')h='<div class="entry-hero"><h1>메일을 확인해주세요</h1><p class="creator">비밀번호 재설정 안내를 보냈어요.</p></div>'+button('로그인으로 돌아가기','flowEmailLogin');
  if(authRoute==='profile')h=entrySteps(1)+'<div class="entry-hero"><h1>어떤 이름으로 불러드릴까요?</h1><p class="creator">나의 숲에 남길 이름을 알려주세요.</p></div><form id="flowProfileForm"><label for="flowProfileName">이름 또는 별명</label><input id="flowProfileName" maxlength="30" value="'+esc(authSession.name|| (state.profile.name==='나'?'':state.profile.name))+'" placeholder="이름 또는 별명"><p class="creator">이름은 나중에도 바꿀 수 있어요.</p><button class="primary" type="submit">다음</button></form>';
  if(authRoute==='start')h=entrySteps(2)+'<div class="entry-hero"><h1>첫 스크랩을 시작해볼까요?</h1><p class="creator">보고 싶은 책, 음악, 영화를 하나만 모아보세요.</p></div>'+button('첫 스크랩 시작하기','flowFirstScrap')+'<div class="rule"></div><h3>작품을 골라 시작할 수도 있어요</h3><p class="creator">추천 작품을 보며 관심 가는 작품을 모아보세요.</p><div class="space"></div>'+button('작품 추천받고 시작하기','flowOptionalTaste','secondary')+'<p class="entry-note">취향 선택은 나중에 MY에서도 할 수 있어요.</p>';
  if(authRoute==='onboard')h=entrySteps(2)+'<div class="entry-hero"><h1>'+esc(state.profile.name)+'님,<br>어떤 걸 좋아하세요?</h1><p class="creator">관심 있는 콘텐츠를 골라 첫 씨앗을 모아요.<br>이미 경험한 작품도 남길 수 있어요.</p></div>'+button('직접 고르기','flowTaste')+button('저장해 둔 스크린샷 가져오기','photoAdd','secondary')+'<div class="flow-account"><strong>지금 모인 콘텐츠 '+state.items.length+'개</strong><small>가져온 콘텐츠는 스크랩에서 이어서 볼 수 있어요.</small></div>'+button(state.items.length?'이 콘텐츠로 시작하기':'취향 선택은 나중에 할게요','flowReady','textbtn');
@@ -1326,10 +1455,10 @@ document.addEventListener('click',e=>{
  if(a==='flowBack')flowTo(authRoute==='start'?'profile':authRoute==='recover'?'login':'welcome');
  if(a==='flowEmailLogin')flowTo('login');
  if(a==='flowSignup'){flowCodeSent=false;flowTo('signup')}
+ if(a==='cloudSetup'){cloudSetupModal()}
  if(a==='flowRecover')flowTo('recover');
- if(['flowKakao','flowApple','flowGoogle'].includes(a)){authSession.method={flowKakao:'카카오',flowApple:'Apple',flowGoogle:'Google'}[a];flowTo('social')}
- if(a==='flowSocialConfirm')signedIn(authSession.method);
- if(a==='flowSendCode'){if($('flowEmail').value.trim().toLowerCase()!=='demo@songrim.app'){$('flowError').textContent='테스트 이메일 demo@songrim.app을 사용해주세요.';return}flowCodeSent=true;$('flowCodeNotice').textContent='테스트 인증번호: 123456 · 실제 메일 발송 없이 입력해주세요.';b.textContent='인증번호 다시 받기'}
+ if(['flowKakao','flowApple','flowGoogle'].includes(a)){toast('소셜 로그인은 다음 단계에서 연결할게요. 지금은 이메일 로그인을 사용해주세요.')}
+ if(a==='flowSocialConfirm')flowTo('welcome');
  if(a==='flowTaste')startTaste();
  if(a==='flowNextTaste')nextTaste();
  if(a==='flowRecordPast'){const c=Model.add(state,window.tasteCandidate);if(!c.completed){c.completed='unknown';c.completedAt=Date.now()}persist();nextTaste();}
@@ -1339,29 +1468,55 @@ document.addEventListener('click',e=>{
  if(a==='flowDislike'){response('dislike');nextTaste()}
  if(a==='flowSkip')nextTaste();
  if(a==='flowExperienced'){const c=Model.add(state,window.tasteCandidate);if(!c.completed){c.completed='unknown';c.completedAt=Date.now()}response('experienced');nextTaste()}
- if(a==='flowLogout'){confirmBox('로그아웃할까요?','이 브라우저의 스크랩과 기록은 그대로 남아요.',()=>{authSession.signedIn=false;saveSession();flowTo('welcome')},'로그아웃')}
+ if(a==='flowLogout'){confirmBox('로그아웃할까요?','클라우드 기록은 유지되고 이 기기의 로그인 상태만 해제됩니다.',async()=>{await cloudLogout();authSession={signedIn:false,finished:false};saveSession();state=Model.empty();try{localStorage.removeItem(KEY)}catch{}authRoute='welcome';view='today';render()},'로그아웃')}
  if(a==='flowReplay'){authSession.finished=false;saveSession();flowTo('profile')}
 });
-document.addEventListener('submit',e=>{
+document.addEventListener('submit',async e=>{
  const f=e.target;
- if(f.id==='flowLoginForm'||f.id==='flowSignupForm'){
- e.preventDefault();const email=$('flowEmail').value.trim().toLowerCase(),password=$('flowPassword').value;
- if(email!=='demo@songrim.app'||password!=='songrim123'){$('flowError').textContent='테스트 이메일과 비밀번호를 확인해주세요.';return}
- if(f.id==='flowSignupForm'){
- if(!flowCodeSent||$('flowCode').value!=='123456'){$('flowError').textContent='인증번호를 받고 123456을 입력해주세요.';return}
- if($('flowPasswordConfirm').value!==password){$('flowError').textContent='비밀번호가 일치하지 않아요.';return}
- if(!$('flowTerms').checked){$('flowError').textContent='이용 안내에 동의해주세요.';return}
- const name=$('flowName').value.trim();if(!name){$('flowError').textContent='이름을 입력해주세요.';return}authSession.name=name;state.profile.name=name;persist();
+ if(f.id==='cloudConfigForm'){
+  e.preventDefault();
+  const key=$('cloudPublicKey').value.trim();
+  if(!/^sb_publishable_/i.test(key) && !/^eyJ/i.test(key)){cloudSetupModal('브라우저용 Publishable key를 확인해주세요.');return}
+  saveCloudPublicKey(key);closeModal();toast('Supabase 사용자 데이터 연결을 저장했어요.');render();return;
  }
- signedIn('이메일');
+ if(f.id==='flowLoginForm'||f.id==='flowSignupForm'){
+  e.preventDefault();
+  if(!cloudPublicKey()){cloudSetupModal('로그인 전에 Supabase Publishable key를 한 번 연결해주세요.');return}
+  const email=$('flowEmail').value.trim().toLowerCase(),password=$('flowPassword').value;
+  const submit=f.querySelector('[type=submit]');submit.disabled=true;
+  try{
+   if(f.id==='flowSignupForm'){
+    if($('flowPasswordConfirm').value!==password)throw Error('비밀번호가 일치하지 않아요.');
+    if(!$('flowTerms').checked)throw Error('이용 안내에 동의해주세요.');
+    const name=$('flowName').value.trim();if(!name)throw Error('이름을 입력해주세요.');
+    const data=await cloudSignup(email,password);
+    authSession.name=name;state.profile.name=name;persist();
+    if(data?.access_token){
+     saveCloudSession(data);authSession.signedIn=true;authSession.method='이메일';saveSession();
+     await cloudLoadForSignedInUser();flowTo('profile');
+    }else{
+     $('flowError').textContent='가입 메일을 확인한 뒤 이메일 인증을 완료하고 로그인해주세요.';
+    }
+   }else{
+    const data=await cloudLogin(email,password);
+    authSession.signedIn=true;authSession.method='이메일';
+    await cloudLoadForSignedInUser();
+    authSession.name=state.profile?.name||data?.user?.user_metadata?.name||'';
+    authSession.finished=state.onboarded===true;
+    saveSession();flowTo(authSession.finished?'app':'profile');
+   }
+  }catch(err){$('flowError').textContent=err.message||'로그인 정보를 확인해주세요.'}
+  finally{if(f.isConnected)submit.disabled=false}
+  return;
  }
  if(f.id==='flowProfileForm'){e.preventDefault();const name=$('flowProfileName').value.trim()||'나';authSession.name=name;state.profile.name=name;saveSession();persist();flowTo('start')}
- if(f.id==='flowRecoverForm'){e.preventDefault();if($('recoveryEmail').value.trim().toLowerCase()!=='demo@songrim.app'){$('flowError').textContent='테스트 이메일 demo@songrim.app을 사용해주세요.';return}flowTo('recoverSent')}
+ if(f.id==='flowRecoverForm'){e.preventDefault();try{if(!cloudPublicKey())throw Error('Supabase 연결 설정이 필요해요.');await cloudRecover($('recoveryEmail').value.trim().toLowerCase());flowTo('recoverSent')}catch(err){$('flowError').textContent=err.message||'재설정 안내를 보내지 못했어요.'}}
  if(f.id==='flowTasteDateForm'){e.preventDefault();const date=$('flowTasteDate').value;if(date&&(!Model.validDate(date)||date>now())){$('flowError').textContent='오늘 또는 과거 날짜를 선택해주세요.';return}const c=Model.add(state,window.tasteCandidate);if(!c.completed){c.completed=date||'unknown';c.completedAt=Date.now()}response('experienced');nextTaste()}
 });
 document.addEventListener('input',e=>{if(e.target.id==='flowProfileName')e.target.setCustomValidity('')});
 window.addEventListener('storage',e=>{if(e.key===AUTH_KEY){try{const a=JSON.parse(e.newValue||'null');authSession=a||{signedIn:false,finished:false};flowTo(authSession.signedIn?(authSession.finished?'app':'onboard'):'welcome')}catch{}}});
 render();
+cloudBootstrap().then(()=>render());
 </script>
 <script type="text/plain" id="third-party-notices">tesseract.js/LICENSE.md
                                  Apache License
