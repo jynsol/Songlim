@@ -1481,7 +1481,7 @@ function renderEntry(){
  $('head').innerHTML='<div class="brand">송림</div>'+(!['welcome','onboard','taste','ready'].includes(authRoute)?button('뒤로','flowBack','textbtn'):'<span class="muted">나의 취향이 자라는 곳</span>');
  let h='';
  if(authRoute==='welcome')h='<div class="entry-hero"><div class="entry-kicker">A FOREST OF YOUR OWN</div><h1>보고 싶은 것들이<br>나의 숲이 되도록.</h1><p class="creator">책 한 권, 영화 한 편, 좋아하는 음악까지.<br>모아두고, 경험하고, 오래 기억해요.</p>'+growth(3,{type:'book',genre:'문학'})+'</div>'+'<div class="social-start-list">'+socialStartButton('kakao')+socialStartButton('apple')+socialStartButton('google')+'</div>'+button('이메일로 로그인','flowEmailLogin','secondary')+'<div class="center">'+button('이메일로 회원가입','flowSignup','textbtn')+'</div>'+entryNote();
- if(authRoute==='login')h='<div class="entry-hero"><h1>다시 만나 반가워요</h1><p class="creator">이어가던 경험과 나의 숲이 기다려요.</p></div><form id="flowLoginForm">'+loginFields()+'<div id="flowError" class="entry-error" role="alert"></div><button class="primary" type="submit">로그인</button></form>'+button('비밀번호를 잊으셨나요?','flowRecover','textbtn')+entryNote();
+ if(authRoute==='login')h='<div class="entry-hero"><h1>로그인</h1><p class="creator">이메일과 비밀번호를 입력해주세요.</p></div><form id="flowLoginForm">'+loginFields()+'<div id="flowError" class="entry-error" role="alert"></div><button class="primary" type="submit">로그인</button></form>'+button('비밀번호를 잊으셨나요?','flowRecover','textbtn')+entryNote();
  if(authRoute==='social')h='<div class="entry-hero"><h1>'+esc(authSession.method)+'로 시작하기</h1><p class="creator">이 계정으로 송림을 이용할까요?</p></div><div class="flow-account"><strong>송림 테스트 계정</strong><small>demo@songrim.app</small></div>'+button('동의하고 계속하기','flowSocialConfirm')+button('다른 방법으로 로그인','flowWelcome','textbtn')+'<p class="entry-note">외부 로그인 동의 단계를 재현한 화면입니다. 실제 '+esc(authSession.method)+' 계정에 연결하지 않습니다.</p>';
  if(authRoute==='signup')h='<div class="entry-hero"><h1>나만의 숲을 시작해요</h1><p class="creator">이 계정으로 PC와 아이폰의 기록을 이어서 볼 수 있어요.</p></div><form id="flowSignupForm"><label for="flowName">이름</label><input id="flowName" required maxlength="30" placeholder="숲에서 불릴 이름">'+loginFields()+'<label for="flowPasswordConfirm">비밀번호 확인</label><input id="flowPasswordConfirm" required type="password" minlength="6" autocomplete="new-password"><label class="checkrow"><input id="flowTerms" type="checkbox" required>이용약관 및 개인정보 안내에 동의합니다</label>'+button('이용 안내 보기','terms','textbtn')+'<div id="flowError" class="entry-error" role="alert"></div><button class="primary" type="submit">가입하고 시작하기</button></form>'+entryNote();
  if(authRoute==='recover')h='<div class="entry-hero"><h1>비밀번호를 잊으셨나요?</h1><p class="creator">가입한 이메일로 재설정 안내를 보내요.</p></div><form id="flowRecoverForm"><label for="recoveryEmail">이메일</label><input id="recoveryEmail" type="email" required autocomplete="email"><div id="flowError" class="entry-error" role="alert"></div><button class="primary" type="submit">재설정 안내 받기</button></form>'+entryNote();
@@ -1608,7 +1608,7 @@ document.addEventListener('submit',async e=>{
     authSession.finished=false;
     saveSession();
     flowTo('login');
-    setTimeout(()=>toast(data?.access_token?'가입이 완료됐어요. 로그인해주세요.':'가입이 완료됐어요. 이메일 인증 후 로그인해주세요.'),50);
+    setTimeout(()=>toast(data?.access_token?'가입이 완료됐어요. 로그인해주세요.':'가입 요청이 완료됐어요. 이메일 인증 후 로그인해주세요.'),50);
    }else{
     const data=await cloudLogin(email,password);
     authSession.signedIn=true;authSession.method='이메일';
