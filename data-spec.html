@@ -1,685 +1,98 @@
-html
-<html lang="ko">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width,initial-scale=1" name="viewport"/>
-<title>송림 콘텐츠 데이터 수집·매칭 정의서</title>
-<style>
-:root{--ink:#111;--text:#2d2d2d;--sub:#666;--line:#d7d7d7;--soft:#f7f7f5;--paper:#fff;--warn:#f3f3f0}
-*{box-sizing:border-box}
-html{background:#fff;scroll-behavior:smooth}
-body{margin:0;background:#fff;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",Arial,sans-serif;font-size:15px;line-height:1.72;letter-spacing:-.018em;word-break:keep-all}
-a{color:inherit;text-underline-offset:3px}.doc{width:min(1040px,calc(100% - 48px));margin:0 auto;padding:54px 0 90px}
-.cover{padding-bottom:42px;border-bottom:1px solid #111}.eyebrow{font-size:12px;color:#777;margin-bottom:24px}.cover h1{margin:0;font-size:39px;line-height:1.12;letter-spacing:-.045em;color:#111}.subtitle{margin-top:10px;font-size:18px;color:#555}.meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:38px;padding-top:16px;border-top:1px solid var(--line);font-size:13px}.meta b{display:block;font-size:11px;color:#777;margin-bottom:4px}
-nav{padding:14px 0;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:6px 18px}nav a{text-decoration:none;font-size:12.5px;font-weight:650;color:#555}
-section{padding:46px 0;border-bottom:1px solid var(--line);scroll-margin-top:20px}h2{margin:0 0 22px;font-size:27px;line-height:1.3;letter-spacing:-.04em;color:#111}h3{margin:32px 0 12px;font-size:18px;line-height:1.4;color:#111}h4{margin:24px 0 8px;font-size:15px;color:#111}p{max-width:820px;margin:0 0 16px}.lede{font-size:17px;line-height:1.68;color:#222}.callout{margin:22px 0;padding:14px 0 14px 15px;border-left:2px solid #111}.soft{background:var(--soft);padding:16px 18px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:20px 0}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin:22px 0}.grid>div{padding-top:12px;border-top:1px solid #aaa}.k{font-size:11px;color:#777;font-weight:700}.v{font-size:19px;line-height:1.35;color:#111;font-weight:750;margin-top:4px}.s{font-size:12px;color:#666;margin-top:5px}
-table{width:100%;border-collapse:collapse;table-layout:fixed;margin:20px 0;font-size:13px;line-height:1.55}th,td{padding:11px 9px;vertical-align:top;text-align:left;border-bottom:1px solid var(--line);overflow-wrap:anywhere}th{border-top:1px solid #888;color:#111;font-weight:750}.status{font-weight:750}.ok{color:#111}.cond{color:#555}.no{color:#777}.small{font-size:12px;color:#666}.flow{margin:22px 0;padding:14px 0;border-top:1px solid #999;border-bottom:1px solid #999;font-weight:650;line-height:1.9;color:#222}.schema{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre-wrap;background:#fafafa;border:1px solid var(--line);padding:16px;font-size:12px;line-height:1.6;overflow:auto}.rulelist{margin:10px 0 0;padding-left:20px}.rulelist li{margin:6px 0}.source-list{font-size:12.5px}.source-list li{margin:8px 0}.tag{display:inline-block;border:1px solid #aaa;padding:2px 6px;margin-right:4px;font-size:10px;color:#444}
-@media(max-width:760px){.doc{width:calc(100% - 36px);padding-top:34px}.cover h1{font-size:31px}.meta,.grid{grid-template-columns:1fr}.meta{gap:12px}section{padding:38px 0}h2{font-size:23px}table,thead,tbody,tr,th,td{display:block;width:100%}thead{display:none}tr{padding:12px 0;border-bottom:1px solid var(--line)}td{border:0;padding:4px 0}td:before{content:attr(data-label);display:block;font-size:10px;color:#777;font-weight:700;margin-bottom:2px}}
-</style>
-</head>
-<body>
-<main class="doc">
-<header class="cover">
-<div class="eyebrow">송림 · 개발 기준 문서</div>
-<h1>콘텐츠 데이터 수집·매칭 정의서</h1>
-<div class="subtitle">기능정의서 기준 · 책 · 음반 · 영화의 공유·이미지 가져오기·직접 검색, 정규화, 동일 콘텐츠 식별 및 Fallback</div>
-<div class="meta"><div><b>검증 기준일</b>2026-09-09</div><div><b>대상</b>MVP · BOOK / ALBUM / MOVIE</div><div><b>기준 기능정의서</b>송림_기능정의서_20260909-173036</div></div>
-</header>
-<nav><a href="#summary">핵심 결론</a><a href="#architecture">전체 구조</a><a href="#book">책</a><a href="#album">음반</a><a href="#movie">영화</a><a href="#source">공유 유입</a><a href="#import">이미지·목록 가져오기</a><a href="#sns-pipeline">SNS 식별</a><a href="#manual-entry">직접 기록</a><a href="#schema">데이터 구조</a><a href="#matching">매칭 규칙</a><a href="#risk">정책·리스크</a><a href="#test">연동 검증</a><a href="#todo">구현 순서</a></nav>
-<section id="summary">
-<h2>1. 핵심 결론</h2>
-<p class="lede">송림은 특정 플랫폼 하나의 API를 마스터 DB처럼 쓰면 안 된다. <strong>송림 자체 Content ID를 중심으로, 카테고리별 복수 공급자의 식별자를 연결하는 구조</strong>가 가장 안전하다.</p>
-<table>
-<thead><tr><th>분야</th><th>MVP 주 데이터원</th><th>보조 데이터원</th><th>판정</th><th>핵심 이유</th></tr></thead>
-<tbody>
-<tr><td data-label="분야">책</td><td data-label="MVP 주 데이터원"><strong>Kakao Daum 책 검색 API</strong></td><td data-label="보조 데이터원">Google Books<br/>알라딘은 제휴 후</td><td class="status ok" data-label="판정">가능</td><td data-label="핵심 이유">한국 도서 검색, ISBN·저자·출판사·썸네일 확보. 현재 책 검색 쿼터 30,000회/일.</td></tr>
-<tr><td data-label="분야">음반</td><td data-label="MVP 주 데이터원"><strong>MusicBrainz</strong></td><td data-label="보조 데이터원">Cover Art Archive<br/>Spotify는 선택적</td><td class="status cond" data-label="판정">가능 · 속도 설계 필요</td><td data-label="핵심 이유">핵심 메타데이터가 CC0이며 자체 ID를 확보하기 좋음. 공개 API는 평균 1 req/s라 캐시·큐가 필요.</td></tr>
-<tr><td data-label="분야">영화</td><td data-label="MVP 주 데이터원"><strong>TMDB + KOBIS</strong></td><td data-label="보조 데이터원">Wikidata 등 공개 식별자 보조</td><td class="status cond" data-label="판정">기술 가능 · 상업 라이선스 확인 필수</td><td data-label="핵심 이유">TMDB는 글로벌 검색 품질이 좋고 KOBIS는 국내 영화 보완에 유리. TMDB 상업 이용은 별도 계약 대상.</td></tr>
-<tr><td data-label="분야">외부 공유</td><td data-label="MVP 주 데이터원"><strong>Share Sheet의 URL·텍스트</strong></td><td data-label="보조 데이터원">OG / JSON-LD / 공개 페이지 메타데이터 / AI 추출</td><td class="status cond" data-label="판정">출처별 편차 큼</td><td data-label="핵심 이유">직접 상품·작품 URL은 강하지만 Instagram 등은 공유 결과에 실제 작품명이 없을 수 있어 사용자 확인이 필요.</td></tr>
-<tr><td data-label="분야">이미지·목록 가져오기</td><td data-label="MVP 주 데이터원"><strong>사용자가 선택한 스크린샷/사진</strong></td><td data-label="보조 데이터원">Vision/OCR·멀티모달 추출 → Provider Search</td><td class="status cond" data-label="판정">가능 · 범위 제한 필요</td><td data-label="핵심 이유">교보·알라딘 장바구니나 찜 목록처럼 제목이 반복 노출되는 화면은 다건 추출에 유리하다. 임의 SNS 이미지까지 100% 자동 인식한다고 약속하지 않고 후보 확인을 포함한다.</td></tr></tbody></table>
-<div class="callout"><strong>중요한 수정</strong><br/>초기 검토에서 생각했던 “알라딘을 책 메인, Spotify를 음반 메인” 구조는 <strong>프로덕션 핵심 의존성으로는 부적합</strong>하다. 알라딘 일반 OpenAPI는 영리 서비스 이용이 불가하고 별도 제휴가 필요하며, Spotify 신규 앱의 Extended Quota는 현재 매우 높은 진입 조건이 있다. 따라서 송림 MVP의 기본 설계는 이 둘 없이도 작동해야 한다.</div><div class="soft"><strong>기능정의서 정합성 기준</strong><br/>
-송림의 콘텐츠 유입은 세 경로로 통일한다.
-① <strong>외부 공유</strong>: 새롭게 발견한 콘텐츠를 계속 쌓는 기본 루프
-② <strong>이미지 가져오기</strong>: 장바구니·찜 목록·SNS 저장 화면 등 이미 쌓인 관심을 여러 건 한 번에 옮기는 경로
-③ <strong>직접 검색</strong>: 사용자가 제목을 찾아 직접 추가하거나 자동화 실패를 보완하는 확실한 경로.
-세 경로 모두 최종적으로 동일한 Content / UserContent를 사용한다.</div>
-</section>
-<section id="architecture">
-<h2>2. 전체 데이터 수집 구조</h2>
-<div class="flow">외부 공유 / 이미지 가져오기 / 직접 검색 / 온보딩 직접 선택 → Input Adapter → 후보 추출·검색 → Provider Verification → Entity Resolution → 사용자 확인 → Content / UserContent → SaveEvent·경험 상태 → 월간 집계·연도별 완료 수 → 올해의 숲·월간 기록·숲 기록</div>
-<div class="grid"><div><div class="k">원칙 01</div><div class="v">AI는 검색어를 만든다</div><div class="s">LLM이 최종 사실 DB가 되지 않는다. 제목·제작자·유형 후보를 구조화하는 데 사용한다.</div></div><div><div class="k">원칙 02</div><div class="v">외부 ID는 여러 개 보관한다</div><div class="s">ISBN, MBID, ISRC, TMDB ID, KOBIS movieCd 등을 송림 내부 ID 밑에 연결한다.</div></div><div><div class="k">원칙 03</div><div class="v">낮은 신뢰도는 자동 병합 금지</div><div class="s">동명이작·재발매·번역판 때문에 “비슷함”만으로 병합하지 않는다.</div></div><div><div class="k">원칙 04</div><div class="v">API 장애가 저장 실패가 되지 않게 한다</div><div class="s">최소 제목·유형만으로 임시 Content를 만든 뒤 비동기로 보완할 수 있다.</div></div><div><div class="k">원칙 05</div><div class="v">여러 건은 Batch로 다룬다</div><div class="s">장바구니·찜 목록 캡처처럼 한 화면에 여러 작품이 있을 때는 항목별 후보를 독립 검증한 뒤 한 번에 확인·저장한다.</div></div></div><h3>2.1 기능 화면 ↔ 데이터 처리</h3><table>
-<thead><tr><th>기능정의서 화면</th><th>데이터 처리</th><th>저장 결과</th></tr></thead>
-<tbody>
-<tr><td>ONB-01 / ONB-02</td><td>10개 직접 선택 또는 IMPORT 결과를 초기 취향 신호로 합산</td><td>직접 응답은 UserContent 상태, 가져온 확정 항목은 INTERESTED. 건너뛰기는 저장하지 않음.</td></tr>
-<tr><td>IMPORT-01</td><td>사용자가 선택한 여러 이미지 → ImportBatch / SourceAsset → 작품 후보 다건 추출</td><td>아직 UserContent 생성하지 않음.</td></tr>
-<tr><td>IMPORT-02</td><td>항목별 후보 확인·교체·제외·중복 처리</td><td>사용자가 일괄 저장한 항목만 INTERESTED로 생성/연결.</td></tr>
-<tr><td>SHARE-01</td><td>Share Sheet URL·텍스트 → 후보 추출 → canonical 매칭</td><td>고신뢰는 SHARE-02, 확인 필요는 SHARE-03. 매칭 판정과 UserContent 저장을 분리.</td></tr>
-<tr><td>SHARE-02 / SHARE-03</td><td>인식 결과 확인 또는 후보 선택·최소 정정</td><td>신규는 INTERESTED. 동일 content_id가 있으면 기존 UserContent 재사용.</td></tr>
-<tr><td>SCRAP-01 + 저장</td><td>이미지 가져오기 또는 직접 검색 진입</td><td>모든 유입 경로를 하나의 UserContent 목록에서 표시. 기본 정렬은 save_count DESC → last_saved_at DESC.</td></tr>
-<tr><td>TODAY-02</td><td>INTERESTED 콘텐츠에서 사용자가 직접 경험할 하나 선택. save_count DESC → last_saved_at DESC로 기본 노출.</td><td>content_id는 그대로 사용하고 selection_source=USER_DIRECT 이벤트만 별도 기록.</td></tr>
-<tr><td>FOREST-01 올해의 숲</td><td>현재 연도 completed_local_date 기준 EXPERIENCED 전체 + 현재 IN_PROGRESS를 조회하고, EXPERIENCED를 BOOK / ALBUM / MOVIE로 group by하여 카테고리 수를 집계한다. 최근 완료 1~2개는 completed_at DESC로 별도 조회한다.</td><td>별도 콘텐츠 복제 없음. 숲은 UserContent 상태와 현재 연도 ForestThemeDefinition을 조합해 렌더링한다.</td></tr>
-<tr><td>FOREST-02 월간 기록</td><td>선택 월 counted SaveEvent의 고유 content_id 수, completed_local_date 기준 경험 완료 수, BOOK / ALBUM / MOVIE별 완료 수, 주차별 완료 수, 선택 월 완료 콘텐츠 목록을 조회한다.</td><td>원본 SaveEvent와 UserContent를 기간 조건으로 집계해 표시한다. 월간 기록 전용 영구 레코드는 만들지 않는다.</td></tr>
-<tr><td>FOREST-03 / 04 숲 기록</td><td>현재 연도를 포함한 연도별 EXPERIENCED 총 수와 해당 연도의 forest_theme_id / theme_version, 숲 장면 asset을 조회한다.</td><td>현재 연도는 실시간 완료 집계 + 현재 테마로 표시하고, 종료된 연도는 ForestYearSnapshot으로 theme_id/theme_version과 숲 장면 asset 상태를 보존한다. 상세 화면은 화면보다 큰 하나의 숲 장면을 상하좌우로 pan하여 감상한다.</td></tr>
-</tbody>
-</table>
-</section>
-<section id="book">
-<h2>3. 책 데이터</h2>
-<h3>3.1 MVP 권장: Kakao Daum 책 검색 API</h3>
-<p>현재 공식 문서 기준 <code>GET https://dapi.kakao.com/v3/search/book</code>가 제공되며 REST API 키로 호출한다. 제목 검색과 정확도순 결과를 사용할 수 있고, 책 검색 일일 무료 쿼터는 30,000회다. 네이버 책 검색 API는 2026년 7월 31일 종료되어 후보에서 제외한다.</p>
-<table><thead><tr><th>송림 필드</th><th>권장 원천</th><th>용도</th></tr></thead><tbody>
-<tr><td data-label="송림 필드">title</td><td data-label="권장 원천">Kakao</td><td data-label="용도">표시명·검색</td></tr><tr><td data-label="송림 필드">authors[]</td><td data-label="권장 원천">Kakao</td><td data-label="용도">동명이책 구분</td></tr><tr><td data-label="송림 필드">isbn</td><td data-label="권장 원천">Kakao / Google Books</td><td data-label="용도">최우선 동일 판본 식별</td></tr><tr><td data-label="송림 필드">publisher</td><td data-label="권장 원천">Kakao</td><td data-label="용도">판본 구분</td></tr><tr><td data-label="송림 필드">published_date</td><td data-label="권장 원천">Kakao / Google Books</td><td data-label="용도">판본 구분</td></tr><tr><td data-label="송림 필드">thumbnail_url</td><td data-label="권장 원천">Kakao</td><td data-label="용도">목록·상세 이미지. 공개 출시 전 이미지 사용조건 재확인.</td></tr>
-</tbody></table>
-<h3>3.2 Google Books</h3><p>보조 조회로 사용한다. 공식 API는 <code>intitle:</code>, <code>inauthor:</code>, <code>isbn:</code> 검색을 지원한다. Kakao 결과가 없거나 ISBN 교차검증이 필요할 때 적합하다.</p>
-<h3>3.3 알라딘은 “제휴 후” 사용</h3><p>알라딘 OpenAPI 자체는 검색·상품 조회와 ISBN13 조회를 제공하지만, 공식 이용 안내상 <strong>도서 정보를 기반으로 하는 법인·기업·단체 서비스 및 영리 목적 서비스는 일반 OpenAPI 이용이 불가</strong>하다. 기업/제휴 경로는 별도로 존재하므로 구매 연계 BM을 붙일 시점에 제휴를 신청한다.</p>
-<div class="soft"><strong>책 MVP 결론</strong><br/>Kakao → Google Books → 사용자 보정. 알라딘은 상품 구매 제휴가 성립한 뒤 공급자와 구매 링크 소스로 추가한다.</div>
-</section>
-<section id="album">
-<h2>4. 음반 데이터</h2>
-<h3>4.1 MVP 권장: MusicBrainz</h3>
-<p>MusicBrainz 핵심 DB에는 Artist, Release Group, Release, Recording, Label 등 음악 카탈로그 구조가 있고 핵심 데이터는 CC0다. 송림의 상위 콘텐츠는 <strong>ALBUM</strong>, 하위 일일 경험은 <strong>TRACK</strong>이므로 Release Group/Release와 Recording 구조를 매핑하기 좋다.</p>
-<table><thead><tr><th>송림 필드</th><th>MusicBrainz 매핑</th><th>비고</th></tr></thead><tbody>
-<tr><td data-label="송림 필드">album_title</td><td data-label="MusicBrainz 매핑">Release Group / Release name</td><td data-label="비고">사용자에게는 대표 앨범 단위로 노출</td></tr><tr><td data-label="송림 필드">artists[]</td><td data-label="MusicBrainz 매핑">Artist / artist-credit</td><td data-label="비고">복수 아티스트 지원</td></tr><tr><td data-label="송림 필드">release_group_mbid</td><td data-label="MusicBrainz 매핑">Release Group MBID</td><td data-label="비고">송림의 앨범 작품 단위에 가까움</td></tr><tr><td data-label="송림 필드">release_mbid</td><td data-label="MusicBrainz 매핑">Release MBID</td><td data-label="비고">실제 판본·발매 구분</td></tr><tr><td data-label="송림 필드">tracks[]</td><td data-label="MusicBrainz 매핑">Medium / Track / Recording</td><td data-label="비고">오늘의 곡 제공</td></tr><tr><td data-label="송림 필드">isrc</td><td data-label="MusicBrainz 매핑">Recording ISRC 관계</td><td data-label="비고">트랙 식별 보조</td></tr><tr><td data-label="송림 필드">cover_url</td><td data-label="MusicBrainz 매핑">Cover Art Archive</td><td data-label="비고">권리 고지는 별도 검토. 없으면 placeholder 허용.</td></tr>
-</tbody></table>
-<p>공개 Web Service는 평균 1회/초 제한이 있으므로 사용자가 검색할 때마다 여러 요청을 연쇄적으로 날리면 안 된다. <strong>서버 캐시 + 요청 큐 + 검색 결과 재사용</strong>을 기본으로 하고, 성장 후에는 CC0 core dump를 자체 인덱싱하는 방향도 가능하다.</p>
-<h3>4.2 Cover Art Archive</h3><p>Release/Release Group MBID로 대표 커버와 250/500/1200 썸네일을 조회할 수 있다. 공식 API 문서상 현재 별도 rate limit 규칙은 없지만, 이미지 자체의 권리는 서비스가 보증하지 않으므로 공개 상용 서비스에서는 법무·라이선스 검토가 필요하다.</p>
-<h3>4.3 Spotify는 핵심 의존성에서 제외</h3>
-<p>기술적으로 Search, Album, Track, ISRC/UPC 데이터는 매우 좋고 Client Credentials 방식의 서버 간 인증도 가능하다. 다만 2026년 현재 신규 Development Mode는 실험·개인 프로젝트 성격이며 앱 소유자 Premium 요건과 최대 5명의 인증 사용자 제한이 있다. Extended Quota는 법인, 출시 서비스, 최소 250k MAU 등 높은 기준을 명시한다. 따라서 초기 송림이 공개 사용자 대상으로 Spotify를 핵심 데이터 공급자로 삼는 구조는 현실적으로 위험하다.</p>
-<div class="soft"><strong>음반 MVP 결론</strong><br/>MusicBrainz core metadata → Cover Art Archive → 필요 시 Spotify URL을 외부 링크로 보관. Spotify API는 내부 프로토타입 또는 향후 파트너 승인 후 보조 공급자로 추가한다.</div>
-</section>
-<section id="movie">
-<h2>5. 영화 데이터</h2>
-<h3>5.1 TMDB</h3>
-<p>TMDB는 원제·번역 제목·대체 제목을 대상으로 영화 검색을 제공하고, 상세·크레딧·외부 ID까지 연결하기 쉬워 글로벌 영화 엔티티 매칭에 가장 적합하다. 다만 공식 FAQ에서 수익을 목적으로 하는 프로젝트는 commercial로 보며, 무료 developer API는 비상업 용도로 설명하고 있다. <strong>송림은 상용 출시 전에 TMDB commercial licensing을 문의해야 한다.</strong></p>
-<h3>5.2 KOBIS</h3>
-<p>영화진흥위원회 OpenAPI에는 영화 목록·영화 상세 조회가 존재하며 키 발급 후 REST/SOAP 방식으로 호출할 수 있다. 국내 개봉 영화명, 감독, 제작정보와 <code>movieCd</code>를 보완 식별자로 사용한다.</p>
-<table><thead><tr><th>송림 필드</th><th>주 원천</th><th>설명</th></tr></thead><tbody>
-<tr><td data-label="송림 필드">title_ko / title_original</td><td data-label="주 원천">TMDB</td><td data-label="설명">한국어 표시명 + 원제</td></tr><tr><td data-label="송림 필드">release_date / year</td><td data-label="주 원천">TMDB / KOBIS</td><td data-label="설명">동명 영화 구분</td></tr><tr><td data-label="송림 필드">directors[] / cast[]</td><td data-label="주 원천">TMDB credits / KOBIS</td><td data-label="설명">매칭 및 상세 표시</td></tr><tr><td data-label="송림 필드">tmdb_id</td><td data-label="주 원천">TMDB</td><td data-label="설명">글로벌 공급자 ID</td></tr><tr><td data-label="송림 필드">kobis_movie_cd</td><td data-label="주 원천">KOBIS</td><td data-label="설명">국내 보조 ID</td></tr><tr><td data-label="송림 필드">poster_url</td><td data-label="주 원천">TMDB</td><td data-label="설명">상업 라이선스 및 attribution 조건 충족 후 사용</td></tr>
-</tbody></table>
-<div class="soft"><strong>영화 MVP 결론</strong><br/>기술 검증에서는 TMDB + KOBIS가 가장 현실적이다. 다만 실제 상용 출시의 Go/No-Go 항목에 “TMDB 상업 사용 조건 확정”을 반드시 넣는다.</div>
-</section>
-<section id="source">
-<h2>6. 외부 공유 유입 정책</h2>
-<p class="lede">송림의 지속 유입은 <strong>Instagram, Threads, 블로그, YouTube 등에서 발견한 콘텐츠 공유</strong>를 중심으로 하고, 첫 진입·대량 이전은 <strong>서점 장바구니·찜 목록·SNS 저장 화면 등의 이미지 가져오기</strong>를 보조 경로로 둔다. SNS를 데이터베이스처럼 크롤링하지 않고, 사용자가 명시적으로 전달한 URL·텍스트·이미지와 접근 가능한 공개 메타데이터를 단서로 정식 콘텐츠 DB에서 엔티티를 찾아 확정한다.</p>
-<div class="callout">
-<strong>제품·저장 원칙</strong><br/>
-외부 공유는 <strong>새롭게 발견한 콘텐츠를 계속 쌓는 기본 루프</strong>다.
-고신뢰 결과라도 “매칭 자동 확정”과 “UserContent 저장”은 구분한다.
-고신뢰는 SHARE-02에서 인식 결과를 보여주고, 확인이 필요한 경우 SHARE-03에서 후보 선택·최소 정정을 거친다.
-신규 저장 상태는 INTERESTED이며, 이미 같은 content_id가 있으면 새 UserContent를 만들지 않는다.
-</div>
-<table><thead><tr><th>유입</th><th>1차 단서</th><th>추가 보강</th><th>기본 UX</th></tr></thead><tbody>
-<tr><td data-label="유입">Instagram / Threads</td><td data-label="1차 단서">Share Sheet URL·공유 텍스트·출처 앱</td><td data-label="추가 보강">공개 title/OG/검색 가능한 문맥 → 후보 추출 → 콘텐츠 DB 교차검증</td><td data-label="기본 UX">고신뢰 → SHARE-02 자동 매칭 / 중신뢰 → SHARE-03 확인 / 실패 시 직접 검색</td></tr>
-<tr><td data-label="유입">일반 블로그·기사</td><td data-label="1차 단서">URL, title, OG, JSON-LD, 공유 텍스트</td><td data-label="추가 보강">페이지의 공개 구조화 정보 및 검색 문맥 → 콘텐츠 DB</td><td data-label="기본 UX">대부분 자동 또는 1탭 확인</td></tr>
-<tr><td data-label="유입">YouTube</td><td data-label="1차 단서">공유 URL·제목·설명에 포함된 단서</td><td data-label="추가 보강">제목/아티스트/작품 후보 추출 → 콘텐츠 DB</td><td data-label="기본 UX">후보 확인 가능성 높음</td></tr>
-<tr><td data-label="유입">도서 상품 URL</td><td data-label="1차 단서">상품 URL/메타데이터</td><td data-label="추가 보강">ISBN 또는 제목·저자 → 책 API</td><td data-label="기본 UX">고신뢰 매칭 후 SHARE-02 확인</td></tr>
-<tr><td data-label="유입">음악 서비스 URL</td><td data-label="1차 단서">서비스 URL/ID/공유 텍스트</td><td data-label="추가 보강">앨범·트랙 후보 → MusicBrainz 등 교차검증</td><td data-label="기본 UX">자동 또는 1탭 확인</td></tr>
-<tr><td data-label="유입">영화 상세/기사 URL</td><td data-label="1차 단서">title·OG·본문 공개 메타</td><td data-label="추가 보강">제목·연도·감독 → TMDB/KOBIS</td><td data-label="기본 UX">자동 또는 1탭 확인</td></tr>
-<tr><td data-label="유입">이미지/영상 화면에만 정보 존재</td><td data-label="1차 단서">Share Sheet만으로 작품 단서가 없을 수 있음</td><td data-label="추가 보강">사용자가 스크린샷/이미지를 별도로 전달한 경우 이미지·텍스트 인식 → 후보 검색</td><td data-label="기본 UX">직접 검색 → 후보 확인 → 저장</td></tr>
-</tbody></table>
-<p class="small">보호된 페이지·로그인이 필요한 본문·플랫폼이 제공하지 않는 비공개 데이터는 우회 수집하지 않는다. 원본 앱이 Share Sheet에 어떤 데이터를 제공하는지는 출처별로 달라질 수 있으므로, SNS 유입은 실제 기기에서 payload를 수집해 검증해야 한다.</p>
-</section><section id="import">
-<h2>7. 이미지·목록 가져오기</h2>
-<p class="lede">
-사용자가 교보문고·알라딘 장바구니, 서점 보관함, 책·영화 찜 목록, SNS 저장 화면처럼
-<strong>이미 쌓아둔 관심 콘텐츠를 여러 장의 스크린샷/사진으로 전달하면 작품 후보를 다건 추출·정리</strong>한다.
-기능정의서의 IMPORT-01 / IMPORT-02 흐름을 기준으로 하며, 분석 단계에서는 UserContent를 만들지 않고
-<strong>사용자가 일괄 저장을 확정한 항목만</strong> 관심의 씨앗으로 저장한다.
-</p>
-<div class="callout"><strong>입력 경로의 역할</strong><br/>
-<strong>이미지·목록 가져오기 = 첫 데이터 만들기 / 대량 이전</strong>　·　
-<strong>Share Sheet = 이후 발견을 계속 쌓기</strong>　·　
-<strong>직접 검색 = 모든 자동화 실패 시의 확실한 저장 경로</strong>
-</div>
-<h3>7.1 MVP 지원 범위</h3>
-<table>
-<thead><tr><th>입력 예</th><th>MVP 처리</th><th>기본 상태</th><th>비고</th></tr></thead>
-<tbody>
-<tr><td>교보·알라딘 장바구니/보관함 캡처</td><td><strong>1순위 지원</strong> · 제목·저자 후보 다건 추출 → 책 DB 검증</td><td>INTERESTED</td><td>반복 리스트 구조라 초기 품질 검증에 적합</td></tr>
-<tr><td>책 추천/읽고 싶은 책 목록 캡처</td><td>지원 · 화면의 제목/저자 후보 추출 → 책 DB 검증</td><td>INTERESTED</td><td>한 화면에 여러 권이면 Batch 처리</td></tr>
-<tr><td>OTT 찜/보고 싶은 영화 목록 캡처</td><td>지원 후보 · 영화명/연도 단서 → TMDB/KOBIS 검증</td><td>INTERESTED</td><td>상용 영화 DB 조건 확정 후 공개 범위 결정</td></tr>
-<tr><td>Instagram/Threads 등 SNS 스크린샷</td><td>Best-effort · 이미지/텍스트 단서 → 후보 검색</td><td>INTERESTED</td><td>작품명이 명확하지 않으면 사용자 확인 필수</td></tr>
-<tr><td>책장·실물 여러 권 사진</td><td>후순위</td><td>INTERESTED</td><td>등표지·반사·가림 때문에 난이도 높음</td></tr>
-</tbody>
-</table>
-<h3>7.2 처리 파이프라인</h3>
-<pre class="schema">1. Import Input
-- photos[]
-- selected_at
-- optional_source_hint: KYOBO_CART | ALADIN_WISHLIST | OTT_WATCHLIST |
-                        INSTAGRAM_SCREENSHOT | OTHER
-
-2. Asset Preprocess
-- 방향/크기 정규화
-- 필요 시 사용자 Crop
-- 텍스트/시각 단서 추출
-
-3. Item Segmentation
-- 한 이미지 안의 반복 행/카드/작품 영역 분리
-- item_index 부여
-
-4. Candidate Extraction
-- type_candidate
-- title_candidate
-- creator_candidate?
-- year_candidate?
-- evidence[]
-
-5. Provider Verification
-- BOOK  → Kakao Book → Google Books
-- ALBUM → MusicBrainz
-- MOVIE → TMDB → KOBIS
-
-6. Item-level Resolution
-- 각 항목별 Confidence 계산
-- 기존 Content와 중복 검사
-
-7. Batch Review
-- 확정 / 확인 필요 / 실패 항목을 한 화면에 표시
-- 사용자는 체크 해제·후보 변경·제목 검색 가능
-
-8. Save
-- 사용자가 IMPORT-02에서 선택한 항목만 저장
-- 신규 UserContent.status = INTERESTED, save_count = 1
-- 기존 UserContent가 있으면 중복 생성하지 않고 유효한 새 저장 이벤트를 1회 추가
-- 같은 ImportBatch 안에서 같은 content_id가 여러 번 검출되면 save_count는 1회만 증가
-- 서로 다른 시점의 별도 ImportBatch에서 다시 가져오면 새로운 저장 1회로 계산
-- 기존 상태(IN_PROGRESS / EXPERIENCED / DISLIKE)는 자동 변경하지 않음
-- 온보딩 진입이면 저장 확정 건수를 valid_signal_count에 반영</pre>
-<h3>7.3 가져오기 저장 상태 규칙</h3><ul class="rulelist">
-<li><strong>신규 가져오기 항목:</strong> IMPORT-02에서 저장 확정 시 항상 <code>INTERESTED</code>로 생성한다.</li>
-<li><strong>이미 존재하는 동일 콘텐츠:</strong> 새 UserContent를 만들지 않고 Source/Import evidence를 추가하며, 서로 다른 시점의 의도적 가져오기라면 <code>save_count +1</code> 한다. 기존 상태는 자동 변경하지 않는다.</li>
-<li><strong>특히 EXPERIENCED:</strong> 장바구니·찜 목록을 다시 가져와도 INTERESTED로 되돌리지 않는다.</li>
-<li><strong>이미지 안의 “읽음/봤음/완료” 문구:</strong> MVP 가져오기 상태를 자동 EXPERIENCED로 만들기 위한 근거로 사용하지 않는다. 경험 여부는 기능정의서의 명시적 사용자 행동으로 관리한다.</li>
-<li><strong>DISLIKE:</strong> 가져오기에서 자동 추론하지 않는다.</li>
-</ul>
-<h3>7.4 온보딩과 연결</h3>
-<div class="flow">신규 가입 → 10개 직접 선택 또는 저장 콘텐츠 가져오기 → 직접 응답 + 가져오기 저장 확정 항목 합산 → 유효 취향 신호 10개 이상 → TODAY-01</div>
-<ul class="rulelist"><li><strong>직접 선택: </strong>관심 있음 / 경험함 / 싫음의 유효 응답 1건 = 신호 1개. 건너뛰기는 저장·카운트하지 않는다.</li><li><strong>가져오기: </strong>IMPORT-02에서 실제 저장 확정한 신규/기존 콘텐츠 1건 = 신호 1개. 가져오기 항목의 신규 상태는 INTERESTED다.</li><li><strong>혼합: </strong>두 경로를 합산한다. 예: 직접 선택 4개 + 가져오기 확정 6개 = 10개.</li><li><strong>이어하기: </strong>온보딩 중 이탈하면 현재 유효 신호 수와 진행 위치를 저장하고 다음 진입에서 이어간다.</li><li><strong>완료: </strong>10개 이상이면 별도 완료 화면 없이 TODAY-01로 이동할 수 있다.</li></ul>
-<h3>7.5 Batch Review UX</h3>
-<table>
-<thead><tr><th>상태</th><th>화면</th><th>사용자 행동</th></tr></thead>
-<tbody><tr><td data-label="상태">고신뢰</td><td data-label="화면">제목·저자/감독/아티스트 + 기본 선택</td><td data-label="사용자 행동">그대로 두거나 체크 해제</td></tr><tr><td data-label="상태">확인 필요</td><td data-label="화면">후보 1~3개</td><td data-label="사용자 행동">다른 후보 선택</td></tr><tr><td data-label="상태">실패</td><td data-label="화면">후보 없음</td><td data-label="사용자 행동">직접 검색 또는 항목 제외</td></tr><tr><td data-label="상태">중복</td><td data-label="화면">이미 저장한 콘텐츠 · 현재 n번 저장</td><td data-label="사용자 행동">새 UserContent 생성 없이 유효 저장 이벤트 1회 추가. 단, 같은 Batch 안의 중복 검출은 1회만 계산.</td></tr></tbody>
-</table>
-<h3>7.6 개인정보·원본 이미지 처리</h3>
-<div class="soft"><strong>MVP 권장 정책</strong><br/>
-장바구니·주문 화면에는 사용자명, 주문정보, 금액 등 불필요한 정보가 함께 찍힐 수 있다. 분석 대상은 작품 식별에 필요한 영역으로 최소화하고, <strong>원본 이미지는 콘텐츠 식별 후 기본적으로 장기 보관하지 않는다.</strong> 송림 DB에는 정규화된 Content, 출처 유형, 필요한 최소 Evidence만 남긴다. 원본 보관이 필요한 기능을 추후 만들 경우 별도 동의와 보관기간을 정의한다.</div>
-<h3>7.7 검증 지표</h3>
-<table>
-<thead><tr><th>지표</th><th>정의</th><th>초기 목표/판단</th></tr></thead>
-<tbody>
-<tr><td>이미지 처리 성공률</td><td>선택한 이미지에서 1개 이상의 유효 콘텐츠 후보를 만든 비율</td><td>출처 유형별 측정</td></tr>
-<tr><td>항목 추출 Recall</td><td>이미지에 실제 존재하는 작품 중 후보로 생성한 비율</td><td>장바구니/목록 화면을 우선 고도화</td></tr>
-<tr><td>항목 정답률</td><td>자동 확정 또는 첫 후보가 실제 작품과 일치하는 비율</td><td>오답 자동 매칭률 우선 관리</td></tr>
-<tr><td>사용자 보정률</td><td>항목별 후보 변경·제목 검색이 발생한 비율</td><td>낮을수록 좋음</td></tr>
-<tr><td>Batch 저장 완료율</td><td>가져오기 시작 후 최소 1건 이상 UserContent 저장까지 완료한 비율</td><td>95%+ 목표 제안</td></tr>
-<tr><td>항목당 처리 시간</td><td>분석 시작부터 Batch Review 표시까지의 시간 / 유효 항목 수</td><td>실기기 측정 후 기준 확정</td></tr>
-</tbody>
-</table>
-<p class="small">기술 검증은 “아무 이미지나 잘 읽는가”보다 <strong>사용자가 실제로 많이 가져올 화면 유형을 먼저 정해 출처별 성능을 관리</strong>한다. 초기에는 책 장바구니·보관함 캡처를 가장 먼저 고정 샘플로 만든다.</p>
-</section>
-<section id="sns-pipeline">
-<h2>8. SNS·웹 유입 식별 파이프라인</h2>
-<p class="lede">송림의 핵심 기술은 “SNS를 긁는 것”이 아니라 <strong>불완전한 공유 단서를 실제 콘텐츠 엔티티로 안전하게 변환하는 것</strong>이다. 정확도는 단일 AI 호출이 아니라 여러 증거를 합쳐 올린다.</p>
-<h3>8.1 처리 순서</h3>
-<pre class="schema">1. Share Input
-- source_app
-- source_url
-- shared_text
-- captured_at
-
-2. Direct Parser
-- URL host / known provider ID
-- page title / OG metadata
-- JSON-LD / schema.org (공개된 경우)
-
-3. Candidate Extraction
-- type_candidate: BOOK | ALBUM | MOVIE
-- title_candidate
-- creator_candidate
-- year_candidate?
-- evidence[]
-
-4. Context Enrichment
-- 공개 웹/블로그 문맥
-- 검색 가능한 제목/설명 단서
-- 원천 서비스의 공개 메타정보
-
-5. Provider Verification
-- BOOK  → Kakao Book → Google Books
-- ALBUM → MusicBrainz → Cover Art / 보조 공급자
-- MOVIE → TMDB → KOBIS
-
-6. Entity Resolution
-- 강한 식별자 + 제목 + 제작자 + 연도 교차검증
-
-7. Match Decision
-- HIGH   → canonical 매칭 자동 확정 → SHARE-02
-- MEDIUM → 후보 1개 또는 2~3개 → SHARE-03 사용자 확인
-- LOW    → 직접 검색 / 최소 수정 → SHARE-03
-
-8. Feedback
-- 사용자의 정정·선택 결과를 SourceEvidence와 MatchLog에 기록</pre><div class="soft"><strong>매칭 판정과 저장 행위 분리</strong><br/>
-HIGH는 “정답 콘텐츠를 자동으로 골랐다”는 뜻이지 UserContent를 즉시 무조건 생성한다는 뜻이 아니다.
-기능정의서 기준으로 외부 공유는 SHARE-02에서 결과를 보여준 뒤 신규 UserContent를 INTERESTED로 저장하고,
-이미 같은 content_id가 있으면 기존 UserContent에 Source만 연결한다.
-</div><p class="small">이미지·목록 가져오기는 위 Share Input 파이프라인과 별도 입력 어댑터를 사용하지만, <strong>Candidate Extraction 이후 Provider Verification → Entity Resolution → Decision → Feedback은 동일한 공통 파이프라인을 재사용</strong>한다.</p>
-<h3>8.2 AI 사용 원칙</h3>
-<ul class="rulelist"><li>AI는 존재하지 않는 콘텐츠를 만들어 DB에 넣지 않는다.</li><li><strong>공유 문맥에서 타입·제목·제작자 후보를 추출하고, 여러 실제 DB 후보를 랭킹하는 역할</strong>로 제한한다.</li><li>최종 자동 확정은 외부 DB에서 실제 엔티티가 확인되고 증거 점수가 기준을 넘은 경우만 허용한다.</li><li>작품명이 없는 “박찬욱 작품 중 이게 제일 좋음” 같은 문장은 사람 이름만으로 특정 영화를 추측 저장하지 않는다.</li></ul>
-<h3>8.3 증거 기반 점수 예시</h3>
-<table><thead><tr><th>증거</th><th>예시 가중치</th><th>의미</th></tr></thead><tbody>
-<tr><td data-label="증거">표준 식별자 직접 확보</td><td data-label="예시 가중치">즉시 높은 신뢰</td><td data-label="의미">ISBN, MBID/ISRC, TMDB/KOBIS ID 등</td></tr>
-<tr><td data-label="증거">공유 텍스트 제목 정확 일치</td><td data-label="예시 가중치">+35</td><td data-label="의미">작품명이 명시됨</td></tr>
-<tr><td data-label="증거">주 제작자 정확 일치</td><td data-label="예시 가중치">+25</td><td data-label="의미">동명 작품 오탐 감소</td></tr>
-<tr><td data-label="증거">페이지 title/OG 제목 일치</td><td data-label="예시 가중치">+20</td><td data-label="의미">웹 문맥의 직접 증거</td></tr>
-<tr><td data-label="증거">외부 DB의 제목+제작자 조합 일치</td><td data-label="예시 가중치">+30</td><td data-label="의미">실제 엔티티 존재 검증</td></tr>
-<tr><td data-label="증거">제목만 일치 / 제작자 불일치</td><td data-label="예시 가중치">-30</td><td data-label="의미">자동 확정 금지 방향</td></tr>
-<tr><td data-label="증거">복수 후보 동점</td><td data-label="예시 가중치">자동 확정 금지</td><td data-label="의미">사용자 확인 필요</td></tr>
-</tbody></table>
-<p class="small">가중치는 초기 설계값이며 실제 150건 이상 테스트 결과로 조정한다. 중요한 목표는 자동화율 자체보다 오답 자동 매칭률을 낮추는 것이다.</p>
-<h3>8.4 실패 없는 Fallback UX</h3>
-<table><thead><tr><th>상태</th><th>사용자 화면</th><th>추가 행동</th></tr></thead><tbody>
-<tr><td data-label="상태">고신뢰</td><td data-label="사용자 화면">“채식주의자 · 한강” 저장 완료</td><td data-label="추가 행동">없음</td></tr>
-<tr><td data-label="상태">중신뢰, 후보 1개</td><td data-label="사용자 화면">“이 콘텐츠가 맞나요?”</td><td data-label="추가 행동">맞아요 1탭</td></tr>
-<tr><td data-label="상태">중신뢰, 후보 다수</td><td data-label="사용자 화면">후보 2~3개</td><td data-label="추가 행동">하나 선택</td></tr>
-<tr><td data-label="상태">공유 데이터에 작품 단서 없음</td><td data-label="사용자 화면">“콘텐츠를 찾지 못했어요”</td><td data-label="추가 행동">직접 검색 / 제목 검색</td></tr>
-<tr><td data-label="상태">이미지 분석도 실패</td><td data-label="사용자 화면">카테고리 + 제목 검색</td><td data-label="추가 행동">최소 입력으로 저장 완료</td></tr>
-</tbody></table>
-<div class="callout"><strong>핵심 KPI</strong><br/>① 자동 식별 성공률 ② 후보 생성 성공률 ③ 자동 확정률 ④ 사용자 보정률 ⑤ 오답 자동 매칭률 ⑥ 공유 시작→저장 완료율 ⑦ 저장 완료 시간. <strong>오답 자동 매칭률은 1~2% 이하를 초기 품질 목표로 두고, 자동 식별이 실패해도 최종 저장 완료율은 최대한 100%에 가깝게 만든다.</strong></div>
-<h3>8.5 반드시 해야 할 실제 기기 검증</h3>
-<p>Instagram·Threads 등은 문서만 보고 성공률을 확정할 수 없다. <strong>iPhone 실제 Share Sheet에서 출처별로 어떤 payload가 넘어오는지를 먼저 기록</strong>해야 한다.</p>
-<table><thead><tr><th>출처</th><th>초기 표본</th><th>기록할 것</th></tr></thead><tbody>
-<tr><td data-label="출처">Instagram</td><td data-label="초기 표본">50건</td><td data-label="기록할 것">URL, shared_text, 메타 접근 가능 여부, 자동 후보, 정답 여부</td></tr>
-<tr><td data-label="출처">Threads</td><td data-label="초기 표본">30건</td><td data-label="기록할 것">동일</td></tr>
-<tr><td data-label="출처">블로그/기사</td><td data-label="초기 표본">30건</td><td data-label="기록할 것">title/OG/JSON-LD 존재 여부 및 매칭 결과</td></tr>
-<tr><td data-label="출처">YouTube·서점·기타</td><td data-label="초기 표본">40건</td><td data-label="기록할 것">직접 식별/후보 검색/사용자 확인 비율</td></tr>
-</tbody></table>
-<p class="small">총 150건의 정답 세트를 만든 뒤 출처별 성공률을 따로 계산한다. 전체 평균만 보면 쉬운 서점 링크가 SNS 실패를 가릴 수 있으므로 반드시 출처별 지표를 유지한다.</p>
-</section><section id="manual-entry">
-<h2>9. 직접 기록·검색 기반 메타데이터 자동완성</h2>
-<p class="lede">
-직접 검색은 기능정의서의 <strong>SCRAP-01 &gt; + 저장</strong>과 자동 인식 실패 보완 경로다.
-사용자는 제목 몇 글자만 입력해 후보를 선택하고, 저자·아티스트·감독·출판사·발매일·표지·외부 식별자 등은 Provider 결과로 자동완성한다.
-신규 저장은 기본 <code>INTERESTED</code>이며, 이미 존재하는 동일 content_id는 재사용한다.
-</p>
-<div class="callout"><strong>원칙</strong><br/>사용자가 메타데이터를 일일이 입력하게 하지 않는다. 직접 기록은 “검색어 입력 → 후보 선택 → 자동완성 → 상태 저장”의 짧은 흐름으로 처리하고, 외부 공유와 동일한 Content 엔티티에 연결한다.</div>
-<h3>9.1 기본 UX</h3>
-<div class="flow">제목 입력 → 콘텐츠 유형 추정/선택 → Provider 검색 → 후보 3~5개 → 1탭 선택 → 메타데이터 자동완성 → UserContent 상태 저장</div>
-<table>
-<thead><tr><th>유형</th><th>사용자 입력 예</th><th>자동완성 항목</th><th>후보 구분 기준</th></tr></thead>
-<tbody>
-<tr><td>책</td><td>채식주의자</td><td>저자, 출판사, 출간일, ISBN, 표지, 설명</td><td>제목 + 저자 + 출판사/판본</td></tr>
-<tr><td>음반</td><td>In Rainbows</td><td>아티스트, 발매일, 커버, 트랙 수/목록, MBID 등</td><td>앨범명 + 아티스트 + 발매연도</td></tr>
-<tr><td>영화</td><td>헤어질 결심</td><td>감독, 개봉연도, 포스터, 원제, 외부 ID</td><td>제목 + 감독 + 개봉연도</td></tr>
-</tbody>
-</table>
-<h3>9.2 책은 작품(Work)과 판본(Edition)을 분리 가능하게 설계</h3>
-<p>동일 작품이 여러 출판사·번역·개정판으로 존재하므로 사용자 경험은 <strong>작품 중심</strong>으로 단순하게 보여주되, 내부 데이터는 판본을 구분할 수 있게 설계한다. MVP에서는 ISBN 단위 Provider 레코드를 우선 저장하고, 정규화된 제목·저자 기준으로 동일 작품 후보를 묶을 수 있도록 <code>work_key</code> 또는 별도 Work 엔티티 확장 여지를 둔다.</p>
-<pre>Work: 데미안 / 헤르만 헤세
- ├─ Edition A: 민음사 / ISBN ...
- ├─ Edition B: 문예출판사 / ISBN ...
- └─ Edition C: 기타 출판사 / ISBN ...</pre>
-<p class="small">MVP에서 판본 선택을 강제하지 않는다. 사용자가 특정 ISBN·서점 링크에서 유입된 경우에는 해당 판본을 연결하고, 제목 검색만 한 경우에는 대표 후보를 선택하게 한다.</p>
-<h3>9.3 외부 공유와 직접 기록은 같은 데이터로 합친다</h3>
-<p>직접 기록으로 생성된 콘텐츠와 Instagram·Threads·블로그·서점 공유로 생성된 콘텐츠를 별도 목록으로 관리하지 않는다. ProviderIdentifier와 정규화 필드를 이용해 동일 Content로 매칭하고, 사용자의 상태만 UserContent에서 관리한다.</p>
-<div class="routebox"><div><span>직접 검색</span><b>검색어 → Provider 후보 → 사용자 1탭 선택 → Content → UserContent</b></div><div><span>외부 공유</span><b>Source → 후보 추출 → Provider 검증 → Content → UserContent</b></div><div><span>이미지 가져오기</span><b>ImportCandidate → Provider 검증 → IMPORT-02 확인 → Content → UserContent</b></div><div><span>중복 시</span><b>새 Content/UserContent는 만들지 않는다. 별도 시점의 의도적 저장이면 Source/Evidence + counted SaveEvent를 추가하고 save_count를 갱신한다. 동일 Batch/재시도 중복은 counted=false 또는 dedupe로 제외한다.</b></div></div>
-<h3>9.4 자동 확정보다 후보 선택을 우선</h3>
-<p>제목이 유일하고 Provider 결과가 명확할 때는 자동 선택할 수 있지만, 동명 작품·여러 판본·리마스터/재발매처럼 복수 후보가 존재하면 자동 확정하지 않는다. 사용자가 후보 카드 1개를 탭하면 필요한 메타데이터가 모두 채워지는 방식으로 정확도와 입력 편의성을 함께 확보한다.</p>
-<h3>9.5 MVP 검증 지표</h3>
-<table>
-<thead><tr><th>지표</th><th>의미</th><th>MVP 목표</th></tr></thead>
-<tbody>
-<tr><td>검색 후보 생성 성공률</td><td>제목 입력 후 1개 이상의 유효 후보가 반환되는 비율</td><td>카테고리별 측정 후 기준 확정</td></tr>
-<tr><td>첫 화면 정답 포함률</td><td>상위 3~5개 후보 안에 사용자가 찾는 콘텐츠가 포함되는 비율</td><td>외부 공유 식별률과 별도 관리</td></tr>
-<tr><td>선택 후 자동완성 성공률</td><td>후보 선택 후 핵심 필드가 정상 저장되는 비율</td><td>거의 전건 성공을 목표</td></tr>
-<tr><td>직접 수정률</td><td>후보 선택 뒤 제목·제작자 등 사용자가 수동 수정한 비율</td><td>낮을수록 좋음</td></tr>
-<tr><td>저장 완료 시간</td><td>검색 시작부터 UserContent 저장까지 걸린 시간</td><td>10초 이내 목표와 함께 측정</td></tr>
-</tbody>
-</table>
-</section>
-<section id="schema">
-<h2>10. 송림 표준 Content Schema</h2>
-<pre class="schema">Content
-- id: UUID
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>송림 데이터 정의서 · Prototype v3 기준</title><style>
+:root{--ink:#252B27;--muted:#6f7872;--line:#E3E8E2;--soft:#F7F9F5;--green:#3F8554;--leaf:#E4F2DA;--sky:#E7F2FA;--sun:#FBF3D5;--paper:#fff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f3f6f1;color:var(--ink);font:15px/1.72 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;word-break:keep-all}.doc{width:min(1080px,calc(100% - 48px));margin:auto;background:#fff;padding:56px 56px 90px;min-height:100vh}.cover{padding-bottom:38px;border-bottom:1px solid #aeb7b0}.eyebrow{font-size:12px;letter-spacing:.08em;color:var(--green);font-weight:750}.cover h1{font-size:40px;line-height:1.15;letter-spacing:-.05em;margin:18px 0 12px}.subtitle{font-size:18px;color:#4e5952;max-width:820px}.meta{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px;padding-top:16px;border-top:1px solid var(--line);font-size:13px}.meta b{display:block;font-size:11px;color:#7b847e;margin-bottom:3px}nav{display:flex;flex-wrap:wrap;gap:7px 17px;padding:15px 0;border-bottom:1px solid var(--line);position:sticky;top:0;background:#fffffff2;backdrop-filter:blur(10px);z-index:3}nav a{font-size:12px;color:#59645d;text-decoration:none}section{padding:44px 0;border-bottom:1px solid var(--line);scroll-margin-top:55px}h2{font-size:27px;letter-spacing:-.04em;margin:0 0 20px}h3{font-size:18px;margin:30px 0 11px}p{max-width:880px;margin:0 0 14px}.lede{font-size:17px;color:#343c37}.callout{padding:15px 17px;border-left:3px solid var(--green);background:var(--soft);margin:20px 0}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:20px 0}.card{border:1px solid var(--line);border-radius:12px;padding:17px}.k{font-size:11px;color:#7a847d;font-weight:750}.v{font-size:18px;font-weight:750;margin-top:4px}.s{font-size:12px;color:#69736c;margin-top:5px}table{width:100%;border-collapse:collapse;table-layout:fixed;margin:18px 0;font-size:13px;line-height:1.55}th,td{text-align:left;vertical-align:top;padding:10px 9px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}th{border-top:1px solid #aab2ac;color:#1f2621}.code{white-space:pre-wrap;overflow:auto;background:#f8faf7;border:1px solid var(--line);padding:16px;border-radius:10px;font:12px/1.62 ui-monospace,SFMono-Regular,Menlo,monospace}.tag{display:inline-block;padding:2px 7px;border-radius:999px;background:var(--leaf);font-size:11px;margin:2px 4px 2px 0}.tag.blue{background:var(--sky)}.tag.yellow{background:var(--sun)}.small{font-size:12px;color:var(--muted)}.flow{padding:15px 0;border-top:1px solid #9fa8a1;border-bottom:1px solid #9fa8a1;font-weight:650;line-height:2}.changed{background:#fbfcf9}.priority{font-weight:750;color:var(--green)}
+@media(max-width:760px){.doc{width:100%;padding:34px 20px 70px}.cover h1{font-size:31px}.meta,.grid{grid-template-columns:1fr}table,thead,tbody,tr,th,td{display:block;width:100%}thead{display:none}tr{padding:10px 0;border-bottom:1px solid var(--line)}td{border:0;padding:4px 0}nav{position:static}}
+</style></head><body><main class="doc"><header class="cover"><div class="eyebrow">SONGRIM · DATA SPECIFICATION</div><h1>송림 데이터 정의서</h1><div class="subtitle">작동 프로토타입 v3 기준 · 화면 상태, 경험 기록, 스크랩, 월간 기록, 나의 숲을 하나의 서버 데이터 모델로 재정의</div><div class="meta"><div><b>기준일</b>2026-09-16</div><div><b>Source of Truth</b>prototype(2).html</div><div><b>대상</b>MVP · BOOK / ALBUM / MOVIE</div></div></header><nav><a href="#summary">기준</a><a href="#uxmap">화면</a><a href="#model">모델</a><a href="#status">상태</a><a href="#content">Content</a><a href="#usercontent">UserContent</a><a href="#experience">경험</a><a href="#today">오늘</a><a href="#genre">장르</a><a href="#forest">숲</a><a href="#ingest">유입</a><a href="#sql">DB</a><a href="#migration">마이그레이션</a><a href="#decisions">결정</a></nav><section id="summary"><h2>1. 개편 기준</h2><p class="lede"><strong>이 문서는 기존의 “외부 데이터 수집·매칭 조사서”가 아니라, 현재 작동 프로토타입을 서버·DB로 옮기기 위한 데이터 정의서다.</strong> 화면에 실제 존재하는 상태, 기록, 집계, 숲 표현을 먼저 정의하고 외부 Provider는 그 데이터를 채우는 하위 계층으로 내린다.</p><div class="grid"><div class="card"><div class="k">SOURCE OF TRUTH</div><div class="v">prototype(2).html</div><div class="s">현재 UX와 상태 전이를 기준으로 스키마를 결정한다.</div></div><div class="card"><div class="k">핵심 엔티티</div><div class="v">Content + UserContent</div><div class="s">작품 자체와 사용자의 관계/경험 기록을 분리한다.</div></div><div class="card"><div class="k">상태</div><div class="v">SAVED → ACTIVE → DONE</div><div class="s">별도 status 컬럼보다 기록/완료 사실에서 파생하는 것을 기본으로 한다.</div></div><div class="card"><div class="k">숲</div><div class="v">완료 경험의 시각화</div><div class="s">완료 1개 = 나무 1그루 = 15㎡. 장르는 10개 나무 분류로 매핑한다.</div></div></div><div class="callout"><strong>기존 문서에서 크게 바뀌는 점</strong><br>IMPORT/SHARE 파이프라인이 문서의 중심이 아니며, SaveEvent·ExperienceLog·Completion·Review·ForestTheme을 1급 데이터로 올린다. “오늘”은 별도 콘텐츠 복제가 아니라 기존 UserContent를 선택해 경험하는 뷰다.</div></section><section id="uxmap"><h2>2. 프로토타입 화면 ↔ 데이터</h2><table><thead><tr><th>화면</th><th>읽는 데이터</th><th>쓰는 데이터</th><th>핵심 규칙</th></tr></thead><tbody>
+<tr><td><strong>오늘</strong></td><td>selected UserContent, 최근 완료</td><td>ExperienceLog, Completion, Review, selected_content_id</td><td>책/음반은 날짜별 경험 기록 가능. 영화는 완료 중심. 완료 시 숲에 반영.</td></tr>
+<tr><td><strong>스크랩</strong></td><td>UserContent + Content + SaveEvent</td><td>저장, 메타 수정, 삭제</td><td>책/음반/영화 × 아직 안 본 것/경험 중/완료. 동일 작품 재스크랩은 새 UserContent가 아니라 SaveEvent 추가.</td></tr>
+<tr><td><strong>나의 숲</strong></td><td>연도별 완료 UserContent, ForestTheme</td><td>연도별 theme 선택</td><td>완료 1개당 나무 1그루. 세부 장르를 10개 tree_category로 축약해 렌더링.</td></tr>
+<tr><td><strong>월간 기록</strong></td><td>ExperienceLog + Completion</td><td>없음(조회/공유)</td><td>날짜별 표지, 기록한 날 수, 월 완료 수와 유형별 완료 수를 계산.</td></tr>
+<tr><td><strong>MY</strong></td><td>Profile, UserContent 집계</td><td>프로필/취향, 백업·복원 관련 설정</td><td>스크랩 총수와 완료 총수를 표시. 취향은 추천/온보딩 신호.</td></tr>
+<tr><td><strong>온보딩</strong></td><td>Catalog/Search Candidate</td><td>Profile, TasteResponse, UserContent</td><td>“어떤 걸 좋아하세요?”에서 작품 반응을 수집하고 첫 스크랩을 만든다.</td></tr></tbody></table></section><section id="model"><h2>3. 권장 도메인 모델</h2><div class="flow">Provider/Share/Import/Search → Content → UserContent → SaveEvent / ExperienceLog / Completion / Review → Today / Scrap / Calendar / Forest</div><table><thead><tr><th>엔티티</th><th>역할</th><th>중요 필드</th></tr></thead><tbody>
+<tr><td>Content</td><td>사용자와 무관한 작품 원본</td><td>type, title, creator, genre, tree_category, length, cover, provider ids</td></tr>
+<tr><td>UserContent</td><td>사용자와 작품의 1:1 관계</td><td>user_id, content_id, imported_progress, track_index, created_at</td></tr>
+<tr><td>SaveEvent</td><td>같은 작품을 몇 번/어디서 스크랩했는지</td><td>source, source_url, saved_at, request_key</td></tr>
+<tr><td>ExperienceLog</td><td>책/음반의 날짜별 경험</td><td>local_date, page_or_position, memo</td></tr>
+<tr><td>Completion</td><td>완료 사실</td><td>completed_local_date, completed_at</td></tr>
+<tr><td>Review</td><td>별점·감상</td><td>rating 1–5 nullable, review_text nullable</td></tr>
+<tr><td>UserPreference</td><td>프로필/온보딩 취향</td><td>display_name, tastes, responses</td></tr>
+<tr><td>ForestTheme</td><td>연도별 숲 테마</td><td>year, theme_id</td></tr>
+<tr><td>TodaySelection</td><td>오늘 경험 대상으로 명시 선택한 기록</td><td>local_date, user_content_id, selection_source</td></tr>
+</tbody></table><p class="small">프로토타입의 <code>selected</code>는 단일 로컬 상태지만, 서버 구현에서는 날짜 이력과 분석 가능성을 위해 TodaySelection 이벤트로 분리하는 편이 안전하다.</p></section><section id="status"><h2>4. 상태와 전이 규칙</h2><table><thead><tr><th>UI 상태</th><th>판정식</th><th>진입</th><th>이탈</th></tr></thead><tbody><tr><td><span class="tag">SAVED</span> 아직 안 본 것</td><td>completion 없음 AND experience log 없음 AND imported_progress=false</td><td>최초 스크랩/직접 추가</td><td>첫 기록 또는 완료</td></tr><tr><td><span class="tag blue">ACTIVE</span> 경험 중</td><td>completion 없음 AND (log ≥ 1 OR imported_progress=true)</td><td>책/음반 첫 경험 기록, 기존 진행 데이터 import</td><td>완료</td></tr><tr><td><span class="tag yellow">DONE</span> 완료</td><td>completion 존재</td><td>완료 처리</td><td>완료 취소</td></tr></tbody></table><div class="callout"><strong>중요:</strong> 상태는 중복 저장하지 않는 것을 권장한다. 프로토타입도 <code>completed</code>, <code>logs</code>, <code>importedProgress</code>로 상태를 계산한다. DB에 status를 둔다면 캐시/검색 최적화용 파생값으로 취급한다.</div></section><section id="content"><h2>5. Content 스키마</h2><div class="code">Content
+- id: uuid PK
 - type: BOOK | ALBUM | MOVIE
-- canonical_title
-- original_title?
-- creators[]                 // 저자 / 아티스트 / 감독
-- release_date?
-- release_year?
-- image_url?
-- image_provider?
-- metadata_status: VERIFIED | PARTIAL | USER_ONLY
+- title: text NOT NULL
+- creator_display: text
+- genre_raw: text nullable
+- tree_category: enum nullable       # 수동 지정 시 우선
+- length_value: int nullable         # 책=쪽수, 음반/영화=분
+- cover_url: text nullable
 - created_at / updated_at
 
-ProviderIdentifier
-- content_id
-- provider: KAKAO_BOOK | GOOGLE_BOOKS | ALADIN |
-            MUSICBRAINZ_RELEASE_GROUP | MUSICBRAINZ_RELEASE |
-            SPOTIFY | TMDB | KOBIS | OTHER
-- provider_id
-- identifier_type: ISBN13 | MBID | ISRC | UPC |
-                   TMDB_ID | KOBIS_MOVIE_CD | PROVIDER_ID
-- value
-- is_primary
-- verified_at
-
-UserContent
-- user_id
-- content_id
-- status: INTERESTED | IN_PROGRESS | EXPERIENCED | DISLIKE
-- save_count: integer         // 유효한 관심 저장 행동 누적
-- first_saved_at?
-- last_saved_at?
-- started_at?
-- completed_at?             // UTC timestamp
-- completed_local_date?       // 완료 시점의 사용자 로컬 YYYY-MM-DD
-- rating?                     // 1~5, 선택 입력
-- user_corrected: boolean
+ContentExternalId
+- content_id FK
+- provider: KAKAO_BOOK | GOOGLE_BOOKS | MUSICBRAINZ | CAA | TMDB | KOBIS | ...
+- external_id: text
+- id_type: ISBN13 | RELEASE_GROUP_MBID | RELEASE_MBID | TMDB_ID | KOBIS_MOVIE_CD | ...
+- UNIQUE(provider, external_id, id_type)</div><p>프로토타입의 <code>creator</code> 단일 문자열은 UI 표시에는 충분하지만 운영 DB에서는 저자/아티스트/감독 배열을 별도 관계로 확장할 수 있다. MVP에서는 <code>creator_display</code>를 필수 표시값으로 두고 구조화 creator는 점진적으로 추가한다.</p></section><section id="usercontent"><h2>6. UserContent · 저장 이벤트</h2><div class="code">UserContent
+- id: uuid PK
+- user_id FK
+- content_id FK
+- imported_progress: boolean default false
+- track_index: int default 0
 - created_at / updated_at
-// 원칙: 같은 user_id + content_id는 1개만 유지.
-// 새 공유/가져오기가 들어와도 기존 상태를 자동으로 낮추지 않는다.
-// 추천/스크랩 기본 우선순위: save_count DESC, last_saved_at DESC.
+- UNIQUE(user_id, content_id)
 
 SaveEvent
-- id
+- id: uuid PK
+- user_content_id FK
+- request_key: text nullable UNIQUE per user
+- source_type: DIRECT | SHARE | IMPORT | ONBOARDING | SEARCH | LEGACY
+- source_label: text nullable
+- source_url: text nullable
+- saved_at: timestamptz NOT NULL</div><p>스크랩 횟수는 <code>COUNT(SaveEvent)</code>, 최근 저장은 <code>MAX(saved_at)</code>으로 계산한다. 동일 작품을 다시 저장해도 UserContent는 하나만 유지한다.</p></section><section id="experience"><h2>7. 경험 기록 · 완료 · 감상</h2><div class="code">ExperienceLog
+- id: uuid PK
+- user_content_id FK
+- local_date: date NOT NULL
+- page_or_position: text nullable
+- memo: text nullable
+- created_at / updated_at
+- UNIQUE(user_content_id, local_date)
+
+Completion
+- user_content_id PK/FK
+- completed_local_date: date nullable   # legacy unknown 허용 시 nullable
+- completed_at: timestamptz NOT NULL
+
+Review
+- user_content_id PK/FK
+- rating: smallint nullable CHECK 1..5
+- review_text: text nullable
+- updated_at</div><p>프로토타입은 책/음반에 같은 날짜의 경험 로그를 중복 생성하지 않고, 영화는 별도 일일 로그 없이 완료일을 경험일로 사용한다. 완료 취소 시 완료 정보와 별점이 제거되는 현재 동작이 있으므로, 실제 서비스에서는 <strong>감상까지 삭제할지 UX 정책을 확정</strong>해야 한다.</p></section><section id="today"><h2>8. 오늘 데이터 규칙</h2><p class="lede">오늘 탭은 추천 DB가 아니라 <strong>스크랩된 UserContent를 경험 상태로 전환시키는 작업 공간</strong>이다.</p><table><thead><tr><th>동작</th><th>데이터 처리</th></tr></thead><tbody><tr><td>오늘 경험할 콘텐츠 선택</td><td>미완료 UserContent를 선택하고 TodaySelection 기록. 콘텐츠 자체는 복제하지 않음.</td></tr><tr><td>다른 콘텐츠 보기</td><td>선택 후보만 교체. 저장 상태에는 영향 없음.</td></tr><tr><td>책/음반 경험 기록</td><td>ExperienceLog upsert. 첫 로그부터 ACTIVE.</td></tr><tr><td>완료하고 나무 심기</td><td>Completion 생성 → DONE → 해당 연도 숲 집계에 즉시 포함.</td></tr><tr><td>별점/감상</td><td>Review 독립 저장. 둘 다 선택값.</td></tr></tbody></table></section><section id="genre"><h2>9. 장르와 나무 10종</h2><table><thead><tr><th>tree_category</th><th>표시</th><th>자동 매핑 단서</th></tr></thead><tbody><tr><td>book-literature</td><td>책 · 문학</td><td>문학, 소설, 수필, 에세이, 추리, 미스터리, 스릴러, 시집, 판타지, SF</td></tr><tr><td>book-humanities</td><td>책 · 인문</td><td>인문, 철학, 역사, 사회, 심리, 예술</td></tr><tr><td>book-science</td><td>책 · 과학</td><td>과학, 수학, 생물, 물리</td></tr><tr><td>album-classical</td><td>음악 · 고전음악</td><td>고전, 클래식, classical</td></tr><tr><td>album-popular</td><td>음악 · 대중음악</td><td>대중, 팝, 록, 힙합, 인디</td></tr><tr><td>album-roots</td><td>음악 · 뿌리음악</td><td>재즈, 블루스, 포크, 국악, 민속</td></tr><tr><td>movie-drama</td><td>영화 · 드라마 계</td><td>드라마, 로맨스, 코미디</td></tr><tr><td>movie-sf</td><td>영화 · SF</td><td>SF, 공상, 판타지</td></tr><tr><td>movie-action</td><td>영화 · 액션스릴러</td><td>액션, 스릴러, 범죄, 공포</td></tr><tr><td>other</td><td>기타</td><td>미분류</td></tr></tbody></table><p>원본 <code>genre_raw</code>는 그대로 보존한다. <code>tree_category</code> 수동 지정값이 있으면 자동 매핑보다 우선한다. 이 10종은 숲 시각화를 위한 축약 분류이며 콘텐츠 검색 장르 체계를 대체하지 않는다.</p></section><section id="forest"><h2>10. 숲 · 월간 기록 집계</h2><table><thead><tr><th>지표/화면</th><th>계산</th></tr></thead><tbody><tr><td>연도별 나무 수</td><td>해당 연도 Completion 수</td></tr><tr><td>숲 면적</td><td>완료 수 × 15㎡</td></tr><tr><td>유형별 완료</td><td>BOOK / ALBUM / MOVIE group by</td></tr><tr><td>가장 많이 경험한 장르</td><td>완료 콘텐츠를 tree_category로 group by 후 최대값</td></tr><tr><td>평균 별점</td><td>해당 완료 콘텐츠 중 rating이 있는 항목만 AVG</td></tr><tr><td>월 기록한 날</td><td>그 달 ExperienceLog 날짜 + 영화 Completion 날짜의 distinct count</td></tr><tr><td>월 완료 수</td><td>completed_local_date가 선택 월인 Completion count</td></tr></tbody></table><div class="code">ForestTheme
 - user_id
-- content_id
-- source_type: SHARE | SCREENSHOT_IMPORT | MANUAL_SEARCH | ONBOARDING_INTEREST
-- source_ref_id?
-- import_batch_id?
-- dedupe_key?                 // 네트워크 재시도/동일 Batch 중복 카운트 방지
-- occurred_at               // UTC timestamp
-- occurred_local_date         // 저장 시점의 사용자 로컬 YYYY-MM-DD
-- is_counted: boolean
-// 같은 IMPORT Batch에서 동일 content_id는 최대 1회만 counted.
-// 서로 다른 시점의 의도적 저장은 각각 counted.
-// UserContent.save_count는 counted SaveEvent의 캐시/집계값.
-
-Source
-- id
-- user_id
-- user_content_id?
-- content_id?
-- source_type: SHARE | SCREENSHOT_IMPORT | MANUAL_SEARCH | ONBOARDING_DIRECT
-- entry_context: ONBOARDING | SCRAP | EXTERNAL_SHARE
-- source_app?
-- source_url?
-- shared_text?
-- source_domain?
-- import_batch_id?
-- captured_at
-- created_at
-
-ImportBatch
-- id
-- user_id
-- entry_context: ONBOARDING | SCRAP
-- source_hint?: KYOBO_CART | ALADIN_WISHLIST |
-                OTT_WATCHLIST | INSTAGRAM_SCREENSHOT | OTHER
-- asset_count
-- detected_item_count
-- confirmed_item_count
-- saved_item_count
-- status: ANALYZING | REVIEW_REQUIRED | COMPLETED | CANCELLED | FAILED
-- created_at / completed_at?
-
-SourceAsset
-- id
-- import_batch_id
-- asset_index
-- temporary_uri?
-- width? / height?
-- retention_status: EPHEMERAL | DELETED
-- created_at
-// MVP 기본: 분석 완료 후 원본 장기 보관하지 않음.
-
-ImportCandidate
-- id
-- import_batch_id
-- source_asset_id
-- item_index
-- candidate_type: BOOK | ALBUM | MOVIE
-- extracted_title?
-- extracted_creator?
-- extracted_year?
-- matched_content_id?
-- confidence
-- review_state: PRESELECTED | NEEDS_CONFIRMATION | EXCLUDED | FAILED
-- decision: AUTO_MATCHED | USER_CONFIRMED | USER_CORRECTED |
-            EXCLUDED | FAILED
-- created_at
-
-SourceEvidence
-- id
-- source_id?
-- import_candidate_id?
-- evidence_type: SHARED_TEXT | PAGE_TITLE | OG | JSON_LD |
-                 SEARCH_CONTEXT | IMAGE_TEXT | VISUAL_CUE | PROVIDER_RESULT
-- raw_value?
-- normalized_value?
-- confidence?
-- created_at
-
-MatchLog
-- id
-- input_type: SHARE | IMPORT | MANUAL_SEARCH
-- input_ref_id
-- candidate_content_id?
-- candidate_type
-- candidate_title?
-- candidate_creator?
-- score
-- decision: AUTO_MATCHED | USER_CONFIRMED | USER_CORRECTED |
-            MANUAL_SEARCH | EXCLUDED | FAILED
-- created_at
-
-OnboardingProgress
-- user_id
-- valid_signal_count
-- direct_cursor?
-- onboarding_completed: boolean
+- year smallint
+- theme_id: BASIC | JUNGLE | SNOW
 - updated_at
-// 유효 신호: ONB 직접 응답(관심 있음/경험함/싫음) +
-// IMPORT-02에서 저장 확정된 항목. 건너뛰기는 제외.
+- UNIQUE(user_id, year)</div><p class="small">프로토타입은 과거 호환값 autumn→jungle, winter→snow를 허용한다. 신규 DB에는 BASIC/JUNGLE/SNOW만 저장하고 migration에서 변환한다.</p></section><section id="ingest"><h2>11. 외부 데이터 유입 · 매칭</h2><p>외부 데이터는 핵심 도메인을 채우는 입력 계층이다. 기존 정의서의 원칙은 유지하되, <strong>매칭 성공이 곧 사용자 저장을 뜻하지 않도록</strong> 분리한다.</p><div class="flow">Share / Image Import / Search / Onboarding → Candidate → Provider Verification → Entity Resolution → Content 확정 → 사용자 저장 확정 → UserContent + SaveEvent</div><table><thead><tr><th>유형</th><th>주 데이터원</th><th>운영 원칙</th></tr></thead><tbody><tr><td>책</td><td>Kakao Books + Google Books</td><td>ISBN 우선 식별, 제목+저자 보조</td></tr><tr><td>음반</td><td>MusicBrainz + Cover Art Archive</td><td>Release Group 중심, 캐시/큐 필요</td></tr><tr><td>영화</td><td>TMDB + KOBIS</td><td>TMDB 상업 라이선스 확인 전 프로덕션 의존 금지</td></tr><tr><td>공유/이미지</td><td>URL·공유텍스트·사용자 선택 이미지</td><td>후보 추출 후 정식 Content DB로 검증. 낮은 신뢰도 자동 병합 금지</td></tr></tbody></table></section><section id="sql"><h2>12. Supabase 권장 테이블</h2><div class="code">profiles
+contents
+content_external_ids
+user_contents
+save_events
+experience_logs
+completions
+reviews
+today_selections
+forest_themes
+user_tastes
+import_batches        # import 기능 연결 시
+import_candidates     # import 기능 연결 시
+source_assets         # 원본 이미지 보관이 필요할 때만</div><p>현재 프로토타입의 로컬 JSON을 그대로 한 테이블에 넣기보다 위처럼 정규화하는 편이 RLS, 집계, 중복 방지, 향후 Provider 교체에 유리하다.</p><h3>12.1 최소 제약조건</h3><div class="code">UNIQUE(user_contents.user_id, user_contents.content_id)
+UNIQUE(experience_logs.user_content_id, experience_logs.local_date)
+CHECK(contents.type IN ('BOOK','ALBUM','MOVIE'))
+CHECK(reviews.rating BETWEEN 1 AND 5 OR reviews.rating IS NULL)
+CHECK(forest_themes.theme_id IN ('BASIC','JUNGLE','SNOW'))
 
-ExperienceSelectionEvent
-- id
-- user_id
-- content_id
-- selection_source: SONGLIM_RECOMMENDATION | USER_DIRECT
-- recommendation_session_id?
-- selected_at
-// TODAY-02 직접 선택과 송림 추천 수락을 구분하기 위한 행동 데이터.
-
-ForestYearSnapshot
-- id
-- user_id
-- forest_year                  // 예: 2025
-- forest_theme_id              // 해당 연도의 기본 테마
-- theme_version                // 과거 숲 재현용 버전 고정
-- representative_image_ref?    // 화면보다 큰 단일 숲 장면 asset 또는 렌더 캐시 위치. 목록은 축소 표시, 상세는 상하좌우 pan
-- image_status: NONE | READY | FAILED
-- completed_count_cache?       // 선택 캐시. source of truth는 UserContent
-- generated_at?
-- updated_at
-// user_id + forest_year는 1개.
-// 과거 연도 숲은 이후 기본 테마가 바뀌어도 theme_version을 유지한다.
-// 숲 장면 asset은 재생성할 수 있으나 동일 forest_theme_id/theme_version을 사용한다.
-
-ForestThemeDefinition (app config 또는 테이블)
-- forest_theme_id
-- theme_version
-- year
-- asset_manifest_ref
-- is_active
-// MVP에서는 연도별 기본 테마 1개.
-// 사용자 데이터에 따라 테마를 자동 변경하지 않는다.
-// 향후 과거 테마 재사용 BM이 생겨도 기록 원본과 테마 소유/적용 상태는 분리한다.
-
-Track (ALBUM only)
-- album_content_id
-- recording_mbid?
-- title
-- artists[]
-- disc_no?
-- track_no?
-- isrc?</pre>
-<div class="callout"><strong>저장 원칙</strong><br/>외부 공급자의 객체를 그대로 DB 구조로 복사하지 않는다. 송림 스키마로 정규화하고, 원천 ID와 출처를 별도 테이블에 남긴다.</div>
-<h3>10.1 월간 기록·연도별 경험 수 집계 규칙</h3>
-<div class="soft"><strong>핵심 원칙</strong><br/>
-월간 기록과 연도별 경험 수는 별도의 수기 통계 테이블을 source of truth로 두지 않는다.
-<strong>저장은 SaveEvent, 경험 완료는 UserContent.completed_at / completed_local_date</strong>를 기준으로 집계한다.
-MVP 트래픽에서는 조회 시 계산해도 되고, 성능 문제가 생기면 동일 규칙으로 캐시/집계 테이블을 추가한다.
-</div>
-<table>
-<thead><tr><th>지표</th><th>정의</th><th>주의사항</th></tr></thead>
-<tbody>
-<tr><td>월간 저장한 콘텐츠 수</td><td>선택 월에 <code>is_counted=true</code>인 SaveEvent가 1회 이상 존재하는 <strong>고유 content_id 수</strong></td><td>같은 콘텐츠를 같은 달 5번 저장해도 상단 저장 수에서는 1개. 반복 5회는 관심 강도 데이터로 별도 사용.</td></tr>
-<tr><td>월간 경험한 콘텐츠 수</td><td><code>completed_local_date</code>가 선택 월에 속하는 EXPERIENCED 고유 content_id 수</td><td>‘시작’이 아니라 최종 감상 완료 기준.</td></tr>
-<tr><td>월간 카테고리 완료 수</td><td>선택 월 완료 콘텐츠를 Content.type = BOOK / ALBUM / MOVIE로 group by</td><td>TRACK은 별도 콘텐츠 완료 수로 세지 않음.</td></tr>
-<tr><td>주차별 경험 수</td><td>선택 월 completed_local_date를 월내 주차 버킷으로 묶은 완료 수</td><td>주차 정의는 월요일 시작 기준으로 통일. 월 경계 밖 날짜는 해당 월 그래프에서 제외.</td></tr>
-
-
-<tr><td>월간 경험 콘텐츠 목록</td><td><code>completed_local_date</code>가 선택 월에 속하는 EXPERIENCED 콘텐츠</td><td><code>completed_at DESC</code>로 정렬해 표지/커버, 제목, 유형, 완료일을 표시한다.</td></tr><tr><td>연도별 총 경험 수</td><td>completed_local_date의 연도가 선택 연도인 EXPERIENCED 고유 content_id 수</td><td>숲 기록 목록과 연도별 숲 상세의 ‘n개의 경험’에 동일하게 사용.</td></tr>
-</tbody>
-</table>
-<h3>10.2 기간 경계·타임존 규칙</h3>
-<ul class="rulelist">
-<li><strong>이벤트 저장:</strong> 서버에는 UTC timestamp를 저장하고, 발생 당시 사용자 로컬 날짜를 <code>occurred_local_date</code> / <code>completed_local_date</code>로 함께 확정한다.</li>
-<li><strong>이유:</strong> 사용자가 이후 해외 이동·타임존 변경을 해도 과거 월간 기록과 연도별 경험 수의 날짜 버킷이 바뀌지 않게 한다.</li>
-<li><strong>경험 완료:</strong> 최종 감상 완료 액션 시 <code>completed_at</code>과 <code>completed_local_date</code>를 같은 트랜잭션에서 기록한다.</li>
-<li><strong>중복 완료:</strong> 이미 EXPERIENCED인 동일 UserContent에 대해 완료 버튼 재시도로 completed_at이 바뀌지 않도록 idempotency를 적용한다.</li>
-</ul>
-<h3>10.3 올해의 숲 / 숲 기록 데이터 규칙</h3>
-<table>
-<thead><tr><th>화면</th><th>조회 기준</th><th>렌더링 원칙</th></tr></thead>
-<tbody>
-<tr><td>올해의 숲</td><td>현재 연도 completed_local_date 기준 EXPERIENCED 전체 + 현재 status=IN_PROGRESS 콘텐츠</td><td>완료 콘텐츠는 큰 나무, IN_PROGRESS는 현재 성장 상태로 렌더링한다. 숲 아래 카테고리 요약은 EXPERIENCED를 BOOK / ALBUM / MOVIE로 집계한다. 최근 완료 1~2개는 completed_at DESC로 조회한다.</td></tr>
-<tr><td>숲 기록 목록</td><td>현재 연도를 포함해 completed_local_date가 1개 이상 존재하는 연도</td><td>현재 연도는 현재 테마 + 실시간 총 경험 수를 사용하고, 종료 연도는 ForestYearSnapshot의 forest_theme_id / theme_version / representative_image_ref와 연도별 총 경험 수를 사용한다.</td></tr>
-<tr><td>숲 기록 상세</td><td>선택 연도. 현재 연도는 현재 테마 + 실시간 완료 집계, 종료 연도는 ForestYearSnapshot + 연도별 총 경험 수</td><td>화면보다 큰 하나의 숲 장면 asset을 뷰포트에 표시하고 드래그/스와이프로 상하좌우 pan한다. 화면 하단에는 연도별 총 경험 수만 표시한다. 개별 나무 선택용 좌표 데이터는 요구하지 않는다.</td></tr>
-</tbody>
-</table>
-<div class="callout"><strong>연도 종료 처리</strong><br/>
-연도 변경 시 과거 숲을 별도 콘텐츠 DB로 복제하지 않는다. 해당 연도 완료 UserContent는 그대로 두고,
-<strong>ForestYearSnapshot에 forest_theme_id / theme_version을 고정</strong>한다.
-화면보다 큰 단일 숲 장면 asset은 연말 배치, 사용자의 첫 ‘숲 기록’ 진입 시 lazy generation, 또는 클라이언트 렌더 후 업로드 중 한 방식을 선택할 수 있다.
-MVP에서는 구현 복잡도가 낮은 방식으로 시작하되, 재생성 시 항상 동일 theme_version을 사용한다.
-</div>
-</section>
-<section id="matching">
-<h2>11. 동일 콘텐츠 매칭 규칙</h2>
-<h3>11.1 강한 식별자 우선</h3>
-<ul class="rulelist"><li><strong>책:</strong> ISBN13 정확 일치 → 동일 판본</li><li><strong>음반:</strong> MusicBrainz Release Group MBID 정확 일치 → 동일 앨범 작품. Release MBID는 판본 구분.</li><li><strong>트랙:</strong> Recording MBID 또는 ISRC + 아티스트 보조</li><li><strong>영화:</strong> TMDB ID 또는 KOBIS movieCd 정확 일치</li></ul>
-<h3>11.2 식별자가 없을 때</h3>
-<table><thead><tr><th>단계</th><th>비교 요소</th><th>처리</th></tr></thead><tbody>
-<tr><td data-label="단계">A</td><td data-label="비교 요소">정규화 제목 + 주 제작자 정확 일치</td><td data-label="처리">연도/출판사/발매일 확인 후 높은 신뢰도</td></tr><tr><td data-label="단계">B</td><td data-label="비교 요소">제목 유사 + 제작자 정확 + 연도 근접</td><td data-label="처리">점수가 자동 매칭 임계값을 넘을 때만 확정. 그렇지 않으면 사용자 확인.</td></tr><tr><td data-label="단계">C</td><td data-label="비교 요소">제목만 유사</td><td data-label="처리">자동 병합 금지, 후보 확인</td></tr><tr><td data-label="단계">D</td><td data-label="비교 요소">공급자 검색 실패</td><td data-label="처리">자동 엔티티 생성 금지. 직접 검색/최소 수정으로 보완하고 BOOK/ALBUM/MOVIE 판단이 불가능하면 MVP 미지원 처리</td></tr>
-</tbody></table>
-<h3>11.3 Confidence</h3>
-<ul class="rulelist"><li><strong>0.90 이상 + 상충 증거 없음:</strong> canonical 매칭 자동 확정. 유입 경로별 확인 화면/저장 규칙은 별도 적용.</li><li><strong>0.65~0.89:</strong> 후보 1~3개 사용자 확인.</li><li><strong>0.65 미만 또는 후보 충돌:</strong> 직접 검색 / 최소 수정.</li></ul>
-<p class="small">Confidence는 LLM의 자기평가값이 아니라 SourceEvidence와 Provider 검증 결과를 조합한 점수로 계산한다. 임계값은 초기값이며 실제 사용자 보정 로그로 재조정한다. 자동 확정률보다 <strong>오답 자동 매칭률</strong>을 우선 관리한다.</p>
-<h3>11.4 이미지 Batch 중복·저장 규칙</h3><ul class="rulelist"><li>한 이미지 안에서 같은 작품이 반복 검출되면 ImportCandidate 단계에서 먼저 묶는다.</li><li>여러 이미지에서 같은 작품이 검출되어도 최종 Content/UserContent는 1개만 유지한다. 같은 ImportBatch 안에서는 해당 content_id의 SaveEvent도 1회만 counted 처리한다.</li><li>IMPORT-02에서 같은 user_id + content_id가 이미 있으면 신규 UserContent를 만들지 않고 Source/Evidence와 SaveEvent를 추가한다. 동일 Batch 중복이 아니라면 save_count를 1 증가시킨다.</li><li>기존 UserContent 상태는 새 이미지 가져오기 때문에 자동 변경하지 않는다. 특히 EXPERIENCED를 INTERESTED로 되돌리지 않는다.</li><li>Batch 안의 한 항목이 실패해도 다른 항목의 저장을 막지 않는다.</li><li>낮은 신뢰도 항목은 후보 교체·직접 검색·제외 중 하나로 처리한다.</li></ul><h3>11.5 유입 경로별 매칭 완료 기준</h3><table>
-<thead><tr><th>경로</th><th>매칭 완료</th><th>UserContent 생성/연결</th></tr></thead>
-<tbody>
-<tr><td>외부 공유</td><td>HIGH → SHARE-02 / MEDIUM·LOW → SHARE-03 확인</td><td>신규는 INTERESTED + save_count=1. 동일 content_id 재공유는 기존 UserContent 재사용 + save_count +1.</td></tr>
-<tr><td>이미지 가져오기</td><td>IMPORT-02에서 사용자가 일괄 저장 대상으로 남긴 항목</td><td>신규는 INTERESTED + save_count=1. 별도 Batch 재가져오기는 +1, 같은 Batch 중복 검출은 1회만 계산. 기존 상태 자동 변경 없음.</td></tr>
-<tr><td>직접 검색</td><td>사용자가 후보를 직접 선택해 ‘관심 저장’을 확정한 시점</td><td>신규는 INTERESTED + save_count=1. 동일 콘텐츠를 다시 관심 저장하면 기존 UserContent 재사용 + save_count +1.</td></tr>
-<tr><td>온보딩 직접 선택</td><td>제시된 canonical Content에 사용자가 관심 있음/경험함/싫음 선택</td><td>각 선택 상태를 UserContent에 반영. 건너뛰기는 생성하지 않음.</td></tr>
-</tbody>
-</table></section>
-<section id="risk">
-<h2>12. 정책·라이선스·운영 리스크</h2>
-<table><thead><tr><th>공급자</th><th>현재 확인된 제약</th><th>송림 대응</th></tr></thead><tbody>
-<tr><td data-label="공급자">Kakao Daum Search</td><td data-label="현재 확인된 제약">앱 등록·REST API 키·일간 쿼터. 쿼터 상향은 협의.</td><td data-label="송림 대응">책 1순위. 서버 캐시. 공개 출시 전 이미지/콘텐츠 표시 약관 재점검.</td></tr>
-<tr><td data-label="공급자">Google Books</td><td data-label="현재 확인된 제약">쿼터·API 정책 준수 필요.</td><td data-label="송림 대응">Fallback 및 ISBN 교차검증.</td></tr>
-<tr><td data-label="공급자">Aladin</td><td data-label="현재 확인된 제약"><strong>일반 OpenAPI는 영리·법인 서비스 이용 불가.</strong> 기업/제휴는 사전 허가 필요.</td><td data-label="송림 대응">MVP 코어에서 제외. 구매 링크 BM 시 제휴 협상.</td></tr>
-<tr><td data-label="공급자">MusicBrainz</td><td data-label="현재 확인된 제약">공개 API 평균 1 req/s. Core는 CC0, supplementary는 다른 라이선스.</td><td data-label="송림 대응">Core 위주 사용, 캐시·큐. 성장 시 dump 자체 인덱싱 검토.</td></tr>
-<tr><td data-label="공급자">Cover Art Archive</td><td data-label="현재 확인된 제약">이미지 저작권을 서비스가 보증하지 않음.</td><td data-label="송림 대응">MVP 커버 미존재 허용. 상용 공개 전 이미지 권리 정책 확정.</td></tr>
-<tr><td data-label="공급자">Spotify</td><td data-label="현재 확인된 제약">Development Mode는 좁은 사용자 범위, Extended Quota는 높은 자격 조건. 이미지 원형 유지·attribution·AI 학습 금지.</td><td data-label="송림 대응">프로덕션 핵심 공급자에서 제외. 외부 링크/향후 승인 시 보조.</td></tr>
-<tr><td data-label="공급자">TMDB</td><td data-label="현재 확인된 제약">비상업 무료, 상업 서비스는 commercial license 문의. attribution 필수.</td><td data-label="송림 대응">기술 검증용. 상용 출시 Go 조건에 계약 확정 포함.</td></tr>
-<tr><td data-label="공급자">KOBIS</td><td data-label="현재 확인된 제약">회원가입·API key 필요.</td><td data-label="송림 대응">국내 영화 보조 식별자로 사용.</td></tr>
-<tr>
-<td data-label="공급자">사용자 이미지 가져오기</td>
-<td data-label="현재 확인된 제약">장바구니·SNS 캡처에 사용자명·주문정보·금액·타인의 게시물 이미지 등 작품 식별에 불필요한 정보가 포함될 수 있음.</td>
-<td data-label="송림 대응">사용자가 명시적으로 선택한 사진만 처리. 작품 식별 목적 최소 처리. 원본 장기보관 금지를 기본값으로 하고, 정규화된 Content·최소 Evidence만 남긴다.</td>
-</tr></tbody></table>
-</section>
-<section id="test">
-<h2>13. 실제 연동 가능성 점검</h2>
-<p class="lede">공식 문서와 현재 활성 엔드포인트 기준으로 기술 연동 가능성을 확인했다. 인증키가 필요한 공급자는 이 문서 작성 환경에서 실제 키를 발급받아 호출하지 않았으므로, <strong>“문서상 활성 확인”과 “송림 계정으로 실호출 확인”을 구분</strong>한다.</p>
-<table><thead><tr><th>공급자</th><th>공식 API 활성</th><th>인증 방식</th><th>실서비스 적합성</th><th>개발 전 해야 할 것</th></tr></thead><tbody>
-<tr><td data-label="공급자">Kakao 책</td><td data-label="공식 API 활성">확인</td><td data-label="인증 방식">REST API Key</td><td data-label="실서비스 적합성">높음</td><td data-label="개발 전 해야 할 것">앱 생성 → 키 발급 → 한국 도서 30~50건 품질 테스트</td></tr>
-<tr><td data-label="공급자">Google Books</td><td data-label="공식 API 활성">확인</td><td data-label="인증 방식">공개/Key</td><td data-label="실서비스 적합성">보조</td><td data-label="개발 전 해야 할 것">한국 ISBN 누락률 측정</td></tr>
-<tr><td data-label="공급자">MusicBrainz</td><td data-label="공식 API 활성">확인</td><td data-label="인증 방식">공개 API + User-Agent</td><td data-label="실서비스 적합성">높음(캐시 전제)</td><td data-label="개발 전 해야 할 것">한국/해외 음반 50장 매칭률·응답시간 측정</td></tr>
-<tr><td data-label="공급자">Cover Art Archive</td><td data-label="공식 API 활성">확인</td><td data-label="인증 방식">공개</td><td data-label="실서비스 적합성">이미지 권리 검토 필요</td><td data-label="개발 전 해야 할 것">커버 존재율과 404 비율 측정</td></tr>
-<tr><td data-label="공급자">Spotify</td><td data-label="공식 API 활성">확인</td><td data-label="인증 방식">OAuth 2.0 / Client Credentials</td><td data-label="실서비스 적합성">초기 공개 서비스 코어로 부적합</td><td data-label="개발 전 해야 할 것">필요 시 5인 내부 테스트에 한정</td></tr>
-<tr><td data-label="공급자">TMDB</td><td data-label="공식 API 활성">확인</td><td data-label="인증 방식">API Key/Bearer</td><td data-label="실서비스 적합성">계약 전 조건부</td><td data-label="개발 전 해야 할 것">상업 이용 문의 + 한국어 검색 샘플 테스트</td></tr>
-<tr><td data-label="공급자">KOBIS</td><td data-label="공식 API 활성">확인</td><td data-label="인증 방식">API Key</td><td data-label="실서비스 적합성">국내 보조</td><td data-label="개발 전 해야 할 것">키 발급 → 최근/고전 한국영화 검색 테스트</td></tr>
-<tr><td data-label="공급자">Aladin</td><td data-label="공식 API 활성">확인</td><td data-label="인증 방식">TTB Key</td><td data-label="실서비스 적합성">제휴 전 불가</td><td data-label="개발 전 해야 할 것">BM 단계에서 기업 제휴 문의</td></tr>
-</tbody></table>
-<h3>13.1 실제 작동 검증용 샘플 세트</h3>
-<p>개발자가 API 키를 발급받으면 임의 검색어가 아니라 아래처럼 <strong>정답을 이미 아는 고정 샘플</strong>로 자동화 테스트를 만든다.</p>
-<ul class="rulelist"><li>콘텐츠 DB 품질: 책 50종, 음반 50종, 영화 50종을 별도 정답 세트로 유지</li><li>SNS/웹 유입 실증: Instagram 50건 + Threads 30건 + 블로그/기사 30건 + YouTube·서점·기타 40건 = 150건</li><li>각 공유 샘플에 실제 작품 정답, Share Sheet payload, 추출 증거, 후보 목록, 최종 선택, 사용자 보정 여부를 기록</li><li>출처별 자동 식별률·후보 생성률·오답 자동 매칭률·최종 저장 완료율·완료 시간을 각각 계산</li></ul>
-<p class="small">전체 평균만 보지 않는다. Instagram/Threads처럼 송림의 핵심 유입 채널은 별도 Go/No-Go 지표로 관리한다.</p>
-<h3>13.2 이미지·목록 가져오기 고정 샘플</h3><p>초기에는 실제 사용 가능성이 높은 스크린샷 50장을 정답 세트로 만든다. 이미지 단위가 아니라 <strong>이미지 안의 작품 항목 단위</strong>로 정답을 기록한다.</p><ul class="rulelist">
-<li>서점 장바구니·보관함 20장</li>
-<li>책 추천/읽고 싶은 목록 10장</li>
-<li>OTT·영화 찜 목록 10장</li>
-<li>Instagram/Threads 등 SNS 스크린샷 10장</li>
-<li>각 이미지별 실제 작품 수, 추출 작품 수, 정답 매칭 수, 오답 자동확정 수, 사용자 보정 수를 기록</li>
-<li>장바구니/정형 목록과 SNS/비정형 이미지는 별도 성공률로 관리</li>
-</ul><h3>13.3 기능정의서 정합성 테스트</h3><table>
-<thead><tr><th>시나리오</th><th>기대 결과</th></tr></thead>
-<tbody>
-<tr><td>ONB 직접 선택 4개 + IMPORT 저장 확정 6개</td><td>valid_signal_count = 10, 온보딩 종료 가능.</td></tr>
-<tr><td>ONB 건너뛰기 10회</td><td>신호 수 증가 없음, UserContent 생성 없음.</td></tr>
-<tr><td>IMPORT 사진 3장에 동일 책 반복</td><td>IMPORT-02에서는 중복 표시/병합, UserContent는 1개만 유지.</td></tr>
-<tr><td>이미 EXPERIENCED인 책을 장바구니 캡처로 다시 가져오기</td><td>INTERESTED로 되돌리지 않고 Source/Evidence만 추가.</td></tr>
-<tr><td>SHARE 고신뢰 콘텐츠</td><td>canonical 매칭 → SHARE-02. 신규 저장 시 INTERESTED, 중복이면 기존 UserContent 재사용.</td></tr>
-<tr><td>SHARE 저신뢰/복수 후보</td><td>SHARE-03 후보 확인·최소 수정 후 확정.</td></tr>
-<tr><td>TODAY-02에서 직접 선택</td><td>기존 INTERESTED content_id 사용, IN_PROGRESS 전이 + selection_source=USER_DIRECT 기록.</td></tr>
-<tr><td>같은 책을 다른 날 Instagram에서 다시 공유</td><td>UserContent 중복 생성 없음, SaveEvent 추가, save_count +1, last_saved_at 갱신.</td></tr>
-<tr><td>같은 장바구니 Batch에서 화면 겹침으로 같은 책 3회 검출</td><td>ImportCandidate는 병합 가능, counted SaveEvent 1회, save_count +1만 반영.</td></tr>
-<tr><td>INTERESTED 3개가 save_count 5 / 3 / 1</td><td>금주의 추천·SCRAP 기본·TODAY-02 직접 선택 목록은 5 → 3 → 1 순. 동률이면 last_saved_at 최신 순.</td></tr>
-<tr><td>9월에 A를 5회, B를 1회 저장</td><td>FOREST-02의 ‘저장한 콘텐츠’ = 2. 반복 저장 횟수는 SaveEvent / UserContent.save_count에 유지하지만 월간 기록 화면에는 별도 하이라이트로 표시하지 않는다.</td></tr>
-<tr><td>8월에 3회 저장한 A를 9월에 완료</td><td>9월 경험 수와 9월 경험 콘텐츠 목록에 A 포함. 9월에 SaveEvent가 없다면 9월 저장 수에는 A를 포함하지 않는다.</td></tr>
-<tr><td>9월 완료 13개: 책4/음반6/영화3</td><td>월간 경험=13, 카테고리 합계도 13. 주차별 완료 수 합계도 13.</td></tr>
-<tr><td>2025 완료 62개 후 2026 진입</td><td>숲 기록에 2025 표시. ForestYearSnapshot의 theme_id/theme_version과 숲 장면 asset으로 재현하며 총 경험 수=62.</td></tr>
-<tr><td>2025 기본 테마가 앱 업데이트로 v2가 됨</td><td>이미 생성된/확정된 2025 ForestYearSnapshot은 기존 theme_version을 유지. 과거 숲 이미지가 자동 변경되지 않음.</td></tr>
-</tbody>
-</table></section>
-<section id="todo">
-<h2>14. MVP 구현 순서</h2>
-<ol class="rulelist"><li><strong>공통 스키마 확정:</strong> Content / ProviderIdentifier / UserContent / SaveEvent / Source / ImportBatch / SourceAsset / ImportCandidate / SourceEvidence / MatchLog / OnboardingProgress / ExperienceSelectionEvent / ForestYearSnapshot / ForestThemeDefinition</li><li><strong>ONB 데이터 규칙:</strong> 직접 응답 + IMPORT 저장 확정 항목을 유효 신호로 합산, 건너뛰기 제외, 10개 이상 완료</li><li><strong>IMPORT-01 입력:</strong> iOS 사진 선택, 여러 장 입력, 임시 원본 처리·삭제 정책</li><li><strong>IMPORT-02 1차 vertical slice:</strong> 책 장바구니·보관함 → 다건 추출 → Kakao/Google Books 검증 → 항목별 확인 → 일괄 INTERESTED 저장</li><li>직접 검색: 제목 입력 → Provider 후보 → 사용자 선택 → Content/UserContent 중복 병합</li><li>Kakao 책 검색 API + Google Books fallback 품질 테스트</li><li>MusicBrainz 검색·Release Group/Release 매핑 + 요청 큐·캐시</li><li>Cover Art Archive 커버 연결, 커버 미존재 placeholder 처리</li><li>TMDB 기술 연동 샘플 + KOBIS 보조 및 상용 조건 확인</li><li><strong>SHARE-01~03:</strong> 실제 iPhone Share Sheet payload 수집 → Source parser → 후보 추출 → 고신뢰 SHARE-02 / 확인 필요 SHARE-03</li><li>OG / JSON-LD / 공개 메타데이터 파서</li><li>공통 Candidate Extraction / Provider Verification / Entity Resolution 모듈로 SHARE·IMPORT·직접 검색을 통합</li><li>AI는 BOOK/ALBUM/MOVIE + title + creator 후보 구조화와 후보 랭킹에만 사용</li><li>중복 정책 구현: 동일 user_id + content_id는 UserContent 1개, 새 유입으로 기존 상태 자동 변경 금지</li>
-<li><strong>반복 저장 집계:</strong> SaveEvent dedupe/idempotency 구현, 같은 ImportBatch 중복 제외, save_count / first_saved_at / last_saved_at 갱신</li>
-<li><strong>노출 우선순위:</strong> INTERESTED 조회 기본 정렬을 save_count DESC → last_saved_at DESC로 공통 모듈화</li><li><strong>TODAY-02 데이터:</strong> SONGLIM_RECOMMENDATION / USER_DIRECT 선택 출처 이벤트 구분 기록</li>
-<li><strong>기간 집계 공통 모듈:</strong> SaveEvent.occurred_local_date + UserContent.completed_local_date 기준 월 필터, 월간 unique 저장 수, 완료 수, 카테고리/주차 group by, 연도별 총 경험 수 집계 구현</li>
-<li><strong>월간 기록 쿼리:</strong> FOREST-02용 저장 고유 수 / 완료 수 / BOOK·ALBUM·MOVIE별 완료 수 / 주차별 완료 수 / 선택 월 경험 콘텐츠 목록 조회</li>
-<li><strong>연도별 숲 스냅샷:</strong> 현재 연도는 실시간 테마/완료 집계로 노출하고, 연도 종료 시 ForestYearSnapshot 생성·재생성 규칙, forest_theme_id/theme_version 고정, 화면보다 큰 단일 숲 장면 asset 캐시/실패 fallback 및 상하좌우 pan 구현</li><li>출처별 품질 대시보드: SHARE와 IMPORT를 분리해 후보 생성률·매칭 정답률·사용자 보정률·오답 자동 매칭률·최종 저장 완료율·완료 시간 관리</li></ol>
-<div class="callout"><strong>MVP Go 기준 제안</strong><br/>Share Sheet와 Screenshot Import를 같은 평균으로 섞지 않는다. <strong>책 장바구니·보관함 같은 정형 이미지에서는 항목 단위 정답률과 최종 저장 완료율을 먼저 높이고, SNS 비정형 이미지는 후보 확인까지 포함한 완료율을 우선 관리한다.</strong> 오답 자동 매칭률은 1~2% 이하를 최우선 품질 목표로 유지한다.</div>
-</section>
-<section>
-<h2>15. 공식 근거</h2>
-<ul class="source-list">
-<li>Kakao Developers · Daum Search Book API: <a href="https://developers.kakao.com/docs/ko/daum-search/dev-guide">developers.kakao.com/docs/ko/daum-search/dev-guide</a></li>
-<li>Kakao Developers · Quota: <a href="https://developers.kakao.com/docs/ko/getting-started/quota">developers.kakao.com/docs/ko/getting-started/quota</a></li>
-<li>NAVER Developers · 책 검색 API 종료 공지: <a href="https://developers.naver.com/notice/article/32564">developers.naver.com/notice/article/32564</a></li>
-<li>Google Books API: <a href="https://developers.google.com/books/docs/v1/using">developers.google.com/books/docs/v1/using</a></li>
-<li>알라딘 OpenAPI 이용 안내: <a href="https://blog.aladin.co.kr/openapi/popup/5353304">blog.aladin.co.kr/openapi/popup/5353304</a></li>
-<li>MusicBrainz Web Service: <a href="https://musicbrainz.org/doc/Web_Service">musicbrainz.org/doc/Web_Service</a></li>
-<li>MusicBrainz Data License: <a href="https://musicbrainz.org/doc/About/Data_License">musicbrainz.org/doc/About/Data_License</a></li>
-<li>MusicBrainz Database Download: <a href="https://musicbrainz.org/doc/MusicBrainz_Database/Download">musicbrainz.org/doc/MusicBrainz_Database/Download</a></li>
-<li>Cover Art Archive API: <a href="https://musicbrainz.org/doc/Cover_Art_Archive/API">musicbrainz.org/doc/Cover_Art_Archive/API</a></li>
-<li>Spotify Search API: <a href="https://developer.spotify.com/documentation/web-api/reference/search">developer.spotify.com/documentation/web-api/reference/search</a></li>
-<li>Spotify Quota Modes: <a href="https://developer.spotify.com/documentation/web-api/concepts/quota-modes">developer.spotify.com/documentation/web-api/concepts/quota-modes</a></li>
-<li>Spotify Client Credentials: <a href="https://developer.spotify.com/documentation/web-api/tutorials/client-credentials-flow">developer.spotify.com/documentation/web-api/tutorials/client-credentials-flow</a></li>
-<li>TMDB Movie Search: <a href="https://developer.themoviedb.org/reference/search-movie">developer.themoviedb.org/reference/search-movie</a></li>
-<li>TMDB FAQ / Commercial &amp; Attribution: <a href="https://developer.themoviedb.org/docs/faq">developer.themoviedb.org/docs/faq</a></li>
-<li>KOBIS OpenAPI Web Service: <a href="https://kobis.or.kr/kobisopenapi/webservice">kobis.or.kr/kobisopenapi/webservice</a></li>
-</ul>
-<p class="small">정책·쿼터·라이선스는 변경될 수 있으므로 실제 출시 직전 다시 확인한다. 특히 이미지 사용권과 상업 이용 조건은 API 기술 연동과 별개의 검토 항목이다.</p>
-<p class="small">이미지·목록 가져오기 파트의 임계값·지원 화면 범위·원본 이미지 보관정책은 송림 내부 MVP 설계값이며, 실제 기기/실사용 샘플 결과와 개인정보 처리 검토 후 확정한다.</p></section>
-</main>
-</body>
-</html>
+RLS 기본 원칙
+- contents: authenticated read, 서버/관리 경로 write
+- user_* / save_events / logs / completions / reviews: auth.uid() = owner user_id
+- provider raw payload: 클라이언트 직접 write 금지</div></section><section id="migration"><h2>13. 프로토타입 v3 → 서버 데이터 마이그레이션</h2><table><thead><tr><th>프로토타입 필드</th><th>서버 대상</th><th>변환</th></tr></thead><tbody><tr><td>items[]</td><td>Content + UserContent</td><td>type/title/creator 정규화 후 content resolve</td></tr><tr><td>item.saves[]</td><td>SaveEvent</td><td>id→request_key, at→saved_at, source→source_label</td></tr><tr><td>item.logs[]</td><td>ExperienceLog</td><td>date/page/memo 그대로 변환</td></tr><tr><td>item.completed</td><td>Completion</td><td>날짜면 local_date, 'unknown'은 legacy flag 또는 null 정책</td></tr><tr><td>item.rating / review</td><td>Review</td><td>rating과 감상 분리 저장</td></tr><tr><td>item.genre / treeCategory / length</td><td>Content</td><td>genre_raw / tree_category / length_value</td></tr><tr><td>selected</td><td>TodaySelection</td><td>현재 날짜의 선택 이벤트로 변환하거나 migration에서 생략</td></tr><tr><td>themes{year:id}</td><td>ForestTheme</td><td>autumn→JUNGLE, winter→SNOW</td></tr><tr><td>profile</td><td>Profile + UserTaste</td><td>name/tastes/responses 분리</td></tr></tbody></table></section><section id="decisions"><h2>14. 구현 전에 확정할 항목</h2><div class="grid"><div class="card"><div class="k">P0</div><div class="v">완료 취소 정책</div><div class="s">현재 프로토타입처럼 별점까지 지울지, Completion만 취소할지 확정.</div></div><div class="card"><div class="k">P0</div><div class="v">Content 메타 수정 권한</div><div class="s">사용자 개인 보정값을 공용 Content에 쓸지 UserContent override로 둘지 확정.</div></div><div class="card"><div class="k">P0</div><div class="v">오늘 선택 이력</div><div class="s">하루 1개 제한인지, 교체 이력을 남길지 확정.</div></div><div class="card"><div class="k">P1</div><div class="v">영화 경험 로그</div><div class="s">현재처럼 완료일만 기록할지, 영화도 별도 ExperienceLog를 허용할지 결정.</div></div><div class="card"><div class="k">P1</div><div class="v">앨범 track_index</div><div class="s">실제 트랙 단위 진행률로 사용할지 단순 프로토타입 필드로 종료할지 결정.</div></div><div class="card"><div class="k">P1</div><div class="v">과거 연도 숲 스냅샷</div><div class="s">실시간 재계산만 할지, 테마/렌더 버전까지 snapshot으로 고정할지 결정.</div></div></div></section></main></body></html>

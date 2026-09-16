@@ -112,7 +112,14 @@ input[type=checkbox],input[type=radio]{accent-color:var(--brand-green)}
 .today-work .creator{color:#929892;font-size:13px;font-weight:400}
 .today-work .cover svg{width:20px;height:20px}
 .today-empty h2{font-size:20px;line-height:1.5}
-.more>summary{background:#f5f7f8;border-radius:var(--control-radius)}
+.more>summary{background:transparent;border:0;box-shadow:none;border-radius:var(--control-radius);color:var(--muted)}
+.inline-picker{position:relative;display:inline-block}
+.inline-picker-panel{position:absolute;top:calc(100% + 4px);right:0;width:200px;max-height:280px;overflow-y:auto;padding:6px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px #20304012;z-index:9}
+.inline-picker-panel[hidden]{display:none}
+.inline-picker-panel button{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;min-height:44px;padding:10px 12px;text-align:left;font-size:13px;border-radius:7px}
+.inline-picker-panel button[aria-pressed=true]{color:#356C45;background:#f0f6ed;font-weight:600}
+.inline-picker-panel button:hover{background:#f5f7f4}
+.inline-picker-panel.year-picker{left:0;right:auto;width:156px}
 </style><style>
 /* Fill the entire viewport with the selected biome, including SVG letterboxing. */
 .forest-viewport{background:#EDF6E8}
@@ -135,7 +142,7 @@ input[type=checkbox],input[type=radio]{accent-color:var(--brand-green)}
 <script>
 
 const TREE_CATEGORIES=[
- {id:'book-literature',type:'book',label:'책 · 문학',color:'#7fa989',pattern:/문학|소설|수필|에세이|추리|미스터리|스릴러|수상집|시집|판타지|SF/i},
+ {id:'book-literature',type:'book',label:'책 · 문학',color:'#7fa989',pattern:/문학|소설|수필|에세이|추리|미스터리|스릴러|수상집|시집|판타지|로맨스|SF|fiction|romance/i},
  {id:'book-humanities',type:'book',label:'책 · 인문',color:'#b6a075',pattern:/인문|철학|역사|사회|심리|예술/},
  {id:'book-science',type:'book',label:'책 · 과학',color:'#78a9a4',pattern:/과학|수학|생물|물리/},
  {id:'album-classical',type:'album',label:'음악 · 고전음악',color:'#9994b5',pattern:/고전|클래식|classical/i},
@@ -146,16 +153,23 @@ const TREE_CATEGORIES=[
  {id:'movie-action',type:'movie',label:'영화 · 액션스릴러',color:'#b48778',pattern:/액션|스릴러|범죄|공포|action|thriller/i},
  {id:'other',type:'all',label:'기타',color:'#9da89e'}
 ];
-function category(c){return TREE_CATEGORIES.find(t=>t.id===c.treeCategory&&(t.type===c.type||t.id==='other'))||TREE_CATEGORIES.find(t=>t.type===c.type&&t.pattern?.test(c.genre||''))||TREE_CATEGORIES[9]}
+function mappedCategory(type,genre){return TREE_CATEGORIES.find(t=>t.type===type&&t.pattern?.test(String(genre||'').normalize('NFKC')))||TREE_CATEGORIES[9]}
+function category(c){
+ // Explicit category is only for legend samples, never a user's cached override.
+ if(!Object.prototype.hasOwnProperty.call(c,'genre')&&!c.id&&c.treeCategory)return TREE_CATEGORIES.find(t=>t.id===c.treeCategory&&(t.type===c.type||t.id==='other'))||TREE_CATEGORIES[9];
+ return mappedCategory(c.type,c.genre);
+}
 function validRating(n){n=Number(n);return Number.isFinite(n)&&n>=1&&n<=5?n:null}
 function contentMetadata(c){
  const seed=typeof SEED_BOOKS!=='undefined'&&c.type==='book'?SEED_BOOKS.find(b=>Model.norm(b.title)===Model.norm(c.title)&&Model.norm(b.creator)===Model.norm(c.creator)):null;
- const genre=String(c.genre??seed?.genre??'');
- return {genre,treeCategory:TREE_CATEGORIES.some(t=>t.id===c.treeCategory&&(t.type===c.type||t.id==='other'))?c.treeCategory:'',length:Number(c.length)>0?Number(c.length):null,review:String(c.review||'')};
+ const genre=String(c.genre||seed?.genre||'');
+ return {genre,treeCategory:mappedCategory(c.type,genre).id,genreMappingVersion:1,genreCandidates:Array.isArray(c.genreCandidates)?c.genreCandidates:[],length:Number(c.length)>0?Number(c.length):null,review:String(c.review||'')};
 }
-function metadataFields(c){return '<label for="contentGenre">세부 장르 · 선택</label><input id="contentGenre" maxlength="200" placeholder="예: 문학, 재즈, SF" value="'+esc(c.genre||'')+'"><label for="contentCategory">나무 분류</label><select id="contentCategory">'+categoryOptions(c.type,c.treeCategory)+'</select><label id="lengthLabel" for="contentLength">'+(c.type==='book'?'전체 쪽수':'전체 재생시간 · 분')+' · 선택</label><input id="contentLength" type="number" min="1" max="100000" step="1" value="'+esc(c.length||'')+'">'}
-function categoryOptions(type,value){const specific=TREE_CATEGORIES.filter(t=>t.type===type),common=TREE_CATEGORIES.filter(t=>t.id==='other');return '<option value="">장르로 자동 분류</option><optgroup label="'+typeName[type]+' 세부 분류">'+specific.map(t=>'<option value="'+t.id+'" '+(t.id===value?'selected':'')+'>'+t.label+'</option>').join('')+'</optgroup><optgroup label="공통">'+common.map(t=>'<option value="'+t.id+'" '+(t.id===value?'selected':'')+'>'+t.label+'</option>').join('')+'</optgroup>'}
-document.addEventListener('change',e=>{if(e.target.id==='contentType'){$('contentCategory').innerHTML=categoryOptions(e.target.value,'');$('contentLength').value='';$('lengthLabel').textContent=(e.target.value==='book'?'전체 쪽수':'전체 재생시간 · 분')+' · 선택'}});
+const GENRE_POOL={book:['소설','일본문학','SF','판타지','로맨스','추리','에세이','인문','과학'],album:['팝','록','재즈','클래식','인디'],movie:['드라마','로맨스','코미디','SF','액션','스릴러']};
+function genreCandidates(c){const raw=[];const current=String(c.genre||'');if(current)raw.push([current,'현재 분류']);(c.genreCandidates||[]).forEach(x=>raw.push(Array.isArray(x)?x:[String(x),'외부 데이터']));current.replace(/\([^)]*https?:[^)]*\)/g,'').split(/[,/_·]/).map(x=>x.trim()).filter(Boolean).forEach(x=>raw.push([x,'기존 데이터']));(GENRE_POOL[c.type]||[]).forEach(label=>raw.push([label,'체험 후보']));const seen=new Set();return raw.filter(([label])=>{const key=Model.norm(label);if(!key||seen.has(key))return false;seen.add(key);return true})}
+function genreOptions(c){const list=genreCandidates(c),selected=String(c.genre||'');return '<option value="">장르를 선택해주세요</option>'+list.map(([label,source])=>'<option value="'+esc(label)+'" '+(label===selected?'selected':'')+'>'+esc(label)+' · '+esc(source)+'</option>').join('')}
+function metadataFields(c){return '<label for="contentGenre">세부 장르 · 선택</label><select id="contentGenre">'+genreOptions(c)+'</select><p id="genreTreePreview" class="muted">나무 분류 · '+mappedCategory(c.type,c.genre).label+'</p><p class="muted tiny">현재는 기존 장르와 체험 후보를 제공해요. 실제 외부 API는 연결 전이에요. 선택한 장르는 나만의 분류로 저장되고, 나무는 자동으로 정해져요.</p><label id="lengthLabel" for="contentLength">'+(c.type==='book'?'전체 쪽수':'전체 재생시간 · 분')+' · 선택</label><input id="contentLength" type="number" min="1" max="100000" step="1" value="'+esc(c.length||'')+'">'}
+document.addEventListener('change',e=>{if(e.target.id==='contentType'){$('contentGenre').innerHTML=genreOptions({type:e.target.value,genre:''});$('contentLength').value='';$('lengthLabel').textContent=(e.target.value==='book'?'전체 쪽수':'전체 재생시간 · 분')+' · 선택'}if(['contentType','contentGenre'].includes(e.target.id))$('genreTreePreview').textContent='나무 분류 · '+mappedCategory($('contentType').value,$('contentGenre').value).label});
 function detailMetadata(c){const days=new Set(c.logs.map(l=>l.date));if(c.type==='movie'&&Model.validDate(c.completed))days.add(c.completed);
  const metric=v=>v?'<strong>'+v+'</strong>':'<strong class="unset">미입력</strong>';
  return '<div class="detail-metrics"><div><small>장르</small>'+metric(c.genre?esc(c.genre.replace(/_/g,' · ')):'')+'<small>'+category(c).label+' 나무</small></div><div><small>'+(c.type==='book'?'길이 · 쪽수':'길이 · 재생시간')+'</small>'+metric(c.length?c.length+(c.type==='book'?'쪽':'분'):'')+'</div><div><small>'+({book:'읽은',album:'들은',movie:'본'}[c.type])+' 일수</small><strong>'+days.size+'일</strong><small>기록한 날짜 기준</small></div></div>'}
@@ -187,7 +201,7 @@ const Model=(()=>{
  };
  const log=(s,id,date)=>{const c=get(s,id);if(!c||c.completed||c.type==='movie'||!validDate(date))return false;if(c.logs.some(l=>l.date===date))return false;c.logs.push({id:uid(),date,page:'',memo:''});return true};
  const complete=(s,id,date)=>{const c=get(s,id);if(!c||c.completed||!validDate(date))return false;c.completed=date;c.completedAt=Date.now();return true};
- const undoComplete=(s,id)=>{const c=get(s,id);if(c){c.completed=null;c.completedAt=null;c.rating=null}};
+ const undoComplete=(s,id)=>{const c=get(s,id);if(c){c.completed=null;c.completedAt=null}};
  const remove=(s,id)=>{s.items=s.items.filter(c=>c.id!==id);if(s.selected===id)s.selected=null};
  const completed=(s,period)=>s.items.filter(c=>c.completed&&(c.completed==='unknown'?period.length===4&&forestRecordYear(c)===period:c.completed.startsWith(period))).sort((a,b)=>a.completed.localeCompare(b.completed)||a.id.localeCompare(b.id));
  const refs=[['작은 화단',75],['텃밭',150],['뒷마당',225],['작은 놀이터',300],['농구장',420],['넓은 놀이터',750],['작은 공원',1500],['축구장',7140]];
@@ -336,7 +350,7 @@ const typeName={book:'책',album:'음반',movie:'영화'},statusName={saved:'아
 let state=Model.empty(),view='today',detailId=null,detailOrigin='scrap',picking=false,year=String(new Date().getFullYear()),month=Model.today().slice(0,7),modal=null,zoomState={scale:1,x:0,y:0},storageOK=true,toastTimer,undoAction=null,shareBlob=null,shareURL=null,photoFiles=[],ocrGeneration=0,ocrBusy=false,candidates=[],authMode=false;
 const $=id=>document.getElementById(id);
 function load(){
- try{const raw=localStorage.getItem(KEY);if(raw)state=Model.validate(JSON.parse(raw));else{const legacy=localStorage.getItem('songrim.records.v1');if(legacy){state=migrateLegacy(JSON.parse(legacy));persist()}}}
+ try{const raw=localStorage.getItem(KEY);if(raw){const previous=JSON.parse(raw);state=Model.validate(previous);if(previous.items.some((c,i)=>c.genreMappingVersion!==1||c.genre!==state.items[i].genre||c.treeCategory!==state.items[i].treeCategory)){if(!localStorage.getItem(KEY+'.before-genre-mapping-v1'))localStorage.setItem(KEY+'.before-genre-mapping-v1',raw);persist()}}else{const legacy=localStorage.getItem('songrim.records.v1');if(legacy){state=migrateLegacy(JSON.parse(legacy));persist()}}}
  catch(e){storageOK=false;$('storageAlert').innerHTML='<div class="storage-alert">기존 데이터를 읽지 못했어요. MY에서 백업을 복원하거나 새로 시작할 수 있어요.</div>'}
 }
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(e){storageOK=false;$('storageAlert').innerHTML='<div class="storage-alert">브라우저에 저장하지 못했어요. MY에서 백업을 다운로드해주세요.</div>';return false}}
@@ -399,7 +413,7 @@ function renderScrap(){
  const typeTabs='<div class="type-tabs" role="group" aria-label="콘텐츠 유형">'+['all','book','movie','album'].map(t=>button(t==='all'?'전체':typeName[t],'filterType','type-tab '+(f.type===t?'active':''),'data-type="'+t+'" aria-pressed="'+(f.type===t)+'"')).join('')+'</div>';
  const statusChips=!picking?'<div class="status-filter" role="group" aria-label="경험 상태">'+['saved','active','done'].map(t=>button(statusName[t],'filterStatus','chip '+(f.status===t?'active':''),'data-status="'+t+'" aria-pressed="'+(f.status===t)+'"')).join('')+'</div>':'';
  const sortLabel={recent:'최근 스크랩순',many:'많이 스크랩한 순',old:'오래 스크랩한 순'}[f.sort];
- return '<section><div class="page-heading"><h1 class="page-title">'+ (picking?'오늘 경험할 콘텐츠':'스크랩')+'</h1>'+(picking?button('취소','cancelPick','textbtn'):'')+'</div><div class="space"></div><input id="search" type="search" placeholder="제목·제작자 검색" aria-label="스크랩 검색" value="'+esc(f.q)+'">'+typeTabs+statusChips+'<div class="scrap-list-tools"><span class="muted">'+list.length+'개</span>'+button(sortLabel+' ▾','filters','sort-button')+'</div><div class="content-list">'+(list.length?list.map(c=>row(c,picking)).join(''):'<div class="empty"><h3>조건에 맞는 콘텐츠가 없어요</h3><p>유형이나 상태를 바꿔보세요.</p>'+button('필터 초기화','resetFilters','textbtn')+'</div>')+'</div><div class="list-footer"></div></section>'+(!picking?button('＋ 스크랩 추가','add','fab'):'');
+ return '<section><div class="page-heading"><h1 class="page-title">'+ (picking?'오늘 경험할 콘텐츠':'스크랩')+'</h1>'+(picking?button('취소','cancelPick','textbtn'):'')+'</div><div class="space"></div><input id="search" type="search" placeholder="제목·제작자 검색" aria-label="스크랩 검색" value="'+esc(f.q)+'">'+typeTabs+statusChips+'<div class="scrap-list-tools"><span class="muted">'+list.length+'개</span>'+inlinePicker(sortLabel,'sort',Object.entries({recent:'최근 스크랩순',many:'많이 스크랩한 순',old:'오래 스크랩한 순'}),f.sort)+'</div><div class="content-list">'+(list.length?list.map(c=>row(c,picking)).join(''):'<div class="empty"><h3>조건에 맞는 콘텐츠가 없어요</h3><p>유형이나 상태를 바꿔보세요.</p>'+button('필터 초기화','resetFilters','textbtn')+'</div>')+'</div><div class="list-footer"></div></section>'+(!picking?button('＋ 스크랩 추가','add','fab'):'');
 }
 function renderDetail(){
  const c=get(detailId);if(!c)return '<div class="empty">이 콘텐츠가 없어요.'+button('스크랩으로','toScrap','textbtn')+'</div>';
@@ -410,7 +424,7 @@ function renderDetail(){
 function forestRecordYear(c){if(c.completed&&c.completed!=='unknown')return c.completed.slice(0,4);const date=new Date(c.completedAt||c.saves?.[0]?.at||Date.now());return Number.isNaN(date.getTime())?now().slice(0,4):String(date.getFullYear())}
 function renderForest(){
  const items=Model.completed(state,year),stats=Model.stats(items),theme=state.themes[year]||'basic';
- return '<section><div class="row between">'+button(year+'년 나의 숲 ▾','years','textbtn')+'</div><div class="space"></div><div class="forest-scene"><div class="forest-viewport" id="forestViewport" data-theme="'+({autumn:'jungle',winter:'snow'}[theme]||theme)+'" tabindex="0" aria-label="숲. 더하기·빼기로 확대, 방향키로 이동">'+forestSVG(items,theme)+'</div><div class="forest-tools"><div>'+button('−','zoomOut','iconbtn','aria-label="숲 축소"')+button('＋','zoomIn','iconbtn','aria-label="숲 확대"')+button('전체 보기','fit','textbtn','id="fit" '+(zoomState.scale===1?'hidden':''))+'</div></div></div><div class="area"><strong>'+stats.n.toLocaleString()+'그루의 나무</strong><p class="forest-types">책 '+stats.book+' · 음반 '+stats.album+' · 영화 '+stats.movie+'</p><p class="forest-area-note">'+stats.area.toLocaleString()+'㎡'+(stats.n?' · '+esc(Model.compare(stats.n)):' · 첫 나무를 기다리고 있어요')+'</p></div>'+forestSummary(items)+'<div class="space"></div>'+button(stats.n?'월간 기록 보기':'오늘의 경험 시작하기',stats.n?'calendar':'toToday')+'<div class="row between">'+(stats.n?button('내 숲 공유하기','shareForest','textbtn'):button('월간 기록 보기','calendar','textbtn'))+button('장르별 나무 보기','forestLegend','textbtn')+button('테마 변경','themes','textbtn')+'</div><p class="muted tiny"></p></section>';
+ return '<section><div class="row between">'+inlinePicker(year+'년 나의 숲','year',[...new Set([now().slice(0,4),...state.items.filter(c=>c.completed).map(forestRecordYear)])].sort().reverse().map(y=>[y,y+'년']),year)+'</div><div class="space"></div><div class="forest-scene"><div class="forest-viewport" id="forestViewport" data-theme="'+({autumn:'jungle',winter:'snow'}[theme]||theme)+'" tabindex="0" aria-label="숲. 더하기·빼기로 확대, 방향키로 이동">'+forestSVG(items,theme)+'</div><div class="forest-tools"><div>'+button('−','zoomOut','iconbtn','aria-label="숲 축소"')+button('＋','zoomIn','iconbtn','aria-label="숲 확대"')+button('전체 보기','fit','textbtn','id="fit" '+(zoomState.scale===1?'hidden':''))+'</div></div></div><div class="area"><strong>'+stats.n.toLocaleString()+'그루의 나무</strong><p class="forest-types">책 '+stats.book+' · 음반 '+stats.album+' · 영화 '+stats.movie+'</p><p class="forest-area-note">'+stats.area.toLocaleString()+'㎡'+(stats.n?' · '+esc(Model.compare(stats.n)):' · 첫 나무를 기다리고 있어요')+'</p></div>'+forestSummary(items)+'<div class="space"></div>'+button(stats.n?'월간 기록 보기':'오늘의 경험 시작하기',stats.n?'calendar':'toToday')+'<div class="row between">'+(stats.n?button('내 숲 공유하기','shareForest','textbtn'):button('월간 기록 보기','calendar','textbtn'))+button('장르별 나무 보기','forestLegend','textbtn')+button('테마 변경','themes','textbtn')+'</div><p class="muted tiny"></p></section>';
 }
 function calendarHTML(period){
  const [y,m]=period.split('-').map(Number),start=new Date(y,m-1,1).getDay(),days=new Date(y,m,0).getDate();
@@ -450,7 +464,8 @@ function searchResults(q){
 }
 function infoForm(c=null,source=''){
  const d=c||{type:'book',title:$('catalogSearch')?.value||'',creator:'',source};
- showModal(c?'기본 정보 수정':'직접 입력','<form id="infoForm" data-edit="'+esc(c?.id||'')+'"><label for="contentType">유형</label><select id="contentType">'+Object.entries(typeName).map(([k,v])=>'<option value="'+k+'" '+(d.type===k?'selected':'')+'>'+v+'</option>').join('')+'</select>'+metadataFields(d)+'<label for="contentTitle">제목</label><input id="contentTitle" required maxlength="200" value="'+esc(d.title)+'"><label for="contentCreator">제작자 · 모르면 비워두세요</label><input id="contentCreator" maxlength="100" value="'+esc(d.creator)+'"><label for="contentSource">출처·메모 · 선택</label><input id="contentSource" maxlength="500" value="'+esc(d.source||'')+'"><label for="contentCover">표지 사진 · 선택</label><input id="contentCover" type="file" accept="image/*"><p class="muted tiny">표지는 스크랩과 달력에만 사용합니다.</p><div id="formError" class="form-error"></div><button class="primary" type="submit">'+(c?'수정 저장':'스크랩')+'</button></form>','info');
+ const locked=c?' disabled aria-disabled="true"':'';
+ showModal(c?'나의 분류 수정':'직접 입력','<form id="infoForm" data-edit="'+esc(c?.id||'')+'"><label for="contentType">유형</label><select id="contentType"'+locked+'>'+Object.entries(typeName).map(([k,v])=>'<option value="'+k+'" '+(d.type===k?'selected':'')+'>'+v+'</option>').join('')+'</select><label for="contentTitle">제목</label><input id="contentTitle" required maxlength="200" value="'+esc(d.title)+'"'+(c?' readonly':'')+'><label for="contentCreator">제작자 · 모르면 비워두세요</label><input id="contentCreator" maxlength="100" value="'+esc(d.creator)+'"'+(c?' readonly':'')+'>'+(c?'<p class="muted tiny">제목·제작자·유형은 공용 원본 정보라 여기서 바꾸지 않아요. 잘못 연결된 경우 다른 작품으로 다시 매칭합니다.</p>':'')+metadataFields(d)+'<label for="contentSource">출처·메모 · 선택</label><input id="contentSource" maxlength="500" value="'+esc(d.source||'')+'"><label for="contentCover">표지 사진 · 선택</label><input id="contentCover" type="file" accept="image/*"><p class="muted tiny">표지는 스크랩과 달력에만 사용합니다.</p><div id="formError" class="form-error"></div><button class="primary" type="submit">'+(c?'나의 분류 저장':'스크랩')+'</button></form>','info');
 }
 function saved(c,eventId){state.onboarded=true;dismissToast();closeModal();commit()}
 function addCatalog(index){const d=CATALOG[index],id=Model.uid(),c=Model.add(state,d,id);saved(c,id)}
@@ -598,10 +613,12 @@ function resetAll(){
  const keys=[];try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(/^songrim|^songlim/i.test(k))keys.push(k)}keys.forEach(k=>localStorage.removeItem(k))}catch{}
  photoFiles=[];candidates=[];ocrGeneration++;localWorker?.terminate();localWorker=null;undoAction=null;clearTimeout(toastTimer);$('toast').innerHTML='';state=Model.empty();authSession={signedIn:false,finished:false};authRoute='welcome';persist();view='today';closeModal();render();toast('모든 스크랩과 기록을 삭제했어요.');
 }
-function yearsMenu(){
- const years=[...new Set([now().slice(0,4),...state.items.filter(c=>c.completed).map(forestRecordYear)])].sort().reverse();
- showModal('연도 선택',years.map(y=>button(y+'년'+(y===year?' ✓':''),'year','menu-row','data-year="'+y+'"')).join(''),'years');
-}
+function inlinePicker(label,kind,options,value){return '<div class="inline-picker">'+button(esc(label)+' ▾','inlinePicker',kind==='sort'?'sort-button':'textbtn','data-picker="'+kind+'" aria-expanded="false" aria-controls="picker-'+kind+'"')+'<div id="picker-'+kind+'" class="inline-picker-panel '+(kind==='year'?'year-picker':'')+'" role="group" aria-label="'+(kind==='year'?'연도 선택':'정렬')+'" hidden>'+options.map(([key,text])=>button('<span>'+esc(text)+'</span><span aria-hidden="true">'+(key===value?'✓':'')+'</span>',kind==='year'?'year':'inlineSort','','data-'+(kind==='year'?'year':'value')+'="'+esc(key)+'" aria-pressed="'+(key===value)+'"')).join('')+'</div></div>'}
+function closeInlinePickers(){document.querySelectorAll('.inline-picker').forEach(el=>{el.querySelector('button').setAttribute('aria-expanded','false');el.querySelector('.inline-picker-panel').hidden=true})}
+function toggleInlinePicker(b){const opening=b.getAttribute('aria-expanded')!=='true';closeInlinePickers();if(opening){b.setAttribute('aria-expanded','true');document.getElementById(b.getAttribute('aria-controls')).hidden=false}}
+document.addEventListener('click',e=>{if(!e.target.closest('.inline-picker'))closeInlinePickers()});
+document.addEventListener('keydown',e=>{const panel=e.target.closest('.inline-picker');if(!panel)return;const trigger=panel.querySelector('button');if(e.key==='Escape'){closeInlinePickers();trigger.focus();e.preventDefault()}if(['ArrowDown','ArrowUp'].includes(e.key)){e.preventDefault();if(trigger.getAttribute('aria-expanded')!=='true')toggleInlinePicker(trigger);const buttons=[...panel.querySelectorAll('.inline-picker-panel button')],index=buttons.indexOf(document.activeElement);buttons[(index+(e.key==='ArrowDown'?1:-1)+buttons.length)%buttons.length]?.focus()}});
+document.addEventListener('focusin',e=>{if(!e.target.closest('.inline-picker'))closeInlinePickers()});
 function editCompletion(id){
  const c=get(id);showModal('완료일 수정','<form id="completionForm" data-id="'+id+'"><label for="completionDate">완료 날짜</label><input id="completionDate" type="date" max="'+now()+'" value="'+(c.completed==='unknown'?'':c.completed)+'" required><p class="creator">해당 날짜의 숲과 달력에 반영합니다.</p><div id="formError" class="form-error"></div><button type="submit" class="primary">수정 저장</button></form>','completion');
 }
@@ -652,9 +669,8 @@ document.addEventListener('click',async e=>{
  if(a==='filterType'){state.filters.type=b.dataset.type;commit();return}
  if(a==='filterStatus'){state.filters.status=state.filters.status===b.dataset.status?'all':b.dataset.status;commit();return}
  if(a==='resetFilters'){state.filters={q:'',status:'all',type:'all',sort:'recent'};commit();return}
- if(a==='filters'){
-  showModal('정렬','<form id="filterForm"><label for="filterSort">콘텐츠 정렬</label><select id="filterSort">'+Object.entries({recent:'최근 스크랩순',many:'많이 스크랩한 순',old:'오래 스크랩한 순'}).map(([k,v])=>'<option value="'+k+'" '+(k===state.filters.sort?'selected':'')+'>'+v+'</option>').join('')+'</select><button type="submit" class="primary">적용</button></form>','filter');return
- }
+ if(a==='inlinePicker'){toggleInlinePicker(b);return}
+ if(a==='inlineSort'){if(['recent','many','old'].includes(b.dataset.value)){state.filters.sort=b.dataset.value;commit();document.querySelector('[data-picker=sort]')?.focus()}return}
  if(a==='record'){record(id);return}
  if(a==='complete'){complete(id);return}
  if(a==='undoComplete'){Model.undoComplete(state,id);closeModal();commit();toast('완료를 취소했어요. 이전 경험 기록은 남아 있어요.');return}
@@ -675,8 +691,7 @@ document.addEventListener('click',async e=>{
   window.open(url,'_blank','noopener,noreferrer');return
  }
  if(a==='track'){c.trackIndex=Number(b.dataset.index);commit();return}
- if(a==='years'){yearsMenu();return}
- if(a==='year'){year=b.dataset.year;zoomState={scale:1,x:0,y:0};closeModal();render();return}
+ if(a==='year'){year=b.dataset.year;zoomState={scale:1,x:0,y:0};render();document.querySelector('[data-picker=year]')?.focus();return}
  if(a==='themes'){themes();return}
  if(a==='theme'){state.themes[year]=b.dataset.theme;closeModal();commit();return}
  if(a==='zoomIn'||a==='zoomOut'){zoomState.scale=Math.max(1,Math.min(3.5,zoomState.scale+(a==='zoomIn'?.3:-.3)));window.applyForest?.();return}
@@ -737,7 +752,7 @@ document.addEventListener('change',async e=>{
 document.addEventListener('submit',async e=>{
  e.preventDefault();const f=e.target;
  if(f.id==='infoForm'){
-  const old=f.dataset.edit?get(f.dataset.edit):null,data={type:$('contentType').value,title:$('contentTitle').value.trim(),creator:$('contentCreator').value.trim(),source:$('contentSource').value.trim(),genre:$('contentGenre').value.trim(),treeCategory:$('contentCategory').value,length:Number($('contentLength').value)||null};
+  const old=f.dataset.edit?get(f.dataset.edit):null,type=old?.type||$('contentType').value,genre=$('contentGenre').value,data={type,title:old?.title||$('contentTitle').value.trim(),creator:old?.creator||$('contentCreator').value.trim(),source:$('contentSource').value.trim(),genre,treeCategory:category({type,genre}).id,length:Number($('contentLength').value)||null};
   if(!data.title){$('formError').textContent='제목을 입력해주세요.';return}
   const submit=f.querySelector('[type=submit]');submit.disabled=true;
   try{
@@ -746,7 +761,7 @@ document.addEventListener('submit',async e=>{
    if(old){
     const duplicate=state.items.find(c=>c.id!==old.id&&c.type===data.type&&Model.norm(c.title)===Model.norm(data.title)&&Model.norm(c.creator)===Model.norm(data.creator));
     if(duplicate){$('formError').textContent='같은 작품이 이미 있어요. 중복된 정보로 바꾸지 않았습니다.';submit.disabled=false;return}
-    Object.assign(old,data);closeModal();commit();toast('콘텐츠 정보를 수정했어요.');
+    Object.assign(old,data);closeModal();commit();toast('나의 장르 분류를 저장했어요.');
    }else{const event=Model.uid(),c=Model.add(state,data,event);saved(c,event)}
   }catch(err){if($('formError'))$('formError').textContent=err.message;submit.disabled=false}
  }
