@@ -793,22 +793,22 @@ function forestVisitorArt(items,animated=true){
  if(chosen.id==='hedgehog')return '<g data-visitor="hedgehog" class="'+cls+'" transform="translate(520 390)"><path d="M-15 4-10-6-4-3 1-12 6-4 13-8 15 4Z" fill="#756758"/><ellipse cx="7" cy="4" rx="13" ry="7" fill="#B49374"/><circle cx="17" cy="1" r="1.2" fill="#3B3733"/></g>';
  return '<g data-visitor="firefly" class="'+cls+'" transform="translate(335 270)"><circle r="11" fill="#F6E5A6" opacity=".18"/><circle r="5" fill="#F0D66F" opacity=".5"/><circle r="2" fill="#F7D64D"/><path d="M-2-3-7-8M2-3 7-8" stroke="#6C705C" stroke-width="1"/></g>';
 }
+const FOREST_GRID_SIZE=25;
 const FOREST_EXPANSION_STAGES=[
- {id:0,label:'빈 터',maxTrees:0,cols:3,rows:3,boardW:150,boardH:84,treeScale:.74},
- {id:1,label:'첫 터',maxTrees:5,cols:4,rows:4,boardW:210,boardH:118,treeScale:.69},
- {id:2,label:'작은 숲',maxTrees:15,cols:6,rows:6,boardW:270,boardH:152,treeScale:.62},
- {id:3,label:'첫 숲',maxTrees:40,cols:8,rows:8,boardW:340,boardH:190,treeScale:.54},
- {id:4,label:'자라는 숲',maxTrees:80,cols:11,rows:11,boardW:430,boardH:240,treeScale:.49},
- {id:5,label:'깊어지는 숲',maxTrees:140,cols:14,rows:14,boardW:505,boardH:282,treeScale:.45},
- {id:6,label:'깊은 숲',maxTrees:200,cols:17,rows:17,boardW:570,boardH:318,treeScale:.41},
- {id:7,label:'넓은 숲',maxTrees:300,cols:20,rows:20,boardW:630,boardH:350,treeScale:.38}
+ {id:0,label:'빈 터',maxTrees:0,cols:3,rows:3,boardW:150,boardH:84,treeScale:.72},
+ {id:1,label:'첫 터',maxTrees:5,cols:4,rows:4,boardW:220,boardH:124,treeScale:.66},
+ {id:2,label:'작은 숲',maxTrees:15,cols:7,rows:7,boardW:310,boardH:174,treeScale:.57},
+ {id:3,label:'첫 숲',maxTrees:40,cols:10,rows:10,boardW:410,boardH:228,treeScale:.49},
+ {id:4,label:'자라는 숲',maxTrees:80,cols:14,rows:14,boardW:525,boardH:292,treeScale:.42},
+ {id:5,label:'깊어지는 숲',maxTrees:140,cols:18,rows:18,boardW:590,boardH:328,treeScale:.37},
+ {id:6,label:'깊은 숲',maxTrees:200,cols:21,rows:21,boardW:630,boardH:350,treeScale:.34},
+ {id:7,label:'넓은 숲',maxTrees:300,cols:25,rows:25,boardW:665,boardH:370,treeScale:.31}
 ];
 function forestLayoutConfig(n){
  const count=Math.max(0,n||0);
  let idx=FOREST_EXPANSION_STAGES.findIndex(s=>count<=s.maxTrees);
  if(idx<0)idx=FOREST_EXPANSION_STAGES.length-1;
- const stage=FOREST_EXPANSION_STAGES[idx];
- const next=FOREST_EXPANSION_STAGES[idx+1]||null;
+ const stage=FOREST_EXPANSION_STAGES[idx],next=FOREST_EXPANSION_STAGES[idx+1]||null;
  const nextExpandAt=next?stage.maxTrees+1:null;
  return {...stage,tier:idx,capacity:stage.cols*stage.rows,nextExpandAt,remainingToExpand:next?Math.max(0,nextExpandAt-count):0};
 }
@@ -816,200 +816,102 @@ function forestExpansionMeta(n){
  const cfg=forestLayoutConfig(n);
  return {label:cfg.label,cols:cfg.cols,rows:cfg.rows,tiles:cfg.capacity,nextAt:cfg.nextExpandAt,remaining:cfg.remainingToExpand};
 }
-function forestPlacements(items,cfg){
- if(!items.length)return [];
- const n=items.length;
- const gridCols=cfg.cols,gridRows=cfg.rows;
- const unit=k=>(hash('forest-grid-v4|'+cfg.tier+'|'+k)%1000000)/1000000;
- const slots=[];
- for(let r=0;r<gridRows;r++)for(let c=0;c<gridCols;c++){
-  const edge=Math.min(c,gridCols-1-c,r,gridRows-1-r);
-  const centerDX=c-(gridCols-1)/2,centerDY=r-(gridRows-1)/2;
-  const centerDist=Math.hypot(centerDX,centerDY);
-  const jitterX=(unit(r+'|'+c+'|jx')-.5)*.18;
-  const jitterY=(unit(r+'|'+c+'|jy')-.5)*.18;
-  slots.push({
-   rx:(c-r)+jitterX,
-   ry:(c+r)+jitterY,
-   gx:c,gy:r,
-   edge,centerDist,
-   key:hash('slot-v4|'+cfg.tier+'|'+r+'|'+c)
-  });
- }
- // Use the whole tile field for the current expansion stage, but keep natural holes.
- const available=[...slots].sort((a,b)=>a.key-b.key);
- const placed=[];
- items.forEach((item,i)=>{
-  const profile=treeVisualProfile(item),sizeVar=treeSizeVariance(item);
-  let bestIndex=0,bestScore=-1e9;
-  available.forEach((slot,j)=>{
-   let minAny=99,minSame=99,minShape=99;
-   for(const q of placed){
-    const d=Math.hypot(slot.gx-q.gx,slot.gy-q.gy);
-    minAny=Math.min(minAny,d);
-    if(q.profile.species.id===profile.species.id)minSame=Math.min(minSame,d);
-    if(q.profile.shape===profile.shape)minShape=Math.min(minShape,d);
-   }
-   const spread=Math.min(minAny,4.2)*6.8;
-   const samePenalty=Math.min(minSame,5.0)*8.2;
-   const shapePenalty=Math.min(minShape,4.0)*2.6;
-   const edgePreference=Math.min(slot.edge,3.2)*.55;
-   const centerEase=Math.max(0,4.6-slot.centerDist)*.16;
-   const noise=unit(i+'|'+slot.key+'|assign')*.7;
-   const score=spread+samePenalty+shapePenalty+edgePreference+centerEase+noise;
-   if(score>bestScore){bestScore=score;bestIndex=j;}
-  });
-  const slot=available.splice(bestIndex,1)[0]||slots[i%slots.length];
-  placed.push({rx:slot.rx,ry:slot.ry,gx:slot.gx,gy:slot.gy,profile,scale:cfg.treeScale*profile.scaleBias*sizeVar,sizeVar});
- });
- return placed;
+function forestStageOrigin(cfg){
+ return {x:Math.floor((FOREST_GRID_SIZE-cfg.cols)/2),y:Math.floor((FOREST_GRID_SIZE-cfg.rows)/2)};
 }
-
-
-function forestDecorations(cfg,cx,cy,treePoints=[],theme='basic'){
- const pieces=[];
- const rock=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".78"><ellipse cy="7" rx="14" ry="4" fill="#7A8D83" opacity=".12"/><path d="M-10 4Q-13-6-5-11Q3-15 9-8Q14-2 9 5Z" fill="#9DA79F"/><path d="M-5-7Q1-11 6-7" fill="none" stroke="#B8C0B9" stroke-width="1.2"/></g>';
+function forestFeatureKeys(cfg){
+ const keys=[];
+ if(cfg.tier>=2)keys.push('10,9');
+ if(cfg.tier>=3)keys.push('8,13','13,15','14,8','7,10');
+ if(cfg.tier>=4)keys.push('15,10','16,10','15,11','16,11');
+ if(cfg.tier>=5)keys.push('7,16','17,14','9,17');
+ return new Set(keys);
+}
+function parseForestTile(v){
+ if(!v)return null;
+ const raw=typeof v==='string'?v.replace(/^g:/,''):'';
+ const m=raw.match(/^(\d+),(\d+)$/);
+ if(!m)return null;
+ const gx=Number(m[1]),gy=Number(m[2]);
+ if(!Number.isInteger(gx)||!Number.isInteger(gy)||gx<0||gy<0||gx>=FOREST_GRID_SIZE||gy>=FOREST_GRID_SIZE)return null;
+ return {gx,gy,key:gx+','+gy};
+}
+function forestPlacements(items,cfg){
+ if(!items.length)return {placements:[],emptySlots:[],featureSlots:[],changed:false};
+ const origin=forestStageOrigin(cfg),unit=k=>(hash('forest-grid-v6|'+k)%1000000)/1000000;
+ const slots=[];
+ for(let r=0;r<cfg.rows;r++)for(let c=0;c<cfg.cols;c++){
+  const gx=origin.x+c,gy=origin.y+r,key=gx+','+gy;
+  const edge=Math.min(c,cfg.cols-1-c,r,cfg.rows-1-r);
+  const centerDX=c-(cfg.cols-1)/2,centerDY=r-(cfg.rows-1)/2;
+  const jitterX=(unit(key+'|jx')-.5)*.12,jitterY=(unit(key+'|jy')-.5)*.12;
+  slots.push({gx,gy,key,c,r,edge,centerDist:Math.hypot(centerDX,centerDY),rx:(c-r)+jitterX,ry:(c+r)+jitterY});
+ }
+ const slotMap=new Map(slots.map(s=>[s.key,s])),featureKeys=forestFeatureKeys(cfg);
+ const featureSlots=slots.filter(s=>featureKeys.has(s.key)),treeSlots=slots.filter(s=>!featureKeys.has(s.key));
+ const taken=new Set(),placements=[];let changed=false;
+ const ordered=[...items].sort((a,b)=>((a.completedAt||0)-(b.completedAt||0))||a.id.localeCompare(b.id));
+ const add=(item,slot)=>{const profile=treeVisualProfile(item),sizeVar=treeSizeVariance(item);placements.push({item,slot,profile,scale:cfg.treeScale*profile.scaleBias*sizeVar,sizeVar});taken.add(slot.key)};
+ ordered.forEach(item=>{const saved=parseForestTile(item.forestTile);if(saved&&slotMap.has(saved.key)&&!featureKeys.has(saved.key)&&!taken.has(saved.key))add(item,slotMap.get(saved.key));});
+ ordered.forEach(item=>{
+  if(placements.some(p=>p.item===item))return;
+  const profile=treeVisualProfile(item),sizeVar=treeSizeVariance(item),available=treeSlots.filter(s=>!taken.has(s.key));
+  let best=available[0],bestScore=-1e9;
+  available.forEach(slot=>{
+   let minAny=99,minSame=99,minShape=99;
+   for(const q of placements){const d=Math.hypot(slot.gx-q.slot.gx,slot.gy-q.slot.gy);minAny=Math.min(minAny,d);if(q.profile.species.id===profile.species.id)minSame=Math.min(minSame,d);if(q.profile.shape===profile.shape)minShape=Math.min(minShape,d)}
+   const tooClose=minAny<1.35?-140:0;
+   const score=tooClose+Math.min(minAny,6)*9.2+Math.min(minSame,7)*4.1+Math.min(minShape,5)*2.2+Math.min(slot.edge,5)*.9+slot.centerDist*.24+unit(item.id+'|'+slot.key+'|assign')*.8;
+   if(score>bestScore){best=slot;bestScore=score}
+  });
+  if(best){item.forestTile='g:'+best.key;changed=true;placements.push({item,slot:best,profile,scale:cfg.treeScale*profile.scaleBias*sizeVar,sizeVar});taken.add(best.key)}
+ });
+ return {placements,emptySlots:treeSlots.filter(s=>!taken.has(s.key)),featureSlots,changed};
+}
+function forestDecorations(cfg,project,theme='basic',emptySlots=[],featureSlots=[]){
+ const pieces=[],featureMap=new Map(featureSlots.map(s=>[s.key,s]));
+ const at=(key)=>{const s=featureMap.get(key);return s?project(s):null};
+ const rock=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".82"><ellipse cy="7" rx="14" ry="4" fill="#7A8D83" opacity=".12"/><path d="M-10 4Q-13-6-5-11Q3-15 9-8Q14-2 9 5Z" fill="#9DA79F"/><path d="M-5-7Q1-11 6-7" fill="none" stroke="#B8C0B9" stroke-width="1.2"/></g>';
  const stump=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".84"><ellipse cy="7" rx="11" ry="3.2" fill="#6F8177" opacity=".12"/><path d="M-6-8L-7 4Q0 9 7 4L6-8Z" fill="#8B6B53"/><ellipse cy="-8" rx="6" ry="3" fill="#B9906A"/><ellipse cy="-8" rx="3" ry="1.4" fill="none" stroke="#8D6C52" stroke-width=".9"/></g>';
  const branch=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".76"><path d="M-15 4Q-4-3 11-1M1-2L8-9M-7 1L-12-6" fill="none" stroke="#806750" stroke-width="3" stroke-linecap="round"/><ellipse cx="9" cy="-8" rx="4" ry="2.2" fill="#839B6D" transform="rotate(-22 9 -8)"/></g>';
- const grass=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".68"><path d="M0 5Q-1-5-6-11M0 5Q1-7 1-13M0 5Q4-4 8-9M0 5Q-6-2-10-4" fill="none" stroke="#78956E" stroke-width="2" stroke-linecap="round"/></g>';
+ const grass=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".7"><path d="M0 5Q-1-5-6-11M0 5Q1-7 1-13M0 5Q4-4 8-9M0 5Q-6-2-10-4" fill="none" stroke="#78956E" stroke-width="2" stroke-linecap="round"/></g>';
+ const flowers=(x,y,s=1,variant=0)=>{const palettes=[['#F8F2DE','#D9B95A','#B9C98D'],['#F7E3D7','#D8A36F','#B7C78A'],['#F8F6EE','#D7B74E','#C5D29A']][variant%3],dots=[[-9,-1],[-2,3],[5,-2],[11,2],[1,7]];return '<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".96"><ellipse cx="0" cy="8" rx="18" ry="5" fill="#6F8E69" opacity=".06"/><ellipse cx="-13" cy="8" rx="5" ry="2.2" fill="'+palettes[2]+'" opacity=".8"/><ellipse cx="13" cy="9" rx="4.8" ry="2.1" fill="'+palettes[2]+'" opacity=".78"/>'+dots.map(d=>'<g transform="translate('+d[0]+' '+d[1]+')"><circle cy="-2" r="2" fill="'+palettes[0]+'"/><circle cx="2" r="1.8" fill="'+palettes[0]+'"/><circle cx="-2" r="1.8" fill="'+palettes[0]+'"/><circle cy="2" r="1.8" fill="'+palettes[0]+'"/><circle r=".9" fill="'+palettes[1]+'"/></g>').join('')+'</g>'};
+ const well=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".95"><ellipse cy="10" rx="16" ry="5" fill="#647D70" opacity=".08"/><ellipse cy="5" rx="13" ry="5" fill="#AFA79A"/><ellipse cy="4" rx="9" ry="3.2" fill="#8FC7D6"/><path d="M-12 5V-8M12 5V-8M-12-7Q0-19 12-7" fill="none" stroke="#806B59" stroke-width="2.5" stroke-linecap="round"/><path d="M-5-14H5" stroke="#806B59" stroke-width="2.4" stroke-linecap="round"/></g>';
+ const pond=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".96"><ellipse cy="8" rx="31" ry="10" fill="#678678" opacity=".08"/><path d="M-30 2Q-25-12-8-12Q5-18 23-8Q34 1 24 13Q9 19-8 15Q-27 16-30 2Z" fill="#8CC5D7"/><path d="M-16-3Q-5-9 7-4" fill="none" stroke="#DFF3F7" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="-25" cy="7" rx="7" ry="2.5" fill="#9CB583" transform="rotate(-26 -25 7)"/><ellipse cx="25" cy="7" rx="7" ry="2.5" fill="#9CB583" transform="rotate(20 25 7)"/></g>';
  const snowRock=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".9"><ellipse cy="7" rx="15" ry="4" fill="#8DA0A5" opacity=".12"/><path d="M-11 4Q-13-5-5-12Q4-15 10-8Q14-1 9 5Z" fill="#8F9D9F"/><path d="M-9-3Q-4-12 5-10Q10-8 11-3Q1-6-9-3Z" fill="#F8FBFC"/></g>';
  const snowPatch=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".82"><ellipse rx="20" ry="6" fill="#F8FBFC"/><ellipse cx="7" cy="-1" rx="10" ry="3.6" fill="#E4EEF2" opacity=".72"/></g>';
  const snowBranch=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".8"><path d="M-16 4Q-4-3 12-1M1-2L9-9M-8 1L-13-6" fill="none" stroke="#756B61" stroke-width="3" stroke-linecap="round"/><path d="M-12-1Q-2-6 8-4" fill="none" stroke="#F8FBFC" stroke-width="2.5" stroke-linecap="round"/></g>';
- const berryTree=(x,y,s=1,shape=0)=>{
-  const crowns=[
-   '<ellipse cx="0" cy="-26" rx="18" ry="13" fill="#627A55"/><ellipse cx="-12" cy="-17" rx="13" ry="10" fill="#768A63"/><ellipse cx="12" cy="-18" rx="12" ry="9" fill="#5F7650"/>',
-   '<polygon points="0,-44 -18,-24 0,-16 18,-24" fill="#667E57"/><polygon points="0,-34 -16,-14 0,-8 16,-14" fill="#7C8F68"/>',
-   '<ellipse cx="-6" cy="-25" rx="14" ry="11" fill="#6D845F"/><ellipse cx="10" cy="-29" rx="13" ry="10" fill="#5E7652"/><ellipse cx="6" cy="-16" rx="11" ry="9" fill="#82976D"/>'
-  ][shape%3];
-  const berries=[[-10,-27],[-2,-19],[8,-28],[13,-17],[-14,-16],[4,-33]].map((b,i)=>'<circle cx="'+b[0]+'" cy="'+b[1]+'" r="'+(i%2?2.4:2.8)+'" fill="'+(i%2?'#B94045':'#D35252')+'"/>').join('');
-  const snowCaps=shape===1
-    ? '<path d="M-12-27Q-6-31 0-28Q6-31 12-27" fill="#F8FBFC" opacity=".92"/><path d="M-9-16Q0-20 9-16" fill="#F8FBFC" opacity=".88"/>'
-    : '<ellipse cx="-3" cy="-32" rx="9" ry="3.6" fill="#F8FBFC" opacity=".94"/><ellipse cx="13" cy="-22" rx="7" ry="3" fill="#F8FBFC" opacity=".9"/>';
-  return '<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".95">'
-   +'<ellipse cy="10" rx="16" ry="4" fill="#8DA0A5" opacity=".12"/>'
-   +'<ellipse cx="0" cy="11" rx="18" ry="5" fill="#F8FBFC" opacity=".94"/>'
-   +'<path d="M0 11Q-1-4 1-34M0-10L-9-20M1-15L11-24" fill="none" stroke="#796A5B" stroke-width="3.6" stroke-linecap="round"/>'
-   +crowns+snowCaps+berries+'</g>';
- };
+ const berryTree=(x,y,s=1,shape=0)=>{const crowns=['<ellipse cx="0" cy="-26" rx="18" ry="13" fill="#627A55"/><ellipse cx="-12" cy="-17" rx="13" ry="10" fill="#768A63"/><ellipse cx="12" cy="-18" rx="12" ry="9" fill="#5F7650"/>','<polygon points="0,-44 -18,-24 0,-16 18,-24" fill="#667E57"/><polygon points="0,-34 -16,-14 0,-8 16,-14" fill="#7C8F68"/>','<ellipse cx="-6" cy="-25" rx="14" ry="11" fill="#6D845F"/><ellipse cx="10" cy="-29" rx="13" ry="10" fill="#5E7652"/><ellipse cx="6" cy="-16" rx="11" ry="9" fill="#82976D"/>'][shape%3],berries=[[-10,-27],[-2,-19],[8,-28],[13,-17],[-14,-16],[4,-33]].map((b,i)=>'<circle cx="'+b[0]+'" cy="'+b[1]+'" r="'+(i%2?2.3:2.7)+'" fill="'+(i%2?'#B94045':'#D35252')+'"/>').join('');return '<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".95"><ellipse cy="10" rx="16" ry="4" fill="#8DA0A5" opacity=".12"/><ellipse cx="0" cy="11" rx="18" ry="5" fill="#F8FBFC" opacity=".94"/><path d="M0 11Q-1-4 1-34M0-10L-9-20M1-15L11-24" fill="none" stroke="#796A5B" stroke-width="3.6" stroke-linecap="round"/>'+crowns+'<ellipse cx="-3" cy="-32" rx="9" ry="3.6" fill="#F8FBFC" opacity=".94"/>'+berries+'</g>'};
+ const open=[...emptySlots].sort((a,b)=>(hash('decor-v6|'+a.key)-hash('decor-v6|'+b.key)));
+ const take=(count,min=2.4)=>{const out=[];for(const s of open){if(out.some(q=>Math.hypot(s.gx-q.gx,s.gy-q.gy)<min))continue;out.push(s);if(out.length>=count)break}return out};
  if(theme==='snow'){
-  if(!treePoints.length)return '';
-  if(cfg.maxTrees<=5){
-   pieces.push(snowPatch((cx+cfg.boardW*.18).toFixed(1),(cy+cfg.boardH*.12).toFixed(1),.48));
-   pieces.push(berryTree((cx-cfg.boardW*.12).toFixed(1),(cy-cfg.boardH*.05).toFixed(1),.42,0));
-  }else if(cfg.maxTrees<=15){
-   pieces.push(snowRock((cx+cfg.boardW*.25).toFixed(1),(cy-cfg.boardH*.10).toFixed(1),.58));
-   pieces.push(snowPatch((cx-cfg.boardW*.16).toFixed(1),(cy+cfg.boardH*.16).toFixed(1),.52));
-   pieces.push(berryTree((cx-cfg.boardW*.14).toFixed(1),(cy-cfg.boardH*.14).toFixed(1),.46,1));
-  }else{
-   pieces.push(snowRock((cx+cfg.boardW*.27).toFixed(1),(cy-cfg.boardH*.12).toFixed(1),.82));
-   pieces.push(snowRock((cx-cfg.boardW*.24).toFixed(1),(cy+cfg.boardH*.20).toFixed(1),.64));
-   pieces.push(snowBranch((cx+cfg.boardW*.08).toFixed(1),(cy+cfg.boardH*.27).toFixed(1),.8));
-   pieces.push(snowPatch((cx-cfg.boardW*.10).toFixed(1),(cy-cfg.boardH*.24).toFixed(1),.78));
-   pieces.push(snowPatch((cx+cfg.boardW*.20).toFixed(1),(cy+cfg.boardH*.12).toFixed(1),.6));
-   pieces.push(berryTree((cx-cfg.boardW*.23).toFixed(1),(cy-cfg.boardH*.07).toFixed(1),.58,0));
-   pieces.push(berryTree((cx+cfg.boardW*.24).toFixed(1),(cy+cfg.boardH*.01).toFixed(1),.54,2));
-   pieces.push(berryTree((cx-cfg.boardW*.03).toFixed(1),(cy+cfg.boardH*.23).toFixed(1),.48,1));
-  }
+  const picks=take(cfg.tier<=1?1:cfg.tier<=3?3:5,3);
+  picks.forEach((s,i)=>{const p=project(s);if(i===0)pieces.push(berryTree(p.x.toFixed(1),p.y.toFixed(1),cfg.tier<=2?.43:.50,i));else if(i%3===1)pieces.push(snowRock(p.x.toFixed(1),p.y.toFixed(1),.72));else pieces.push(snowPatch(p.x.toFixed(1),p.y.toFixed(1),.65))});
+  const extra=cfg.tier>=4?take(7,3.4).slice(5):[];extra.forEach((s,i)=>{const p=project(s);pieces.push(i%2?berryTree(p.x.toFixed(1),p.y.toFixed(1),.45,i+1):snowBranch(p.x.toFixed(1),p.y.toFixed(1),.7))});
   return pieces.join('');
  }
- const flowers=(x,y,s=1,variant=0)=>{
-  // Flat floor flowers seen as top-down ground cover, not upright stems.
-  const palettes=[
-   ['#F8F2DE','#D9B95A','#B9C98D'],
-   ['#F7E3D7','#D8A36F','#B7C78A'],
-   ['#F8F6EE','#D7B74E','#C5D29A']
-  ][variant%3];
-  const rosettes=[[-12,-1,3.6],[-4,3,3.2],[5,-2,3.4],[12,2,3.0],[1,8,2.8]];
-  const petals=rosettes.map(r=>
-   '<g transform="translate('+r[0]+' '+r[1]+') scale('+(r[2]/3.2).toFixed(2)+')">'
-   +'<ellipse cx="0" cy="0" rx="6" ry="3.2" fill="'+palettes[2]+'" opacity=".28"/>'
-   +'<circle cx="0" cy="-2.2" r="2.1" fill="'+palettes[0]+'"/>'
-   +'<circle cx="1.9" cy="-.4" r="1.8" fill="'+palettes[0]+'"/>'
-   +'<circle cx="-1.9" cy="-.4" r="1.8" fill="'+palettes[0]+'"/>'
-   +'<circle cx="0" cy="1.7" r="1.8" fill="'+palettes[0]+'"/>'
-   +'<circle cx="0" cy="0" r=".95" fill="'+palettes[1]+'"/>'
-   +'</g>'
-  ).join('');
-  const leafs=''
-   +'<ellipse cx="-16" cy="8" rx="5.2" ry="2.4" fill="#B7C98D" opacity=".85" transform="rotate(-18 -16 8)"/>'
-   +'<ellipse cx="15" cy="9" rx="4.8" ry="2.2" fill="#B7C98D" opacity=".82" transform="rotate(16 15 9)"/>'
-   +'<ellipse cx="0" cy="11" rx="6.5" ry="2.6" fill="#C9D8A7" opacity=".72"/>';
-  return '<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".96">'
-   +'<ellipse cx="0" cy="8" rx="19" ry="5" fill="#6F8E69" opacity=".06"/>'
-   +leafs+petals+'</g>';
- };
-
- if(!treePoints.length)return '';
- if(cfg.maxTrees<=5){
-  pieces.push(grass((cx-cfg.boardW*.22).toFixed(1),(cy+cfg.boardH*.20).toFixed(1),.52));
- }else if(cfg.maxTrees<=15){
-  pieces.push(rock((cx+cfg.boardW*.26).toFixed(1),(cy-cfg.boardH*.11).toFixed(1),.58));
-  pieces.push(grass((cx-cfg.boardW*.20).toFixed(1),(cy+cfg.boardH*.22).toFixed(1),.58));
- }else{
-  pieces.push(rock((cx+cfg.boardW*.28).toFixed(1),(cy-cfg.boardH*.13).toFixed(1),.82));
-  pieces.push(stump((cx-cfg.boardW*.28).toFixed(1),(cy+cfg.boardH*.18).toFixed(1),.78));
-  pieces.push(branch((cx+cfg.boardW*.12).toFixed(1),(cy+cfg.boardH*.28).toFixed(1),.78));
-  pieces.push(grass((cx-cfg.boardW*.12).toFixed(1),(cy-cfg.boardH*.28).toFixed(1),.75));
- }
- // Pick the widest real gaps instead of relying on a few fixed coordinates.
- // Dense forests therefore still get visible flowers, while the clumps stay on the floor between trees.
- const candidateSeeds=[
-  [-.34,-.02],[-.30,.13],[-.27,-.14],[-.21,.25],[-.18,.04],[-.15,-.23],[-.09,.17],[-.07,-.08],
-  [-.02,.29],[.00,.07],[.04,-.24],[.08,.20],[.11,-.04],[.15,.29],[.18,-.18],[.22,.10],
-  [.25,-.03],[.28,.20],[.31,-.13],[.34,.04],[-.24,-.02],[-.12,.30],[.02,-.12],[.14,.08],[.26,.28]
- ];
- const candidates=candidateSeeds.map((p,i)=>{
-  const x=cx+p[0]*cfg.boardW,y=cy+p[1]*cfg.boardH;
-  const nearest=treePoints.length?Math.min(...treePoints.map(t=>Math.hypot(x-t.x,y-t.y))):999;
-  return {x,y,i,nearest};
- }).sort((a,b)=>b.nearest-a.nearest);
- const chosen=[];
- const desired=cfg.maxTrees<=5?1:cfg.maxTrees<=15?2:Math.min(7,Math.max(5,Math.round(cfg.boardW/115)));
- for(const c of candidates){
-  // Enough breathing room to read as a ground detail, but not so strict that all flowers disappear.
-  if(c.nearest<25)continue;
-  if(chosen.some(t=>Math.hypot(c.x-t.x,c.y-t.y)<45))continue;
-  chosen.push(c);
-  if(chosen.length>=desired)break;
- }
- // Fallback: guarantee only the stage-appropriate number of floor flowers.
- if(chosen.length<desired){
-  for(const c of candidates){
-   if(chosen.includes(c)||c.nearest<18)continue;
-   if(chosen.some(t=>Math.hypot(c.x-t.x,c.y-t.y)<38))continue;
-   chosen.push(c);
-   if(chosen.length>=desired)break;
-  }
- }
- chosen.forEach((p,i)=>pieces.push(flowers(p.x.toFixed(1),p.y.toFixed(1),.96+(i%3)*.07,p.i)));
+ [['10,9','flower'],['8,13','well'],['13,15','rock'],['14,8','stump'],['7,10','grass'],['7,16','branch'],['17,14','rock'],['9,17','flower']].forEach(([key,kind],i)=>{const p=at(key);if(!p)return;if(kind==='flower')pieces.push(flowers(p.x.toFixed(1),p.y.toFixed(1),.9,i));if(kind==='well')pieces.push(well(p.x.toFixed(1),p.y.toFixed(1),.82));if(kind==='rock')pieces.push(rock(p.x.toFixed(1),p.y.toFixed(1),.76));if(kind==='stump')pieces.push(stump(p.x.toFixed(1),p.y.toFixed(1),.74));if(kind==='grass')pieces.push(grass(p.x.toFixed(1),p.y.toFixed(1),.72));if(kind==='branch')pieces.push(branch(p.x.toFixed(1),p.y.toFixed(1),.74))});
+ if(cfg.tier>=4){const waterKeys=['15,10','16,10','15,11','16,11'].map(k=>at(k)).filter(Boolean);if(waterKeys.length){const x=waterKeys.reduce((a,p)=>a+p.x,0)/waterKeys.length,y=waterKeys.reduce((a,p)=>a+p.y,0)/waterKeys.length;pieces.push(pond(x.toFixed(1),y.toFixed(1),.86))}}
  return pieces.join('');
 }
 function forestSVG(items,theme='basic',animated=true){
  theme=(theme==='snow'||theme==='winter')?'snow':'basic';
- const n=items.length,cfg=forestLayoutConfig(n);
+ const n=items.length,cfg=forestLayoutConfig(n),origin=forestStageOrigin(cfg);
  const rawAll=[];for(let r=0;r<cfg.rows;r++)for(let c=0;c<cfg.cols;c++)rawAll.push({rx:c-r,ry:c+r});
  const minRX=Math.min(...rawAll.map(p=>p.rx)),maxRX=Math.max(...rawAll.map(p=>p.rx)),minRY=Math.min(...rawAll.map(p=>p.ry)),maxRY=Math.max(...rawAll.map(p=>p.ry));
  const cx=360,cy=286,marginX=44,marginY=34;
- const project=p=>({x:cx+((p.rx-(minRX+maxRX)/2)/(Math.max(1,maxRX-minRX)))*cfg.boardW,y:cy+((p.ry-(minRY+maxRY)/2)/(Math.max(1,maxRY-minRY)))*cfg.boardH});
- const sortedItems=[...items].sort((a,b)=>(hash(a.id+'|forest')-hash(b.id+'|forest'))||a.id.localeCompare(b.id));
- const placements=forestPlacements(sortedItems,cfg);
- const points=sortedItems.map((c,i)=>{const slot=placements[i]||placements[i%placements.length];return {...project({rx:slot.rx,ry:slot.ry}),c,profile:slot.profile,scale:slot.scale};}).sort((a,b)=>a.y-b.y||a.c.id.localeCompare(b.c.id));
- const ground=theme==='snow'?'#E3ECEF':'#D9E9CC';
- const top={x:cx,y:cy-cfg.boardH/2-marginY},right={x:cx+cfg.boardW/2+marginX,y:cy},bottom={x:cx,y:cy+cfg.boardH/2+marginY},left={x:cx-cfg.boardW/2-marginX,y:cy};
- const depth=18;
- const groundPath='M'+top.x+' '+top.y+' L'+right.x+' '+right.y+' L'+bottom.x+' '+bottom.y+' L'+left.x+' '+left.y+' Z';
- const leftSide='M'+left.x+' '+left.y+' L'+bottom.x+' '+bottom.y+' L'+bottom.x+' '+(bottom.y+depth)+' L'+left.x+' '+(left.y+depth)+' Z';
- const rightSide='M'+bottom.x+' '+bottom.y+' L'+right.x+' '+right.y+' L'+right.x+' '+(right.y+depth)+' L'+bottom.x+' '+(bottom.y+depth)+' Z';
- const decorations=forestDecorations(cfg,cx,cy,points,theme);
- const trees=points.map(p=>{const sc=(p.scale||cfg.treeScale).toFixed(3),shadowRx=((p.profile?.radius||24)*.80).toFixed(1),shadowRy=(Math.max(4.2,(p.profile?.radius||24)*.16)).toFixed(1),snowBase=theme==='snow'?'<ellipse cx="0" cy="13" rx="'+Math.max(10,(p.profile?.radius||24)*.55).toFixed(1)+'" ry="4.2" fill="#F8FBFC" opacity=".92"/>':'';return '<g data-tree="'+esc(p.c.id)+'" tabindex="'+(forestEditMode?'0':'-1')+'" aria-label="'+esc(p.c.title+' · '+String(p.c.genre||category(p.c).label))+'" transform="translate('+p.x.toFixed(1)+' '+p.y.toFixed(1)+') scale('+sc+')"><ellipse cx="4" cy="10" rx="'+shadowRx+'" ry="'+shadowRy+'" fill="#708579" opacity=".14"/>'+snowBase+'<circle class="tree-hit" cx="0" cy="-27" r="34" fill="transparent" pointer-events="all"/>'+treeArt(p.c,theme)+'</g>'}).join('');
- const visitor=n?forestVisitorArt(items,animated):'';
- const patches=[
-  {x:cx-cfg.boardW*.20,y:cy-cfg.boardH*.10,rx:cfg.boardW*.12,ry:cfg.boardH*.055,o:.14},
-  {x:cx+cfg.boardW*.15,y:cy-cfg.boardH*.07,rx:cfg.boardW*.10,ry:cfg.boardH*.05,o:.11},
-  {x:cx-cfg.boardW*.04,y:cy+cfg.boardH*.16,rx:cfg.boardW*.15,ry:cfg.boardH*.06,o:.10}
- ].map((g,i)=>'<ellipse cx="'+g.x.toFixed(1)+'" cy="'+g.y.toFixed(1)+'" rx="'+g.rx.toFixed(1)+'" ry="'+g.ry.toFixed(1)+'" fill="'+(theme==='snow'?(i===1?'#D6E3E7':'#EEF4F6'):(i===1?'#c5d9b7':'#caddbb'))+'" opacity="'+(theme==='snow'?Math.min(.42,g.o+.18):g.o)+'"/>').join('');
+ const project=s=>{const c=s.c??(s.gx-origin.x),r=s.r??(s.gy-origin.y),rx=s.rx??(c-r),ry=s.ry??(c+r);return {x:cx+((rx-(minRX+maxRX)/2)/(Math.max(1,maxRX-minRX)))*cfg.boardW,y:cy+((ry-(minRY+maxRY)/2)/(Math.max(1,maxRY-minRY)))*cfg.boardH,gx:s.gx,gy:s.gy,edge:s.edge||0,key:s.key}};
+ const sortedItems=[...items].sort((a,b)=>((a.completedAt||0)-(b.completedAt||0))||a.id.localeCompare(b.id));
+ const layout=forestPlacements(sortedItems,cfg);if(layout.changed)persist();
+ const points=layout.placements.map(p=>({...project(p.slot),c:p.item,profile:p.profile,scale:p.scale})).sort((a,b)=>a.y-b.y||a.c.id.localeCompare(b.c.id));
+ const ground=theme==='snow'?'#E3ECEF':'#D9E9CC',top={x:cx,y:cy-cfg.boardH/2-marginY},right={x:cx+cfg.boardW/2+marginX,y:cy},bottom={x:cx,y:cy+cfg.boardH/2+marginY},left={x:cx-cfg.boardW/2-marginX,y:cy},depth=18;
+ const groundPath='M'+top.x+' '+top.y+' L'+right.x+' '+right.y+' L'+bottom.x+' '+bottom.y+' L'+left.x+' '+left.y+' Z',leftSide='M'+left.x+' '+left.y+' L'+bottom.x+' '+bottom.y+' L'+bottom.x+' '+(bottom.y+depth)+' L'+left.x+' '+(left.y+depth)+' Z',rightSide='M'+bottom.x+' '+bottom.y+' L'+right.x+' '+right.y+' L'+right.x+' '+(right.y+depth)+' L'+bottom.x+' '+(bottom.y+depth)+' Z';
+ const decorations=forestDecorations(cfg,project,theme,layout.emptySlots,layout.featureSlots);
+ const trees=points.map(p=>{const sc=(p.scale||cfg.treeScale).toFixed(3),shadowRx=((p.profile?.radius||24)*.70).toFixed(1),shadowRy=(Math.max(3.6,(p.profile?.radius||24)*.13)).toFixed(1),snowBase=theme==='snow'?'<ellipse cx="0" cy="13" rx="'+Math.max(9,(p.profile?.radius||24)*.5).toFixed(1)+'" ry="4.1" fill="#F8FBFC" opacity=".92"/>':'';return '<g data-tree="'+esc(p.c.id)+'" tabindex="'+(forestEditMode?'0':'-1')+'" aria-label="'+esc(p.c.title+' · '+String(p.c.genre||category(p.c).label))+'" transform="translate('+p.x.toFixed(1)+' '+p.y.toFixed(1)+') scale('+sc+')"><ellipse cx="4" cy="10" rx="'+shadowRx+'" ry="'+shadowRy+'" fill="#708579" opacity=".11"/>'+snowBase+'<circle class="tree-hit" cx="0" cy="-27" r="34" fill="transparent" pointer-events="all"/>'+treeArt(p.c,theme)+'</g>'}).join('');
+ const visitor=n?forestVisitorArt(items,animated):'',patches=[{x:cx-cfg.boardW*.22,y:cy-cfg.boardH*.11,rx:cfg.boardW*.12,ry:cfg.boardH*.05,o:.10},{x:cx+cfg.boardW*.16,y:cy-cfg.boardH*.08,rx:cfg.boardW*.10,ry:cfg.boardH*.046,o:.08},{x:cx-cfg.boardW*.03,y:cy+cfg.boardH*.17,rx:cfg.boardW*.14,ry:cfg.boardH*.055,o:.07}].map((g,i)=>'<ellipse cx="'+g.x.toFixed(1)+'" cy="'+g.y.toFixed(1)+'" rx="'+g.rx.toFixed(1)+'" ry="'+g.ry.toFixed(1)+'" fill="'+(theme==='snow'?(i===1?'#D6E3E7':'#EEF4F6'):(i===1?'#c9dcb9':'#d4e3c7'))+'" opacity="'+(theme==='snow'?Math.min(.36,g.o+.15):g.o)+'"/>').join('');
  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 540" role="img" aria-label="'+n+'그루의 '+({basic:'기본',snow:'설산'}[theme])+' 숲"><defs><linearGradient id="groundFill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+(theme==='snow'?'#F2F6F7':'#E5F0DA')+'"/><stop offset=".58" stop-color="'+ground+'"/><stop offset="1" stop-color="'+(theme==='snow'?'#D7E3E6':'#D0E1C2')+'"/></linearGradient><clipPath id="groundClip"><path d="'+groundPath+'"/></clipPath></defs><rect width="720" height="540" fill="transparent"/>'+(theme==='snow'?'<path d="M55 224 177 58 275 191 368 31 541 221 598 99 720 247" fill="#c4d4db"/><path d="m135 115 42-57 40 54-29-12-13 17-12-17zM317 99 51-68 55 73-39-18-19 22-17-23z" fill="#f8fbfc"/>':'')+'<g id="forest-world"><path d="'+groundPath+'" fill="url(#groundFill)"/><g clip-path="url(#groundClip)">'+patches+decorations+'</g><path d="'+groundPath+'" fill="none" stroke="#bdd0b1" stroke-width="1.5" opacity=".46"/><path d="'+leftSide+'" fill="#938874" opacity=".98"/><path d="'+rightSide+'" fill="#ab9f8a" opacity=".98"/>'+trees+visitor+'</g></svg>';
 }
+
 
 </script>
 <script>
@@ -1213,7 +1115,7 @@ const typeName={book:'책',album:'음반',movie:'영화'},statusName={saved:'아
 let state=Model.empty(),view='today',detailId=null,detailOrigin='scrap',picking=false,year=String(new Date().getFullYear()),month=Model.today().slice(0,7),modal=null,zoomState={scale:1,x:0,y:0},storageOK=true,toastTimer,undoAction=null,shareBlob=null,shareURL=null,photoFiles=[],ocrGeneration=0,ocrBusy=false,candidates=[],authMode=false;
 const $=id=>document.getElementById(id);
 function load(){
- try{const raw=localStorage.getItem(KEY);if(raw){const previous=JSON.parse(raw);state=Model.validate(previous);const treeMigrated=ensureCompletedSpeciesAssignments()||remapDefaultSpeciesByCategory();if(treeMigrated||previous.items.some((c,i)=>c.genreMappingVersion!==3||c.genre!==state.items[i].genre||c.treeCategory!==state.items[i].treeCategory)){if(!localStorage.getItem(KEY+'.before-genre-mapping-v3'))localStorage.setItem(KEY+'.before-genre-mapping-v3',raw);persist()}}else{const legacy=localStorage.getItem('songrim.records.v1');if(legacy){state=migrateLegacy(JSON.parse(legacy));ensureCompletedSpeciesAssignments();remapDefaultSpeciesByCategory();persist()}}}
+ try{const raw=localStorage.getItem(KEY);if(raw){const previous=JSON.parse(raw);state=Model.validate(previous);const assignedSpecies=ensureCompletedSpeciesAssignments(),remappedSpecies=remapDefaultSpeciesByCategory(),treeMigrated=assignedSpecies||remappedSpecies;if(treeMigrated||previous.items.some((c,i)=>c.genreMappingVersion!==3||c.genre!==state.items[i].genre||c.treeCategory!==state.items[i].treeCategory)){if(!localStorage.getItem(KEY+'.before-genre-mapping-v3'))localStorage.setItem(KEY+'.before-genre-mapping-v3',raw);persist()}}else{const legacy=localStorage.getItem('songrim.records.v1');if(legacy){state=migrateLegacy(JSON.parse(legacy));ensureCompletedSpeciesAssignments();remapDefaultSpeciesByCategory();persist()}}}
  catch(e){storageOK=false;$('storageAlert').innerHTML='<div class="storage-alert">기존 데이터를 읽지 못했어요. MY에서 백업을 복원하거나 새로 시작할 수 있어요.</div>'}
 }
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));scheduleCloudSync();return true}catch(e){storageOK=false;$('storageAlert').innerHTML='<div class="storage-alert">브라우저에 저장하지 못했어요. MY에서 백업을 다운로드해주세요.</div>';return false}}
