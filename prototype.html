@@ -662,76 +662,68 @@ function speciesArt(speciesId,theme='basic'){
  const polygon=(pts,fill,extra='')=>'<polygon points="'+pts+'" fill="'+fill+'" '+extra+'/>';
  let out='<ellipse cy="14" rx="22" ry="4.6" fill="#254e49" opacity=".07"/>';
 
- // Each species keeps a distinct silhouette. The palette stays intentionally muted so the forest reads as one scene.
+ // v13: fewer leaf fragments, stronger trunk personalities, and larger geometric crown masses.
  if(sp.id==='birch'){
-  out+=path('M-10 13Q-8-18-10-56M4 13Q2-18 5-65M15 13Q13-9 15-48','none',tr,3.1);
-  out+=path('M-10-28L-23-40M5-34L20-50M15-20L28-32','none','#7C766D',1.4,'opacity=".72"');
-  [[-19,-58,10,20,c[0]],[4,-68,11,22,c[1]],[24,-52,10,18,c[2]]].forEach(a=>out+=ellipse(...a));
-  out+=path('M-12 1h6M-12-12h6M1-3h6M1-18h6M12-5h6','none','#77756E',1,'opacity=".58"');
+  out+=path('M-9 13Q-8-18-10-59M7 13Q5-15 7-67M18 13Q16-9 18-47','none',tr,3.2);
+  out+=path('M-10-27L-23-39M7-37L22-51M18-20L29-31','none','#77736D',1.35,'opacity=".65"');
+  out+=ellipse(-9,-55,18,28,c[0],'transform="rotate(-9 -9 -55)"');
+  out+=ellipse(15,-52,17,24,c[1],'transform="rotate(10 15 -52)" opacity=".9"');
+  out+=path('M-11-7h6M-11-20h6M4-8h6M4-22h6M15-4h5','none','#77756E',1,'opacity=".55"');
  }else if(sp.id==='oak'){
-  out+=path('M0 13Q-4-14 0-45M0-21L-29-38M0-30L28-49M-5-9L-35-22','none',tr,5.8);
-  out+=path('M-43-38C-45-52-33-61-20-58C-14-69 0-70 8-61C18-68 34-62 35-50C47-47 50-34 42-25C31-17 20-18 11-23C3-15-11-15-18-22C-29-16-42-23-43-38Z',c[0]);
-  out+=path('M-31-46C-21-55-8-57 0-50C8-58 24-54 28-44C18-36 7-35 0-39C-8-32-21-34-31-46Z',c[1],'',1,'opacity=".72"');
-  out+=path('M-37-28C-26-33-16-30-10-22C-18-16-30-18-37-28Z',c[2],'',1,'opacity=".72"');
+  // Intentionally the heaviest trunk in the basic set.
+  out+=path('M-2 14Q-7-10-3-38M2 14Q7-10 4-39M0-12L-31-31M1-20L30-41','none',tr,9.2);
+  out+=polygon('-49,-37 -34,-57 -9,-61 8,-55 32,-56 49,-37 39,-19 13,-15 -9,-19 -34,-16',c[0]);
+  out+=polygon('-30,-46 -11,-58 8,-54 23,-45 8,-34 -12,-34',c[1],'opacity=".72"');
  }else if(sp.id==='cherry'){
-  out+=path('M0 13Q1-10 0-39M0-19L-23-39M0-27L21-47M-3-8L-28-19','none',tr,3.7);
-  out+=path('M-37-38C-40-50-30-58-20-54C-18-65-4-67 1-57C9-64 22-60 21-49C32-50 39-40 34-31C28-21 15-22 9-27C2-19-11-20-15-28C-25-21-36-27-37-38Z',c[0]);
-  out+=path('M-26-45C-18-55-7-56 0-49C7-56 18-55 23-46C16-39 8-37 1-40C-7-35-18-37-26-45Z',c[1],'',1,'opacity=".82"');
-  [[-20,-52,1.6],[10,-52,1.4],[25,-39,1.5],[-5,-30,1.4]].forEach(d=>out+=circle(d[0],d[1],d[2],'#EFE7DF','.65'));
+  out+=path('M0 13Q-1-11 0-40M0-20L-24-37M0-27L22-46','none',tr,4.1);
+  out+=path('M-39-38Q-38-56-20-57Q-8-68 4-57Q20-64 31-50Q44-44 37-28Q26-17 11-23Q0-16-14-22Q-31-17-39-38Z',c[0]);
+  out+=path('M-24-48Q-8-59 4-51Q15-57 25-47Q13-38 1-40Q-10-34-24-48Z',c[1],'',1,'opacity=".76"');
+  [[-18,-51],[10,-51],[25,-37]].forEach(d=>out+=circle(d[0],d[1],1.5,'#EFE7DF','.62'));
  }else if(sp.id==='zelkova'){
-  out+=path('M0 13Q1-12 0-42M0-18L-31-30M0-24L33-35M-3-8L-39-15','none',tr,4.9);
-  out+=path('M-49-34C-46-47-33-53-20-49C-12-58 1-56 8-49C18-56 33-51 37-42C49-40 52-29 45-21C34-15 21-16 10-21C0-14-16-15-24-21C-35-16-47-22-49-34Z',c[0]);
-  out+=path('M-38-37C-27-44-16-45-7-39C2-46 15-45 26-39C15-32 4-31-4-34C-14-29-28-30-38-37Z',c[1],'',1,'opacity=".74"');
+  out+=path('M0 13Q0-12 0-41M0-18L-35-30M0-22L36-34','none',tr,5.5);
+  out+=polygon('-51,-35 -37,-49 -15,-53 1,-49 18,-52 41,-45 51,-31 42,-18 17,-16 0,-20 -18,-15 -42,-20',c[0]);
+  out+=polygon('-34,-38 -18,-47 0,-43 16,-47 34,-38 20,-28 0,-29 -18,-27',c[1],'opacity=".68"');
  }else if(sp.id==='ginkgo'){
-  out+=path('M0 13V-42M0-18L-24-35M0-25L22-43M0-31L2-56','none',tr,3.8);
-  [[-28,-40,c[0]],[-12,-55,c[1]],[5,-61,c[2]],[23,-45,c[0]],[4,-36,c[1]]].forEach((a,i)=>{
-   const x=a[0],y=a[1],fill=a[2],s=i===2?18:16;
-   out+=path('M'+x+' '+y+'Q'+(x-s)+' '+(y-15)+' '+(x-s-2)+' '+(y-3)+'Q'+x+' '+(y+9)+' '+(x+s+2)+' '+(y-3)+'Q'+(x+s)+' '+(y-15)+' '+x+' '+y+'Z',fill);
-  });
+  out+=path('M0 13V-43M0-18L-24-36M0-27L22-44','none',tr,4.0);
+  out+=path('M0-67Q-34-62-38-39Q-15-47 0-30Q14-47 39-39Q34-62 0-67Z',c[0]);
+  out+=path('M0-59Q-19-55-23-43Q-9-47 0-36Q8-48 24-43Q19-56 0-59Z',c[1],'',1,'opacity=".72"');
  }else if(sp.id==='metasequoia'){
-  out+=path('M0 14V-70','none',tr,3.2);
-  [[-66,9],[-56,14],[-45,18],[-33,22],[-20,25],[-6,27]].forEach((a,i)=>{const y=a[0],w=a[1];out+=path('M0 '+y+'C'+(-w*.3)+' '+(y+6)+' '+(-w*.78)+' '+(y+14)+' '+(-w)+' '+(y+20)+'C'+(-w*.42)+' '+(y+18)+' '+(-w*.15)+' '+(y+16)+' 0 '+(y+13)+'C'+(w*.18)+' '+(y+16)+' '+(w*.55)+' '+(y+19)+' '+w+' '+(y+20)+'C'+(w*.78)+' '+(y+13)+' '+(w*.34)+' '+(y+5)+' 0 '+y+'Z',c[i%3]);});
+  out+=path('M0 14V-72','none',tr,3.2);
+  [[-68,11],[-54,17],[-39,22],[-23,27],[-6,31]].forEach((a,i)=>{const y=a[0],w=a[1];out+=polygon('0,'+y+' '+(-w)+','+(y+22)+' 0,'+(y+15)+' '+w+','+(y+22),c[i%3]);});
  }else if(sp.id==='maple'){
-  out+=path('M0 13Q-1-11 1-41M0-20L-24-43M0-29L20-51M-3-9L-31-18M2-13L29-27','none',tr,4.4);
-  out+=polygon('-44,-43 -30,-55 -16,-43 -30,-31',c[0]);
-  out+=polygon('8,-54 22,-66 36,-52 20,-39',c[2]);
-  out+=polygon('-44,-18 -33,-29 -21,-19 -33,-8',c[1]);
-  out+=polygon('18,-30 31,-39 42,-27 29,-17',c[0]);
-  out+=polygon('-10,-61 2,-72 15,-60 2,-48',c[1]);
-  out+=polygon('-17,-34 -4,-43 9,-32 -4,-22',c[2]);
+  out+=path('M0 13Q-1-12 0-42M0-21L-28-42M0-29L24-50','none',tr,4.4);
+  out+=polygon('-39,-45 -24,-59 -8,-45 -24,-30',c[0]);
+  out+=polygon('5,-55 23,-70 40,-53 21,-36',c[2]);
+  out+=polygon('-18,-28 0,-43 18,-28 0,-14',c[1]);
  }else if(sp.id==='willow'){
-  out+=path('M0 13Q1-16 0-51M0-36L-24-48M0-39L24-53','none',tr,3.8);
-  out+=path('M-28-47C-23-58-11-62-2-56C5-64 18-60 21-51C32-46 32-36 25-31C15-28 7-31 2-36C-7-30-20-33-28-47Z',c[0]);
-  [-26,-18,-10,-3,7,16,24].forEach((x,i)=>out+=path('M'+x+' '+(-43-Math.abs(x)/6)+'Q'+(x+(i%2?5:-5))+' -18 '+(x+(i%3-1)*3)+' 5','none',i%2?c[1]:c[2],1.8,'opacity=".9"'));
+  // A visibly bent trunk, unlike the straight-trunk species around it.
+  out+=path('M-5 13Q14-9 6-31Q-1-48 11-60','none',tr,5.0);
+  out+=path('M5-29L-26-43M7-38L31-50','none',tr,2.3);
+  out+=path('M-32-47Q-18-63 0-56Q15-66 31-51Q25-38 12-34Q-4-28-18-34Q-28-36-32-47Z',c[0]);
+  [-24,-10,7,23].forEach((x,i)=>out+=path('M'+x+' '+(-45-Math.abs(x)/8)+'Q'+(x+(i%2?6:-6))+' -16 '+(x+(i%2?2:-2))+' 5','none',i%2?c[1]:c[2],2.0,'opacity=".9"'));
  }else if(sp.id==='magnolia'){
-  out+=path('M-4 13Q-6-8 -2-32M5 13Q7-10 3-41M2-20L-27-34M1-28L26-45M-3-8L-18-20','none',tr,3.5);
-  out+=polygon('-42,-37 -30,-49 -16,-43 -18,-29',c[0]);
-  out+=polygon('12,-50 28,-59 39,-46 26,-35',c[1]);
-  out+=polygon('-15,-58 0,-68 16,-56 1,-45',c[0]);
-  out+=polygon('-29,-21 -19,-29 -8,-21 -18,-13',c[2]);
-  out+=polygon('5,-30 17,-39 29,-29 16,-19',c[1]);
-  [[-20,-39,1.8],[2,-55,1.8]].forEach(d=>out+=circle(d[0],d[1],d[2],'#F7F5EE','.92'));
+  // Deliberately reduced to two crown blocks + two tiny blossoms.
+  out+=path('M0 13Q-2-10 0-38M0-20L-26-35M1-27L25-44','none',tr,4.2);
+  out+=polygon('-39,-39 -24,-55 -4,-49 -8,-27 -29,-24',c[0]);
+  out+=polygon('-5,-51 16,-62 36,-47 27,-27 5,-28',c[1]);
+  out+=circle(-14,-43,1.9,'#F7F5EE','.92')+circle(17,-48,1.9,'#F7F5EE','.92');
  }else if(sp.id==='crape'){
-  out+=path('M-3 13Q-5-10 -2-34M4 13Q5-13 1-44M-1-19L-24-35M1-26L21-48M-4-7L-31-18','none',tr,2.8);
-  out+=polygon('-40,-43 -17,-48 -12,-35 -35,-31',c[0]);
-  out+=polygon('10,-55 34,-58 29,-43 8,-40',c[1]);
-  out+=polygon('-42,-21 -24,-25 -19,-14 -38,-11',c[2]);
-  out+=polygon('-9,-64 13,-66 10,-53 -10,-51',c[0]);
-  out+=polygon('7,-33 29,-37 25,-25 6,-22',c[2]);
-  out+=path('M-23-37Q-15-42-9-35M14-48Q20-52 25-46','none','#E3D9CC',1.1,'opacity=".35"');
+  out+=path('M-4 13Q-6-10-3-39M5 13Q6-11 3-46','none',tr,3.0);
+  out+=path('M-1-23L-26-38M2-29L25-48','none',tr,1.8);
+  out+=polygon('-38,-42 -19,-53 1,-43 -8,-25 -31,-27',c[0]);
+  out+=polygon('2,-53 25,-60 38,-43 26,-27 6,-30',c[1]);
  }else if(sp.id==='pine'){
-  out+=path('M-1 13Q-7-18 4-51M1-25L-31-40M3-34L31-52M-2-12L-34-20','none',tr,4.1);
-  [[-34,-41,24,7,c[0],-6],[30,-52,25,8,c[1],7],[-4,-61,21,7,c[0],-3],[-32,-21,20,6,c[2],-5],[12,-35,22,7,c[2],6]].forEach(a=>out+=ellipse(a[0],a[1],a[2],a[3],a[4],'transform="rotate('+a[5]+' '+a[0]+' '+a[1]+')"'));
+  out+=path('M-2 13Q-9-15 4-53M1-25L-32-40M3-35L32-52','none',tr,4.5);
+  out+=ellipse(-27,-40,27,8,c[0],'transform="rotate(-7 -27 -40)"');
+  out+=ellipse(29,-51,28,8,c[1],'transform="rotate(7 29 -51)"');
+  out+=ellipse(-1,-61,23,7,c[2],'transform="rotate(-3 -1 -61)"');
  }else if(sp.id==='cedar'){
-  out+=path('M0 14V-68','none',tr,3.1);
-  [[-64,10],[-54,16],[-43,21],[-31,25],[-17,28],[-3,30]].forEach((a,i)=>{const y=a[0],w=a[1];out+=path('M0 '+y+'C'+(-w*.35)+' '+(y+5)+' '+(-w*.82)+' '+(y+15)+' '+(-w)+' '+(y+22)+'C'+(-w*.38)+' '+(y+19)+' '+(-w*.16)+' '+(y+17)+' 0 '+(y+14)+'C'+(w*.18)+' '+(y+17)+' '+(w*.58)+' '+(y+20)+' '+w+' '+(y+22)+'C'+(w*.78)+' '+(y+13)+' '+(w*.34)+' '+(y+4)+' 0 '+y+'Z',c[i%3]);});
+  out+=path('M0 14V-70','none',tr,3.2);
+  [[-65,12],[-49,19],[-32,25],[-13,31]].forEach((a,i)=>{const y=a[0],w=a[1];out+=polygon('0,'+y+' '+(-w)+','+(y+24)+' 0,'+(y+17)+' '+w+','+(y+24),c[i%3]);});
  }else if(sp.id==='hackberry'){
-  out+=path('M-4 13Q-5-8 -2-28M5 13Q6-9 2-36M0-16L-34-31M1-22L34-37M-5-7L-39-14','none',tr,5.0);
-  out+=polygon('-49,-29 -33,-47 -14,-39 -25,-20',c[0]);
-  out+=polygon('-20,-43 -1,-55 15,-43 0,-29',c[1]);
-  out+=polygon('7,-40 29,-50 46,-34 31,-18',c[0]);
-  out+=polygon('-37,-22 -20,-31 -6,-20 -21,-11',c[2]);
-  out+=polygon('0,-24 18,-34 33,-23 16,-12',c[1],'opacity=".82"');
+  out+=path('M-4 13Q-6-7-2-31M5 13Q7-8 2-38M0-17L-36-31M1-24L35-38','none',tr,6.2);
+  out+=polygon('-50,-31 -33,-50 -8,-48 2,-36 -8,-18 -35,-15',c[0]);
+  out+=polygon('-7,-43 17,-54 47,-36 37,-17 12,-19 0,-29',c[1]);
  }else if(sp.id==='fringe'){
   // Preserved: user liked this composition and palette.
   out+=path('M0 13Q-2-11 1-40M0-18L-24-37M0-27L24-46','none',tr,3.8);
@@ -747,29 +739,32 @@ function speciesArt(speciesId,theme='basic'){
   out+=path('M0-71C-12-62-17-44-13-27C-15-12-9 0 0 5C10 0 15-12 13-28C17-45 12-63 0-71Z',c[0]);
   out+=path('M0-62C-7-50-9-37-6-25C-9-15-5-5 0 0C5-5 8-15 6-26C9-39 7-51 0-62Z',c[1],'',1,'opacity=".72"');
  }else if(sp.id==='yew'){
-  out+=path('M-3 13Q-4-12 -1-34M4 13Q6-15 2-51','none',tr,3.7);
-  out+=polygon('-16,-64 16,-64 23,-17 -23,-17',c[0]);
-  out+=polygon('-10,-54 10,-54 14,-25 -14,-25',c[1],'opacity=".72"');
-  out+=polygon('-7,-43 7,-43 10,-32 -10,-32',c[2],'opacity=".45"');
+  out+=path('M0 13Q-2-13 0-53','none',tr,4.5);
+  out+=polygon('-19,-63 18,-63 24,-16 -25,-16',c[0]);
+  out+=polygon('-10,-53 10,-53 14,-25 -14,-25',c[1],'opacity=".7"');
  }else if(sp.id==='juniper'){
-  out+=path('M-3 13Q-11-17 7-51M0-23L-31-40M5-34L34-48M-5-11L-31-19','none',tr,4.0);
-  [[-33,-41,24,7,c[1],-7],[31,-49,27,8,c[0],6],[9,-59,22,7,c[2],5],[-31,-19,19,6,c[0],-6],[13,-35,20,6,c[1],7]].forEach(a=>out+=ellipse(a[0],a[1],a[2],a[3],a[4],'transform="rotate('+a[5]+' '+a[0]+' '+a[1]+')"'));
+  out+=path('M-4 13Q-15-15 7-52M0-24L-31-40M5-34L34-48','none',tr,4.8);
+  out+=ellipse(-30,-41,26,8,c[1],'transform="rotate(-8 -30 -41)"');
+  out+=ellipse(31,-49,29,9,c[0],'transform="rotate(8 31 -49)"');
+  out+=ellipse(9,-59,23,7,c[2],'transform="rotate(5 9 -59)"');
  }else if(sp.id==='paulownia'){
-  out+=path('M0 13Q-2-8 0-46M0-24L-25-43M0-31L20-52M-1-13L-18-24M3-17L27-31','none',tr,4.4);
-  out+=path('M0-6L7-24M-7-31L-16-46M11-43L18-58','none',tr,2.1,'opacity=".88"');
-  out+=polygon('-35,-45 -25,-53 -15,-43 -25,-35',c[0]);
-  out+=polygon('10,-54 21,-63 31,-52 20,-43',c[1]);
-  out+=polygon('18,-31 28,-38 37,-29 27,-22',c[2]);
+  // Extra sparse: visible branch skeleton, only two main leaves and one tiny leaf.
+  out+=path('M0 13Q-1-9 1-49M0-22L-27-43M1-31L22-55M-1-11L-19-24M3-17L29-31','none',tr,4.0);
+  out+=path('M-9-29L-18-49M12-44L18-62M-5-15L8-28','none',tr,1.8,'opacity=".9"');
+  out+=polygon('-38,-46 -27,-56 -16,-45 -27,-35',c[0]);
+  out+=polygon('11,-57 23,-67 34,-55 22,-44',c[1]);
+  out+=polygon('23,-29 29,-34 35,-28 29,-22',c[2]);
  }else if(sp.id==='evergreen'){
-  out+=path('M0 13V-43M0-18L-16-33M0-25L17-42','none',tr,5.2);
-  out+=path('M0-64C-15-65-25-56-26-45C-37-41-39-29-31-21C-28-9-15-4-5-10C4-3 18-5 24-15C35-20 37-32 29-40C29-53 15-64 0-64Z',c[0]);
-  out+=path('M-11-53C-21-46-21-35-14-30C-20-21-13-12-4-14C2-8 13-12 14-21C24-26 21-39 12-42C10-51-2-58-11-53Z',c[1],'',1,'opacity=".68"');
+  out+=path('M0 13V-44M0-20L-18-33M0-26L18-42','none',tr,6.5);
+  out+=polygon('-32,-48 -17,-64 4,-66 26,-57 36,-39 29,-18 8,-9 -14,-12 -31,-27',c[0]);
+  out+=polygon('-16,-50 2,-58 20,-48 18,-31 2,-23 -14,-29',c[1],'opacity=".7"');
  }else{
   out+=path('M0 13V-42','none',tr,4)+path('M0-20L-22-38M0-26L20-47','none',tr,2.2);
-  out+=path('M-34-37C-34-50-21-57-11-53C-4-63 10-62 15-52C28-54 36-42 31-31C34-19 18-14 8-21C0-15-15-17-18-25C-28-23-35-28-34-37Z',c[0]);
+  out+=polygon('-34,-39 -20,-55 2,-58 28,-49 35,-31 18,-17 -8,-18 -30,-25',c[0]);
  }
  return out;
 }
+
 
 function treeArt(c,theme){
  const item=typeof c==='string'?get(c)||{}:c,cat=category(item),sample=!Object.prototype.hasOwnProperty.call(item||{},'genre')&&!item?.id&&item?.treeCategory;
@@ -809,12 +804,14 @@ function forestLayoutConfig(n){
 }
 function forestPlacements(items,cfg){
  if(!items.length)return [];
- const n=items.length,target=Math.max(n+6,Math.ceil(n*1.30));
+ // Keep the same loose grid, but give the placement solver a few more candidate cells.
+ // This opens the gaps slightly without pulling the forest back toward the center.
+ const n=items.length,target=Math.max(n+8,Math.ceil(n*1.36));
  const gridCols=Math.max(4,Math.ceil(Math.sqrt(target*1.12)));
  const gridRows=Math.max(3,Math.ceil(target/gridCols));
  const minRX=-(cfg.rows-1),maxRX=cfg.cols-1,minRY=0,maxRY=cfg.rows+cfg.cols-2;
  const vMinRX=-(gridRows-1),vMaxRX=gridCols-1,vMinRY=0,vMaxRY=gridRows+gridCols-2;
- const unit=k=>(hash('forest-grid-v2|'+cfg.tier+'|'+k)%1000000)/1000000;
+ const unit=k=>(hash('forest-grid-v3|'+cfg.tier+'|'+k)%1000000)/1000000;
  const slots=[];
  for(let r=0;r<gridRows;r++)for(let c=0;c<gridCols;c++){
   // A grid is the base, but every cell is nudged slightly so it never reads as a checkerboard.
@@ -824,11 +821,11 @@ function forestPlacements(items,cfg){
   let ux=(vrx-vMinRX)/Math.max(1,vMaxRX-vMinRX),uy=(vry-vMinRY)/Math.max(1,vMaxRY-vMinRY);
   ux=.045+ux*.91;uy=.055+uy*.89;
   const rx=minRX+ux*(maxRX-minRX),ry=minRY+uy*(maxRY-minRY);
-  slots.push({rx,ry,gx:c,gy:r,key:hash('slot-v2|'+cfg.tier+'|'+r+'|'+c)});
+  slots.push({rx,ry,gx:c,gy:r,key:hash('slot-v3|'+cfg.tier+'|'+r+'|'+c)});
  }
  // Keep a deterministic, spatially varied subset of the grid.
  slots.sort((a,b)=>a.key-b.key);
- const available=slots.slice(0,Math.min(slots.length,Math.max(n,Math.ceil(n*1.20))));
+ const available=slots.slice(0,Math.min(slots.length,Math.max(n,Math.ceil(n*1.34))));
  const placed=[];
  items.forEach((item,i)=>{
   const profile=treeVisualProfile(item),sizeVar=treeSizeVariance(item);
@@ -842,7 +839,7 @@ function forestPlacements(items,cfg){
     if(q.profile.shape===profile.shape)minShape=Math.min(minShape,d);
    }
    const edge=Math.min(slot.gx,gridCols-1-slot.gx,slot.gy,gridRows-1-slot.gy);
-   const score=Math.min(minAny,3)*5+Math.min(minSame,4)*7+Math.min(minShape,3)*2+Math.min(edge,2)*.7+unit(i+'|'+slot.key+'|assign')*.6;
+   const score=Math.min(minAny,3.4)*6.2+Math.min(minSame,4.2)*7.4+Math.min(minShape,3.2)*2.2+Math.min(edge,2)*.45+unit(i+'|'+slot.key+'|assign')*.6;
    if(score>bestScore){bestScore=score;bestIndex=j;}
   });
   const slot=available.splice(bestIndex,1)[0]||slots[i%slots.length];
