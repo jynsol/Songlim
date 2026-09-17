@@ -765,8 +765,69 @@ function speciesArt(speciesId,theme='basic'){
 }
 
 
+function snowTreeArt(item){
+ const key=String(item?.id||item?.title||item?.treeCategory||'snow-tree');
+ const variant=hash(key+'|snow-tree-v2')%8;
+ const path=(d,fill='none',stroke='',w=1,extra='')=>'<path d="'+d+'" fill="'+fill+'" stroke="'+(stroke||'none')+'" stroke-width="'+w+'" stroke-linecap="round" stroke-linejoin="round" '+extra+'/>';
+ const ellipse=(x,y,rx,ry,fill,extra='')=>'<ellipse cx="'+x+'" cy="'+y+'" rx="'+rx+'" ry="'+ry+'" fill="'+fill+'" '+extra+'/>';
+ const circle=(x,y,r,fill,opacity='1')=>'<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+fill+'" opacity="'+opacity+'"/>';
+ const poly=(pts,fill,extra='')=>'<polygon points="'+pts+'" fill="'+fill+'" '+extra+'/>';
+ const trunk=['#766C62','#81776B','#6E6964'][variant%3];
+ const cold=['#365A50','#4F7064','#607B6C','#718676','#829485','#557066','#46665D','#6D8074'];
+ const c1=cold[variant],c2=cold[(variant+2)%cold.length],c3=cold[(variant+4)%cold.length];
+ let out='<ellipse cy="14" rx="22" ry="4.5" fill="#718792" opacity=".10"/><ellipse cy="13" rx="17" ry="4" fill="#F7FBFC" opacity=".92"/>';
+ if(variant===0){
+  // Layered fir: compact, pointed and heavily snow-capped.
+  out+=path('M0 13V-70','none',trunk,3.2);
+  [[-65,11],[-51,17],[-36,23],[-20,29],[-4,33]].forEach((a,i)=>{const y=a[0],w=a[1];out+=poly('0,'+y+' '+(-w)+','+(y+23)+' 0,'+(y+15)+' '+w+','+(y+23),i%2?c2:c1);out+=path('M'+(-w*.72)+' '+(y+18)+'Q0 '+(y+12)+' '+(w*.72)+' '+(y+18),'none','#F7FBFC',2.5,'opacity=".95"');});
+ }else if(variant===1){
+  // Snow birch grove: three pale trunks and sparse frosted crowns.
+  out+=path('M-10 13Q-8-22-9-63M4 13Q5-20 6-70M17 13Q16-11 18-52','none','#D8D6CF',3.4);
+  out+=path('M-10-23L-24-38M6-37L20-51M17-18L28-29','none','#8D8981',1.4,'opacity=".75"');
+  out+=ellipse(-9,-55,16,24,c2,'opacity=".86"')+ellipse(14,-53,15,21,c3,'opacity=".82"');
+  out+=ellipse(-13,-63,10,4,'#F8FBFC','opacity=".95"')+ellipse(18,-59,10,3.8,'#F8FBFC','opacity=".93"');
+  out+=path('M-11-6h6M-11-19h6M4-8h6M4-22h6','none','#77756E',1,'opacity=".6"');
+ }else if(variant===2){
+  // Low wide pine, clearly different from the tall fir.
+  out+=path('M-2 13Q-8-17 4-54M1-24L-33-39M3-35L34-50','none',trunk,4.4);
+  out+=ellipse(-27,-39,27,7.5,c1,'transform="rotate(-7 -27 -39)"')+ellipse(29,-50,29,8,c2,'transform="rotate(7 29 -50)"')+ellipse(0,-61,23,6.5,c3);
+  out+=path('M-47-40Q-27-47-8-42M8-52Q29-58 50-51M-18-62Q0-67 18-62','none','#F8FBFC',3,'opacity=".92"');
+ }else if(variant===3){
+  // Red berry tree: bare branches + evergreen clumps + visible berries.
+  out+=path('M0 13Q-2-14 1-50M0-20L-26-39M1-31L25-52M-12-31L-18-50M13-43L21-60','none',trunk,3.7);
+  out+=ellipse(-20,-39,13,10,c2)+ellipse(17,-47,14,11,c1)+ellipse(0,-28,12,9,c3);
+  [[-26,-41],[-17,-34],[-10,-44],[12,-50],[20,-43],[7,-29],[-2,-23],[24,-54]].forEach((b,i)=>out+=circle(b[0],b[1],i%3===0?2.8:2.3,i%2?'#B83F45':'#D55355'));
+  out+=ellipse(-18,-47,8,3,'#F8FBFC','opacity=".94"')+ellipse(16,-54,8,3,'#F8FBFC','opacity=".94"');
+ }else if(variant===4){
+  // Round winter broadleaf, soft mass with broken snow caps.
+  out+=path('M0 13Q0-15 0-43M0-19L-29-35M1-27L28-45','none',trunk,5.0);
+  out+=path('M-42-38Q-39-55-21-58Q-8-66 4-57Q21-64 34-51Q46-43 38-27Q25-16 10-22Q-3-14-17-22Q-34-17-42-38Z',c2);
+  out+=path('M-34-46Q-22-57-9-52Q4-59 16-52Q27-55 34-46Q20-48 9-43Q-4-47-16-42Q-27-46-34-46Z','#F8FBFC','',1,'opacity=".93"');
+ }else if(variant===5){
+  // Narrow cypress column with frosted ridge.
+  out+=path('M0 13V-60','none',trunk,3.2);
+  out+=path('M0-72C-12-63-17-45-13-28C-15-12-9 0 0 5C10 0 15-12 13-29C17-46 12-64 0-72Z',c1);
+  out+=path('M0-64C-6-52-8-39-5-27C-7-17-4-7 0-2C4-7 7-17 5-28C8-40 6-53 0-64Z',c3,'',1,'opacity=".72"');
+  out+=path('M-7-54Q0-59 7-54M-9-34Q0-39 9-34M-7-15Q0-19 7-15','none','#F8FBFC',2.4,'opacity=".9"');
+ }else if(variant===6){
+  // Crooked juniper, asymmetrical and windswept.
+  out+=path('M-5 13Q13-9 4-31Q-2-47 12-60','none',trunk,4.8);
+  out+=path('M5-29L-27-42M7-39L33-50','none',trunk,2.2);
+  out+=ellipse(-28,-42,26,7.5,c2,'transform="rotate(-10 -28 -42)"')+ellipse(31,-50,28,8,c1,'transform="rotate(8 31 -50)"')+ellipse(10,-60,20,6,c3,'transform="rotate(4 10 -60)"');
+  out+=path('M-47-42Q-28-48-9-43M11-52Q30-58 49-51','none','#F8FBFC',2.8,'opacity=".92"');
+ }else{
+  // Almost-bare winter tree with a few iced leaves.
+  out+=path('M0 13Q-1-12 1-54M0-22L-31-45M1-34L25-60M-1-12L-20-27M4-21L31-34M-12-33L-20-52M15-48L22-65','none',trunk,3.6);
+  out+=poly('-35,-47 -30,-52 -24,-47 -30,-42',c2)+poly('20,-61 25,-66 31,-61 25,-56',c3)+poly('27,-32 31,-35 35,-31 31,-27',c1,'opacity=".85"');
+  out+=circle(-28,-50,2.4,'#C74B50')+circle(24,-63,2.2,'#C74B50')+circle(31,-33,2.1,'#C74B50');
+  out+=path('M-34-54Q-29-57-23-53M19-67Q25-70 31-66','none','#F8FBFC',2.2,'opacity=".95"');
+ }
+ return out;
+}
+
 function treeArt(c,theme){
  const item=typeof c==='string'?get(c)||{}:c,cat=category(item),sample=!Object.prototype.hasOwnProperty.call(item||{},'genre')&&!item?.id&&item?.treeCategory;
+ if(theme==='snow'||theme==='winter')return snowTreeArt(item);
  const species=sample?speciesForCategory(cat.id)[0]:contentSpecies(item);
  return speciesArt(species?.id||TREE_SPECIES[0].id,theme);
 }
@@ -799,10 +860,10 @@ const FOREST_EXPANSION_STAGES=[
  {id:1,label:'첫 터',maxTrees:5,cols:4,rows:4,boardW:220,boardH:124,treeScale:.66},
  {id:2,label:'작은 숲',maxTrees:15,cols:7,rows:7,boardW:310,boardH:174,treeScale:.57},
  {id:3,label:'첫 숲',maxTrees:40,cols:10,rows:10,boardW:410,boardH:228,treeScale:.49},
- {id:4,label:'자라는 숲',maxTrees:80,cols:14,rows:14,boardW:525,boardH:292,treeScale:.42},
- {id:5,label:'깊어지는 숲',maxTrees:140,cols:18,rows:18,boardW:590,boardH:328,treeScale:.37},
- {id:6,label:'깊은 숲',maxTrees:200,cols:21,rows:21,boardW:630,boardH:350,treeScale:.34},
- {id:7,label:'넓은 숲',maxTrees:300,cols:25,rows:25,boardW:665,boardH:370,treeScale:.31}
+ {id:4,label:'자라는 숲',maxTrees:80,cols:13,rows:13,boardW:500,boardH:278,treeScale:.43},
+ {id:5,label:'깊어지는 숲',maxTrees:140,cols:17,rows:17,boardW:575,boardH:320,treeScale:.38},
+ {id:6,label:'깊은 숲',maxTrees:200,cols:20,rows:20,boardW:625,boardH:348,treeScale:.35},
+ {id:7,label:'넓은 숲',maxTrees:300,cols:23,rows:23,boardW:665,boardH:370,treeScale:.32}
 ];
 function forestLayoutConfig(n){
  const count=Math.max(0,n||0);
@@ -822,9 +883,9 @@ function forestStageOrigin(cfg){
 function forestFeatureKeys(cfg){
  const keys=[];
  if(cfg.tier>=2)keys.push('10,9');
- if(cfg.tier>=3)keys.push('8,13','13,15','14,8','7,10');
- if(cfg.tier>=4)keys.push('15,10','16,10','15,11','16,11');
- if(cfg.tier>=5)keys.push('7,16','17,14','9,17');
+ if(cfg.tier>=3)keys.push('8,13','13,15','14,8','7,10','12,8','9,15');
+ if(cfg.tier>=4)keys.push('15,10','16,10','15,11','16,11','16,13');
+ if(cfg.tier>=5)keys.push('7,16','17,14','9,17','11,17');
  return new Set(keys);
 }
 function parseForestTile(v){
@@ -875,7 +936,7 @@ function forestDecorations(cfg,project,theme='basic',emptySlots=[],featureSlots=
  const stump=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".84"><ellipse cy="7" rx="11" ry="3.2" fill="#6F8177" opacity=".12"/><path d="M-6-8L-7 4Q0 9 7 4L6-8Z" fill="#8B6B53"/><ellipse cy="-8" rx="6" ry="3" fill="#B9906A"/><ellipse cy="-8" rx="3" ry="1.4" fill="none" stroke="#8D6C52" stroke-width=".9"/></g>';
  const branch=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".76"><path d="M-15 4Q-4-3 11-1M1-2L8-9M-7 1L-12-6" fill="none" stroke="#806750" stroke-width="3" stroke-linecap="round"/><ellipse cx="9" cy="-8" rx="4" ry="2.2" fill="#839B6D" transform="rotate(-22 9 -8)"/></g>';
  const grass=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".7"><path d="M0 5Q-1-5-6-11M0 5Q1-7 1-13M0 5Q4-4 8-9M0 5Q-6-2-10-4" fill="none" stroke="#78956E" stroke-width="2" stroke-linecap="round"/></g>';
- const flowers=(x,y,s=1,variant=0)=>{const palettes=[['#F8F2DE','#D9B95A','#B9C98D'],['#F7E3D7','#D8A36F','#B7C78A'],['#F8F6EE','#D7B74E','#C5D29A']][variant%3],dots=[[-9,-1],[-2,3],[5,-2],[11,2],[1,7]];return '<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".96"><ellipse cx="0" cy="8" rx="18" ry="5" fill="#6F8E69" opacity=".06"/><ellipse cx="-13" cy="8" rx="5" ry="2.2" fill="'+palettes[2]+'" opacity=".8"/><ellipse cx="13" cy="9" rx="4.8" ry="2.1" fill="'+palettes[2]+'" opacity=".78"/>'+dots.map(d=>'<g transform="translate('+d[0]+' '+d[1]+')"><circle cy="-2" r="2" fill="'+palettes[0]+'"/><circle cx="2" r="1.8" fill="'+palettes[0]+'"/><circle cx="-2" r="1.8" fill="'+palettes[0]+'"/><circle cy="2" r="1.8" fill="'+palettes[0]+'"/><circle r=".9" fill="'+palettes[1]+'"/></g>').join('')+'</g>'};
+ const flowers=(x,y,s=1,variant=0)=>{const palettes=[['#FFF4CF','#E2B84F','#98B875'],['#FADBCF','#D99168','#94B472'],['#F8F4E8','#E0B447','#A8C07E']][variant%3],dots=[[-11,-2],[-4,3],[4,-3],[11,2],[0,8],[7,8],[-9,7]];return '<g transform="translate('+x+' '+y+') scale('+s+')" opacity="1"><ellipse cx="0" cy="8" rx="21" ry="6" fill="#6F8E69" opacity=".08"/><ellipse cx="-14" cy="9" rx="6.2" ry="2.7" fill="'+palettes[2]+'" opacity=".92"/><ellipse cx="14" cy="9" rx="6" ry="2.6" fill="'+palettes[2]+'" opacity=".9"/>'+dots.map(d=>'<g transform="translate('+d[0]+' '+d[1]+')"><circle cy="-2.6" r="2.7" fill="'+palettes[0]+'"/><circle cx="2.5" r="2.3" fill="'+palettes[0]+'"/><circle cx="-2.5" r="2.3" fill="'+palettes[0]+'"/><circle cy="2.4" r="2.3" fill="'+palettes[0]+'"/><circle r="1.15" fill="'+palettes[1]+'"/></g>').join('')+'</g>'};
  const well=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".95"><ellipse cy="10" rx="16" ry="5" fill="#647D70" opacity=".08"/><ellipse cy="5" rx="13" ry="5" fill="#AFA79A"/><ellipse cy="4" rx="9" ry="3.2" fill="#8FC7D6"/><path d="M-12 5V-8M12 5V-8M-12-7Q0-19 12-7" fill="none" stroke="#806B59" stroke-width="2.5" stroke-linecap="round"/><path d="M-5-14H5" stroke="#806B59" stroke-width="2.4" stroke-linecap="round"/></g>';
  const pond=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".96"><ellipse cy="8" rx="31" ry="10" fill="#678678" opacity=".08"/><path d="M-30 2Q-25-12-8-12Q5-18 23-8Q34 1 24 13Q9 19-8 15Q-27 16-30 2Z" fill="#8CC5D7"/><path d="M-16-3Q-5-9 7-4" fill="none" stroke="#DFF3F7" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="-25" cy="7" rx="7" ry="2.5" fill="#9CB583" transform="rotate(-26 -25 7)"/><ellipse cx="25" cy="7" rx="7" ry="2.5" fill="#9CB583" transform="rotate(20 25 7)"/></g>';
  const snowRock=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".9"><ellipse cy="7" rx="15" ry="4" fill="#8DA0A5" opacity=".12"/><path d="M-11 4Q-13-5-5-12Q4-15 10-8Q14-1 9 5Z" fill="#8F9D9F"/><path d="M-9-3Q-4-12 5-10Q10-8 11-3Q1-6-9-3Z" fill="#F8FBFC"/></g>';
@@ -885,12 +946,12 @@ function forestDecorations(cfg,project,theme='basic',emptySlots=[],featureSlots=
  const open=[...emptySlots].sort((a,b)=>(hash('decor-v6|'+a.key)-hash('decor-v6|'+b.key)));
  const take=(count,min=2.4)=>{const out=[];for(const s of open){if(out.some(q=>Math.hypot(s.gx-q.gx,s.gy-q.gy)<min))continue;out.push(s);if(out.length>=count)break}return out};
  if(theme==='snow'){
-  const picks=take(cfg.tier<=1?1:cfg.tier<=3?3:5,3);
+  const picks=take(cfg.tier<=1?1:cfg.tier<=3?4:6,2.8);
   picks.forEach((s,i)=>{const p=project(s);if(i===0)pieces.push(berryTree(p.x.toFixed(1),p.y.toFixed(1),cfg.tier<=2?.43:.50,i));else if(i%3===1)pieces.push(snowRock(p.x.toFixed(1),p.y.toFixed(1),.72));else pieces.push(snowPatch(p.x.toFixed(1),p.y.toFixed(1),.65))});
   const extra=cfg.tier>=4?take(7,3.4).slice(5):[];extra.forEach((s,i)=>{const p=project(s);pieces.push(i%2?berryTree(p.x.toFixed(1),p.y.toFixed(1),.45,i+1):snowBranch(p.x.toFixed(1),p.y.toFixed(1),.7))});
   return pieces.join('');
  }
- [['10,9','flower'],['8,13','well'],['13,15','rock'],['14,8','stump'],['7,10','grass'],['7,16','branch'],['17,14','rock'],['9,17','flower']].forEach(([key,kind],i)=>{const p=at(key);if(!p)return;if(kind==='flower')pieces.push(flowers(p.x.toFixed(1),p.y.toFixed(1),.9,i));if(kind==='well')pieces.push(well(p.x.toFixed(1),p.y.toFixed(1),.82));if(kind==='rock')pieces.push(rock(p.x.toFixed(1),p.y.toFixed(1),.76));if(kind==='stump')pieces.push(stump(p.x.toFixed(1),p.y.toFixed(1),.74));if(kind==='grass')pieces.push(grass(p.x.toFixed(1),p.y.toFixed(1),.72));if(kind==='branch')pieces.push(branch(p.x.toFixed(1),p.y.toFixed(1),.74))});
+ [['10,9','flower'],['12,8','flower'],['9,15','flower'],['16,13','flower'],['11,17','flower'],['8,13','well'],['13,15','rock'],['14,8','stump'],['7,10','grass'],['7,16','branch'],['17,14','rock'],['9,17','flower']].forEach(([key,kind],i)=>{const p=at(key);if(!p)return;if(kind==='flower')pieces.push(flowers(p.x.toFixed(1),p.y.toFixed(1),1.18+(i%2)*.08,i));if(kind==='well')pieces.push(well(p.x.toFixed(1),p.y.toFixed(1),.82));if(kind==='rock')pieces.push(rock(p.x.toFixed(1),p.y.toFixed(1),.76));if(kind==='stump')pieces.push(stump(p.x.toFixed(1),p.y.toFixed(1),.74));if(kind==='grass')pieces.push(grass(p.x.toFixed(1),p.y.toFixed(1),.72));if(kind==='branch')pieces.push(branch(p.x.toFixed(1),p.y.toFixed(1),.74))});
  if(cfg.tier>=4){const waterKeys=['15,10','16,10','15,11','16,11'].map(k=>at(k)).filter(Boolean);if(waterKeys.length){const x=waterKeys.reduce((a,p)=>a+p.x,0)/waterKeys.length,y=waterKeys.reduce((a,p)=>a+p.y,0)/waterKeys.length;pieces.push(pond(x.toFixed(1),y.toFixed(1),.86))}}
  return pieces.join('');
 }
