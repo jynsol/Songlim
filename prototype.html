@@ -1,6 +1,7 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#ffffff"><title>송림 · 작동 프로토타입 · BOOK/ALBUM/MOVIE</title><style>
 :root{--ink:#20262c;--muted:#767d83;--line:#e9ecee;--soft:#f8f9fa;--blue:#3F8554;--grad:linear-gradient(115deg,#3F8554,#4B8C58)}
-*{box-sizing:border-box}body{margin:0;background:#f3f4f5;color:var(--ink);font:15px/1.65 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;word-break:keep-all}button,input,select,textarea{font:inherit}button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button:disabled{opacity:.4;cursor:default}button{border:0;background:none;color:inherit}a{color:#356C45;text-decoration:none}button:focus-visible,a:focus-visible{outline:2px solid var(--blue);outline-offset:3px}input,select,textarea{border:1px solid #dde2e5;border-radius:8px;padding:11px 12px;max-width:100%;width:100%;background:white;color:var(--ink)}input[type=checkbox],input[type=radio]{width:20px;height:20px}textarea{resize:vertical;min-height:90px}label{display:block;font-size:13px;margin:15px 0 6px}h1,h2,h3,p{margin:0}h1{font-size:25px;letter-spacing:-.7px;line-height:1.4}h2{font-size:21px;letter-spacing:-.6px}h3{font-size:16px}small,.muted{color:var(--muted);font-size:12px}.app{max-width:430px;margin:0 auto;background:#fff;min-height:100dvh;position:relative}.head{height:68px;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:#ffffffed;position:sticky;top:0;z-index:4;border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}.head h1{font-size:18px}.brand{font-weight:750;font-size:20px;display:flex;align-items:center;gap:7px}.brand svg{color:#3F8554}.iconbtn{min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:8px}.row{display:flex;align-items:center;gap:10px}.between{justify-content:space-between}.grow{flex:1;min-width:0}.page{padding:24px 20px 116px}.page>section{margin-bottom:28px}.primary,.secondary{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;padding:12px 16px;border-radius:9px;font-weight:650;font-size:14px}.primary{background:var(--blue);color:#fff}.primary.grad{background:var(--grad)}.secondary{background:white;border:1px solid #dfe4e7;color:#444}.textbtn{min-height:44px;padding:10px 4px;font-size:13px;color:#626b73}.textbtn.danger,.menu-row.danger{color:#a63e3e}.stack{display:grid;gap:10px}.center{text-align:center}.space{height:22px}.rule{border-top:1px solid var(--line);margin:22px 0}.card{padding:18px;border:1px solid var(--line);border-radius:14px;background:#fff}.growth{display:block;width:100%;height:210px;margin:12px auto 10px}.growth-label{font-size:12px;color:#707c76;margin-bottom:16px}.title{font-size:23px;font-weight:700;line-height:1.45;margin:4px 0}.creator{font-size:13px;color:var(--muted);margin-top:5px}.more{position:relative}.more>summary{list-style:none;min-width:44px;min-height:44px;display:grid;place-items:center;cursor:pointer;border-radius:8px;background:#f2f3f4}.more>summary::-webkit-details-marker{display:none}.more-menu{position:absolute;right:0;top:44px;width:190px;padding:8px;background:white;box-shadow:0 8px 35px #20304018;border:1px solid var(--line);border-radius:10px;z-index:8}.more-menu button{display:block;min-height:44px;width:100%;text-align:left;padding:10px;font-size:13px;border-bottom:1px solid var(--line)}.more-menu button:last-child{border-bottom:0}.tabs{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,430px);display:flex;padding:10px 10px max(12px,env(safe-area-inset-bottom));background:#fffffffa;border-top:1px solid var(--line);z-index:5}.tabs button{flex:1;display:grid;justify-items:center;gap:4px;min-height:46px;color:#868e92;font-size:11px}.tabs button.active{color:#3F8554;font-weight:700}.tabs svg{width:21px;height:21px}.chips{display:flex;gap:7px;overflow-x:auto;padding:12px 0;scrollbar-width:none}.chip{white-space:nowrap;min-height:40px;padding:7px 13px;border:1px solid #e5e8eb;border-radius:22px;color:#62696e;font-size:12px}.chip.active{background:#E4F2DA;color:#356C45;border-color:#C9DFC0}.content-list{display:grid;gap:10px}.content-row{width:100%;display:flex;gap:14px;align-items:center;text-align:left;border:1px solid var(--line);border-radius:12px;padding:15px;background:#fff;min-width:0}.content-row .title{font-size:16px;margin:5px 0}.cover{width:58px;height:80px;object-fit:cover;flex-shrink:0;border-radius:4px;display:grid;place-items:center;background:#f2f3f4;color:#79838a;font-size:21px;border:1px solid #e5e7e9}.cover.album{height:58px}.badge{font-size:11px;color:#6b747a}.summary{font-size:12px;color:var(--muted);margin:6px 0 16px}.fab{position:fixed;bottom:92px;right:max(calc((100vw - 430px)/2 + 20px),20px);padding:12px 17px;background:var(--grad);color:white;border-radius:26px;font-size:13px;font-weight:650;box-shadow:0 10px 24px #3f855426,0 2px 6px #0002;z-index:3}.list-footer{height:78px}.empty{padding:48px 10px;text-align:center}.empty p{font-size:13px;color:var(--muted);margin:10px 0 24px}.note{padding:12px 14px;background:#f7f8f9;border-radius:8px;font-size:12px;color:#687077}.tap-row{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:48px;margin-top:10px;padding:13px 14px;background:#f7f8f9;border-radius:10px;font-size:13px;color:var(--ink)}.tap-row>span{color:var(--muted);flex-shrink:0}.history{padding:14px 0;border-bottom:1px solid var(--line);font-size:13px}.history p{white-space:pre-wrap;overflow-wrap:anywhere}.collapse{margin:12px 0;font-size:13px}.collapse>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;color:#69747b}.forest-viewport{height:390px;overflow:hidden;background:linear-gradient(155deg,#f4f3ee,#f6f5f1);border-radius:16px;touch-action:none;position:relative}.forest-viewport svg{width:100%;height:100%;display:block;user-select:none}.forest-tools{display:flex;justify-content:space-between;align-items:center;margin-top:6px}.forest-tools button{font-size:12px;color:#737d83}.area{margin-top:20px}.area h2{font-size:21px;margin-bottom:7px}.area strong{font-size:27px;letter-spacing:-.6px}.area p{font-size:12px;color:#777;margin-top:5px}.animal{animation:wander 13s ease-in-out infinite alternate}.leaf{animation:sway 5s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom}@keyframes wander{to{transform:translateX(20px)}}@keyframes sway{to{rotate:2deg}}
+*{box-sizing:border-box}body{margin:0;background:#f3f4f5;color:var(--ink);font:15px/1.65 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;word-break:keep-all}button,input,select,textarea{font:inherit}button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button:disabled{opacity:.4;cursor:default}button{border:0;background:none;color:inherit}a{color:#356C45;text-decoration:none}button:focus-visible,a:focus-visible{outline:2px solid var(--blue);outline-offset:3px}input,select,textarea{border:1px solid #dde2e5;border-radius:8px;padding:11px 12px;max-width:100%;width:100%;background:white;color:var(--ink)}input[type=checkbox],input[type=radio]{width:20px;height:20px}textarea{resize:vertical;min-height:90px}label{display:block;font-size:13px;margin:15px 0 6px}h1,h2,h3,p{margin:0}h1{font-size:25px;letter-spacing:-.7px;line-height:1.4}h2{font-size:21px;letter-spacing:-.6px}h3{font-size:16px}small,.muted{color:var(--muted);font-size:12px}.app{max-width:430px;margin:0 auto;background:#fff;min-height:100dvh;position:relative}.head{height:68px;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:#ffffffed;position:sticky;top:0;z-index:4;border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}.head h1{font-size:18px}.brand{font-weight:750;font-size:20px;display:flex;align-items:center;gap:7px}.brand svg{color:#3F8554}.iconbtn{min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:8px}.row{display:flex;align-items:center;gap:10px}.between{justify-content:space-between}.grow{flex:1;min-width:0}.page{padding:24px 20px 116px}.page>section{margin-bottom:28px}.primary,.secondary{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;padding:12px 16px;border-radius:9px;font-weight:650;font-size:14px}.primary{background:var(--blue);color:#fff}.primary.grad{background:var(--grad)}.secondary{background:white;border:1px solid #dfe4e7;color:#444}.textbtn{min-height:44px;padding:10px 4px;font-size:13px;color:#626b73}.textbtn.danger,.menu-row.danger{color:#a63e3e}.stack{display:grid;gap:10px}.center{text-align:center}.space{height:22px}.rule{border-top:1px solid var(--line);margin:22px 0}.card{padding:18px;border:1px solid var(--line);border-radius:14px;background:#fff}.growth{display:block;width:100%;height:210px;margin:12px auto 10px}.growth-label{font-size:12px;color:#707c76;margin-bottom:16px}.title{font-size:23px;font-weight:700;line-height:1.45;margin:4px 0}.creator{font-size:13px;color:var(--muted);margin-top:5px}
+.taste-intro{margin:12px auto 0;max-width:330px;font-size:13px;line-height:1.5;color:#5f686d;text-align:center;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.more{position:relative}.more>summary{list-style:none;min-width:44px;min-height:44px;display:grid;place-items:center;cursor:pointer;border-radius:8px;background:#f2f3f4}.more>summary::-webkit-details-marker{display:none}.more-menu{position:absolute;right:0;top:44px;width:190px;padding:8px;background:white;box-shadow:0 8px 35px #20304018;border:1px solid var(--line);border-radius:10px;z-index:8}.more-menu button{display:block;min-height:44px;width:100%;text-align:left;padding:10px;font-size:13px;border-bottom:1px solid var(--line)}.more-menu button:last-child{border-bottom:0}.tabs{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,430px);display:flex;padding:10px 10px max(12px,env(safe-area-inset-bottom));background:#fffffffa;border-top:1px solid var(--line);z-index:5}.tabs button{flex:1;display:grid;justify-items:center;gap:4px;min-height:46px;color:#868e92;font-size:11px}.tabs button.active{color:#3F8554;font-weight:700}.tabs svg{width:21px;height:21px}.chips{display:flex;gap:7px;overflow-x:auto;padding:12px 0;scrollbar-width:none}.chip{white-space:nowrap;min-height:40px;padding:7px 13px;border:1px solid #e5e8eb;border-radius:22px;color:#62696e;font-size:12px}.chip.active{background:#E4F2DA;color:#356C45;border-color:#C9DFC0}.content-list{display:grid;gap:10px}.content-row{width:100%;display:flex;gap:14px;align-items:center;text-align:left;border:1px solid var(--line);border-radius:12px;padding:15px;background:#fff;min-width:0}.content-row .title{font-size:16px;margin:5px 0}.cover{width:58px;height:80px;object-fit:cover;flex-shrink:0;border-radius:4px;display:grid;place-items:center;background:#f2f3f4;color:#79838a;font-size:21px;border:1px solid #e5e7e9}.cover.album{height:58px}.badge{font-size:11px;color:#6b747a}.summary{font-size:12px;color:var(--muted);margin:6px 0 16px}.fab{position:fixed;bottom:92px;right:max(calc((100vw - 430px)/2 + 20px),20px);padding:12px 17px;background:var(--grad);color:white;border-radius:26px;font-size:13px;font-weight:650;box-shadow:0 10px 24px #3f855426,0 2px 6px #0002;z-index:3}.list-footer{height:78px}.empty{padding:48px 10px;text-align:center}.empty p{font-size:13px;color:var(--muted);margin:10px 0 24px}.note{padding:12px 14px;background:#f7f8f9;border-radius:8px;font-size:12px;color:#687077}.tap-row{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:48px;margin-top:10px;padding:13px 14px;background:#f7f8f9;border-radius:10px;font-size:13px;color:var(--ink)}.tap-row>span{color:var(--muted);flex-shrink:0}.history{padding:14px 0;border-bottom:1px solid var(--line);font-size:13px}.history p{white-space:pre-wrap;overflow-wrap:anywhere}.collapse{margin:12px 0;font-size:13px}.collapse>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;color:#69747b}.forest-viewport{height:390px;overflow:hidden;background:linear-gradient(155deg,#f4f3ee,#f6f5f1);border-radius:16px;touch-action:none;position:relative}.forest-viewport svg{width:100%;height:100%;display:block;user-select:none}.forest-tools{display:flex;justify-content:space-between;align-items:center;margin-top:6px}.forest-tools button{font-size:12px;color:#737d83}.area{margin-top:20px}.area h2{font-size:21px;margin-bottom:7px}.area strong{font-size:27px;letter-spacing:-.6px}.area p{font-size:12px;color:#777;margin-top:5px}.animal{animation:wander 13s ease-in-out infinite alternate}.leaf{animation:sway 5s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom}@keyframes wander{to{transform:translateX(20px)}}@keyframes sway{to{rotate:2deg}}
 .hidden-glow{animation:hiddenGlow 4.2s ease-in-out infinite}.hidden-glow.alt{animation-delay:-2.1s}.hidden-twinkle{animation:hiddenTwinkle 2.8s ease-in-out infinite}.hidden-twinkle.alt{animation-delay:-1.4s}.hidden-twinkle.slow{animation-duration:3.8s}.hidden-ornament-glow{animation:hiddenOrnament 3.2s ease-in-out infinite}.hidden-ornament-glow.alt{animation-delay:-1.6s}.hidden-ice-sheen{animation:hiddenIceSheen 4.4s ease-in-out infinite}.hidden-ice-sheen.alt{animation-delay:-2.2s}@keyframes hiddenGlow{0%,18%,100%{opacity:.04}38%,56%{opacity:.18}70%{opacity:.08}}@keyframes hiddenTwinkle{0%,22%,100%{opacity:.06}38%,52%{opacity:.95}66%{opacity:.18}}@keyframes hiddenOrnament{0%,20%,100%{opacity:.08}42%,58%{opacity:.56}72%{opacity:.16}}@keyframes hiddenIceSheen{0%,24%,100%{opacity:.10}40%,60%{opacity:.52}74%{opacity:.16}}
 @media(prefers-reduced-motion:reduce){.animal,.leaf,.hidden-glow,.hidden-twinkle,.hidden-ornament-glow,.hidden-ice-sheen{animation:none}}.paused .animal,.paused .leaf{animation-play-state:paused}.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;text-align:center}.cal .weekday{font-size:11px;color:#8a9399;padding:8px 0}.day{min-height:75px;display:flex;flex-direction:column;align-items:center;padding:5px 0;font-size:11px;border-radius:7px;position:relative}.day.today>span:first-child{background:#3F8554;color:white;border-radius:50%;width:22px;height:22px;display:grid;place-items:center}.day img,.day .mini-cover{width:25px;height:33px;object-fit:cover;margin-top:3px;border-radius:2px;background:#eff1f2;font-size:10px;overflow:hidden;display:grid;place-items:center}.day .plus{font-size:9px;color:#356C45}.day.completed{background:#F5F0D9}.month-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.menu-row{width:100%;min-height:56px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);text-align:left;font-size:14px}.sheet-back{position:fixed;inset:0;background:#15202b55;z-index:20;display:flex;align-items:flex-end;justify-content:center}.sheet{background:#fff;border-radius:20px 20px 0 0;width:min(100%,460px);max-height:90dvh;overflow-y:auto;overscroll-behavior:contain;padding:18px 22px max(26px,env(safe-area-inset-bottom))}.sheet-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.sheet-head h2{font-size:19px}.sheet .primary{margin-top:18px}.toast{position:fixed;bottom:160px;left:50%;transform:translateX(-50%);width:min(calc(100% - 40px),380px);padding:13px 16px;background:#252d34;color:white;border-radius:9px;z-index:15;font-size:13px;display:flex;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 3px 14px #0002}.toast button{color:#F6E5A6;white-space:nowrap;min-height:30px}.toast:empty{display:none}.preview{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:8px;margin:10px 0}.rating{display:flex;gap:5px}.rating button{font-size:28px;color:#bbb;padding:4px;min-width:44px;min-height:44px}.rating .on{color:var(--brand-star)}.theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.theme-grid button{border:1px solid var(--line);border-radius:10px;padding:14px 4px;min-height:74px}.theme-grid button.active{border-color:#3F8554;color:#3F8554}.tiny{font-size:11px}.offscreen{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.form-error{color:#a13e3e;font-size:12px;margin-top:8px}.dev{border-top:1px solid #eee;padding-top:14px;margin-top:28px}.dev summary{font-size:12px;color:#888;min-height:44px;cursor:pointer}.storage-alert{background:#fff5db;color:#705a2d;padding:10px;font-size:12px}.trial{display:flex;gap:8px;align-items:center;color:#838b90;font-size:11px;margin-bottom:14px}.thumbs{display:flex;gap:8px;overflow:auto;margin:12px 0}.thumbs img{height:90px;max-width:100px;object-fit:cover;border-radius:6px}.checkrow{display:flex;align-items:center;gap:10px;border-bottom:1px solid #eee;padding:12px 0}.checkrow label{margin:0;flex:1}.share-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.share-actions .primary{margin:0}.back-title{font-size:17px;font-weight:650}.small-link{font-size:12px}.bookpage{font-size:12px;color:#777;margin-top:8px}
 @media(min-width:700px){.app{border-inline:1px solid #e5e7e9}.sheet-back{align-items:center}.sheet{border-radius:18px}}
@@ -406,10 +407,52 @@ function normalizeBookGenre(raw,data){
  return inferBookGenre(merged);
 }
 
-const BOOK_EXCLUDED_SEARCH_RE=/(평가문제집|문제집|기출\s*문제|기출문제|모의고사|수능|내신|자습서|학습서|참고서|교과서|수험서|워크북|workbook|test\s*prep|토익|toeic|토플|toefl|jlpt|ebs|개념원리|쎈\s*수학|rpm|n제)/i;
+const BOOK_EXCLUDED_SEARCH_RE=/(평가문제집|문제집|기출\s*문제|기출문제|모의고사|수능|내신|자습서|학습서|참고서|교과서|수험서|워크북|workbook|test\s*prep|토익|toeic|토플|toefl|jlpt|ebs|개념원리|쎈\s*수학|라이트쎈|개념쎈|rpm|n제|자이스토리|마더텅|블랙라벨|숨마쿰라우데|완자|수능특강|수능완성|올림포스|개념\+유형|기본서|실전서|해설서|공무원\s*시험|자격증\s*시험|학습지|연산\s*문제|연산력|기탄\s*(수학|국어|영어|한자)|사고력\s*수학|유형\s*문제|단원평가|진단평가|학력평가|초등\s*참고서|중등\s*참고서|고등\s*참고서|초등\s*[1-6]?\s*학년|중[123]\s*(국어|영어|수학|과학|사회)|고[123]\s*(국어|영어|수학|과학|사회)|초등\s*(국어|영어|수학|과학|사회)|중학\s*(국어|영어|수학|과학|사회)|고등\s*(국어|영어|수학|과학|사회))/i;
+const BOOK_EDUCATIONAL_COLLECTION_RE=/((중고생|중학생|고등학생|청소년|초등학생).{0,16}(필독|권장|추천|꼭\s*읽어야|읽어야\s*할|논술|교과)|필독.{0,12}(고전|문학|소설|명작|도서)|권장도서\s*\d+|필독서\s*\d+|(한국\s*)?고전소설\s*(\d+|선|선집|모음|컬렉션)|명작소설\s*(\d+|선|선집)|교과서\s*수록|교과\s*연계|논술\s*(대비|필독|고전|문학)|수행평가\s*(대비|필독)|독서평설|중고등\s*필독|중등\s*필독|고등\s*필독)/i;
+const BOOK_ANTHOLOGY_COLLECTION_RE=/((한국|세계|동양|서양|현대|고전|명작)?\s*(단편소설|고전소설|명작소설|단편문학|고전문학|명작문학|한국문학|세계문학)\s*(\d{1,3}\s*(선|편|권)?|선집|모음|컬렉션)|((단편소설|고전소설|명작소설|단편문학|고전문학|명작문학|한국문학|세계문학)\s*(베스트|대표|엄선)?\s*\d{1,3}\s*(선|편)?))/i;
+
+const BOOK_PERIODICAL_RE=/((한국소설|한국문학|문학|소설)\s*[\(\[]?\s*(19|20)\d{2}\s*년\s*\d{1,2}\s*월\s*\d{1,4}\s*호[\)\]]?|((19|20)\d{2}\s*년\s*\d{1,2}\s*월).{0,12}\d{1,4}\s*호|\b\d{1,4}\s*호\b)/i;
+function compactBookTitle(value){
+ return String(value||'')
+  .replace(/<[^>]+>/g,' ')
+  .replace(/[·•ㆍ:：\-–—_/\\()[\]{}]/g,' ')
+  .replace(/\s+/g,' ')
+  .trim();
+}
+const BOOK_EXCLUDED_PUBLISHER_RE=/(천재교육|비상교육|좋은책신사고|마더텅|수경출판사|이투스북|메가스터디북스|디딤돌교육|NE능률|능률교육|지학사|개념원리|키출판사|쎄듀|오르비북스|기탄교육|기탄출판|동아출판|미래엔|교학사|금성출판사|에듀윌|해커스|시대고시|박문각)/i;
 function isExcludedBookCandidate(book){
- const hay=[book?.title,book?.creator,book?.publisher,book?.genre,book?.rawGenre,book?.contents].filter(Boolean).join(' ').replace(/<[^>]+>/g,' ');
- return BOOK_EXCLUDED_SEARCH_RE.test(hay);
+ // 소개문(contents)은 보지 않는다. 일반 문학의 '스릴러의 교과서' 같은 표현 오탐 방지.
+ const title=compactBookTitle(book?.title);
+ const searchable=[
+  title,
+  book?.genre,
+  book?.rawGenre
+ ].filter(Boolean).join(' ').replace(/<[^>]+>/g,' ');
+ const publisher=String(book?.publisher||'');
+
+ // '한국소설'은 정기간행물/잡지 계열 제목으로 취급해 제목에 포함되면 제외.
+ // 또한 연+월/호 조합이 있는 문학 정기간행물형 제목도 제외한다.
+ const normalizedTitle=title.replace(/\s+/g,' ').trim();
+ const koreanNovelPeriodical=
+   normalizedTitle.includes('한국소설')
+   ||/(계간|계간지|봄호|여름호|가을호|겨울호|\d{1,2}\s*월호|월호)/i.test(normalizedTitle)
+   ||(/(19|20)\d{2}\s*년/.test(normalizedTitle)&&/\d{1,2}\s*월/.test(normalizedTitle)&&/\d{1,4}\s*호/.test(normalizedTitle))
+   ||(/(문학|소설|시|비평|문예)/.test(normalizedTitle)&&/\d{1,4}\s*호/.test(normalizedTitle))
+   ||(/(문학|소설|시|비평|문예)/.test(normalizedTitle)&&/(봄|여름|가을|겨울)\s*(호|편)?/i.test(normalizedTitle));
+
+ // 띄어쓰기/괄호/구두점 차이에도 잡히도록 제목의 공백 제거본도 함께 본다.
+ const compact=title.replace(/\s+/g,'');
+
+ const anthologyCompact=
+   /((한국|세계|동양|서양|현대|고전|명작)?(단편소설|고전소설|명작소설|단편문학|고전문학|명작문학|한국문학|세계문학)\d{1,3}(선|편|권)?$)|((단편소설|고전소설|명작소설|단편문학|고전문학|명작문학|한국문학|세계문학)(선집|모음|컬렉션)$)/i.test(compact);
+
+ return BOOK_EXCLUDED_SEARCH_RE.test(searchable)
+   ||BOOK_EDUCATIONAL_COLLECTION_RE.test(title)
+   ||BOOK_ANTHOLOGY_COLLECTION_RE.test(title)
+   ||anthologyCompact
+   ||koreanNovelPeriodical
+   ||BOOK_PERIODICAL_RE.test(title)
+   ||BOOK_EXCLUDED_PUBLISHER_RE.test(publisher);
 }
 function allowDiscoveryCandidate(item){
  if(!item||!item.title||!['book','album','movie'].includes(item.type))return false;
@@ -1437,9 +1480,14 @@ function openScrapComposer(type='book',query=null,reset=false){
 }
 function addMenu(){openScrapComposer('book','',true)}
 const BOOK_SEARCH_ENDPOINT='https://gytfefnvpqqxveryhopw.supabase.co/functions/v1/super-service';
+const BOOK_POPULARITY_ENDPOINT='https://gytfefnvpqqxveryhopw.supabase.co/functions/v1/book-popularity';
 let remoteBookResults=[],bookSearchSeq=0,bookSearchTimer=null;
+let bookSearchRawResults=[],bookSearchActiveQuery='',bookSearchNextPage=2,bookSearchHasMore=false,bookSearchLoadingMore=false,bookSearchStagnantPages=0,bookSearchObserver=null;
+const BOOK_SEARCH_PAGE_SIZE=20;
 const MUSIC_SEARCH_ENDPOINT='https://gytfefnvpqqxveryhopw.supabase.co/functions/v1/music-search';
+const MUSIC_POPULARITY_ENDPOINT='https://gytfefnvpqqxveryhopw.supabase.co/functions/v1/music-popularity';
 const MOVIE_SEARCH_ENDPOINT='https://gytfefnvpqqxveryhopw.supabase.co/functions/v1/movie-search';
+const MOVIE_RECOMMEND_ENDPOINT='https://gytfefnvpqqxveryhopw.supabase.co/functions/v1/movie-recommend';
 const IMAGE_OCR_ENDPOINT='https://gytfefnvpqqxveryhopw.supabase.co/functions/v1/image-ocr';
 let remoteAlbumResults=[],musicSearchSeq=0,musicSearchTimer=null;
 let remoteMovieResults=[],movieSearchSeq=0,movieSearchTimer=null;
@@ -1450,8 +1498,351 @@ function unwrapBookDocuments(payload){
 }
 function normalizeRemoteBook(d){
  const creators=Array.isArray(d?.authors)?d.authors:Array.isArray(d?.author)?d.author:[d?.author||d?.creator||''];
- const base={type:'book',title:String(d?.title||d?.bookTitle||'').trim(),creator:creators.filter(Boolean).join(', ').trim(),publisher:String(d?.publisher||'').trim(),isbn:String(d?.isbn||d?.isbn13||d?.isbn10||'').trim(),cover:String(d?.thumbnail||d?.cover||d?.image||'').trim(),catalogUrl:String(d?.url||d?.link||'').trim(),publishedAt:String(d?.datetime||d?.publishedAt||d?.pubdate||'').trim(),contents:String(d?.contents||d?.description||d?.overview||'').trim(),source:'카카오 책 검색'};
+ const popularityCount=Number(d?.ratingsCount??d?.ratingCount??d?.reviewCount??d?.reviews??d?.salesCount??d?.sales_count??d?.popularity??0)||0;
+ const averageRating=Number(d?.averageRating??d?.rating??0)||0;
+ const base={type:'book',title:String(d?.title||d?.bookTitle||'').replace(/<[^>]+>/g,'').trim(),creator:creators.filter(Boolean).join(', ').trim(),publisher:String(d?.publisher||'').trim(),isbn:String(d?.isbn||d?.isbn13||d?.isbn10||'').trim(),cover:String(d?.thumbnail||d?.cover||d?.image||d?.imageUrl||d?.image_url||d?.coverUrl||d?.cover_url||d?.thumbnailUrl||d?.thumbnail_url||'').trim(),catalogUrl:String(d?.url||d?.link||'').trim(),publishedAt:String(d?.datetime||d?.publishedAt||d?.pubdate||'').trim(),contents:String(d?.contents||d?.description||d?.overview||'').trim(),source:'카카오 책 검색',searchPopularity:popularityCount,averageRating};
  const rawGenre=cleanGenreValue(d?.genre||d?.category||d?.categoryName||d?.subject||''),genre=normalizeBookGenre(rawGenre,base);return {...base,genre,rawGenre,genreSource:'auto',genreCandidates:genre?[[genre,rawGenre?'외부 분류':'자동분류']]:[]};
+}
+
+
+function normalizeGoogleBookSearchItem(item){
+ const v=item?.volumeInfo||{},ids=Array.isArray(v.industryIdentifiers)?v.industryIdentifiers:[];
+ const isbn=(ids.find(x=>String(x?.type||'').includes('ISBN_13'))?.identifier||ids.find(x=>String(x?.type||'').includes('ISBN'))?.identifier||'');
+ const rawGenre=Array.isArray(v.categories)?v.categories.join(' / '):'';
+ const base={type:'book',title:String(v.title||'').trim(),creator:Array.isArray(v.authors)?v.authors.join(', '):'',publisher:String(v.publisher||'').trim(),isbn:String(isbn||'').trim(),cover:String(v.imageLinks?.thumbnail||v.imageLinks?.smallThumbnail||'').replace(/^http:/,'https:'),catalogUrl:String(v.infoLink||v.previewLink||'').trim(),publishedAt:String(v.publishedDate||'').trim(),contents:String(v.description||'').trim(),source:'Google Books 보조 검색',searchPopularity:Number(v.ratingsCount)||0,averageRating:Number(v.averageRating)||0};
+ const genre=normalizeBookGenre(rawGenre,base);
+ return {...base,genre,rawGenre,genreSource:'auto',genreCandidates:genre?[[genre,'Google Books']]:[]};
+}
+async function searchGoogleBooksSupplement(query){
+ try{
+  const urls=[
+   'https://www.googleapis.com/books/v1/volumes?q='+encodeURIComponent(query)+'&maxResults=20&printType=books',
+   'https://www.googleapis.com/books/v1/volumes?q='+encodeURIComponent('intitle:'+query)+'&maxResults=20&printType=books'
+  ];
+  const batches=await Promise.all(urls.map(url=>fetch(url).then(async res=>res.ok?await res.json():{}).catch(()=>({}))));
+  return batches.flatMap(payload=>Array.isArray(payload?.items)?payload.items:[])
+   .map(normalizeGoogleBookSearchItem)
+   .filter(c=>c.title&&!isExcludedBookCandidate(c));
+ }catch{return []}
+}
+function bookSearchCoreTitle(value){
+ return Model.norm(String(value||'')
+   .replace(/\([^)]*\)|\[[^\]]*\]|\{[^}]*\}/g,' ')
+   .replace(/[:：\-–—]\s*[^:：\-–—]+$/,' ')
+   .replace(/\s+/g,' '));
+}
+
+const BOOK_PUBLISHER_TIERS=[
+ {score:1.00,names:['민음사','문학동네','황금가지','창비','문학과지성사','열린책들','을유문화사']},
+ {score:.82,names:['현대문학','시공사','아르테','은행나무','문학수첩','비채','웅진지식하우스','김영사','북하우스','세계사','돌베개']},
+ {score:.68,names:['나무의철학','다산책방','알에이치코리아','RHK','위즈덤하우스','해냄','자음과모음','민음인']}
+];
+function bookPublisherTrust(book){
+ const p=Model.norm(book?.publisher||'');
+ if(!p)return 0;
+ for(const tier of BOOK_PUBLISHER_TIERS)if(tier.names.some(name=>p.includes(Model.norm(name))))return tier.score;
+ return .18;
+}
+function bookEditionTrust(book){
+ let score=0;
+ if(book?.isbn)score+=.26;
+ if(book?.publisher)score+=.18;
+ if(book?.publishedAt)score+=.10;
+ if(book?.cover)score+=.08;
+ score+=bookPublisherTrust(book)*.38;
+ return Math.min(1,score);
+}
+
+
+function primaryIsbn13(value){
+ const parts=String(value||'').match(/\d{10,13}/g)||[];
+ return parts.find(x=>x.length===13)||'';
+}
+function applyPopularityInfo(book,info){
+ if(!book||!info)return;
+ book.yes24Found=Boolean(info?.found);
+ book.yes24PopularityScore=Number(info?.popularityScore)||0;
+ book.yes24SalePoint=Number(info?.salePoint)||0;
+ book.yes24StarScore=Number(info?.starScore)||0;
+ book.yes24BestsellerRank=Number(info?.bestsellerRank)||null;
+ book.yes24SteadyRank=Number(info?.steadyRank)||null;
+ if(!book.cover&&info?.cover)book.cover=String(info.cover);
+ if(!book.catalogUrl&&info?.link)book.catalogUrl=String(info.link);
+ if(!book.publisher&&info?.publisher)book.publisher=String(info.publisher);
+ if(!book.publishedAt&&info?.publishDate)book.publishedAt=String(info.publishDate);
+}
+async function enrichBookPopularity(results,seq){
+ const candidates=(results||[]).filter(book=>primaryIsbn13(book?.isbn)).slice(0,30);
+ const isbns=[...new Set(candidates.map(book=>primaryIsbn13(book.isbn)).filter(Boolean))];
+ if(!isbns.length)return;
+
+ try{
+  const res=await fetch(BOOK_POPULARITY_ENDPOINT,{
+   method:'POST',
+   headers:{'Content-Type':'application/json','Accept':'application/json'},
+   body:JSON.stringify({isbns})
+  });
+  if(!res.ok)return;
+
+  const payload=await res.json();
+  const infoMap=new Map(
+   (Array.isArray(payload?.books)?payload.books:[])
+    .map(info=>[primaryIsbn13(info?.isbn13||info?.isbn),info])
+    .filter(([isbn])=>isbn)
+  );
+
+  const applyTo=list=>{
+   for(const book of list||[]){
+    const info=infoMap.get(primaryIsbn13(book?.isbn));
+    if(info)applyPopularityInfo(book,info);
+   }
+  };
+
+  applyTo(results);
+  applyTo(bookSearchRawResults);
+
+  if(seq!==bookSearchSeq||!$('catalogResults'))return;
+
+  remoteBookResults=mergeAndRankBooks(bookSearchRawResults,[],bookSearchActiveQuery||'')
+   .filter(c=>!isExcludedBookCandidate(c));
+
+  renderRemoteBooks(remoteBookResults);
+ }catch{}
+}
+
+function bookSearchScore(book,query,index=0){
+ const q=Model.norm(query),title=Model.norm(book?.title),core=bookSearchCoreTitle(book?.title),creator=Model.norm(book?.creator);
+ if(!q||!title)return -9999-index;
+
+ const tokens=q.split(/\s+/).filter(Boolean);
+ const creatorParts=String(book?.creator||'')
+   .split(/[,/&·]|\s+저|\s+역/)
+   .map(Model.norm)
+   .filter(Boolean);
+
+ const creatorExact=creator===q||creatorParts.includes(q);
+ const creatorStarts=creator.startsWith(q)||creatorParts.some(x=>x.startsWith(q));
+ const titleExact=title===q;
+ const coreExact=core===q;
+
+ let score=0;
+
+ // Query relevance itself remains the strongest signal.
+ if(titleExact)score+=1450;
+ else if(coreExact)score+=1320;
+ else if(title.startsWith(q))score+=850;
+ else if(title.includes(q))score+=680;
+ else if(core.includes(q)||q.includes(core))score+=440;
+
+ if(creatorExact)score+=1420;
+ else if(creatorStarts)score+=930;
+ else if(creator.includes(q))score+=720;
+
+ const matched=tokens.filter(t=>title.includes(t)||creator.includes(t)).length;
+ score+=matched*75;
+ if(tokens.length&&matched===tokens.length)score+=130;
+
+ // Generic server search-mode evidence:
+ // - title-target result + exact title => stronger edition candidate
+ // - person-target result + exact creator => stronger author candidate
+ if(book?.serverTargets?.includes('title')&&(titleExact||coreExact))score+=520;
+ if(book?.serverTargets?.includes('person')&&(creatorExact||creatorStarts))score+=560;
+ if(book?.serverTargets?.includes('general'))score+=80;
+
+ // A result returned by the server through multiple query modes is
+ // stronger evidence than a one-off fringe hit.
+ const hits=Math.max(1,Number(book?.serverHitCount)||1);
+ score+=Math.min(260,(hits-1)*85);
+
+ // Prefer complete, usable Korean-edition metadata.
+ if(book?.isbn)score+=30;
+ if(book?.publisher)score+=22;
+ if(book?.cover)score+=22;
+ if(book?.publishedAt)score+=12;
+ score+=bookEditionTrust(book)*175;
+ score+=bookPublisherTrust(book)*145;
+
+ // Use popularity only when the server actually supplies it.
+ const pop=Math.max(0,Number(book?.searchPopularity)||0);
+ if(pop)score+=Math.min(190,Math.log10(pop+1)*42);
+ const rating=Math.max(0,Number(book?.averageRating)||0);
+ if(rating)score+=Math.min(35,rating*6);
+
+ // YES24 popularity enrichment. Query relevance still dominates.
+ const yesPop=Math.max(0,Number(book?.yes24PopularityScore)||0);
+ if(yesPop)score+=Math.min(220,yesPop*1.25);
+
+ const salePoint=Math.max(0,Number(book?.yes24SalePoint)||0);
+ if(salePoint)score+=Math.min(120,Math.log10(salePoint+1)*28);
+
+ const yesStar=Math.max(0,Number(book?.yes24StarScore)||0);
+ if(yesStar)score+=Math.min(24,yesStar*2.4);
+
+ if(book?.yes24Found)score+=18;
+ if(book?.yes24BestsellerRank)score+=Math.max(0,70-Math.log10(book.yes24BestsellerRank+1)*24);
+ if(book?.yes24SteadyRank)score+=Math.max(0,45-Math.log10(book.yes24SteadyRank+1)*18);
+
+ // Server/provider ordering is a tie-breaker, not the main ranker.
+ const providerRank=Math.max(0,Number(book?.bestServerRank)||index);
+ score+=Math.max(0,55-providerRank*1.5);
+
+ return score;
+}
+
+
+
+function creatorMatchTier(book,query){
+ const q=Model.norm(query),creator=Model.norm(book?.creator);
+ if(!q||!creator)return 0;
+ const parts=String(book?.creator||'')
+   .split(/[,/&·]|\s+저|\s+역/)
+   .map(Model.norm)
+   .filter(Boolean);
+
+ if(creator===q||parts.includes(q))return 3;
+ if(creator.startsWith(q)||parts.some(x=>x.startsWith(q)))return 2;
+ if(creator.includes(q))return 1;
+ return 0;
+}
+
+function titleMatchTier(book,query){
+ const q=Model.norm(query),title=Model.norm(book?.title),core=bookSearchCoreTitle(book?.title);
+ if(!q||!title)return 0;
+ if(title===q||core===q)return 4;
+ if(title.startsWith(q))return 3;
+ if(title.includes(q))return 2;
+ if(core.includes(q)||q.includes(core))return 1;
+ return 0;
+}
+
+function bookPopularityRankScore(book){
+ let score=0;
+
+ // YES24 signals
+ const yesPop=Math.max(0,Number(book?.yes24PopularityScore)||0);
+ const salePoint=Math.max(0,Number(book?.yes24SalePoint)||0);
+ const star=Math.max(0,Number(book?.yes24StarScore)||0);
+ if(yesPop)score+=Math.min(260,yesPop*1.45);
+ if(salePoint)score+=Math.min(180,Math.log10(salePoint+1)*40);
+ if(book?.yes24BestsellerRank)score+=Math.max(0,95-Math.log10(Number(book.yes24BestsellerRank)+1)*28);
+ if(book?.yes24SteadyRank)score+=Math.max(0,70-Math.log10(Number(book.yes24SteadyRank)+1)*22);
+ if(star)score+=Math.min(28,star*2.8);
+ if(book?.yes24Found)score+=15;
+
+ // Server/provider popularity if present
+ const pop=Math.max(0,Number(book?.searchPopularity)||0);
+ if(pop)score+=Math.min(180,Math.log10(pop+1)*40);
+
+ // Provider rank is only a weak fallback when explicit popularity is sparse.
+ const providerRank=Math.max(0,Number(book?.bestServerRank)||0);
+ score+=Math.max(0,45-providerRank*1.2);
+
+ // Edition trust remains a small tie-breaker, not "popularity".
+ score+=bookPublisherTrust(book)*24;
+ score+=bookEditionTrust(book)*18;
+
+ return score;
+}
+
+function detectBookQueryMode(list,query){
+ const q=Model.norm(query);
+ if(!q)return 'general';
+
+ let creatorStrong=0,titleStrong=0;
+ for(const book of list||[]){
+  if(creatorMatchTier(book,q)>=2)creatorStrong++;
+  if(titleMatchTier(book,q)>=3)titleStrong++;
+ }
+
+ // If several results clearly identify the query as an author/person,
+ // treat it as author search. No hardcoded author list is used.
+ if(creatorStrong>=2 && creatorStrong>titleStrong)return 'author';
+ return 'general';
+}
+
+function compareBooksForQuery(a,b,query,mode){
+ if(mode==='author'){
+  const ca=creatorMatchTier(a,query),cb=creatorMatchTier(b,query);
+  if(ca!==cb)return cb-ca;
+
+  // Within the same author-match group, popularity is the primary order.
+  const pa=bookPopularityRankScore(a),pb=bookPopularityRankScore(b);
+  if(Math.abs(pa-pb)>.001)return pb-pa;
+
+  // Then fall back to detailed relevance/edition quality.
+  return bookSearchScore(b,query,b.__searchIndex||0)-bookSearchScore(a,query,a.__searchIndex||0);
+ }
+
+ return bookSearchScore(b,query,b.__searchIndex||0)-bookSearchScore(a,query,a.__searchIndex||0);
+}
+
+function mergeAndRankBooks(primary,supplement,query){
+ const map=new Map();
+
+ const put=(book,index,origin)=>{
+  const isbn=String(book?.isbn||'').replace(/\D/g,'');
+  const key=isbn.length>=10
+    ?'isbn:'+isbn
+    :'work:'+Model.norm(book?.title)+'|'+Model.norm(book?.creator)+'|'+Model.norm(book?.publisher);
+
+  const incomingTargets=Array.isArray(book?.serverTargets)?book.serverTargets:[];
+  const candidate={
+   ...book,
+   serverTargets:[...new Set(incomingTargets)],
+   serverHitCount:Number(book?.serverHitCount)||1,
+   bestServerRank:Number.isFinite(Number(book?.bestServerRank))?Number(book.bestServerRank):index,
+   __searchIndex:index,
+   __searchOrigin:origin
+  };
+
+  const existing=map.get(key);
+  if(!existing){
+   map.set(key,candidate);
+   return;
+  }
+
+  const merged={
+   ...existing,
+   ...candidate,
+   cover:existing.cover||candidate.cover,
+   publisher:existing.publisher||candidate.publisher,
+   isbn:existing.isbn||candidate.isbn,
+   publishedAt:existing.publishedAt||candidate.publishedAt,
+   contents:existing.contents||candidate.contents,
+   searchPopularity:Math.max(Number(existing.searchPopularity)||0,Number(candidate.searchPopularity)||0),
+   averageRating:Math.max(Number(existing.averageRating)||0,Number(candidate.averageRating)||0),
+   yes24Found:Boolean(existing.yes24Found||candidate.yes24Found),
+   yes24PopularityScore:Math.max(Number(existing.yes24PopularityScore)||0,Number(candidate.yes24PopularityScore)||0),
+   yes24SalePoint:Math.max(Number(existing.yes24SalePoint)||0,Number(candidate.yes24SalePoint)||0),
+   yes24StarScore:Math.max(Number(existing.yes24StarScore)||0,Number(candidate.yes24StarScore)||0),
+   yes24BestsellerRank:[existing.yes24BestsellerRank,candidate.yes24BestsellerRank].filter(Boolean).sort((a,b)=>a-b)[0]||null,
+   yes24SteadyRank:[existing.yes24SteadyRank,candidate.yes24SteadyRank].filter(Boolean).sort((a,b)=>a-b)[0]||null,
+   serverTargets:[...new Set([...(existing.serverTargets||[]),...(candidate.serverTargets||[])])],
+   serverHitCount:(Number(existing.serverHitCount)||1)+(Number(candidate.serverHitCount)||1),
+   bestServerRank:Math.min(Number(existing.bestServerRank)||999,Number(candidate.bestServerRank)||999),
+   __searchIndex:Math.min(Number(existing.__searchIndex)||999,index)
+  };
+  map.set(key,merged);
+ };
+
+ (primary||[]).forEach((b,i)=>put(b,i,'server'));
+ (supplement||[]).forEach((b,i)=>put(b,i+100,'server-extra'));
+
+ const ranked=[...map.values()].filter(b=>!isExcludedBookCandidate(b));
+ const mode=detectBookQueryMode(ranked,query);
+ return ranked
+   .sort((a,b)=>compareBooksForQuery(a,b,query,mode))
+   .map(({__searchIndex,__searchOrigin,...b})=>b);
+}
+
+
+async function enrichMissingBookCover(book){ return book; }
+
+async function enrichVisibleBookCovers(list,seq){
+ const missing=(list||[]).filter(b=>!b.cover).slice(0,8);
+ if(!missing.length)return;
+ await Promise.all(missing.map(enrichMissingBookCover));
+ if(seq===bookSearchSeq&&$('catalogResults'))renderRemoteBooks(remoteBookResults);
 }
 
 async function lookupSecondaryBookGenre(book){
@@ -1492,26 +1883,233 @@ async function repairMissingBookGenres(limit=36){
   if(changed){ensureCompletedSpeciesAssignments();persist();if(['forest','detail','today','scrap'].includes(view))render();}
  }finally{bookGenreRepairRunning=false}
 }
+function stopBookSearchObserver(){
+ if(bookSearchObserver){try{bookSearchObserver.disconnect()}catch{}bookSearchObserver=null}
+}
+function observeBookSearchSentinel(){
+ stopBookSearchObserver();
+ const sentinel=$('bookSearchSentinel');
+ if(!sentinel||!bookSearchHasMore||!bookSearchActiveQuery)return;
+
+ bookSearchObserver=new IntersectionObserver(entries=>{
+  if(entries.some(entry=>entry.isIntersecting))loadMoreBookResults();
+ },{root:null,rootMargin:'700px 0px',threshold:.01});
+
+ bookSearchObserver.observe(sentinel);
+}
 function renderRemoteBooks(results,message=''){
  const el=$('catalogResults');if(!el)return;
- if(message){el.innerHTML='<div class="scrap-empty"><p>'+esc(message)+'</p>'+button('직접 입력하기','manual','textbtn scrap-manual')+'</div>';return}
- el.innerHTML=results.length?'<div class="content-list">'+results.map((c,i)=>'<div class="content-row" style="align-items:flex-start">'+cover(c)+'<div class="grow"><div class="title">'+esc(c.title)+'</div><div class="creator">'+esc(c.creator||'저자 미확인')+'</div>'+(c.genre?'<div class="badge">장르 · '+esc(c.genre)+'</div>':'<div class="badge">장르 확인 중</div>')+(c.publisher?'<div class="badge">'+esc(c.publisher)+'</div>':'')+(c.isbn?'<div class="badge">ISBN '+esc(c.isbn)+'</div>':'')+'</div>'+button('스크랩','addRemoteBook','textbtn','data-index="'+i+'"')+'</div>').join('')+'</div>':'<div class="scrap-empty"><p>검색 결과가 없어요.</p>'+button('직접 입력하기','manual','textbtn scrap-manual')+'</div>';
+ stopBookSearchObserver();
+
+ if(message){
+  el.innerHTML='<div class="scrap-empty"><p>'+esc(message)+'</p>'+button('직접 입력하기','manual','textbtn scrap-manual')+'</div>';
+  return
+ }
+
+ if(!results.length){
+  el.innerHTML='<div class="scrap-empty"><p>검색 결과가 없어요.</p>'+button('직접 입력하기','manual','textbtn scrap-manual')+'</div>';
+  return
+ }
+
+ const rows=results.map((c,i)=>
+  '<div class="content-row" style="align-items:flex-start">'+
+   cover(c)+
+   '<div class="grow">'+
+    '<div class="title">'+esc(c.title)+'</div>'+
+    '<div class="creator">'+esc(c.creator||'저자 미확인')+'</div>'+
+    (c.genre?'<div class="badge">장르 · '+esc(c.genre)+'</div>':'<div class="badge">장르 확인 중</div>')+
+    (c.publisher?'<div class="badge">'+esc(c.publisher)+'</div>':'')+
+    (c.isbn?'<div class="badge">ISBN '+esc(c.isbn)+'</div>':'')+
+   '</div>'+
+   button('스크랩','addRemoteBook','textbtn','data-index="'+i+'"')+
+  '</div>'
+ ).join('');
+
+ const tail=bookSearchHasMore
+  ?'<div id="bookSearchSentinel" style="padding:18px 0 30px;text-align:center"><p class="creator">'+(bookSearchLoadingMore?'더 불러오는 중…':'아래로 내리면 더 불러와요')+'</p></div>'
+  :'<div style="height:18px"></div>';
+
+ el.innerHTML='<div class="content-list">'+rows+'</div>'+tail;
+ observeBookSearchSentinel();
 }
+async function fetchServerBookBatch(query,{target='',page=1,size=50}={}){
+ try{
+  const params=new URLSearchParams({query,q:query,size:String(size),page:String(page)});
+  if(target)params.set('target',target);
+
+  const body={query,q:query,size,page};
+  if(target)body.target=target;
+
+  const res=await fetch(BOOK_SEARCH_ENDPOINT+'?'+params.toString(),{
+   method:'POST',
+   headers:{'Content-Type':'application/json','Accept':'application/json'},
+   body:JSON.stringify(body)
+  });
+
+  const raw=await res.text();
+  let payload={};
+  try{payload=raw?JSON.parse(raw):{}}catch{payload={message:raw}}
+  if(!res.ok)return [];
+
+  const docs=unwrapBookDocuments(payload);
+  return docs
+   .map((d,i)=>{
+    const book=normalizeRemoteBook(d);
+    return {
+     ...book,
+     serverTargets:[target||'general'],
+     serverHitCount:1,
+     bestServerRank:(page-1)*size+i
+    };
+   })
+   .filter(c=>c.title&&!isExcludedBookCandidate(c));
+ }catch{
+  return [];
+ }
+}
+
+async function searchServerBookPage(query,page){
+ const batches=await Promise.all([
+  fetchServerBookBatch(query,{page,size:BOOK_SEARCH_PAGE_SIZE}),
+  fetchServerBookBatch(query,{target:'title',page,size:BOOK_SEARCH_PAGE_SIZE}),
+  fetchServerBookBatch(query,{target:'person',page,size:BOOK_SEARCH_PAGE_SIZE})
+ ]);
+ return batches.flat();
+}
+
+async function searchPrimaryBooks(query){
+ return searchServerBookPage(query,1);
+}
+
+function bookResultKey(book){
+ const isbn=String(book?.isbn||'').replace(/\D/g,'');
+ if(isbn.length>=10)return 'isbn:'+isbn;
+ return 'work:'+Model.norm(book?.title)+'|'+Model.norm(book?.creator)+'|'+Model.norm(book?.publisher);
+}
+
+async function loadMoreBookResults(){
+ if(bookSearchLoadingMore||!bookSearchHasMore||!bookSearchActiveQuery)return;
+
+ const query=bookSearchActiveQuery,page=bookSearchNextPage,seq=bookSearchSeq;
+ bookSearchLoadingMore=true;
+ renderRemoteBooks(remoteBookResults);
+
+ try{
+  const before=new Set(bookSearchRawResults.map(bookResultKey));
+  const more=await searchServerBookPage(query,page);
+
+  if(seq!==bookSearchSeq||query!==bookSearchActiveQuery)return;
+
+  const fresh=more.filter(book=>!before.has(bookResultKey(book)));
+  if(fresh.length){
+   bookSearchRawResults.push(...more);
+   bookSearchStagnantPages=0;
+  }else{
+   bookSearchStagnantPages++;
+  }
+
+  bookSearchNextPage=page+1;
+
+  // Stop only when the server truly runs out, or repeats the same page
+  // several times (some providers ignore page parameters).
+  if(!more.length||bookSearchStagnantPages>=2||page>=30){
+   bookSearchHasMore=false;
+  }
+
+  remoteBookResults=mergeAndRankBooks(bookSearchRawResults,[],query)
+   .filter(c=>!isExcludedBookCandidate(c));
+
+  renderRemoteBooks(remoteBookResults);
+  enrichBookPopularity(remoteBookResults,seq).catch(()=>{});
+
+  const pending=remoteBookResults
+   .filter(book=>!cleanGenreValue(book.genre))
+   .slice(0,8);
+  if(pending.length){
+   Promise.all(pending.map(enrichBookGenre))
+    .then(()=>{if(seq===bookSearchSeq&&$('catalogResults'))renderRemoteBooks(remoteBookResults)})
+    .catch(()=>{});
+  }
+ }catch{
+  if(seq===bookSearchSeq){
+   bookSearchHasMore=false;
+   renderRemoteBooks(remoteBookResults);
+  }
+ }finally{
+  bookSearchLoadingMore=false;
+  if(seq===bookSearchSeq&&$('catalogResults'))renderRemoteBooks(remoteBookResults);
+ }
+}
+function exactBookTitleMatch(book,query){
+ return Model.norm(book?.title)===Model.norm(query)||bookSearchCoreTitle(book?.title)===Model.norm(query);
+}
+function rescueBookQueries(query,candidates){
+ const q=Model.norm(query),creators=[],publishers=[];
+ for(const c of candidates||[]){
+  const title=Model.norm(c?.title);
+  if(!title.includes(q))continue;
+  const creator=String(c?.creator||'').trim(),publisher=String(c?.publisher||'').trim();
+  if(creator&&!creators.includes(creator))creators.push(creator);
+  if(publisher&&!publishers.includes(publisher))publishers.push(publisher);
+ }
+ const out=[];
+ creators.slice(0,2).forEach(name=>out.push(query+' '+name));
+ publishers.slice(0,1).forEach(name=>out.push(query+' '+name));
+ return [...new Set(out)].slice(0,3);
+}
+
 async function searchResults(q){
  const query=String(q||'').trim(),seq=++bookSearchSeq;
- if(!query){remoteBookResults=[];renderRemoteBooks([], '책 제목이나 저자를 입력해주세요.');return}
- const el=$('catalogResults');if(el)el.innerHTML='<p class="creator">검색 중…</p>';
+ stopBookSearchObserver();
+
+ if(!query){
+  remoteBookResults=[];
+  bookSearchRawResults=[];
+  bookSearchActiveQuery='';
+  bookSearchHasMore=false;
+  renderRemoteBooks([], '책 제목이나 저자를 입력해주세요.');
+  return
+ }
+
+ bookSearchActiveQuery=query;
+ bookSearchNextPage=2;
+ bookSearchHasMore=true;
+ bookSearchLoadingMore=false;
+ bookSearchStagnantPages=0;
+ bookSearchRawResults=[];
+
+ const el=$('catalogResults');
+ if(el)el.innerHTML='<p class="creator">검색 중…</p>';
+
  try{
-  const requestUrl=BOOK_SEARCH_ENDPOINT+'?query='+encodeURIComponent(query)+'&q='+encodeURIComponent(query);
-  const res=await fetch(requestUrl,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({query,q:query})});
-  const text=await res.text();let payload={};try{payload=text?JSON.parse(text):{}}catch{payload={message:text}}
-  if(!res.ok){const detail=payload?.error||payload?.message||('HTTP '+res.status);if(res.status===401)throw Error('검색 서버에서 인증 오류가 발생했어요. Edge Function의 Verify JWT 설정을 확인해주세요.');throw Error(detail)}
+  const serverBooks=await searchPrimaryBooks(query);
   if(seq!==bookSearchSeq||!$('catalogResults'))return;
-  remoteBookResults=unwrapBookDocuments(payload).map(normalizeRemoteBook).filter(c=>c.title&&!isExcludedBookCandidate(c)).slice(0,12);
+
+  bookSearchRawResults=serverBooks;
+  remoteBookResults=mergeAndRankBooks(bookSearchRawResults,[],query)
+   .filter(c=>!isExcludedBookCandidate(c));
+
+  if(!serverBooks.length)bookSearchHasMore=false;
+
   renderRemoteBooks(remoteBookResults);
-  const pending=remoteBookResults.map((book,i)=>({book,i})).filter(x=>!cleanGenreValue(x.book.genre)).slice(0,8);
-  if(pending.length){Promise.all(pending.map(async x=>{await enrichBookGenre(x.book);return x})).then(()=>{if(seq===bookSearchSeq&&$('catalogResults'))renderRemoteBooks(remoteBookResults)}).catch(()=>{})}
- }catch(err){if(seq!==bookSearchSeq||!$('catalogResults'))return;remoteBookResults=[];renderRemoteBooks([],err?.message||'책 검색 서버에 연결하지 못했어요.');}
+  enrichBookPopularity(remoteBookResults,seq).catch(()=>{});
+
+  const pending=remoteBookResults
+   .filter(book=>!cleanGenreValue(book.genre))
+   .slice(0,8);
+
+  if(pending.length){
+   Promise.all(pending.map(enrichBookGenre))
+    .then(()=>{if(seq===bookSearchSeq&&$('catalogResults'))renderRemoteBooks(remoteBookResults)})
+    .catch(()=>{});
+  }
+ }catch(err){
+  if(seq!==bookSearchSeq||!$('catalogResults'))return;
+  remoteBookResults=[];
+  bookSearchRawResults=[];
+  bookSearchHasMore=false;
+  renderRemoteBooks([],err?.message||'책 검색 서버에 연결하지 못했어요.');
+ }
 }
 function unwrapAlbums(payload){
  if(Array.isArray(payload))return payload;
@@ -1520,7 +2118,8 @@ function unwrapAlbums(payload){
 }
 function normalizeRemoteAlbum(d){
  const providerId=d?.provider_id??d?.providerId??d?.collectionId??'',release=String(d?.release_date||d?.releaseDate||'').trim(),rawGenre=String(d?.genre||d?.primaryGenreName||'').trim(),genre=normalizeAlbumGenre(rawGenre);
- return {type:'album',title:String(d?.title||d?.collectionName||'').trim(),creator:String(d?.artist||d?.artistName||d?.creator||'').trim(),cover:String(d?.cover_url||d?.artworkUrl100||d?.cover||'').trim(),genre,rawGenre,genreSource:'auto',genreCandidates:genre?[[genre,'Apple Music'],...(rawGenre&&rawGenre!==genre?[[rawGenre,'원본 장르']]:[])]:[],provider:String(d?.provider||'apple').trim(),providerId:String(providerId||'').trim(),releaseDate:release,trackCount:Number(d?.track_count??d?.trackCount)||null,copyright:String(d?.copyright||'').trim(),catalogUrl:String(d?.external_url||d?.collectionViewUrl||d?.catalogUrl||'').trim(),source:'Apple Music 앨범 검색'};
+ const searchPopularity=Number(d?.popularity??d?.playCount??d?.play_count??d?.listeners??d?.ratingCount??0)||0;
+ return {type:'album',title:String(d?.title||d?.collectionName||'').trim(),creator:String(d?.artist||d?.artistName||d?.creator||'').trim(),cover:String(d?.cover_url||d?.artworkUrl100||d?.cover||'').trim(),genre,rawGenre,genreSource:'auto',genreCandidates:genre?[[genre,'Apple Music'],...(rawGenre&&rawGenre!==genre?[[rawGenre,'원본 장르']]:[])]:[],provider:String(d?.provider||'apple').trim(),providerId:String(providerId||'').trim(),releaseDate:release,trackCount:Number(d?.track_count??d?.trackCount)||null,copyright:String(d?.copyright||'').trim(),catalogUrl:String(d?.external_url||d?.collectionViewUrl||d?.catalogUrl||'').trim(),source:'Apple Music 앨범 검색',searchPopularity,averageRating:Number(d?.averageRating??d?.rating??0)||0};
 }
 function renderRemoteAlbums(results,message=''){
  const el=$('musicCatalogResults');if(!el)return;
@@ -1550,8 +2149,33 @@ function normalizeRemoteMovie(d){
  const release=String(d?.release_date||d?.releaseDate||'').trim();
  const originalTitle=String(d?.original_title||d?.originalTitle||'').trim();
  const genres=movieGenreInfo(d?.genre_ids??d?.genreIds);
- return {type:'movie',title:String(d?.title||'').trim(),creator:'',cover:String(d?.poster_url||d?.posterUrl||d?.poster||'').trim(),genre:genres.primary,rawGenre:genres.candidates.map(x=>x[0]).join(', '),genreSource:'auto',genreCandidates:genres.candidates,provider:String(d?.provider||'tmdb').trim(),providerId:String(providerId||'').trim(),releaseDate:release,originalTitle,originalLanguage:String(d?.original_language||d?.originalLanguage||'').trim(),overview:String(d?.overview||'').trim(),genreIds:Array.isArray(d?.genre_ids)?d.genre_ids.map(Number).filter(Number.isFinite):Array.isArray(d?.genreIds)?d.genreIds.map(Number).filter(Number.isFinite):[],catalogUrl:String(d?.external_url||d?.externalUrl||d?.catalogUrl||'').trim(),source:'TMDB 영화 검색'};
+ const searchPopularity=Number(d?.popularity??0)||0;
+ const voteCount=Number(d?.vote_count??d?.voteCount??0)||0;
+ const averageRating=Number(d?.vote_average??d?.voteAverage??d?.rating??0)||0;
+ return {type:'movie',title:String(d?.title||'').trim(),creator:String(d?.director||d?.creator||'').trim(),cover:String(d?.poster_url||d?.posterUrl||d?.poster||'').trim(),genre:genres.primary,rawGenre:genres.candidates.map(x=>x[0]).join(', '),genreSource:'auto',genreCandidates:genres.candidates,provider:String(d?.provider||'tmdb').trim(),providerId:String(providerId||'').trim(),releaseDate:release,originalTitle,originalLanguage:String(d?.original_language||d?.originalLanguage||'').trim(),overview:String(d?.overview||'').trim(),genreIds:Array.isArray(d?.genre_ids)?d.genre_ids.map(Number).filter(Number.isFinite):Array.isArray(d?.genreIds)?d.genreIds.map(Number).filter(Number.isFinite):[],catalogUrl:String(d?.external_url||d?.externalUrl||d?.catalogUrl||'').trim(),source:'TMDB 영화 검색',searchPopularity,voteCount,averageRating};
 }
+
+function movieSearchScore(movie,query,index=0){
+ const q=Model.norm(query),title=Model.norm(movie?.title),original=Model.norm(movie?.originalTitle);
+ if(!q||!title)return -9999-index;
+ let score=0;
+ if(title===q)score+=1200;
+ else if(original===q)score+=1080;
+ else if(title.startsWith(q))score+=760;
+ else if(title.includes(q)||original.includes(q))score+=620;
+ const pop=Math.max(0,Number(movie?.searchPopularity)||0),votes=Math.max(0,Number(movie?.voteCount)||0),rating=Math.max(0,Number(movie?.averageRating)||0);
+ if(pop)score+=Math.min(220,Math.log10(pop+1)*75);
+ if(votes)score+=Math.min(220,Math.log10(votes+1)*62);
+ if(votes>=100)score+=Math.min(75,rating*8);
+ if(movie?.cover)score+=15;
+ if(movie?.releaseDate)score+=8;
+ score+=Math.max(0,24-index);
+ return score;
+}
+function rankMovies(results,query){
+ return [...results].sort((a,b)=>movieSearchScore(b,query)-movieSearchScore(a,query)).slice(0,12);
+}
+
 function renderRemoteMovies(results,message=''){
  const el=$('movieCatalogResults');if(!el)return;
  if(message){el.innerHTML='<div class="scrap-empty"><p>'+esc(message)+'</p>'+button('직접 입력하기','manual','textbtn scrap-manual')+'</div>';return}
@@ -1566,7 +2190,7 @@ async function movieSearchResults(q){
   const text=await res.text();let payload={};try{payload=text?JSON.parse(text):{}}catch{payload={message:text}}
   if(!res.ok){const detail=payload?.error||payload?.message||('HTTP '+res.status);if(res.status===401)throw Error('검색 서버에서 인증 오류가 발생했어요. Edge Function의 Verify JWT 설정을 확인해주세요.');throw Error(detail)}
   if(seq!==movieSearchSeq||!$('movieCatalogResults'))return;
-  remoteMovieResults=unwrapMovies(payload).map(normalizeRemoteMovie).filter(c=>c.title).slice(0,12);
+  remoteMovieResults=rankMovies(unwrapMovies(payload).map(normalizeRemoteMovie).filter(c=>c.title),query);
   renderRemoteMovies(remoteMovieResults);
  }catch(err){if(seq!==movieSearchSeq||!$('movieCatalogResults'))return;remoteMovieResults=[];renderRemoteMovies([],err?.message||'영화 검색 서버에 연결하지 못했어요.');}
 }
@@ -1766,7 +2390,7 @@ function ocrStringSimilarity(a,b){
 function ocrCandidateKey(c){return [c.type,c.provider||'',c.providerId||'',Model.norm(c.title),Model.norm(c.creator)].join('|')}
 async function ocrFetchUncached(endpoint,query,unwrap,normalize){
  const requestUrl=endpoint+'?query='+encodeURIComponent(query)+'&q='+encodeURIComponent(query);
- const res=await fetch(requestUrl,{method:'POST',signal:AbortSignal.timeout(30000),headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({query,q:query})});
+ const res=await fetch(requestUrl,{method:'POST',signal:AbortSignal.timeout(30000),headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({query,q:query,size:50,page:1})});
  const text=await res.text();let payload={};try{payload=text?JSON.parse(text):{}}catch{payload={message:text}}
  if(!res.ok)throw Error(payload?.error||payload?.message||('HTTP '+res.status));
  return unwrap(payload).map(normalize).filter(c=>c.title).slice(0,7);
@@ -2364,15 +2988,118 @@ document.addEventListener('click',async e=>{
  if(a==='clear'){confirmBox('모든 데이터를 삭제할까요?','이 브라우저의 송림 스크랩·경험·완료·테마·프로필이 모두 초기화됩니다.',resetAll,'전체 삭제');return}
 
 });
-document.addEventListener('input',e=>{
- if(e.target.id==='search'){
-  const input=e.target,position=input.selectionStart,q=input.value;state.filters.q=q;persist();
-  const scroll=window.scrollY;render();$('search').focus();try{$('search').setSelectionRange(position,position)}catch{}window.scrollTo(0,scroll)
+const imeComposingIds=new Set();
+let mainSearchRenderTimer=null;
+const catalogSearchTimers={book:null,album:null,movie:null};
+
+function catalogKindFromId(id){
+ return id==='catalogSearch'?'book':id==='musicCatalogSearch'?'album':id==='movieCatalogSearch'?'movie':'';
+}
+function cancelCatalogTimer(kind){
+ if(!kind)return;
+ clearTimeout(catalogSearchTimers[kind]);
+ catalogSearchTimers[kind]=null;
+ if(kind==='book'){clearTimeout(bookSearchTimer);bookSearchTimer=null}
+ if(kind==='album'){clearTimeout(musicSearchTimer);musicSearchTimer=null}
+ if(kind==='movie'){clearTimeout(movieSearchTimer);movieSearchTimer=null}
+}
+function invalidateCatalogRequest(kind){
+ if(kind==='book')bookSearchSeq++;
+ else if(kind==='album')musicSearchSeq++;
+ else if(kind==='movie')movieSearchSeq++;
+}
+function runCatalogSearch(kind,value){
+ if(kind==='book')searchResults(value);
+ else if(kind==='album')musicSearchResults(value);
+ else if(kind==='movie')movieSearchResults(value);
+}
+function scheduleCatalogSearchFromLiveInput(input,delay=460){
+ const id=input?.id,kind=catalogKindFromId(id);
+ if(!kind)return;
+ if(scrapFlowActive)scrapComposerState.queries[kind]=input.value;
+ cancelCatalogTimer(kind);
+
+ catalogSearchTimers[kind]=setTimeout(()=>{
+  catalogSearchTimers[kind]=null;
+  const current=document.getElementById(id);
+  if(!current)return;
+
+  // Windows/Chromium can keep the final Hangul syllable in composition
+  // until another key is pressed. So do not wait for compositionend here.
+  const value=current.value;
+  if(scrapFlowActive)scrapComposerState.queries[kind]=value;
+  runCatalogSearch(kind,value);
+ },delay);
+}
+
+function scheduleMainSearchRender(input){
+ const q=input.value,position=input.selectionStart??q.length;
+ state.filters.q=q;persist();
+ clearTimeout(mainSearchRenderTimer);
+ mainSearchRenderTimer=setTimeout(()=>{
+  mainSearchRenderTimer=null;
+  if(imeComposingIds.has('search'))return;
+  const current=$('search');
+  if(current&&document.activeElement===current&&current.value!==q)return;
+  const scroll=window.scrollY;
+  render();
+  const next=$('search');
+  if(next){
+   next.focus();
+   try{next.setSelectionRange(Math.min(position,next.value.length),Math.min(position,next.value.length))}catch{}
+  }
+  window.scrollTo(0,scroll);
+ },480);
+}
+
+document.addEventListener('compositionstart',e=>{
+ const input=e.target,id=input?.id;
+ if(!['search','catalogSearch','musicCatalogSearch','movieCatalogSearch'].includes(id))return;
+ imeComposingIds.add(id);
+
+ if(id==='search'){
+  clearTimeout(mainSearchRenderTimer);
+  mainSearchRenderTimer=null;
+  return;
  }
- if(e.target.id==='catalogSearch'){clearTimeout(bookSearchTimer);const value=e.target.value;if(scrapFlowActive)scrapComposerState.queries.book=value;bookSearchTimer=setTimeout(()=>searchResults(value),320);}
- if(e.target.id==='musicCatalogSearch'){clearTimeout(musicSearchTimer);const value=e.target.value;if(scrapFlowActive)scrapComposerState.queries.album=value;musicSearchTimer=setTimeout(()=>musicSearchResults(value),320);}
- if(e.target.id==='movieCatalogSearch'){clearTimeout(movieSearchTimer);const value=e.target.value;if(scrapFlowActive)scrapComposerState.queries.movie=value;movieSearchTimer=setTimeout(()=>movieSearchResults(value),320);}
+
+ const kind=catalogKindFromId(id);
+ invalidateCatalogRequest(kind);
+ cancelCatalogTimer(kind);
 });
+
+document.addEventListener('compositionend',e=>{
+ const id=e.target?.id;
+ if(!['search','catalogSearch','musicCatalogSearch','movieCatalogSearch'].includes(id))return;
+ imeComposingIds.delete(id);
+
+ setTimeout(()=>{
+  const current=document.getElementById(id);
+  if(!current)return;
+  if(id==='search')scheduleMainSearchRender(current);
+  else scheduleCatalogSearchFromLiveInput(current,80);
+ },0);
+});
+
+document.addEventListener('input',e=>{
+ const input=e.target,id=input?.id;
+ if(!['search','catalogSearch','musicCatalogSearch','movieCatalogSearch'].includes(id))return;
+
+ if(id==='search'){
+  state.filters.q=input.value;persist();
+  if(e.isComposing||imeComposingIds.has(id))return;
+  scheduleMainSearchRender(input);
+  return;
+ }
+
+ const kind=catalogKindFromId(id);
+ invalidateCatalogRequest(kind);
+
+ // Always schedule from the latest visible text, even while composing.
+ // Search result rendering does not replace the catalog input node.
+ scheduleCatalogSearchFromLiveInput(input,460);
+});
+
 document.addEventListener('change',async e=>{
  const el=e.target;
  if(el.dataset.candidate!==undefined){candidates[Number(el.dataset.candidate)].selected=el.checked;renderCandidates()}
@@ -2531,8 +3258,8 @@ function tasteStart(){
  tasteOwner=owner;tasteMode='add';tastePreferredType='';
  tasteQueryDecks={};tasteExploreDecks={};tasteUsedQueries=new Set();
  for(const type of ['book','album','movie']){
-  tasteQueryDecks[type]=shuffleTaste(TASTE_QUERIES[type]);tasteExploreDecks[type]=[];
-  shuffleTaste(TASTE_EXPLORE[type]).forEach(query=>enqueueTasteQuery(type,query));
+  tasteQueryDecks[type]=[...TASTE_QUERIES[type]];tasteExploreDecks[type]=[];
+  TASTE_EXPLORE[type].forEach(query=>enqueueTasteQuery(type,query));
  }
  tasteRequest++;tasteLoading=false;tastePool=[];tasteIndex=0;tasteSeen=0;tasteReviewed=0;window.tasteCandidate=null;
  flowTo('tasteType');
@@ -2540,14 +3267,14 @@ function tasteStart(){
 function closeAdditionalTaste(){tasteRequest++;tasteLoading=false;window.tasteCandidate=null;authRoute='app';view=tasteOrigin||'my';render();requestAnimationFrame(()=>window.scrollTo(0,tasteOriginScroll||0))}
 // Search prompts bootstrap discovery; no personal preference or local catalog is required.
 const TASTE_QUERIES={
- book:[['채식주의자','한강'],['소년이 온다','한강'],['어린 왕자','생텍쥐페리'],['데미안','헤르만 헤세'],['1984','조지 오웰'],['코스모스','칼 세이건'],['사피엔스','유발 하라리'],['아몬드','손원평'],['불편한 편의점','김호연'],['달러구트 꿈 백화점','이미예'],['해리 포터와 마법사의 돌','롤링'],['노인과 바다','헤밍웨이']],
- album:[['Palette','IU'],['1989','Taylor Swift'],['25','Adele'],['Abbey Road','The Beatles'],['Parachutes','Coldplay'],['24K Magic','Bruno Mars'],['HIT ME HARD AND SOFT','Billie Eilish'],['Random Access Memories','Daft Punk'],['Dynamite','BTS'],['New Jeans','NewJeans'],['The Album','BLACKPINK'],['Nevermind','Nirvana']],
- movie:[['기생충',''],['인터스텔라',''],['인셉션',''],['타이타닉',''],['라라랜드',''],['센과 치히로의 행방불명',''],['겨울왕국',''],['토이 스토리',''],['트루먼 쇼',''],['어벤져스: 엔드게임',''],['극한직업',''],['서울의 봄','']]
+ book:[],
+ album:[],
+ movie:[]
 };
 const TASTE_EXPLORE={
- book:['한강','김영하','정유정','김초엽','정세랑','히가시노 게이고','무라카미 하루키','헤르만 헤세','조지 오웰','베르나르 베르베르','소설','여행','사랑','인생','우주','과학','역사','철학','마음','에세이'],
- album:['IU','BTS','Taylor Swift','Adele','Coldplay','Bruno Mars','The Beatles','Billie Eilish','NewJeans','BLACKPINK','잔나비','백예린','성시경','태연','윤하','Radiohead','Oasis','Queen','jazz','piano','love','night','dream'],
- movie:['사랑','시간','여행','세상','가족','친구','밤','꿈','스타','해리 포터','반지의 제왕','배트맨','스파이더맨','미션 임파서블','어벤져스','토이 스토리','겨울왕국','인사이드 아웃','슈퍼','마지막','우리','행복','도시','바다']
+ book:['소설','한국소설','세계문학','SF 소설','추리 소설','판타지 소설','에세이','철학','심리','과학','우주','역사','사회','예술','여행','사랑','인생','마음'],
+ album:[],
+ movie:['드라마','SF','판타지','액션','스릴러','미스터리','범죄','로맨스','코미디','애니메이션','가족','모험','역사','음악 영화','다큐멘터리','시간 여행','우주','성장']
 };
 let tasteLoading=false,tasteNotice='',tasteRequest=0,tasteOwner=null;
 let tasteShownKeys=new Set(),tasteQueryDecks={},tasteExploreDecks={},tasteUsedQueries=new Set();
@@ -2568,67 +3295,531 @@ function tasteKeys(c){
  return keys;
 }
 function freshTasteCandidates(candidates){
+ // 이전 버전에서 이미 메모리에 들어온 추천 후보도 현재 필터 기준으로 다시 정리한다.
+ tastePool=tastePool.filter(c=>c?.type!=='book'||!isExcludedBookCandidate(c));
  const excluded=new Set(tasteShownKeys);
- [...state.items,...tastePool.slice(tasteIndex)].forEach(c=>tasteKeys(c).forEach(key=>excluded.add(key)));
+ [...state.items,...tastePool.slice(tasteIndex)].forEach(c=>{
+  if(c?.type==='album'){
+   excluded.add(`album:id:${c.provider||''}:${c.provider_id||c.id||''}`);
+  }else{
+   tasteKeys(c).forEach(key=>excluded.add(key));
+  }
+ });
  return candidates.filter(c=>{
-  if(!c.title||!['book','album','movie'].includes(c.type)||state.profile.responses?.[c.type+':'+c.title])return false;
-  if(!allowDiscoveryCandidate(c))return false;
   const keys=tasteKeys(c);
-  if(keys.some(key=>excluded.has(key)))return false;
-  keys.forEach(key=>excluded.add(key));return true;
+  if(!c.title||!['book','album','movie'].includes(c.type)|| (c.type!=='album' && state.profile.responses?.[c.type+':'+c.title]))return false;
+  if(!allowDiscoveryCandidate(c))return false;
+  // 음악 명반 추천은 취향 선택/기존 추천 이력과 분리하여 노출 검증
+  // (동일 추천 세션 내 중복만 방지)
+  const duplicateKeys = c.type==='album'
+    ? []
+    : keys;
+  if(duplicateKeys.some(key=>excluded.has(key)))return false;
+  duplicateKeys.forEach(key=>excluded.add(key));return true;
  });
 }
+
+function tasteSignalCount(type){
+ const responses=state.profile?.responses||{};
+ let count=Object.keys(responses).filter(k=>k.startsWith(type+':')&&['interested','experienced'].includes(responses[k])).length;
+ count+=state.items.filter(c=>c.type===type&&(c.completed||c.saves?.length)).length*.35;
+ return count;
+}
+function tastePopularityScore(c){
+ const pop=Math.max(0,Number(c?.searchPopularity)||0),rating=Math.max(0,Number(c?.averageRating)||0),votes=Math.max(0,Number(c?.voteCount)||0);
+ let score=0;
+ if(c.type==='book'){
+  score=Math.max(score,.18+bookPublisherTrust(c)*.22+bookEditionTrust(c)*.16);
+
+  const yesPop=Math.max(0,Number(c?.yes24PopularityScore)||0);
+  const salePoint=Math.max(0,Number(c?.yes24SalePoint)||0);
+  const star=Math.max(0,Number(c?.yes24StarScore)||0);
+
+  if(yesPop>0)score=Math.max(score,Math.min(1,.34+yesPop/190));
+  if(salePoint>0)score=Math.max(score,Math.min(1,.32+Math.log10(salePoint+1)/5.2));
+  if(c?.yes24BestsellerRank)score=Math.max(score,Math.max(.62,1-Math.log10(Number(c.yes24BestsellerRank)+1)*.14));
+  if(c?.yes24SteadyRank)score=Math.max(score,Math.max(.40,.88-Math.log10(Number(c.yes24SteadyRank)+1)*.15));
+  if(star>0)score=Math.min(1,score+Math.min(.08,star/120));
+  if(c?.yes24Found)score=Math.min(1,score+.03);
+
+  if(pop>0)score=Math.max(score,Math.min(1,.36+Math.log10(pop+1)/4.8));
+ }else if(c.type==='movie'){
+  if(pop>0)score=Math.max(score,Math.min(1,.34+Math.log10(pop+1)/4.2));
+  if(votes>0)score=Math.max(score,Math.min(1,.30+Math.log10(votes+1)/5.1));
+ }else{
+  if(pop>0)score=Math.max(score,Math.min(1,.34+Math.log10(pop+1)/5));
+ }
+ if(rating>0&&(c.type!=='movie'||votes>=100))score=Math.min(1,score+Math.min(.10,rating/100));
+ if(c.cover)score=Math.min(1,score+.03);
+ return Math.max(.18,score);
+}
+function tasteAffinityScore(c){
+ const same=state.items.filter(x=>x.type===c.type);
+ if(!same.length)return .35;
+ let score=.20,weight=0;
+ for(const x of same){
+  const positive=x.completed||x.saves?.length||state.profile?.responses?.[x.type+':'+x.title]==='interested'||state.profile?.responses?.[x.type+':'+x.title]==='experienced';
+  if(!positive)continue;
+  weight++;
+  if(c.genre&&x.genre&&Model.norm(c.genre)===Model.norm(x.genre))score+=.22;
+  if(c.creator&&x.creator&&Model.norm(c.creator)===Model.norm(x.creator))score+=.10;
+  const cg=new Set((c.genreCandidates||[]).map(g=>Model.norm(Array.isArray(g)?g[0]:g)));
+  const xg=(x.genreCandidates||[]).map(g=>Model.norm(Array.isArray(g)?g[0]:g));
+  if(xg.some(g=>cg.has(g)))score+=.08;
+ }
+ return Math.max(.15,Math.min(1,score/(Math.max(1,weight*.16)+.55)));
+}
+function tasteDiversityScore(c){
+ const recent=tastePool.slice(Math.max(0,tasteIndex-8),tasteIndex).filter(Boolean);
+ if(!recent.length)return 1;
+ let penalty=0;
+ for(const x of recent){
+  if(c.creator&&x.creator&&Model.norm(c.creator)===Model.norm(x.creator))penalty+=.34;
+  if(c.genre&&x.genre&&Model.norm(c.genre)===Model.norm(x.genre))penalty+=.07;
+  if(c.type==='movie'&&c.providerId&&x.providerId===c.providerId)penalty+=1;
+ }
+ return Math.max(0,1-penalty);
+}
+
+function tasteRecencyScore(c){
+ const raw=String(c?.publishedAt||c?.publishDate||c?.releaseDate||'').trim();
+ if(!raw)return .12;
+
+ let year=0,month=1,day=1;
+ const compact=raw.match(/^(\d{4})(\d{2})(\d{2})$/);
+ const dashed=raw.match(/^(\d{4})[-/.](\d{1,2})(?:[-/.](\d{1,2}))?/);
+
+ if(compact){
+  year=Number(compact[1]);month=Number(compact[2]);day=Number(compact[3]);
+ }else if(dashed){
+  year=Number(dashed[1]);month=Number(dashed[2]);day=Number(dashed[3]||1);
+ }else{
+  const y=raw.match(/\b(19|20)\d{2}\b/);
+  if(y)year=Number(y[0]);
+ }
+
+ if(!year)return .12;
+
+ const now=new Date();
+ const published=new Date(year,Math.max(0,month-1),Math.max(1,day));
+ const ageYears=Math.max(0,(now-published)/(365.25*24*60*60*1000));
+
+ // Fresh releases are strongly preferred during cold start, but backlist
+ // titles keep a non-zero floor so classics can still appear.
+ if(ageYears<=1.5)return 1;
+ if(ageYears<=3)return .86;
+ if(ageYears<=5)return .68;
+ if(ageYears<=8)return .46;
+ if(ageYears<=12)return .30;
+ return .12;
+}
+
+function tasteRankScore(c){
+ const signals=tasteSignalCount(c.type);
+
+ // Cold start policy:
+ // books: current YES24 bestsellers first (weighted random), then popularity/newness.
+ // other media: recent releases + popular titles.
+ // As explicit taste accumulates, affinity gradually becomes the main signal.
+ const weights=c.type==='book'
+  ?(signals<3
+    ?{pop:.70,newness:.18,aff:.04,div:.08}
+    :signals<8
+     ?{pop:.62,newness:.14,aff:.10,div:.14}
+     :{pop:.54,newness:.10,aff:.20,div:.16})
+  :(signals<3
+    ?{pop:.52,newness:.28,aff:.10,div:.10}
+    :signals<8
+     ?{pop:.40,newness:.18,aff:.28,div:.14}
+     :{pop:.36,newness:.08,aff:.40,div:.16});
+
+ const pop=tastePopularityScore(c),
+       newness=tasteRecencyScore(c),
+       aff=tasteAffinityScore(c),
+       div=tasteDiversityScore(c);
+
+ // Current bestseller status gets an extra cold-start nudge for books.
+ let bestsellerNudge=0;
+ if(c.type==='book'&&signals<3){
+  if(c?.yes24BestsellerRank)bestsellerNudge=.10;
+  else if((Number(c?.yes24PopularityScore)||0)>0)bestsellerNudge=.04;
+ }
+
+ const stableJitter=(hash(c.type+'|'+c.title+'|'+c.creator)%100)/10000;
+ return pop*weights.pop
+      +newness*weights.newness
+      +aff*weights.aff
+      +div*weights.div
+      +bestsellerNudge
+      +stableJitter;
+}
+function rankTasteCandidates(candidates){
+ return [...candidates].sort((a,b)=>tasteRankScore(b)-tasteRankScore(a));
+}
+
 function nextTasteQuery(type){
- if(tasteQueryDecks[type]?.length)return {pick:tasteQueryDecks[type].pop(),curated:true};
+ if(type==='album')return {pick:['classic-albums',''],curated:false};
  const query=tasteExploreDecks[type].shift();
  return query?{pick:[query,''],curated:false}:null;
 }
+
+
+const BOOK_RECOMMENDATION_EXCLUDED_GROUPS=new Set(['history','art','travel','selfdev','society','economy']);
+
+const BOOK_RECOMMENDATION_YOUTH_RE=/(주니어|어린이|아동|유아|청소년|키즈|초등|중등|고등|학습만화|만화로\s*배우는|캐릭터|공략집)/i;
+const BOOK_RECOMMENDATION_YOUTH_PUBLISHER_RE=/(주니어|어린이|아이세움|아울북|비룡소|사계절아동|웅진주니어|길벗스쿨|미래엔아이세움|위즈덤하우스\s*키즈|키즈엠|창비어린이|다산어린이)/i;
+
+function isYouthBookRecommendationCandidate(c){
+ const title=String(c?.title||'');
+ const publisher=String(c?.publisher||'');
+ const categoryText=[
+  c?.genre,
+  c?.rawGenre,
+  c?.categoryName,
+  c?.categoryFullPath
+ ].filter(Boolean).join(' ');
+ return BOOK_RECOMMENDATION_YOUTH_RE.test(title)
+   ||BOOK_RECOMMENDATION_YOUTH_RE.test(categoryText)
+   ||BOOK_RECOMMENDATION_YOUTH_PUBLISHER_RE.test(publisher);
+}
+
+
+async function fetchBookRankingCandidates(mode='bestseller'){
+ const controller=new AbortController();
+ const timer=setTimeout(()=>controller.abort(),7000);
+ try{
+  const res=await fetch(BOOK_POPULARITY_ENDPOINT,{
+   method:'POST',
+   headers:{'Content-Type':'application/json','Accept':'application/json'},
+   body:JSON.stringify({mode,page:1,size:100}),
+   signal:controller.signal
+  });
+  if(!res.ok)return [];
+
+  const payload=await res.json();
+  const raw=Array.isArray(payload?.books)?payload.books:[];
+  return raw.map((d,index)=>{
+   const title=String(d?.title||'').trim();
+   const creator=String(d?.author||d?.creator||'').trim();
+   const isbn13=String(d?.isbn13||d?.isbn||'').replace(/\D/g,'');
+   const publishedAt=String(d?.publishDate||d?.publishedAt||'').trim();
+   const rank=Number(d?.rank)||index+1;
+
+   // 카테고리별 rank 기준. 상위권일수록 잘 뽑히되 완전 순차는 아니다.
+   const rankingWeight=mode==='steady'
+    ?(rank<=5?.72:rank<=10?.60:rank<=20?.48:.36)
+    :(rank<=5?1:rank<=10?.86:rank<=20?.68:.48);
+
+   return {
+    type:'book',
+    title,
+    creator,
+    publisher:String(d?.publisher||'').trim(),
+    isbn:isbn13,
+    cover:String(d?.cover||'').trim(),
+    catalogUrl:String(d?.link||'').trim(),
+    publishedAt,
+    genre:String(d?.categoryName||'').trim(),
+    rawGenre:String(d?.categoryFullPath||'').trim(),
+    genreSource:'yes24-'+mode,
+    genreCandidates:[],
+    recommendationGroup:String(d?.recommendationGroup||'etc'),
+    categoryName:String(d?.categoryName||'').trim(),
+    source:mode==='steady'?'YES24 스테디셀러':'YES24 베스트셀러',
+    yes24Found:true,
+    yes24PopularityScore:Number(d?.popularityScore)||0,
+    yes24SalePoint:Number(d?.salePoint)||0,
+    yes24StarScore:Number(d?.starScore)||0,
+    yes24BestsellerRank:mode==='bestseller'?rank:null,
+    yes24SteadyRank:mode==='steady'?rank:(Number(d?.steadyRank)||null),
+    bestsellerWeight:rankingWeight,
+    recommendationTier:mode
+   };
+  }).filter(c=>
+    c.title
+    &&!isExcludedBookCandidate(c)
+    &&!BOOK_RECOMMENDATION_EXCLUDED_GROUPS.has(String(c?.recommendationGroup||''))
+    &&!isYouthBookRecommendationCandidate(c)
+   );
+ }catch{
+  return [];
+ }finally{
+  clearTimeout(timer);
+ }
+}
+function weightedPickIndex(list){
+ const total=list.reduce((sum,c)=>sum+Math.max(.05,Number(c?.bestsellerWeight)||.35),0);
+ let pick=Math.random()*total;
+ for(let i=0;i<list.length;i++){
+  pick-=Math.max(.05,Number(list[i]?.bestsellerWeight)||.35);
+  if(pick<=0)return i;
+ }
+ return Math.max(0,list.length-1);
+}
+
+function weightedShuffleBestsellers(list){
+ // 같은 장르가 연속으로 몰리지 않게 카테고리별로 번갈아 뽑는다.
+ const groups=new Map();
+ for(const c of (list||[])){
+  const key=String(c?.recommendationGroup||c?.categoryName||'etc');
+  if(!groups.has(key))groups.set(key,[]);
+  groups.get(key).push(c);
+ }
+ const groupKeys=[...groups.keys()].sort(()=>Math.random()-.5);
+ const out=[];
+ while(groupKeys.some(key=>(groups.get(key)||[]).length)){
+  // 라운드마다 카테고리 순서를 가볍게 섞어서 고정 패턴도 피한다.
+  const round=[...groupKeys].sort(()=>Math.random()-.5);
+  for(const key of round){
+   const pool=groups.get(key)||[];
+   if(!pool.length)continue;
+   const idx=weightedPickIndex(pool);
+   out.push(pool.splice(idx,1)[0]);
+  }
+ }
+ return out;
+}
+
+async function fetchMovieRecommendations(){
+ const controller=new AbortController();
+ const timer=setTimeout(()=>controller.abort(),9000);
+ try{
+  const headers={'Accept':'application/json'};
+  if(cloudSession?.access_token)headers.Authorization='Bearer '+cloudSession.access_token;
+  const publicKey=cloudPublicKey();if(publicKey)headers.apikey=publicKey;
+  const res=await fetch(MOVIE_RECOMMEND_ENDPOINT,{method:'GET',headers,signal:controller.signal});
+  if(!res.ok)return [];
+  const payload=await res.json();
+  const raw=Array.isArray(payload?.movies)?payload.movies:[];
+  return raw.map(movie=>normalizeRemoteMovie({
+    ...movie,
+    poster_path:movie.poster_url||movie.poster_path,
+    id:movie.provider_id||movie.id
+  })).filter(c=>c?.title).map(c=>({
+    ...c,
+    source:'영화 추천 API',
+    provider:'tmdb',
+    provider_id:c.provider_id||c.id||''
+  }));
+ }catch{
+  return [];
+ }finally{
+  clearTimeout(timer);
+ }
+}
+
+function musicRecommendationWeight(c){
+ const users=Math.max(0,Number(c?.totalUserCount)||0);
+ const listens=Math.max(0,Number(c?.totalListenCount)||0);
+ const score=Math.max(0,Number(c?.musicPopularityScore)||0);
+ return Math.max(.2,score||Math.log10(users+1)*.78+Math.log10(listens+1)*.22);
+}
+
+function weightedShuffleClassicAlbums(list){
+ const pool=[...(list||[])];
+ const out=[];
+ const usedArtists=new Set();
+ let recentGenres=[],recentEras=[];
+
+ while(pool.length){
+  const candidates=pool
+   .map((c,i)=>({c,i}))
+   .filter(({c})=>!usedArtists.has(Model.norm(c?.creator||'')));
+
+  if(!candidates.length)break;
+
+  const weighted=candidates.map(({c,i})=>{
+   let w=musicRecommendationWeight(c);
+   const genre=String(c?.musicGenreFamily||c?.genre||'').toLowerCase();
+   const era=String(c?.musicEra||'');
+   if(genre&&recentGenres.includes(genre))w*=.32;
+   if(genre&&recentGenres.slice(-1)[0]===genre)w*=.18;
+   if(era&&recentEras.slice(-2).includes(era))w*=.68;
+   w*=.82+Math.random()*.36;
+   return {c,i,w:Math.max(.03,w)};
+  });
+
+  const total=weighted.reduce((s,x)=>s+x.w,0);
+  let pick=Math.random()*total,chosen=weighted[0];
+  for(const x of weighted){
+   pick-=x.w;
+   if(pick<=0){chosen=x;break}
+  }
+
+  const [picked]=pool.splice(chosen.i,1);
+  out.push(picked);
+  usedArtists.add(Model.norm(picked?.creator||''));
+
+  const g=String(picked?.musicGenreFamily||picked?.genre||'').toLowerCase();
+  const e=String(picked?.musicEra||'');
+  if(g)recentGenres=[...recentGenres.slice(-2),g];
+  if(e)recentEras=[...recentEras.slice(-2),e];
+ }
+ return out;
+}
+
+async function fetchMusicClassicCandidates(){
+ const controller=new AbortController();
+ const timer=setTimeout(()=>controller.abort(),9000);
+ try{
+  const res=await fetch(MUSIC_POPULARITY_ENDPOINT,{
+   method:'POST',
+   headers:{'Content-Type':'application/json','Accept':'application/json'},
+   body:JSON.stringify({mode:'classic-albums'}),
+   signal:controller.signal
+  });
+  if(!res.ok)return [];
+
+  const payload=await res.json();
+  const raw=Array.isArray(payload?.albums)?payload.albums:[];
+  const normalized=raw.map(d=>{
+   const c=normalizeRemoteAlbum(d);
+   return {
+    ...c,
+    source:'ListenBrainz 명반 추천',
+    searchPopularity:Number(d?.total_user_count)||Number(d?.popularity_score)||0,
+    totalUserCount:Number(d?.total_user_count)||0,
+    totalListenCount:Number(d?.total_listen_count)||0,
+    musicPopularityScore:Number(d?.popularity_score)||0,
+    musicGenreFamily:String(d?.genre_family||'').trim(),
+    musicEra:String(d?.era||'').trim(),
+    recommendationKey:d?.release_group_mbid?'album:rg:'+String(d.release_group_mbid):''
+   };
+  }).filter(c=>c.title&&c.creator);
+
+  return weightedShuffleClassicAlbums(normalized);
+ }catch{
+  return [];
+ }finally{
+  clearTimeout(timer);
+ }
+}
+
 async function fetchTasteCandidates(type,job){
+ if(type==='movie'){
+  return await fetchMovieRecommendations();
+ }
+ if(type==='book'){
+  const bestsellers=await fetchBookRankingCandidates('bestseller');
+  return weightedShuffleBestsellers(bestsellers);
+ }
+ if(type==='album'){
+  return await fetchMusicClassicCandidates();
+ }
  if(!job)return [];
- const {pick,curated}=job;
+ const {pick}=job;
  const [title,creator]=pick;
  const query=title+(creator?' '+creator:'');
  const config={book:[BOOK_SEARCH_ENDPOINT,unwrapBookDocuments,normalizeRemoteBook],album:[MUSIC_SEARCH_ENDPOINT,unwrapAlbums,normalizeRemoteAlbum],movie:[MOVIE_SEARCH_ENDPOINT,unwrapMovies,normalizeRemoteMovie]};
  const [endpoint,unwrap,normalize]=config[type];
- const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),7000);
  try{
   const url=type==='book'?endpoint+'?query='+encodeURIComponent(query)+'&q='+encodeURIComponent(query):endpoint;
   const headers={'Content-Type':'application/json','Accept':'application/json'};
   if(cloudSession?.access_token)headers.Authorization='Bearer '+cloudSession.access_token;
   const publicKey=cloudPublicKey();if(publicKey)headers.apikey=publicKey;
-  const res=await fetch(url,{method:'POST',headers,body:JSON.stringify({query,q:query}),signal:controller.signal});
+  const res=await fetch(url,{method:'POST',headers,body:JSON.stringify({query,q:query,size:50,page:1}),signal:controller.signal});
   if(!res.ok)throw Error('HTTP '+res.status);
-  const works=unwrap(await res.json()).map(normalize).filter(c=>c.title&&(type!=='book'||!isExcludedBookCandidate(c))).slice(0,24);
-  if(!curated)return works;
-  const matches=works.filter(c=>Model.norm(c.title).includes(Model.norm(title)));
-  const chosen=matches.find(c=>Model.norm(c.title)===Model.norm(title))||matches[0];
-  return chosen?[{...chosen,recommendationKey:type+':curated:'+Model.norm(title)+':'+Model.norm(creator)}]:[];
+  let works=unwrap(await res.json()).map(normalize).filter(c=>c.title&&(type!=='book'||!isExcludedBookCandidate(c)));
+  if(type==='movie')works=[...works].sort((a,b)=>movieSearchScore(b,query)-movieSearchScore(a,query));
+  if(type==='book')return works.slice(0,40);
+  return works.slice(0,24);
  }finally{clearTimeout(timer)}
 }
+
+
+async function fetchTasteBookSteadyFallback(){
+ const steady=await fetchBookRankingCandidates('steady');
+ return weightedShuffleBestsellers(steady);
+}
+
+async function enrichTasteBookPopularity(candidates){
+ const books=(candidates||[])
+   .filter(c=>c?.type==='book'&&!isExcludedBookCandidate(c)&&primaryIsbn13(c?.isbn))
+   .slice(0,12);
+ const isbns=[...new Set(books.map(c=>primaryIsbn13(c.isbn)).filter(Boolean))];
+ if(!isbns.length)return candidates;
+
+ const controller=new AbortController();
+ const timer=setTimeout(()=>controller.abort(),4500);
+
+ try{
+  const res=await fetch(BOOK_POPULARITY_ENDPOINT,{
+   method:'POST',
+   headers:{'Content-Type':'application/json','Accept':'application/json'},
+   body:JSON.stringify({isbns}),
+   signal:controller.signal
+  });
+  if(!res.ok)return candidates;
+
+  const payload=await res.json();
+  const infoMap=new Map(
+   (Array.isArray(payload?.books)?payload.books:[])
+    .map(info=>[primaryIsbn13(info?.isbn13||info?.isbn),info])
+    .filter(([isbn])=>isbn)
+  );
+
+  for(const book of books){
+   const info=infoMap.get(primaryIsbn13(book.isbn));
+   if(info)applyPopularityInfo(book,info);
+  }
+ }catch{
+  // YES24 보강이 실패하거나 느려도 추천 자체는 서버 후보로 계속 진행한다.
+ }finally{
+  clearTimeout(timer);
+ }
+
+ return candidates;
+}
+
 async function loadTasteCandidates(){
  if(tasteLoading)return;
  const request=++tasteRequest,owner=cloudSession?.user?.id||'local';
  tasteLoading=true;tasteNotice='';render();
+ try{
  // Prefetch without replacing the current card. Limit empty/error retries per interaction.
- for(let attempt=0;attempt<3;attempt++){
+ for(let attempt=0;attempt<2;attempt++){
   const activeTypes=tastePreferredType?[tastePreferredType]:['book','album','movie'];
-  const jobs=activeTypes.flatMap(type=>[0,1].map(()=>({type,job:nextTasteQuery(type)}))).filter(x=>x.job);
-  if(!jobs.length){tasteNotice='지금 찾을 수 있는 새 작품을 모두 살펴봤어요.';break}
+  const jobs=activeTypes.map(type=>({type,job:nextTasteQuery(type)})).filter(x=>x.job);
+  if(!jobs.length){
+   if(tasteMode==='add'){
+    const refillTypes=tastePreferredType?[tastePreferredType]:['book','album','movie'];
+    for(const type of refillTypes){tasteExploreDecks[type]=[];TASTE_EXPLORE[type].forEach(q=>{const key=type+':'+Model.norm(q);tasteUsedQueries.delete(key);enqueueTasteQuery(type,q)})}
+    continue;
+   }
+   tasteNotice='지금 찾을 수 있는 새 작품을 모두 살펴봤어요.';break
+  }
   const results=await Promise.allSettled(jobs.map(({type,job})=>fetchTasteCandidates(type,job)));
-  if(request!==tasteRequest)return;
+  if(request!==tasteRequest){tasteLoading=false;return;}
   if(owner!==(cloudSession?.user?.id||'local')||authRoute!=='taste'){tasteLoading=false;return}
-  const candidates=results.flatMap(r=>r.status==='fulfilled'?r.value:[]);
-  candidates.forEach(c=>{
-   // Follow returned authors/artists and titles to expand beyond the initial list.
-   if(c.creator)enqueueTasteQuery(c.type,c.creator);
-   enqueueTasteQuery(c.type,c.title);
-   if(c.type==='movie')String(c.title).split(/[ :：·-]+/).filter(word=>word.length>=2).forEach(word=>enqueueTasteQuery(c.type,word));
-  });
-  const additions=shuffleTaste(freshTasteCandidates(candidates));
+  let candidates=results.flatMap(r=>r.status==='fulfilled'?r.value:[])
+   .filter(c=>c?.type!=='book'||!isExcludedBookCandidate(c));
+
+  // Book recommendations get the same YES24 popularity enrichment as search.
+  candidates=await enrichTasteBookPopularity(candidates);
+
+  // Filter educational/anthology books again before the final recommendation rank.
+  candidates=candidates.filter(c=>c?.type!=='book'||!isExcludedBookCandidate(c));
+
+  // 책은 서버의 카테고리 혼합 베스트셀러 순서를 보존한다.
+  // 장르/취향 점수로 다시 정렬하면 특정 장르가 몰릴 수 있으므로 책에는 재정렬하지 않는다.
+  let additions;
+  if(tastePreferredType==='book' || (candidates.length&&candidates.every(c=>c?.type==='book'))){
+   additions=freshTasteCandidates(candidates);
+   if(!additions.length){
+    const steady=await fetchTasteBookSteadyFallback();
+    additions=freshTasteCandidates(steady);
+   }
+  }else if(tastePreferredType==='album' || (candidates.length&&candidates.every(c=>c?.type==='album'))){
+   // 음악은 ListenBrainz 대중성 + 장르/시대 분산 순서를 그대로 사용한다.
+   additions=freshTasteCandidates(candidates);
+  }else{
+   additions=rankTasteCandidates(freshTasteCandidates(candidates));
+  }
   tastePool.push(...additions);
   const failed=results.filter(r=>r.status==='rejected').length;
   if(failed===results.length){
-   jobs.forEach(({type,job})=>{if(job.curated)tasteQueryDecks[type].unshift(job.pick);else tasteExploreDecks[type].push(job.pick[0])});
+   jobs.forEach(({type,job})=>{if(job?.pick?.[0])tasteExploreDecks[type].push(job.pick[0])});
    tasteNotice='작품을 불러오지 못했어요. 연결을 확인하고 다시 시도해주세요.';break;
   }
   if(additions.length)break;
@@ -2636,6 +3827,14 @@ async function loadTasteCandidates(){
  if(!tastePool[tasteIndex]&&!tasteNotice)tasteNotice='새 작품을 찾지 못했어요. 다른 후보를 다시 찾아볼 수 있어요.';
  tasteLoading=false;
  render();
+ }catch(err){
+  if(request===tasteRequest){
+   tasteLoading=false;
+   tasteNotice='추천을 불러오는 중 오류가 발생했어요. 다시 시도해주세요.';
+   console.error('taste recommendation error',err);
+   render();
+  }
+ }
 }
 function startTaste(mode='initial',preferredType=''){
  tasteMode=mode==='add'?'add':'initial';
@@ -2645,34 +3844,134 @@ function startTaste(mode='initial',preferredType=''){
  if(tasteOwner!==owner){
   tasteShownKeys=new Set();tasteQueryDecks={};tasteExploreDecks={};tasteUsedQueries=new Set();tasteOwner=owner;
   for(const type of ['book','album','movie']){
-   tasteQueryDecks[type]=shuffleTaste(TASTE_QUERIES[type]);tasteExploreDecks[type]=[];
-   shuffleTaste(TASTE_EXPLORE[type]).forEach(query=>enqueueTasteQuery(type,query));
+   tasteQueryDecks[type]=[];tasteExploreDecks[type]=[];
+   TASTE_EXPLORE[type].forEach(query=>enqueueTasteQuery(type,query));
   }
  }
  tasteRequest++;tasteLoading=false;tastePool=[];tasteIndex=0;tasteSeen=0;tasteReviewed=0;
  flowTo('taste');
  return loadTasteCandidates();
 }
+
+function tasteIntroText(c){
+ let raw=String(c?.contents||c?.description||c?.overview||'')
+  .replace(/<[^>]+>/g,' ')
+  .replace(/[_＿]+/g,' ')
+  .replace(/\s+/g,' ')
+  .trim();
+ if(!raw)return '';
+
+ // 추천사/인용문/수상·화제 문구보다 실제 작품 설명을 우선한다.
+ raw=raw
+  .replace(/^[“"『「][^”"』」]{15,220}[”"』」]\s*(?:[-–—]?\s*[^.!?。]{0,45})?\s*/,'')
+  .replace(/^(?:(?:출간\s*즉시|종합\s*베스트셀러|베스트셀러|유튜브\s*[\d,.]+\s*만?\s*뷰|전\s*국민적|화제작|특별기획보도|인터뷰\s*대서특필|방송계의\s*퓰리처상|피버디상|수상자|수상작|추천사|찬사)[^.!?。]{0,95}[.!?。]?\s*)+/i,'')
+  .trim();
+
+ if(!raw)return '';
+
+ // 첫 문장이 너무 짧으면 거기서 끝내지 않는다.
+ // 완결된 문장을 2~3개 이어 붙여 약 90~170자 정도를 목표로 한다.
+ const parts=[];
+ let start=0;
+ const enders=/[.!?。]/g;
+ let match;
+ while((match=enders.exec(raw))&&parts.length<4){
+  let end=match.index+1;
+  while(end<raw.length&&/[”"'’」』)]/.test(raw[end]))end++;
+  const part=raw.slice(start,end).trim();
+  if(part)parts.push(part);
+  start=end;
+  while(start<raw.length&&/\s/.test(raw[start]))start++;
+  enders.lastIndex=start;
+ }
+
+ if(parts.length){
+  let combined='';
+  for(const part of parts){
+   const next=(combined?combined+' ':'')+part;
+   if(combined.length>=90)break;
+   if(next.length<=180){
+    combined=next;
+   }else{
+    break;
+   }
+  }
+  if(combined.length>=70)return combined;
+ }
+
+ // 문장부호가 드문 소개문은 단어 경계에서만 축약한다.
+ if(raw.length<=165)return raw;
+ const probe=raw.slice(0,166);
+ const lastSpace=probe.lastIndexOf(' ');
+ const safe=lastSpace>=135?probe.slice(0,lastSpace):raw.slice(0,160);
+ return safe.trim()+'…';
+}
+
+async function ensureTasteIntro(c){
+ if(!c||c.type!=='book'||c.contents||c._introLoading||c._introLoaded)return;
+ c._introLoading=true;
+ try{
+  const isbn=primaryIsbn13(c.isbn);
+  const query=isbn||c.title;
+  if(!query)return;
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),4500);
+  try{
+   const url=BOOK_SEARCH_ENDPOINT+'?query='+encodeURIComponent(query)+'&q='+encodeURIComponent(query)+(isbn?'&target=isbn':'');
+   const headers={'Content-Type':'application/json','Accept':'application/json'};
+   if(cloudSession?.access_token)headers.Authorization='Bearer '+cloudSession.access_token;
+   const publicKey=cloudPublicKey();if(publicKey)headers.apikey=publicKey;
+   const res=await fetch(url,{
+    method:'POST',
+    headers,
+    body:JSON.stringify({query,q:query,target:isbn?'isbn':'title',size:8,page:1,sort:'accuracy'}),
+    signal:controller.signal
+   });
+   if(!res.ok)return;
+   const docs=unwrapBookDocuments(await res.json()).map(normalizeRemoteBook);
+   const exact=isbn
+    ?docs.find(x=>primaryIsbn13(x.isbn)===isbn)
+    :docs.find(x=>Model.norm(x.title)===Model.norm(c.title));
+   const found=exact||docs[0];
+   if(found?.contents)c.contents=found.contents;
+  }finally{
+   clearTimeout(timer);
+  }
+ }catch{
+  // 소개 보강 실패는 추천 흐름을 막지 않는다.
+ }finally{
+  c._introLoading=false;
+  c._introLoaded=true;
+  if(authRoute==='taste'&&window.tasteCandidate===c)render();
+ }
+}
+
 function renderTastePage(){
- const c=tastePool[tasteIndex],isAdd=tasteMode==='add';
+ let c=tastePool[tasteIndex],isAdd=tasteMode==='add';
+ while(c?.type==='book'&&isExcludedBookCandidate(c)){
+  tasteIndex++;
+  c=tastePool[tasteIndex];
+ }
  window.tasteCandidate=c||null;
  if(tasteLoading&&!c)return '<div class="entry-hero" role="status"><h1>새로운 작품을 찾고 있어요</h1><p class="creator">다음 작품을 곧 보여드릴게요.</p></div>';
  if(!c){
-  const title=isAdd?'새로운 후보를 더 볼까요?':'첫 추천을 준비하고 있어요';
-  const description=esc(tasteNotice||(isAdd?'이번 후보를 모두 살펴봤어요. 원하면 새 작품을 더 불러올 수 있어요.':'새 작품을 불러와 5개까지 빠르게 살펴볼 수 있어요.'));
-  return '<div class="entry-hero"><h1>'+title+'</h1><p class="creator">'+description+'</p></div>'+button('새 작품 불러오기','flowTasteMore')+button(isAdd?'닫기':'그냥 시작하기',isAdd?'tasteClose':'flowFinish','textbtn');
+  if(isAdd&&!tasteLoading){setTimeout(()=>{if(authRoute==='taste'&&tasteMode==='add'&&!tasteLoading)loadTasteCandidates()},0);}
+  const title=isAdd?'다음 작품을 찾고 있어요':'첫 추천을 준비하고 있어요';
+  const description=esc(tasteNotice||(isAdd?'검증된 인기작을 중심으로 겹치지 않게 계속 이어서 보여드려요.':'새 작품을 불러와 5개까지 빠르게 살펴볼 수 있어요.'));
+  return '<div class="entry-hero" role="status"><h1>'+title+'</h1><p class="creator">'+description+'</p></div>'+button(isAdd?'닫기':'그냥 시작하기',isAdd?'tasteClose':'flowFinish','textbtn');
  }
  window.tasteCandidate=c;
  tasteKeys(c).forEach(key=>tasteShownKeys.add(key));
+ if(c.type==='book'&&!c.contents&&!c._introLoaded&&!c._introLoading)setTimeout(()=>ensureTasteIntro(c),0);
  const initialProgress=Math.min(tasteReviewed+1,INITIAL_TASTE_TARGET);
  const heading=isAdd
-  ?'<div class="taste-heading"><h1>취향을 조금 더<br>알려주세요</h1><p class="creator">원하는 만큼 보고, 언제든 닫을 수 있어요.<br>기존 취향에 새로운 신호만 더해집니다.</p></div>'
+  ?'<div class="taste-heading"><h1>취향을 조금 더<br>알려주세요</h1><p class="creator">처음엔 신작과 인기작부터, 반응이 쌓이면 취향에 맞는 작품 비중이 커져요.<br>원하는 만큼 보고 언제든 닫을 수 있어요.</p></div>'
   :'<div class="taste-heading"><h1>몇 작품만 알려주시면<br>첫 추천을 골라드릴게요</h1><p class="creator">'+esc(({book:'책',album:'음반',movie:'영화'}[tastePreferredType]||'선택한 유형'))+'부터 5개 작품을 빠르게 살펴봐주세요.</p><div class="taste-progress" aria-label="첫 추천 작품 '+initialProgress+'번째, 전체 '+INITIAL_TASTE_TARGET+'개"><span>'+initialProgress+' / '+INITIAL_TASTE_TARGET+'</span><span class="taste-dots" aria-hidden="true">'+Array.from({length:INITIAL_TASTE_TARGET},(_,i)=>'<i class="'+(i<=tasteReviewed?'on':'')+'"></i>').join('')+'</span></div></div>';
- return (tasteNotice?'<p class="note" role="status">'+esc(tasteNotice)+'</p>':'')+heading+'<div class="onboard-card"><div class="taste-cover-stage">'+cover(c)+'</div><small>'+typeName[c.type]+'</small><h2 title="'+esc(c.title)+'">'+esc(c.title)+'</h2><p class="creator" title="'+esc(c.creator)+'">'+esc(c.creator)+'</p></div><div class="taste-actions">'+button('보고 싶어요','flowInterested')+button('이미 경험했어요','flowExperienced','secondary')+button('넘기기','flowSkip','textbtn')+'</div>'
+ return (tasteNotice?'<p class="note" role="status">'+esc(tasteNotice)+'</p>':'')+heading+'<div class="onboard-card"><div class="taste-cover-stage">'+cover(c)+'</div><small>'+typeName[c.type]+'</small><h2 title="'+esc(c.title)+'">'+esc(c.title)+'</h2><p class="creator" title="'+esc(c.creator)+'">'+esc(c.creator)+'</p>'+(tasteIntroText(c)?'<p class="taste-intro">'+esc(tasteIntroText(c))+'</p>':'')+'</div><div class="taste-actions">'+button('보고 싶어요','flowInterested')+button('이미 경험했어요','flowExperienced','secondary')+button('넘기기','flowSkip','textbtn')+'</div>'
 }
 
 function response(type){const c=window.tasteCandidate;state.profile.responses??={};state.profile.responses[c.type+':'+c.title]=type;persist()}
-function nextTaste(){if(!tastePool[tasteIndex])return;tasteIndex++;tasteReviewed++;if(tasteMode==='initial'&&tasteReviewed>=INITIAL_TASTE_TARGET){flowTo('ready');return}flowTo('taste');if(authRoute==='taste'&&tastePool.length-tasteIndex<=3)loadTasteCandidates()}
+function nextTaste(){if(!tastePool[tasteIndex])return;tasteIndex++;tasteReviewed++;if(tasteMode==='initial'&&tasteReviewed>=INITIAL_TASTE_TARGET){flowTo('ready');return}flowTo('taste');if(authRoute==='taste'&&tastePool.length-tasteIndex<=8)loadTasteCandidates()}
 function finishEntry(){authSession.finished=true;state.onboarded=true;saveSession();persist();view='today';flowTo('app')}
 document.addEventListener('click',async e=>{
  const b=e.target.closest('[data-action]');if(!b||b.disabled)return;const a=b.dataset.action;
@@ -2680,7 +3979,7 @@ document.addEventListener('click',async e=>{
  if(a==='flowTasteMore'){
   const refillTypes=tastePreferredType?[tastePreferredType]:['book','album','movie'];
   if(!refillTypes.some(type=>(tasteQueryDecks[type]?.length||tasteExploreDecks[type]?.length))){
-   for(const type of refillTypes){tasteQueryDecks[type]=shuffleTaste(TASTE_QUERIES[type]);tasteExploreDecks[type]=[];shuffleTaste(TASTE_EXPLORE[type]).forEach(query=>enqueueTasteQuery(type,query));}
+   for(const type of refillTypes){tasteQueryDecks[type]=[];tasteExploreDecks[type]=[];TASTE_EXPLORE[type].forEach(query=>enqueueTasteQuery(type,query));}
   }
   loadTasteCandidates();
  }
