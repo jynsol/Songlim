@@ -1021,11 +1021,11 @@ function forestPlacements(items,cfg){
  const featureSlots=slots.filter(s=>featureKeys.has(s.key)),treeSlots=slots.filter(s=>!featureKeys.has(s.key));
  const taken=new Set(),placements=[];let changed=false;
  const ordered=[...items].sort((a,b)=>((a.completedAt||0)-(b.completedAt||0))||a.id.localeCompare(b.id));
- const add=(item,slot)=>{const profile=treeVisualProfile(item),sizeVar=treeSizeVariance(item);placements.push({item,slot,profile,scale:cfg.treeScale*profile.scaleBias*sizeVar,sizeVar});taken.add(slot.key)};
+ const add=(item,slot)=>{const profile=treeVisualProfile(item),sizeVar=(item&&item.hiddenTree)?1:treeSizeVariance(item);placements.push({item,slot,profile,scale:cfg.treeScale*profile.scaleBias*sizeVar,sizeVar});taken.add(slot.key)};
  ordered.forEach(item=>{const saved=parseForestTile(item.forestTile);if(saved&&slotMap.has(saved.key)&&!featureKeys.has(saved.key)&&!taken.has(saved.key))add(item,slotMap.get(saved.key));});
  ordered.forEach(item=>{
   if(placements.some(p=>p.item===item))return;
-  const profile=treeVisualProfile(item),sizeVar=treeSizeVariance(item),available=treeSlots.filter(s=>!taken.has(s.key));
+  const profile=treeVisualProfile(item),sizeVar=(item&&item.hiddenTree)?1:treeSizeVariance(item),available=treeSlots.filter(s=>!taken.has(s.key));
   let best=available[0],bestScore=-1e9;
   available.forEach(slot=>{
    let minAny=99,minSame=99,minShape=99;
