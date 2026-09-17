@@ -122,7 +122,7 @@ input[type=checkbox],input[type=radio]{accent-color:var(--brand-green)}
 .inline-picker-panel.year-picker{left:0;right:auto;width:156px}
 </style><style>
 /* Fill the entire viewport with the selected biome, including SVG letterboxing. */
-.forest-viewport{background:#EDF6E8}
+.forest-viewport{background:linear-gradient(155deg,#F4F3EE,#F7F6F2)}
 .forest-viewport[data-theme="jungle"]{background:#EDF2DD}
 .forest-viewport[data-theme="snow"]{background:#F2F6FC}
 </style><style>
@@ -748,12 +748,12 @@ function speciesArt(speciesId,theme='basic'){
   out+=ellipse(31,-49,29,9,c[0],'transform="rotate(8 31 -49)"');
   out+=ellipse(9,-59,23,7,c[2],'transform="rotate(5 9 -59)"');
  }else if(sp.id==='paulownia'){
-  // Extra sparse: visible branch skeleton, only two main leaves and one tiny leaf.
-  out+=path('M0 13Q-1-9 1-49M0-22L-27-43M1-31L22-55M-1-11L-19-24M3-17L29-31','none',tr,4.0);
-  out+=path('M-9-29L-18-49M12-44L18-62M-5-15L8-28','none',tr,1.8,'opacity=".9"');
-  out+=polygon('-38,-46 -27,-56 -16,-45 -27,-35',c[0]);
-  out+=polygon('11,-57 23,-67 34,-55 22,-44',c[1]);
-  out+=polygon('23,-29 29,-34 35,-28 29,-22',c[2]);
+  // Much barer paulownia: branch skeleton dominates, leaves are tiny accents only.
+  out+=path('M0 13Q-1-10 1-52M0-23L-29-45M1-33L24-58M-1-12L-20-26M3-19L30-33','none',tr,4.0);
+  out+=path('M-10-31L-19-50M14-46L21-64M-6-16L7-29M8-25L18-38','none',tr,1.8,'opacity=".9"');
+  out+=polygon('-34,-47 -29,-52 -23,-47 -29,-41',c[0]);
+  out+=polygon('19,-58 25,-63 31,-57 25,-51',c[1]);
+  out+=polygon('26,-30 30,-33 34,-29 30,-25',c[2],'opacity=".88"');
  }else if(sp.id==='evergreen'){
   out+=path('M0 13V-44M0-20L-18-33M0-26L18-42','none',tr,6.5);
   out+=polygon('-32,-48 -17,-64 4,-66 26,-57 36,-39 29,-18 8,-9 -14,-12 -31,-27',c[0]);
@@ -794,38 +794,47 @@ function forestVisitorArt(items,animated=true){
  if(chosen.id==='hedgehog')return '<g data-visitor="hedgehog" class="'+cls+'" transform="translate(520 390)"><path d="M-15 4-10-6-4-3 1-12 6-4 13-8 15 4Z" fill="#756758"/><ellipse cx="7" cy="4" rx="13" ry="7" fill="#B49374"/><circle cx="17" cy="1" r="1.2" fill="#3B3733"/></g>';
  return '<g data-visitor="firefly" class="'+cls+'" transform="translate(335 270)"><circle r="11" fill="#F6E5A6" opacity=".18"/><circle r="5" fill="#F0D66F" opacity=".5"/><circle r="2" fill="#F7D64D"/><path d="M-2-3-7-8M2-3 7-8" stroke="#6C705C" stroke-width="1"/></g>';
 }
+const FOREST_EXPANSION_STAGES=[
+ {id:1,label:'첫 숲',maxTrees:40,cols:8,rows:8,boardW:420,boardH:236,treeScale:.58},
+ {id:2,label:'작은 숲',maxTrees:80,cols:11,rows:11,boardW:500,boardH:280,treeScale:.52},
+ {id:3,label:'자라는 숲',maxTrees:140,cols:14,rows:14,boardW:560,boardH:312,treeScale:.46},
+ {id:4,label:'깊은 숲',maxTrees:200,cols:17,rows:17,boardW:600,boardH:334,treeScale:.42},
+ {id:5,label:'넓은 숲',maxTrees:300,cols:20,rows:20,boardW:630,boardH:350,treeScale:.38}
+];
 function forestLayoutConfig(n){
- if(n<=8)return {cols:4,rows:3,boardW:330,boardH:188,treeScale:.75,tier:1};
- if(n<=16)return {cols:5,rows:4,boardW:385,boardH:218,treeScale:.68,tier:2};
- if(n<=30)return {cols:6,rows:5,boardW:450,boardH:252,treeScale:.61,tier:3};
- if(n<=50)return {cols:7,rows:6,boardW:510,boardH:286,treeScale:.56,tier:4};
- if(n<=80)return {cols:8,rows:7,boardW:570,boardH:318,treeScale:.51,tier:5};
- return {cols:9,rows:8,boardW:620,boardH:344,treeScale:.47,tier:6};
+ const count=Math.max(0,n||0);
+ let idx=FOREST_EXPANSION_STAGES.findIndex(s=>count<=s.maxTrees);
+ if(idx<0)idx=FOREST_EXPANSION_STAGES.length-1;
+ const stage=FOREST_EXPANSION_STAGES[idx];
+ const next=FOREST_EXPANSION_STAGES[idx+1]||null;
+ return {...stage,tier:idx+1,capacity:stage.cols*stage.rows,nextExpandAt:next?next.maxTrees:null,remainingToExpand:next?Math.max(0,next.maxTrees-count):0};
+}
+function forestExpansionMeta(n){
+ const cfg=forestLayoutConfig(n);
+ return {label:cfg.label,cols:cfg.cols,rows:cfg.rows,tiles:cfg.capacity,nextAt:cfg.nextExpandAt,remaining:cfg.remainingToExpand};
 }
 function forestPlacements(items,cfg){
  if(!items.length)return [];
- // Keep the same loose grid, but give the placement solver a few more candidate cells.
- // This opens the gaps slightly without pulling the forest back toward the center.
- const n=items.length,target=Math.max(n+8,Math.ceil(n*1.36));
- const gridCols=Math.max(4,Math.ceil(Math.sqrt(target*1.12)));
- const gridRows=Math.max(3,Math.ceil(target/gridCols));
- const minRX=-(cfg.rows-1),maxRX=cfg.cols-1,minRY=0,maxRY=cfg.rows+cfg.cols-2;
- const vMinRX=-(gridRows-1),vMaxRX=gridCols-1,vMinRY=0,vMaxRY=gridRows+gridCols-2;
- const unit=k=>(hash('forest-grid-v3|'+cfg.tier+'|'+k)%1000000)/1000000;
+ const n=items.length;
+ const gridCols=cfg.cols,gridRows=cfg.rows;
+ const unit=k=>(hash('forest-grid-v4|'+cfg.tier+'|'+k)%1000000)/1000000;
  const slots=[];
  for(let r=0;r<gridRows;r++)for(let c=0;c<gridCols;c++){
-  // A grid is the base, but every cell is nudged slightly so it never reads as a checkerboard.
-  const jr=r+(unit(r+'|'+c+'|r')-.5)*.24;
-  const jc=c+(unit(r+'|'+c+'|c')-.5)*.24;
-  const vrx=jc-jr,vry=jc+jr;
-  let ux=(vrx-vMinRX)/Math.max(1,vMaxRX-vMinRX),uy=(vry-vMinRY)/Math.max(1,vMaxRY-vMinRY);
-  ux=.045+ux*.91;uy=.055+uy*.89;
-  const rx=minRX+ux*(maxRX-minRX),ry=minRY+uy*(maxRY-minRY);
-  slots.push({rx,ry,gx:c,gy:r,key:hash('slot-v3|'+cfg.tier+'|'+r+'|'+c)});
+  const edge=Math.min(c,gridCols-1-c,r,gridRows-1-r);
+  const centerDX=c-(gridCols-1)/2,centerDY=r-(gridRows-1)/2;
+  const centerDist=Math.hypot(centerDX,centerDY);
+  const jitterX=(unit(r+'|'+c+'|jx')-.5)*.18;
+  const jitterY=(unit(r+'|'+c+'|jy')-.5)*.18;
+  slots.push({
+   rx:(c-r)+jitterX,
+   ry:(c+r)+jitterY,
+   gx:c,gy:r,
+   edge,centerDist,
+   key:hash('slot-v4|'+cfg.tier+'|'+r+'|'+c)
+  });
  }
- // Keep a deterministic, spatially varied subset of the grid.
- slots.sort((a,b)=>a.key-b.key);
- const available=slots.slice(0,Math.min(slots.length,Math.max(n,Math.ceil(n*1.34))));
+ // Use the whole tile field for the current expansion stage, but keep natural holes.
+ const available=[...slots].sort((a,b)=>a.key-b.key);
  const placed=[];
  items.forEach((item,i)=>{
   const profile=treeVisualProfile(item),sizeVar=treeSizeVariance(item);
@@ -838,28 +847,90 @@ function forestPlacements(items,cfg){
     if(q.profile.species.id===profile.species.id)minSame=Math.min(minSame,d);
     if(q.profile.shape===profile.shape)minShape=Math.min(minShape,d);
    }
-   const edge=Math.min(slot.gx,gridCols-1-slot.gx,slot.gy,gridRows-1-slot.gy);
-   const score=Math.min(minAny,3.4)*6.2+Math.min(minSame,4.2)*7.4+Math.min(minShape,3.2)*2.2+Math.min(edge,2)*.45+unit(i+'|'+slot.key+'|assign')*.6;
+   const spread=Math.min(minAny,4.2)*6.8;
+   const samePenalty=Math.min(minSame,5.0)*8.2;
+   const shapePenalty=Math.min(minShape,4.0)*2.6;
+   const edgePreference=Math.min(slot.edge,3.2)*.55;
+   const centerEase=Math.max(0,4.6-slot.centerDist)*.16;
+   const noise=unit(i+'|'+slot.key+'|assign')*.7;
+   const score=spread+samePenalty+shapePenalty+edgePreference+centerEase+noise;
    if(score>bestScore){bestScore=score;bestIndex=j;}
   });
   const slot=available.splice(bestIndex,1)[0]||slots[i%slots.length];
-  const rec={rx:slot.rx,ry:slot.ry,gx:slot.gx,gy:slot.gy,profile,scale:cfg.treeScale*profile.scaleBias*sizeVar,sizeVar};
-  placed.push(rec);
+  placed.push({rx:slot.rx,ry:slot.ry,gx:slot.gx,gy:slot.gy,profile,scale:cfg.treeScale*profile.scaleBias*sizeVar,sizeVar});
  });
  return placed;
 }
 
 
-function forestDecorations(cfg,cx,cy){
+function forestDecorations(cfg,cx,cy,treePoints=[]){
  const pieces=[];
  const rock=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".78"><ellipse cy="7" rx="14" ry="4" fill="#7A8D83" opacity=".12"/><path d="M-10 4Q-13-6-5-11Q3-15 9-8Q14-2 9 5Z" fill="#9DA79F"/><path d="M-5-7Q1-11 6-7" fill="none" stroke="#B8C0B9" stroke-width="1.2"/></g>';
  const stump=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".84"><ellipse cy="7" rx="11" ry="3.2" fill="#6F8177" opacity=".12"/><path d="M-6-8L-7 4Q0 9 7 4L6-8Z" fill="#8B6B53"/><ellipse cy="-8" rx="6" ry="3" fill="#B9906A"/><ellipse cy="-8" rx="3" ry="1.4" fill="none" stroke="#8D6C52" stroke-width=".9"/></g>';
  const branch=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".76"><path d="M-15 4Q-4-3 11-1M1-2L8-9M-7 1L-12-6" fill="none" stroke="#806750" stroke-width="3" stroke-linecap="round"/><ellipse cx="9" cy="-8" rx="4" ry="2.2" fill="#839B6D" transform="rotate(-22 9 -8)"/></g>';
  const grass=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".68"><path d="M0 5Q-1-5-6-11M0 5Q1-7 1-13M0 5Q4-4 8-9M0 5Q-6-2-10-4" fill="none" stroke="#78956E" stroke-width="2" stroke-linecap="round"/></g>';
+ const flowers=(x,y,s=1,variant=0)=>{
+  // Flat floor flowers seen as top-down ground cover, not upright stems.
+  const palettes=[
+   ['#F8F2DE','#D9B95A','#B9C98D'],
+   ['#F7E3D7','#D8A36F','#B7C78A'],
+   ['#F8F6EE','#D7B74E','#C5D29A']
+  ][variant%3];
+  const rosettes=[[-12,-1,3.6],[-4,3,3.2],[5,-2,3.4],[12,2,3.0],[1,8,2.8]];
+  const petals=rosettes.map(r=>
+   '<g transform="translate('+r[0]+' '+r[1]+') scale('+(r[2]/3.2).toFixed(2)+')">'
+   +'<ellipse cx="0" cy="0" rx="6" ry="3.2" fill="'+palettes[2]+'" opacity=".28"/>'
+   +'<circle cx="0" cy="-2.2" r="2.1" fill="'+palettes[0]+'"/>'
+   +'<circle cx="1.9" cy="-.4" r="1.8" fill="'+palettes[0]+'"/>'
+   +'<circle cx="-1.9" cy="-.4" r="1.8" fill="'+palettes[0]+'"/>'
+   +'<circle cx="0" cy="1.7" r="1.8" fill="'+palettes[0]+'"/>'
+   +'<circle cx="0" cy="0" r=".95" fill="'+palettes[1]+'"/>'
+   +'</g>'
+  ).join('');
+  const leafs=''
+   +'<ellipse cx="-16" cy="8" rx="5.2" ry="2.4" fill="#B7C98D" opacity=".85" transform="rotate(-18 -16 8)"/>'
+   +'<ellipse cx="15" cy="9" rx="4.8" ry="2.2" fill="#B7C98D" opacity=".82" transform="rotate(16 15 9)"/>'
+   +'<ellipse cx="0" cy="11" rx="6.5" ry="2.6" fill="#C9D8A7" opacity=".72"/>';
+  return '<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".96">'
+   +'<ellipse cx="0" cy="8" rx="19" ry="5" fill="#6F8E69" opacity=".06"/>'
+   +leafs+petals+'</g>';
+ };
+
  pieces.push(rock((cx+cfg.boardW*.28).toFixed(1),(cy-cfg.boardH*.13).toFixed(1),.82));
  pieces.push(stump((cx-cfg.boardW*.28).toFixed(1),(cy+cfg.boardH*.18).toFixed(1),.78));
  pieces.push(branch((cx+cfg.boardW*.12).toFixed(1),(cy+cfg.boardH*.28).toFixed(1),.78));
  pieces.push(grass((cx-cfg.boardW*.12).toFixed(1),(cy-cfg.boardH*.28).toFixed(1),.75));
+ // Pick the widest real gaps instead of relying on a few fixed coordinates.
+ // Dense forests therefore still get visible flowers, while the clumps stay on the floor between trees.
+ const candidateSeeds=[
+  [-.34,-.02],[-.30,.13],[-.27,-.14],[-.21,.25],[-.18,.04],[-.15,-.23],[-.09,.17],[-.07,-.08],
+  [-.02,.29],[.00,.07],[.04,-.24],[.08,.20],[.11,-.04],[.15,.29],[.18,-.18],[.22,.10],
+  [.25,-.03],[.28,.20],[.31,-.13],[.34,.04],[-.24,-.02],[-.12,.30],[.02,-.12],[.14,.08],[.26,.28]
+ ];
+ const candidates=candidateSeeds.map((p,i)=>{
+  const x=cx+p[0]*cfg.boardW,y=cy+p[1]*cfg.boardH;
+  const nearest=treePoints.length?Math.min(...treePoints.map(t=>Math.hypot(x-t.x,y-t.y))):999;
+  return {x,y,i,nearest};
+ }).sort((a,b)=>b.nearest-a.nearest);
+ const chosen=[];
+ const desired=Math.min(7,Math.max(5,Math.round(cfg.boardW/115)));
+ for(const c of candidates){
+  // Enough breathing room to read as a ground detail, but not so strict that all flowers disappear.
+  if(c.nearest<25)continue;
+  if(chosen.some(t=>Math.hypot(c.x-t.x,c.y-t.y)<45))continue;
+  chosen.push(c);
+  if(chosen.length>=desired)break;
+ }
+ // Fallback: guarantee a few flower clumps even in a very dense completed forest.
+ if(chosen.length<4){
+  for(const c of candidates){
+   if(chosen.includes(c)||c.nearest<18)continue;
+   if(chosen.some(t=>Math.hypot(c.x-t.x,c.y-t.y)<38))continue;
+   chosen.push(c);
+   if(chosen.length>=4)break;
+  }
+ }
+ chosen.forEach((p,i)=>pieces.push(flowers(p.x.toFixed(1),p.y.toFixed(1),.96+(i%3)*.07,p.i)));
  return pieces.join('');
 }
 function forestSVG(items,theme='basic',animated=true){
@@ -878,7 +949,7 @@ function forestSVG(items,theme='basic',animated=true){
  const groundPath='M'+top.x+' '+top.y+' L'+right.x+' '+right.y+' L'+bottom.x+' '+bottom.y+' L'+left.x+' '+left.y+' Z';
  const leftSide='M'+left.x+' '+left.y+' L'+bottom.x+' '+bottom.y+' L'+bottom.x+' '+(bottom.y+depth)+' L'+left.x+' '+(left.y+depth)+' Z';
  const rightSide='M'+bottom.x+' '+bottom.y+' L'+right.x+' '+right.y+' L'+right.x+' '+(right.y+depth)+' L'+bottom.x+' '+(bottom.y+depth)+' Z';
- const decorations=forestDecorations(cfg,cx,cy);
+ const decorations=forestDecorations(cfg,cx,cy,points);
  const trees=points.map(p=>{const sc=(p.scale||cfg.treeScale).toFixed(3),shadowRx=((p.profile?.radius||24)*.80).toFixed(1),shadowRy=(Math.max(4.2,(p.profile?.radius||24)*.16)).toFixed(1);return '<g data-tree="'+esc(p.c.id)+'" tabindex="'+(forestEditMode?'0':'-1')+'" aria-label="'+esc(p.c.title+' · '+String(p.c.genre||category(p.c).label))+'" transform="translate('+p.x.toFixed(1)+' '+p.y.toFixed(1)+') scale('+sc+')"><ellipse cx="4" cy="10" rx="'+shadowRx+'" ry="'+shadowRy+'" fill="#708579" opacity=".14"/><circle class="tree-hit" cx="0" cy="-27" r="34" fill="transparent" pointer-events="all"/>'+treeArt(p.c,theme)+'</g>'}).join('');
  const visitor=n?forestVisitorArt(items,animated):'';
  const patches=[
@@ -1165,7 +1236,10 @@ function renderDetail(){
 function forestRecordYear(c){if(c.completed&&c.completed!=='unknown')return c.completed.slice(0,4);const date=new Date(c.completedAt||c.saves?.[0]?.at||Date.now());return Number.isNaN(date.getTime())?now().slice(0,4):String(date.getFullYear())}
 function renderForest(){
  const items=Model.completed(state,year),stats=Model.stats(items),theme=state.themes[year]||'basic';
- const collection=collectionCounts();return '<section><div class="row between">'+inlinePicker(year+'년 나의 숲','year',[...new Set([now().slice(0,4),...state.items.filter(c=>c.completed).map(forestRecordYear)])].sort().reverse().map(y=>[y,y+'년']),year)+(stats.n?button(forestEditMode?'완료':'꾸미기','forestEdit','textbtn forest-edit-control','aria-pressed="'+forestEditMode+'"'):'')+'</div><div class="space"></div><div class="forest-scene"><div class="forest-viewport '+(forestEditMode?'editing':'')+'" id="forestViewport" data-theme="'+({autumn:'jungle',winter:'snow'}[theme]||theme)+'" tabindex="0" aria-label="'+(forestEditMode?'꾸미기 중. 바꾸고 싶은 나무를 누르세요.':'완료한 콘텐츠가 나무로 쌓인 숲.')+'">'+forestSVG(items,theme)+'</div></div>'+(forestEditMode?'<p class="forest-edit-hint">나무를 누르면 이 콘텐츠에 사용할 나무를 바꿀 수 있어요.</p>':'')+'<div class="area"><strong>'+stats.n.toLocaleString()+'그루의 나무</strong><p class="forest-types">책 '+stats.book+' · 음반 '+stats.album+' · 영화 '+stats.movie+'</p><p class="forest-area-note">'+stats.area.toLocaleString()+'㎡'+(stats.n?' · '+esc(Model.compare(stats.n)):' · 첫 나무를 기다리고 있어요')+'</p></div>'+forestSummary(items)+'<button class="collection-entry" data-action="collection"><strong>나의 도감</strong><span>나무 '+collection.trees+'/'+collection.totalTrees+' · 방문객 '+collection.visitors+'/'+collection.totalVisitors+'  ›</span></button><div class="space"></div>'+button(stats.n?'월간 기록 보기':'오늘의 경험 시작하기',stats.n?'calendar':'toToday')+'<div class="row between">'+(stats.n?button('내 숲 공유하기','shareForest','textbtn'):button('월간 기록 보기','calendar','textbtn'))+button('테마 변경','themes','textbtn')+'</div><p class="muted tiny"></p></section>';
+ const expansion=forestExpansionMeta(stats.n);
+ const stageNote='현재 숲 단계 · '+expansion.label+' · '+expansion.cols+'×'+expansion.rows+' 타일 ('+expansion.tiles+'칸)'+(expansion.nextAt?' · 다음 확장까지 '+expansion.remaining+'그루':' · 최대 확장 단계');
+ const collection=collectionCounts();
+ return '<section><div class="row between">'+inlinePicker(year+'년 나의 숲','year',[...new Set([now().slice(0,4),...state.items.filter(c=>c.completed).map(forestRecordYear)])].sort().reverse().map(y=>[y,y+'년']),year)+(stats.n?button(forestEditMode?'완료':'꾸미기','forestEdit','textbtn forest-edit-control','aria-pressed="'+forestEditMode+'"'):'')+'</div><div class="space"></div><div class="forest-scene"><div class="forest-viewport '+(forestEditMode?'editing':'')+'" id="forestViewport" data-theme="'+({autumn:'jungle',winter:'snow'}[theme]||theme)+'" tabindex="0" aria-label="'+(forestEditMode?'꾸미기 중. 바꾸고 싶은 나무를 누르세요.':'완료한 콘텐츠가 나무로 쌓인 숲.')+'">'+forestSVG(items,theme)+'</div></div>'+(forestEditMode?'<p class="forest-edit-hint">나무를 누르면 이 콘텐츠에 사용할 나무를 바꿀 수 있어요.</p>':'')+'<div class="area"><strong>'+stats.n.toLocaleString()+'그루의 나무</strong><p class="forest-types">책 '+stats.book+' · 음반 '+stats.album+' · 영화 '+stats.movie+'</p><p class="forest-area-note">'+stats.area.toLocaleString()+'㎡'+(stats.n?' · '+esc(Model.compare(stats.n)):' · 첫 나무를 기다리고 있어요')+'</p><p class="muted tiny">'+stageNote+'</p></div>'+forestSummary(items)+'<button class="collection-entry" data-action="collection"><strong>나의 도감</strong><span>나무 '+collection.trees+'/'+collection.totalTrees+' · 방문객 '+collection.visitors+'/'+collection.totalVisitors+'  ›</span></button><div class="space"></div>'+button(stats.n?'월간 기록 보기':'오늘의 경험 시작하기',stats.n?'calendar':'toToday')+'<div class="row between">'+(stats.n?button('내 숲 공유하기','shareForest','textbtn'):button('월간 기록 보기','calendar','textbtn'))+button('테마 변경','themes','textbtn')+'</div><p class="muted tiny"></p></section>';
 }
 function calendarHTML(period){
  const [y,m]=period.split('-').map(Number),start=new Date(y,m-1,1).getDay(),days=new Date(y,m,0).getDate();
