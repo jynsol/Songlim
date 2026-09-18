@@ -2068,7 +2068,8 @@ async function loadMoreBookResults(){
   remoteBookResults=mergeAndRankBooks(bookSearchRawResults,[],query)
    .filter(c=>!isExcludedBookCandidate(c));
 
-  renderRemoteBooks(remoteBookResults);
+  // 여기서 다시 그리지 않는다 - 아래 finally에서 한 번만 그린다.
+  // (여기서도 그리면 finally와 연달아 두 번 그려져 감지기가 중복 발동한다.)
   enrichBookPopularity(remoteBookResults,seq).catch(()=>{});
 
   const pending=remoteBookResults
@@ -2082,7 +2083,6 @@ async function loadMoreBookResults(){
  }catch{
   if(seq===bookSearchSeq){
    bookSearchHasMore=false;
-   renderRemoteBooks(remoteBookResults);
   }
  }finally{
   bookSearchLoadingMore=false;
