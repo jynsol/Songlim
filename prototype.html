@@ -1516,6 +1516,7 @@ const BOOK_POPULARITY_ENDPOINT='https://gytfefnvpqqxveryhopw.supabase.co/functio
 let remoteBookResults=[],bookSearchSeq=0,bookSearchTimer=null;
 let bookSearchRawResults=[],bookSearchActiveQuery='',bookSearchNextPage=2,bookSearchHasMore=false,bookSearchLoadingMore=false,bookSearchStagnantPages=0,bookSearchObserver=null;
 let scrapAddedBookKeys=new Set();
+function isRemoteBookScrapped(c){return state.items.some(x=>bookResultKey(x)===bookResultKey(c));}
 const BOOK_SEARCH_PAGE_SIZE=20;
 const MUSIC_SEARCH_ENDPOINT='https://gytfefnvpqqxveryhopw.supabase.co/functions/v1/music-search';
 const MUSIC_POPULARITY_ENDPOINT='https://gytfefnvpqqxveryhopw.supabase.co/functions/v1/music-popularity';
@@ -1968,7 +1969,7 @@ function renderRemoteBooks(results,message=''){
     (c.publisher?'<div class="badge">'+esc(c.publisher)+'</div>':'')+
     (c.isbn?'<div class="badge">ISBN '+esc(c.isbn)+'</div>':'')+
    '</div>'+
-   (scrapAddedBookKeys.has(bookResultKey(c))
+   (isRemoteBookScrapped(c)
     ?button('✓ 스크랩됨','removeRemoteBook','textbtn','data-index="'+i+'"')
     :button('스크랩','addRemoteBook','textbtn','data-index="'+i+'"'))+
   '</div>'
@@ -2252,8 +2253,19 @@ function infoForm(c=null,source=''){
  showModal(c?'나의 분류 수정':'직접 입력','<form id="infoForm" data-edit="'+esc(c?.id||'')+'"><label for="contentType">유형</label><select id="contentType"'+locked+'>'+Object.entries(typeName).map(([k,v])=>'<option value="'+k+'" '+(d.type===k?'selected':'')+'>'+v+'</option>').join('')+'</select><label for="contentTitle">제목</label><input id="contentTitle" required maxlength="200" value="'+esc(d.title)+'"'+(c?' readonly':'')+'><label for="contentCreator">제작자 · 모르면 비워두세요</label><input id="contentCreator" maxlength="100" value="'+esc(d.creator)+'"'+(c?' readonly':'')+'>'+(c?'<p class="muted tiny">제목·제작자·유형은 공용 원본 정보라 여기서 바꾸지 않아요. 잘못 연결된 경우 다른 작품으로 다시 매칭합니다.</p>':'')+metadataFields(d)+'<label for="contentSource">출처·메모 · 선택</label><input id="contentSource" maxlength="500" value="'+esc(d.source||'')+'"><label for="contentCover">표지 사진 · 선택</label><input id="contentCover" type="file" accept="image/*"><p class="muted tiny">표지는 스크랩과 달력에만 사용합니다.</p><div id="formError" class="form-error"></div><button class="primary" type="submit">'+(c?'나의 분류 저장':'스크랩')+'</button></form>','info');
 }
 function markScrapped(action,index){
- const btn=$('overlay').querySelector('[data-action="'+action+'"][data-index="'+index+'"]');
- if(btn){btn.disabled=true;btn.textContent='✓ 저장됨';btn.setAttribute('aria-label','이번 추가에서 저장한 콘텐츠')}
+ renderRemoteBooks(remoteBookResults);
+}
+function removeRemoteBook(index){
+ const d=remoteBookResults[index];
+ if(!d)return;
+ const key=bookResultKey(d);
+ const target=state.items.find(c=>bookResultKey(c)===key);
+ if(target){
+  Model.remove(state,target.id);
+ }
+ scrapAddedBookKeys.delete(key);
+ persist();
+ renderRemoteBooks(remoteBookResults);
 }
 function saved(c,eventId,options={}){
  state.onboarded=true;dismissToast();
@@ -2269,16 +2281,6 @@ function saved(c,eventId,options={}){
  if(options.keepOpen){persist();render();if(options.action!==undefined&&options.index!==undefined)markScrapped(options.action,options.index);return}
  closeModal();commit()
 }
-function removeRemoteBook(index){
- const d=remoteBookResults[index];
- if(!d)return;
- const key=bookResultKey(d);
- const target=state.items.find(c=>bookResultKey(c)===key);
- if(target)Model.remove(state,target.id);
- scrapAddedBookKeys.delete(key);
- commit();
-}
-
 async function addRemoteBook(index){const d=remoteBookResults[index];if(!d)return;if(!cleanGenreValue(d.genre))await enrichBookGenre(d);if(!(Number(d.length)>0)&&primaryIsbn13(d?.isbn))await enrichBookPopularity([d],bookSearchSeq).catch(()=>{});const id=Model.uid(),c=Model.add(state,d,id);scrapAddedBookKeys.add(bookResultKey(d));saved(c,id,{keepOpen:true,action:'addRemoteBook',index})}
 function addRemoteAlbum(index){const d=remoteAlbumResults[index];if(!d)return;const id=Model.uid(),c=Model.add(state,d,id);saved(c,id,{keepOpen:true,action:'addRemoteAlbum',index})}
 function addRemoteMovie(index){const d=remoteMovieResults[index];if(!d)return;const id=Model.uid(),c=Model.add(state,d,id);saved(c,id,{keepOpen:true,action:'addRemoteMovie',index})}
