@@ -2970,6 +2970,7 @@ document.addEventListener('click',async e=>{
   return
  }
  if(a==='addRemoteBook'){await addRemoteBook(Number(b.dataset.index));return}
+ if(a==='removeRemoteBook'){removeRemoteBook(Number(b.dataset.index));return}
  if(a==='addRemoteAlbum'){addRemoteAlbum(Number(b.dataset.index));return}
  if(a==='addRemoteMovie'){addRemoteMovie(Number(b.dataset.index));return}
  if(a==='choose'){if(c&&!c.completed){state.selected=c.id;state.onboarded=true;go('today');persist()}return}
