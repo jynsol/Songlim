@@ -1969,7 +1969,7 @@ function renderRemoteBooks(results,message=''){
     (c.isbn?'<div class="badge">ISBN '+esc(c.isbn)+'</div>':'')+
    '</div>'+
    (scrapAddedBookKeys.has(bookResultKey(c))
-    ?'<button type="button" class="textbtn" disabled aria-label="이번 추가에서 저장한 콘텐츠">✓ 저장됨</button>'
+    ?button('✓ 스크랩됨','removeRemoteBook','textbtn','data-index="'+i+'"')
     :button('스크랩','addRemoteBook','textbtn','data-index="'+i+'"'))+
   '</div>'
  ).join('');
@@ -2269,6 +2269,16 @@ function saved(c,eventId,options={}){
  if(options.keepOpen){persist();render();if(options.action!==undefined&&options.index!==undefined)markScrapped(options.action,options.index);return}
  closeModal();commit()
 }
+function removeRemoteBook(index){
+ const d=remoteBookResults[index];
+ if(!d)return;
+ const key=bookResultKey(d);
+ const target=state.items.find(c=>bookResultKey(c)===key);
+ if(target)Model.remove(state,target.id);
+ scrapAddedBookKeys.delete(key);
+ commit();
+}
+
 async function addRemoteBook(index){const d=remoteBookResults[index];if(!d)return;if(!cleanGenreValue(d.genre))await enrichBookGenre(d);if(!(Number(d.length)>0)&&primaryIsbn13(d?.isbn))await enrichBookPopularity([d],bookSearchSeq).catch(()=>{});const id=Model.uid(),c=Model.add(state,d,id);scrapAddedBookKeys.add(bookResultKey(d));saved(c,id,{keepOpen:true,action:'addRemoteBook',index})}
 function addRemoteAlbum(index){const d=remoteAlbumResults[index];if(!d)return;const id=Model.uid(),c=Model.add(state,d,id);saved(c,id,{keepOpen:true,action:'addRemoteAlbum',index})}
 function addRemoteMovie(index){const d=remoteMovieResults[index];if(!d)return;const id=Model.uid(),c=Model.add(state,d,id);saved(c,id,{keepOpen:true,action:'addRemoteMovie',index})}
