@@ -1,13 +1,13 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#ffffff"><title>송림 · 작동 프로토타입 · BOOK/ALBUM/MOVIE</title><style>
 :root{--ink:#20262c;--muted:#767d83;--line:#e9ecee;--soft:#f8f9fa;--blue:#3F8554;--grad:linear-gradient(115deg,#3F8554,#4B8C58)}
 *{box-sizing:border-box}body{margin:0;background:#f3f4f5;color:var(--ink);font:15px/1.65 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;word-break:keep-all}button,input,select,textarea{font:inherit}button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button:disabled{opacity:.4;cursor:default}button{border:0;background:none;color:inherit}a{color:#356C45;text-decoration:none}button:focus-visible,a:focus-visible{outline:2px solid var(--blue);outline-offset:3px}input,select,textarea{border:1px solid #dde2e5;border-radius:8px;padding:11px 12px;max-width:100%;width:100%;background:white;color:var(--ink)}input[type=checkbox],input[type=radio]{width:20px;height:20px}textarea{resize:vertical;min-height:90px}label{display:block;font-size:13px;margin:15px 0 6px}h1,h2,h3,p{margin:0}h1{font-size:25px;letter-spacing:-.7px;line-height:1.4}h2{font-size:21px;letter-spacing:-.6px}h3{font-size:16px}small,.muted{color:var(--muted);font-size:12px}.app{max-width:430px;margin:0 auto;background:#fff;min-height:100dvh;position:relative}.head{height:68px;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:#ffffffed;position:sticky;top:0;z-index:4;border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}.head h1{font-size:18px}.brand{font-weight:750;font-size:20px;display:flex;align-items:center;gap:7px}.brand svg{color:#3F8554}.iconbtn{min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:8px}.row{display:flex;align-items:center;gap:10px}.between{justify-content:space-between}.grow{flex:1;min-width:0}.page{padding:24px 20px 116px}.page>section{margin-bottom:28px}.primary,.secondary{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;padding:12px 16px;border-radius:9px;font-weight:650;font-size:14px}.primary{background:var(--blue);color:#fff}.primary.grad{background:var(--grad)}.secondary{background:white;border:1px solid #dfe4e7;color:#444}.textbtn{min-height:44px;padding:10px 4px;font-size:13px;color:#626b73}.textbtn.danger,.menu-row.danger{color:#a63e3e}.stack{display:grid;gap:10px}.center{text-align:center}.space{height:22px}.rule{border-top:1px solid var(--line);margin:22px 0}.card{padding:18px;border:1px solid var(--line);border-radius:14px;background:#fff}.growth{display:block;width:100%;height:210px;margin:12px auto 10px}.growth-label{font-size:12px;color:#707c76;margin-bottom:16px}.title{font-size:23px;font-weight:700;line-height:1.45;margin:4px 0}.creator{font-size:13px;color:var(--muted);margin-top:5px}
-.taste-intro{margin:12px auto 0;max-width:330px;font-size:13px;line-height:1.5;color:#5f686d;text-align:center;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.more{position:relative}.more>summary{list-style:none;min-width:44px;min-height:44px;display:grid;place-items:center;cursor:pointer;border-radius:8px;background:#f2f3f4}.more>summary::-webkit-details-marker{display:none}.more-menu{position:absolute;right:0;top:44px;width:190px;padding:8px;background:white;box-shadow:0 8px 35px #20304018;border:1px solid var(--line);border-radius:10px;z-index:8}.more-menu button{display:block;min-height:44px;width:100%;text-align:left;padding:10px;font-size:13px;border-bottom:1px solid var(--line)}.more-menu button:last-child{border-bottom:0}.tabs{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,430px);display:flex;padding:10px 10px max(12px,env(safe-area-inset-bottom));background:#fffffffa;border-top:1px solid var(--line);z-index:5}.tabs button{flex:1;display:grid;justify-items:center;gap:4px;min-height:46px;color:#868e92;font-size:11px}.tabs button.active{color:#3F8554;font-weight:700}.tabs svg{width:21px;height:21px}.chips{display:flex;gap:7px;overflow-x:auto;padding:12px 0;scrollbar-width:none}.chip{white-space:nowrap;min-height:40px;padding:7px 13px;border:1px solid #e5e8eb;border-radius:22px;color:#62696e;font-size:12px}.chip.active{background:#E4F2DA;color:#356C45;border-color:#C9DFC0}.content-list{display:grid;gap:10px}.content-row{width:100%;display:flex;gap:14px;align-items:center;text-align:left;border:1px solid var(--line);border-radius:12px;padding:15px;background:#fff;min-width:0}.content-row .title{font-size:16px;margin:5px 0}.cover{width:58px;height:80px;object-fit:cover;flex-shrink:0;border-radius:4px;display:grid;place-items:center;background:#f2f3f4;color:#79838a;font-size:21px;border:1px solid #e5e7e9}.cover.album{height:58px}.badge{font-size:11px;color:#6b747a}.summary{font-size:12px;color:var(--muted);margin:6px 0 16px}.fab{position:fixed;bottom:92px;right:max(calc((100vw - 430px)/2 + 20px),20px);padding:12px 17px;background:var(--grad);color:white;border-radius:26px;font-size:13px;font-weight:650;box-shadow:0 10px 24px #3f855426,0 2px 6px #0002;z-index:3}.list-footer{height:78px}.empty{padding:48px 10px;text-align:center}.empty p{font-size:13px;color:var(--muted);margin:10px 0 24px}.note{padding:12px 14px;background:#f7f8f9;border-radius:8px;font-size:12px;color:#687077}.tap-row{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:48px;margin-top:10px;padding:13px 14px;background:#f7f8f9;border-radius:10px;font-size:13px;color:var(--ink)}.tap-row>span{color:var(--muted);flex-shrink:0}.history{padding:14px 0;border-bottom:1px solid var(--line);font-size:13px}.history p{white-space:pre-wrap;overflow-wrap:anywhere}.collapse{margin:12px 0;font-size:13px}.collapse>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;color:#69747b}.forest-viewport{height:390px;overflow:hidden;background:linear-gradient(155deg,#f4f3ee,#f6f5f1);border-radius:16px;touch-action:none;position:relative}.forest-viewport svg{width:100%;height:100%;display:block;user-select:none}.forest-tools{display:flex;justify-content:space-between;align-items:center;margin-top:6px}.forest-tools button{font-size:12px;color:#737d83}.area{margin-top:20px}.area h2{font-size:21px;margin-bottom:7px}.area strong{font-size:27px;letter-spacing:-.6px}.area p{font-size:12px;color:#777;margin-top:5px}.animal{animation:wander 13s ease-in-out infinite alternate}.leaf{animation:sway 5s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom}@keyframes wander{to{transform:translateX(20px)}}@keyframes sway{to{rotate:2deg}}
+.taste-intro{display:none}.more{position:relative}.more>summary{list-style:none;min-width:44px;min-height:44px;display:grid;place-items:center;cursor:pointer;border-radius:8px;background:#f2f3f4}.more>summary::-webkit-details-marker{display:none}.more-menu{position:absolute;right:0;top:44px;width:190px;padding:8px;background:white;box-shadow:0 8px 35px #20304018;border:1px solid var(--line);border-radius:10px;z-index:8}.more-menu button{display:block;min-height:44px;width:100%;text-align:left;padding:10px;font-size:13px;border-bottom:1px solid var(--line)}.more-menu button:last-child{border-bottom:0}.tabs{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,430px);display:flex;padding:10px 10px max(12px,env(safe-area-inset-bottom));background:#fffffffa;border-top:1px solid var(--line);z-index:5}.tabs button{flex:1;display:grid;justify-items:center;gap:4px;min-height:46px;color:#868e92;font-size:11px}.tabs button.active{color:#3F8554;font-weight:700}.tabs svg{width:21px;height:21px}.chips{display:flex;gap:7px;overflow-x:auto;padding:12px 0;scrollbar-width:none}.chip{white-space:nowrap;min-height:40px;padding:7px 13px;border:1px solid #e5e8eb;border-radius:22px;color:#62696e;font-size:12px}.chip.active{background:#E4F2DA;color:#356C45;border-color:#C9DFC0}.content-list{display:grid;gap:10px}.content-row{width:100%;display:flex;gap:14px;align-items:center;text-align:left;border:1px solid var(--line);border-radius:12px;padding:15px;background:#fff;min-width:0}.content-row .title{font-size:16px;margin:5px 0}.cover{width:58px;height:80px;object-fit:cover;flex-shrink:0;border-radius:4px;display:grid;place-items:center;background:#f2f3f4;color:#79838a;font-size:21px;border:1px solid #e5e7e9}.cover.album{height:58px}.badge{font-size:11px;color:#6b747a}.summary{font-size:12px;color:var(--muted);margin:6px 0 16px}.fab{position:fixed;bottom:92px;right:max(calc((100vw - 430px)/2 + 20px),20px);padding:12px 17px;background:var(--grad);color:white;border-radius:26px;font-size:13px;font-weight:650;box-shadow:0 10px 24px #3f855426,0 2px 6px #0002;z-index:3}.list-footer{height:78px}.empty{padding:48px 10px;text-align:center}.empty p{font-size:13px;color:var(--muted);margin:10px 0 24px}.note{padding:12px 14px;background:#f7f8f9;border-radius:8px;font-size:12px;color:#687077}.tap-row{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:48px;margin-top:10px;padding:13px 14px;background:#f7f8f9;border-radius:10px;font-size:13px;color:var(--ink)}.tap-row>span{color:var(--muted);flex-shrink:0}.history{padding:14px 0;border-bottom:1px solid var(--line);font-size:13px}.history p{white-space:pre-wrap;overflow-wrap:anywhere}.collapse{margin:12px 0;font-size:13px}.collapse>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;color:#69747b}.forest-viewport{height:390px;overflow:hidden;background:linear-gradient(155deg,#f4f3ee,#f6f5f1);border-radius:16px;touch-action:none;position:relative}.forest-viewport svg{width:100%;height:100%;display:block;user-select:none}.forest-tools{display:flex;justify-content:space-between;align-items:center;margin-top:6px}.forest-tools button{font-size:12px;color:#737d83}.area{margin-top:20px}.area h2{font-size:21px;margin-bottom:7px}.area strong{font-size:27px;letter-spacing:-.6px}.area p{font-size:12px;color:#777;margin-top:5px}.animal{animation:wander 13s ease-in-out infinite alternate}.leaf{animation:sway 5s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom}@keyframes wander{to{transform:translateX(20px)}}@keyframes sway{to{rotate:2deg}}
 .hidden-glow{animation:hiddenGlow 4.2s ease-in-out infinite}.hidden-glow.alt{animation-delay:-2.1s}.hidden-twinkle{animation:hiddenTwinkle 2.8s ease-in-out infinite}.hidden-twinkle.alt{animation-delay:-1.4s}.hidden-twinkle.slow{animation-duration:3.8s}.hidden-ornament-glow{animation:hiddenOrnament 3.2s ease-in-out infinite}.hidden-ornament-glow.alt{animation-delay:-1.6s}.hidden-ice-sheen{animation:hiddenIceSheen 4.4s ease-in-out infinite}.hidden-ice-sheen.alt{animation-delay:-2.2s}@keyframes hiddenGlow{0%,18%,100%{opacity:.04}38%,56%{opacity:.18}70%{opacity:.08}}@keyframes hiddenTwinkle{0%,22%,100%{opacity:.06}38%,52%{opacity:.95}66%{opacity:.18}}@keyframes hiddenOrnament{0%,20%,100%{opacity:.08}42%,58%{opacity:.56}72%{opacity:.16}}@keyframes hiddenIceSheen{0%,24%,100%{opacity:.10}40%,60%{opacity:.52}74%{opacity:.16}}
 @media(prefers-reduced-motion:reduce){.animal,.leaf,.hidden-glow,.hidden-twinkle,.hidden-ornament-glow,.hidden-ice-sheen{animation:none}}.paused .animal,.paused .leaf{animation-play-state:paused}.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;text-align:center}.cal .weekday{font-size:11px;color:#8a9399;padding:8px 0}.day{min-height:75px;display:flex;flex-direction:column;align-items:center;padding:5px 0;font-size:11px;border-radius:7px;position:relative}.day.today>span:first-child{background:#3F8554;color:white;border-radius:50%;width:22px;height:22px;display:grid;place-items:center}.day img,.day .mini-cover{width:25px;height:33px;object-fit:cover;margin-top:3px;border-radius:2px;background:#eff1f2;font-size:10px;overflow:hidden;display:grid;place-items:center}.day .plus{font-size:9px;color:#356C45}.day.completed{background:#F5F0D9}.month-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.menu-row{width:100%;min-height:56px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);text-align:left;font-size:14px}.sheet-back{position:fixed;inset:0;background:#15202b55;z-index:20;display:flex;align-items:flex-end;justify-content:center}.sheet{background:#fff;border-radius:20px 20px 0 0;width:min(100%,460px);max-height:90dvh;overflow-y:auto;overscroll-behavior:contain;padding:18px 22px max(26px,env(safe-area-inset-bottom))}.sheet-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.sheet-head h2{font-size:19px}.sheet .primary{margin-top:18px}.toast{position:fixed;bottom:160px;left:50%;transform:translateX(-50%);width:min(calc(100% - 40px),380px);padding:13px 16px;background:#252d34;color:white;border-radius:9px;z-index:15;font-size:13px;display:flex;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 3px 14px #0002}.toast button{color:#F6E5A6;white-space:nowrap;min-height:30px}.toast:empty{display:none}.preview{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:8px;margin:10px 0}.rating{display:flex;gap:5px}.rating button{font-size:28px;color:#bbb;padding:4px;min-width:44px;min-height:44px}.rating .on{color:var(--brand-star)}.theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.theme-grid button{border:1px solid var(--line);border-radius:10px;padding:14px 4px;min-height:74px}.theme-grid button.active{border-color:#3F8554;color:#3F8554}.tiny{font-size:11px}.offscreen{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.form-error{color:#a13e3e;font-size:12px;margin-top:8px}.dev{border-top:1px solid #eee;padding-top:14px;margin-top:28px}.dev summary{font-size:12px;color:#888;min-height:44px;cursor:pointer}.storage-alert{background:#fff5db;color:#705a2d;padding:10px;font-size:12px}.trial{display:flex;gap:8px;align-items:center;color:#838b90;font-size:11px;margin-bottom:14px}.thumbs{display:flex;gap:8px;overflow:auto;margin:12px 0}.thumbs img{height:90px;max-width:100px;object-fit:cover;border-radius:6px}.checkrow{display:flex;align-items:center;gap:10px;border-bottom:1px solid #eee;padding:12px 0}.checkrow label{margin:0;flex:1}.share-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.share-actions .primary{margin:0}.back-title{font-size:17px;font-weight:650}.small-link{font-size:12px}.bookpage{font-size:12px;color:#777;margin-top:8px}
 @media(min-width:700px){.app{border-inline:1px solid #e5e7e9}.sheet-back{align-items:center}.sheet{border-radius:18px}}
 @media print{.head,.tabs,.fab,.toast{display:none}}
 .today-history{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}.today-history h3{font-size:14px;margin-bottom:6px}.past-record{display:block;width:100%;text-align:left;padding:13px 0;border-bottom:1px solid var(--line);min-height:60px}.past-memo{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.65;margin-top:5px}
-.detail-metrics{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:12px;padding:18px 14px;background:#f5f8f5;border-radius:12px;margin:20px 0}.detail-metrics strong,.detail-metrics small{display:block;overflow-wrap:anywhere}.detail-metrics strong{font-size:14px;margin:5px 0}.detail-metrics strong.unset{font-weight:400;color:var(--muted)}.review-copy{background:#faf8f4;border-radius:12px;padding:16px;margin-top:12px}.review-copy p{white-space:pre-wrap;overflow-wrap:anywhere;margin-top:8px}.forest-summary{font-size:12px;background:#f6f9f6}.forest-summary p+p{margin-top:10px}.tree-legend{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:16px 0}.tree-legend>div{display:grid;justify-items:center;text-align:center}.recent-completed{border-top:1px solid var(--line);padding-top:24px}.recent-completed svg{flex-shrink:0}.recent-tree-thumb{display:block;flex:0 0 70px;overflow:visible}
+.detail-metrics{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:12px;padding:18px 14px;background:#f5f8f5;border-radius:12px;margin:20px 0}.detail-metrics strong,.detail-metrics small{display:block;overflow-wrap:anywhere}.detail-metrics strong{font-size:14px;margin:5px 0}.detail-metrics strong.unset{font-weight:400;color:var(--muted)}.review-copy{background:#faf8f4;border-radius:12px;padding:16px;margin-top:12px}.review-copy p{white-space:pre-wrap;overflow-wrap:anywhere;margin-top:8px}.detail-intro{white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;display:block;overflow:visible;font-size:13px;line-height:1.65;color:var(--ink);margin-top:8px}.forest-summary{font-size:12px;background:#f6f9f6}.forest-summary p+p{margin-top:10px}.tree-legend{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:16px 0}.tree-legend>div{display:grid;justify-items:center;text-align:center}.recent-completed{border-top:1px solid var(--line);padding-top:24px}.recent-completed svg{flex-shrink:0}.recent-tree-thumb{display:block;flex:0 0 70px;overflow:visible}
 
 [hidden]{display:none!important}.entry-page{padding:28px 24px 48px;min-height:calc(100dvh - 68px);display:flex;flex-direction:column;justify-content:center}.entry-hero{padding:22px 0 26px}.entry-hero h1{font-size:32px;line-height:1.4;letter-spacing:-1.3px}.entry-kicker{font-size:11px;letter-spacing:2px;color:var(--blue);font-weight:700;margin-bottom:14px}.entry-page .primary{background:var(--grad)}.entry-page .secondary{margin-top:10px}.entry-note{font-size:11px;line-height:1.7;color:var(--muted);margin-top:24px}.entry-steps{display:flex;gap:6px;margin:6px 0 26px}.entry-steps span{height:4px;flex:1;background:var(--line);border-radius:4px}.entry-steps .on{background:var(--blue)}.onboard-card{padding:26px 18px;text-align:center;background:var(--soft);border-radius:18px;margin:20px 0}.onboard-card .cover{margin:0 auto 20px;width:92px;height:125px}.flow-account{padding:16px;border:1px solid var(--line);border-radius:12px;margin:18px 0}.flow-account small{display:block}.entry-error{color:#a34f49;font-size:12px;min-height:24px;margin:12px 0}.flow-count{font-size:12px;color:var(--blue)}.entry-page form .primary{margin-top:18px}.entry-page .checkrow label{margin:0}.entry-page .checkrow{align-items:center}.flow-top{margin-top:20px}.entry-page .growth{height:185px}.entry-page .textbtn{color:#626b73}.taste-type-grid{display:grid;gap:10px;margin-top:18px}.taste-type-option{width:100%;min-height:50px;padding:12px 16px;border:1px solid #e7e2d7;border-radius:10px;background:#f5f2ea;color:var(--ink);font-weight:650}.taste-type-option:hover{filter:brightness(.985)}.taste-type-option:active{filter:brightness(.965)}.taste-type-option[data-type="book"]{background:#E4F2DA;border-color:#C9DFC0;color:#356C45}.taste-type-option[data-type="album"]{background:#E7F2FA;border-color:#CFE3F0;color:var(--brand-progress-ink)}.taste-type-option[data-type="movie"]{background:#FBF3D5;border-color:#EEDFAD;color:var(--brand-complete-ink)}
 
@@ -75,7 +75,7 @@ input[type=checkbox],input[type=radio]{accent-color:var(--brand-green)}
 .forest-tools .iconbtn{min-width:40px;min-height:40px}.forest-tools .textbtn{padding-inline:8px}
 .area{margin:22px 0 0}.area strong{font-size:25px}.area .forest-types{font-size:13px;color:#555f65;margin-top:7px}
 .area .forest-area-note{font-size:12px;color:#78817d;margin-top:12px;line-height:1.7}
-.forest-summary{background:transparent;border:0;border-radius:0;padding:20px 0;margin:20px 0 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);display:grid;gap:18px}
+.forest-summary{background:transparent;border:0;border-radius:0;padding:20px 0;margin:20px 0 0;border-top:1px solid var(--line);display:grid;gap:18px}
 .forest-summary>div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);align-items:baseline;gap:16px;margin:0!important}
 .forest-summary small{font-size:12px;line-height:1.6;color:#727d81}
 .forest-summary h3{min-width:0;text-align:right;overflow-wrap:anywhere;line-height:1.6}
@@ -92,7 +92,7 @@ input[type=checkbox],input[type=radio]{accent-color:var(--brand-green)}
 .taste-page .onboard-card .cover{width:148px;height:204px;margin:0;box-shadow:0 5px 15px #25394712}
 .taste-page .onboard-card .cover.album{height:148px}
 .taste-page .onboard-card h2{font-size:20px;line-height:1.4;min-height:56px;max-width:100%;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;margin-top:3px}
-.taste-page .onboard-card .creator{font-size:12px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}
+.taste-page .onboard-card .creator{font-size:12px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}.taste-detail-link{margin-top:10px;font-size:12px;color:#69747b}
 .taste-actions{position:sticky;bottom:0;display:grid;gap:8px;background:#fff;padding:12px 0 max(12px,env(safe-area-inset-bottom));z-index:3;flex-shrink:0}
 .taste-actions .secondary{margin-top:0}.taste-actions .textbtn{min-height:40px;padding:7px 4px}
 .taste-page~.tabs{display:none}.head .taste-exit{font-size:12px;flex-shrink:0}
@@ -269,7 +269,7 @@ input,select,textarea{
 }
 </style>
 <style id="collection-ui">
-.collection-entry{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:54px;padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);text-align:left}
+.collection-entry{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:54px;padding:14px 0;border-top:1px solid var(--line);text-align:left}
 .collection-entry strong{font-size:14px}.collection-entry span{font-size:12px;color:var(--muted)}
 .collection-tabs{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line);margin:0 0 18px}.collection-tab{position:relative;min-height:46px;color:#7a817d;font-size:13px}.collection-tab.active{color:var(--ink);font-weight:700}.collection-tab.active:after{content:"";position:absolute;left:28%;right:28%;bottom:-1px;height:2px;border-radius:2px;background:var(--brand-green)}
 .collection-progress{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:4px 0 18px}.collection-progress strong{font-size:22px;line-height:1.2}.collection-progress small{text-align:right;line-height:1.55}
@@ -597,7 +597,7 @@ const Model=(()=>{
   const providerId=String(data.providerId??data.provider_id??'').trim(),provider=String(data.provider||'').trim();
   const providerDefault=data.type==='album'?'apple':data.type==='movie'?'tmdb':'';
   let c=((data.type==='album'||data.type==='movie')&&providerId?s.items.find(c=>c.type===data.type&&String(c.providerId||'')===providerId&&String(c.provider||'')===(provider||providerDefault)):null) || s.items.find(c=>c.type===data.type&&norm(c.title)===norm(data.title)&&norm(c.creator)===norm(data.creator));
-  if(!c){c={id:uid(),type:data.type,title:data.title.trim(),creator:(data.creator||'').trim(),...contentMetadata(data),tracks:data.tracks||[],logs:[],completed:null,rating:null,saves:[],cover:data.cover||'',source:data.source||'',publisher:String(data.publisher||''),isbn:String(data.isbn||''),catalogUrl:String(data.catalogUrl||''),publishedAt:String(data.publishedAt||''),provider:provider,providerId:providerId,releaseDate:String(data.releaseDate||data.release_date||''),trackCount:Number(data.trackCount??data.track_count)||null,copyright:String(data.copyright||''),originalTitle:String(data.originalTitle||data.original_title||''),originalLanguage:String(data.originalLanguage||data.original_language||''),overview:String(data.overview||''),contents:String(data.contents||data.description||''),genreIds:Array.isArray(data.genreIds)?data.genreIds.map(Number).filter(Number.isFinite):Array.isArray(data.genre_ids)?data.genre_ids.map(Number).filter(Number.isFinite):[],trackIndex:0};s.items.push(c)}
+  if(!c){c={id:uid(),type:data.type,title:data.title.trim(),creator:(data.creator||'').trim(),...contentMetadata(data),tracks:data.tracks||[],logs:[],completed:null,rating:null,saves:[],cover:data.cover||'',source:data.source||'',publisher:String(data.publisher||''),isbn:String(data.isbn||''),catalogUrl:String(data.catalogUrl||''),publishedAt:String(data.publishedAt||''),provider:provider,providerId:providerId,releaseDate:String(data.releaseDate||data.release_date||''),trackCount:Number(data.trackCount??data.track_count)||null,copyright:String(data.copyright||''),originalTitle:String(data.originalTitle||data.original_title||''),originalLanguage:String(data.originalLanguage||data.original_language||''),overview:String(data.overview||''),contents:String(data.contents||data.description||''),albumDescription:String(data.albumDescription||''),genreIds:Array.isArray(data.genreIds)?data.genreIds.map(Number).filter(Number.isFinite):Array.isArray(data.genre_ids)?data.genre_ids.map(Number).filter(Number.isFinite):[],trackIndex:0};s.items.push(c)}
   if(!c.saves.some(e=>e.id===request))c.saves.push({id:request,at:Date.now(),source:data.source||'직접 입력'});
   return c;
  };
@@ -1326,7 +1326,7 @@ function cloudSetupModal(message=''){
 const KEY='songrim.prototype.v3';
 let forestEditMode=false;
 const typeName={book:'책',album:'음반',movie:'영화'},statusName={saved:'아직 안 본 것',active:'경험 중',done:'완료'};
-let state=Model.empty(),view='today',detailId=null,detailOrigin='scrap',picking=false,year=String(new Date().getFullYear()),month=Model.today().slice(0,7),modal=null,zoomState={scale:1,x:0,y:0},storageOK=true,toastTimer,undoAction=null,shareBlob=null,shareURL=null,photoFiles=[],ocrGeneration=0,ocrBusy=false,candidates=[],authMode=false;
+let state=Model.empty(),view='today',detailId=null,detailOrigin='scrap',picking=false,year=String(new Date().getFullYear()),month=Model.today().slice(0,7),modal=null,zoomState={scale:1,x:0,y:0},storageOK=true,toastTimer,undoAction=null,shareBlob=null,shareURL=null,photoFiles=[],ocrGeneration=0,ocrBusy=false,candidates=[],authMode=false,candidatePreview=null,candidatePreviewReturn=null;
 const $=id=>document.getElementById(id);
 function load(){
  try{const raw=localStorage.getItem(KEY);if(raw){const previous=JSON.parse(raw);state=Model.validate(previous);const assignedSpecies=ensureCompletedSpeciesAssignments(),remappedSpecies=remapDefaultSpeciesByCategory(),treeMigrated=assignedSpecies||remappedSpecies;if(treeMigrated||previous.items.some((c,i)=>c.genreMappingVersion!==3||c.genre!==state.items[i].genre||c.treeCategory!==state.items[i].treeCategory)){if(!localStorage.getItem(KEY+'.before-genre-mapping-v3'))localStorage.setItem(KEY+'.before-genre-mapping-v3',raw);persist()}}else{const legacy=localStorage.getItem('songrim.records.v1');if(legacy){state=migrateLegacy(JSON.parse(legacy));ensureCompletedSpeciesAssignments();remapDefaultSpeciesByCategory();persist()}}}
@@ -1341,9 +1341,24 @@ function attr(id){return 'data-id="'+esc(id)+'"'}
 function toast(message,undo){$('toast').classList.remove('planted');clearTimeout(toastTimer);undoAction=undo||null;$('toast').innerHTML='<span>'+esc(message)+'</span>'+(undo?button('취소','toastUndo',''):'');toastTimer=setTimeout(()=>{$('toast').innerHTML='';undoAction=null},3000)}
 function dismissToast(){$('toast').classList.remove('planted');clearTimeout(toastTimer);$('toast').innerHTML='';undoAction=null}
 function commit(){persist();render()}
-function go(next){closeModal();if(next!=='forest')forestEditMode=false;if(view==='calendar')sessionStorageSafe('calendarScroll',String(window.scrollY));if(view==='scrap')sessionStorageSafe('scroll',String(window.scrollY));view=next;picking=false;render();window.scrollTo(0,0);if(next==='scrap')window.scrollTo(0,Number(sessionStorageSafe('scroll'))||0);if(next==='calendar')window.scrollTo(0,Number(sessionStorageSafe('calendarScroll'))||0)}
+function go(next){if(view==='detail'&&next!=='detail')candidatePreview=null;closeModal();if(next!=='forest')forestEditMode=false;if(view==='calendar')sessionStorageSafe('calendarScroll',String(window.scrollY));if(view==='scrap')sessionStorageSafe('scroll',String(window.scrollY));view=next;picking=false;render();window.scrollTo(0,0);if(next==='scrap')window.scrollTo(0,Number(sessionStorageSafe('scroll'))||0);if(next==='calendar')window.scrollTo(0,Number(sessionStorageSafe('calendarScroll'))||0)}
 function sessionStorageSafe(k,v){try{if(v!==undefined)sessionStorage.setItem('sr3-'+k,v);return sessionStorage.getItem('sr3-'+k)}catch{return null}}
-function openDetail(id,origin=view){detailId=id;detailOrigin=origin==='detail'?detailOrigin:origin;go('detail');const c=get(id);if(c?.type==='book'&&!cleanGenreValue(c.genre)&&c.genreSource!=='user'){enrichBookGenre(c).then(()=>{if(c.genre){ensureCompletedSpeciesAssignments();persist();if(view==='detail'&&detailId===id)render()}}).catch(()=>{})}}
+function openDetail(id,origin=view){candidatePreview=null;detailId=id;detailOrigin=origin==='detail'?detailOrigin:origin;go('detail');const c=get(id);if(c?.type==='book'&&!cleanGenreValue(c.genre)&&c.genreSource!=='user'){enrichBookGenre(c).then(()=>{if(c.genre){ensureCompletedSpeciesAssignments();persist();if(view==='detail'&&detailId===id)render()}}).catch(()=>{})}}
+function openCandidateDetail(c){
+ // 추천(취향) 카드의 미저장 후보를 상세 화면에서 미리보기 위한 진입점. Model.add()를 호출하지 않는다.
+ if(!c)return;
+ candidatePreview={...c,id:null,logs:[],saves:[],completed:c.completed||null,rating:null,review:''};
+ candidatePreviewReturn=authRoute;
+ detailId=null;
+ authRoute='app';
+ go('detail');
+}
+function closeCandidateDetail(){
+ const back=candidatePreviewReturn||'taste';
+ candidatePreview=null;candidatePreviewReturn=null;
+ authRoute=back;
+ render();window.scrollTo(0,0);
+}
 function cover(c,small=false){return c.cover?'<img class="cover '+c.type+'" src="'+esc(c.cover)+'" alt="'+esc(c.title)+' 표지">':'<div class="cover '+c.type+'" aria-label="'+esc(c.title)+' 표지 없음">'+icon(c.type)+'</div>'}
 function row(c,choose=false){return '<button class="content-row" data-action="'+(choose?'choose':'detail')+'" '+attr(c.id)+'>'+cover(c)+'<div class="grow"><div class="row between"><span class="badge">'+typeName[c.type]+' · '+statusName[Model.status(c)]+'</span><span class="badge">'+c.saves.length+'번 스크랩</span></div><div class="title">'+esc(c.title)+'</div><div class="creator">'+esc(c.creator||'제작자 미확인')+'</div></div><span class="muted">›</span></button>'}
 function menu(c){return '<details class="more"><summary aria-label="콘텐츠 메뉴">⋯</summary><div class="more-menu">'+button('다른 스크랩으로 바꾸기','pick','')+button('콘텐츠 상세 보기','detail','',attr(c.id))+'</div></details>'}
@@ -1394,11 +1409,24 @@ function renderScrap(){
  const sortLabel={recent:'최근 스크랩순',many:'많이 스크랩한 순',old:'오래 스크랩한 순'}[f.sort];
  return '<section><div class="page-heading"><h1 class="page-title">'+ (picking?'오늘 경험할 콘텐츠':'스크랩')+'</h1>'+(picking?button('취소','cancelPick','textbtn'):'')+'</div><div class="space"></div><input id="search" type="search" placeholder="제목·제작자 검색" aria-label="스크랩 검색" value="'+esc(f.q)+'">'+typeTabs+statusChips+'<div class="scrap-list-tools"><span class="muted">'+list.length+'개</span>'+inlinePicker(sortLabel,'sort',Object.entries({recent:'최근 스크랩순',many:'많이 스크랩한 순',old:'오래 스크랩한 순'}),f.sort)+'</div><div class="content-list">'+(list.length?list.map(c=>row(c,picking)).join(''):'<div class="empty"><h3>조건에 맞는 콘텐츠가 없어요</h3><p>유형이나 상태를 바꿔보세요.</p>'+button('필터 초기화','resetFilters','textbtn')+'</div>')+'</div><div class="list-footer"></div></section>'+(!picking?button('＋ 스크랩 추가','add','fab'):'');
 }
+function contentIntroText(c){
+ // 상세 화면 전용: tasteIntroText()와 달리 절대 자르지 않고 원본 필드를 그대로 반환한다.
+ if(!c)return '';
+ if(c.type==='movie')return String(c.overview||'').trim();
+ if(c.type==='album')return String(c.albumDescription||c.contents||c.description||'').trim();
+ return String(c.contents||'').trim();
+}
 function renderDetail(){
- const c=get(detailId);if(!c)return '<div class="empty">이 콘텐츠가 없어요.'+button('스크랩으로','toScrap','textbtn')+'</div>';
+ const c=candidatePreview||get(detailId);if(!c)return '<div class="empty">이 콘텐츠가 없어요.'+button('스크랩으로','toScrap','textbtn')+'</div>';
+ if(c.type==='book'&&!detailIntroAttempts.has(detailIntroKey(c))&&(!c.contents||looksTruncatedIntro(c.contents)))setTimeout(()=>ensureDetailIntro(c),0);
+ const introHTML=contentIntroText(c)?'<div class="rule"></div><h3>작품 소개</h3><p class="detail-intro">'+esc(contentIntroText(c))+'</p>':'';
+ if(candidatePreview){
+  // 추천 후보 미리보기: Model.add()를 호출하지 않으므로 id가 없다. 편집·삭제·기록 등 저장 전제 기능은 노출하지 않는다.
+  return '<section><div class="detail-title-row"><h1>'+esc(c.title)+'</h1></div><p class="creator">'+esc(c.creator||'제작자 미확인')+' · '+typeName[c.type]+' · 추천 후보 · 아직 스크랩 전</p><div class="row">'+cover(c)+'</div>'+detailMetadata(c)+introHTML+'</section>';
+ }
  const logs=[...c.logs].sort((a,b)=>b.date.localeCompare(a.date));
  const logHTML=l=>'<div class="history"><div class="row between"><strong>'+esc(l.date)+'</strong>'+button('수정','editLog','textbtn',attr(c.id)+' data-log="'+l.id+'"')+'</div>'+(l.page?'<p>'+esc(l.page)+'쪽</p>':'')+(l.memo?'<p>'+esc(l.memo)+'</p>':'<p class="muted">오늘 '+(c.type==='book'?'읽었어요':'들었어요')+'</p>')+'</div>';
- return '<section><div class="detail-title-row"><h1>'+esc(c.title)+'</h1><details class="more"><summary aria-label="콘텐츠 관리">⋯</summary><div class="more-menu">'+button('기본 정보 수정','editInfo','',attr(c.id))+button('한 번 더 스크랩','rescrap','',attr(c.id))+(c.completed?button('완료 취소','undoComplete','',attr(c.id)):'')+button('스크랩 삭제','delete','',attr(c.id))+'</div></details></div><p class="creator">'+esc(c.creator||'제작자 미확인')+' · '+typeName[c.type]+' · '+statusName[Model.status(c)]+'</p>'+detailMetadata(c)+'<details class="collapse"><summary>콘텐츠 정보 ▾</summary><div class="row">'+cover(c)+'<div><p>'+c.saves.length+'번 스크랩</p><p class="muted">'+esc(c.source||'직접 입력')+'</p>'+button(c.type==='book'?'서점에서 검색 ↗':c.type==='album'?'음반·곡 검색 ↗':'영화 검색 ↗','external','textbtn',attr(c.id))+'</div></div></details><div class="rule"></div>'+recordActions(c,true)+(c.review?'<div class="review-copy"><h3>나의 감상</h3><p>'+esc(c.review)+'</p></div>':'')+'<div class="rule"></div><h3>경험 기록</h3>'+(logs.length?logHTML(logs[0])+(logs.length>1?'<details class="collapse"><summary>지난 기록 '+(logs.length-1)+'개 보기</summary>'+logs.slice(1).map(logHTML).join('')+'</details>':''):'<p class="creator">아직 일일 기록이 없어요.</p>')+'</section>';
+ return '<section><div class="detail-title-row"><h1>'+esc(c.title)+'</h1><details class="more"><summary aria-label="콘텐츠 관리">⋯</summary><div class="more-menu">'+button('기본 정보 수정','editInfo','',attr(c.id))+button('한 번 더 스크랩','rescrap','',attr(c.id))+(c.completed?button('완료 취소','undoComplete','',attr(c.id)):'')+button('스크랩 삭제','delete','',attr(c.id))+'</div></details></div><p class="creator">'+esc(c.creator||'제작자 미확인')+' · '+typeName[c.type]+' · '+statusName[Model.status(c)]+'</p>'+detailMetadata(c)+introHTML+'<details class="collapse"><summary>콘텐츠 정보 ▾</summary><div class="row">'+cover(c)+'<div><p>'+c.saves.length+'번 스크랩</p><p class="muted">'+esc(c.source||'직접 입력')+'</p>'+button(c.type==='book'?'서점에서 검색 ↗':c.type==='album'?'음반·곡 검색 ↗':'영화 검색 ↗','external','textbtn',attr(c.id))+'</div></div></details><div class="rule"></div>'+recordActions(c,true)+(c.review?'<div class="review-copy"><h3>나의 감상</h3><p>'+esc(c.review)+'</p></div>':'')+'<div class="rule"></div><h3>경험 기록</h3>'+(logs.length?logHTML(logs[0])+(logs.length>1?'<details class="collapse"><summary>지난 기록 '+(logs.length-1)+'개 보기</summary>'+logs.slice(1).map(logHTML).join('')+'</details>':''):'<p class="creator">아직 일일 기록이 없어요.</p>')+'</section>';
 }
 function forestRecordYear(c){if(c.completed&&c.completed!=='unknown')return c.completed.slice(0,4);const date=new Date(c.completedAt||c.saves?.[0]?.at||Date.now());return Number.isNaN(date.getTime())?now().slice(0,4):String(date.getFullYear())}
 function renderForest(){
@@ -1406,7 +1434,7 @@ function renderForest(){
  const expansion=forestExpansionMeta(stats.n);
  const stageNote=stats.n===0?'빈 터 · 첫 나무가 생기면 8×8 첫 숲으로 확장돼요':'현재 숲 단계 · '+expansion.label+' · '+expansion.cols+'×'+expansion.rows+' 타일 ('+expansion.tiles+'칸)'+(expansion.nextAt?' · 다음 확장까지 '+expansion.remaining+'그루':' · 최대 확장 단계');
  const collection=collectionCounts();
- return '<section><div class="row between">'+inlinePicker(year+'년 나의 숲','year',[...new Set([now().slice(0,4),...state.items.filter(c=>c.completed).map(forestRecordYear)])].sort().reverse().map(y=>[y,y+'년']),year)+(stats.n?button(forestEditMode?'완료':'꾸미기','forestEdit','textbtn forest-edit-control','aria-pressed="'+forestEditMode+'"'):'')+'</div><div class="space"></div><div class="forest-scene"><div class="forest-viewport '+(forestEditMode?'editing':'')+'" id="forestViewport" data-theme="'+((theme==='snow'||theme==='winter')?'snow':'basic')+'" tabindex="0" aria-label="'+(forestEditMode?'꾸미기 중. 바꾸고 싶은 나무를 누르세요.':'완료한 콘텐츠가 나무로 쌓인 숲.')+'">'+forestSVG(items,theme)+'</div></div>'+(forestEditMode?'<p class="forest-edit-hint">나무를 누르면 이 콘텐츠에 사용할 나무를 바꿀 수 있어요.</p>':'')+'<div class="area"><strong>'+stats.n.toLocaleString()+'그루의 나무</strong><p class="forest-types">책 '+stats.book+' · 음반 '+stats.album+' · 영화 '+stats.movie+'</p><p class="forest-area-note">'+stats.area.toLocaleString()+'㎡'+(stats.n?' · '+esc(Model.compare(stats.n)):' · 첫 나무를 기다리고 있어요')+'</p><p class="muted tiny">'+stageNote+'</p></div>'+forestSummary(items)+'<button class="collection-entry" data-action="collection"><strong>나의 도감</strong><span>나무 '+collection.trees+'/'+collection.totalTrees+' · 방문객 '+collection.visitors+'/'+collection.totalVisitors+'  ›</span></button><div class="space"></div>'+button(stats.n?'월간 기록 보기':'오늘의 경험 시작하기',stats.n?'calendar':'toToday')+'<div class="row between">'+(stats.n?button('내 숲 공유하기','shareForest','textbtn'):button('월간 기록 보기','calendar','textbtn'))+button('테마 변경','themes','textbtn')+'</div><p class="muted tiny"></p></section>';
+ return '<section><div class="row between">'+inlinePicker(year+'년 나의 숲','year',[...new Set([now().slice(0,4),...state.items.filter(c=>c.completed).map(forestRecordYear)])].sort().reverse().map(y=>[y,y+'년']),year)+(stats.n?button(forestEditMode?'완료':'꾸미기','forestEdit','textbtn forest-edit-control','aria-pressed="'+forestEditMode+'"'):'')+'</div><div class="space"></div><div class="forest-scene"><div class="forest-viewport '+(forestEditMode?'editing':'')+'" id="forestViewport" data-theme="'+((theme==='snow'||theme==='winter')?'snow':'basic')+'" tabindex="0" aria-label="'+(forestEditMode?'꾸미기 중. 바꾸고 싶은 나무를 누르세요.':'완료한 콘텐츠가 나무로 쌓인 숲.')+'">'+forestSVG(items,theme)+'</div></div>'+(forestEditMode?'<p class="forest-edit-hint">나무를 누르면 이 콘텐츠에 사용할 나무를 바꿀 수 있어요.</p>':'')+'<div class="area"><strong>'+stats.n.toLocaleString()+'그루의 나무</strong><p class="forest-types">책 '+stats.book+' · 음반 '+stats.album+' · 영화 '+stats.movie+'</p><p class="forest-area-note">'+stats.area.toLocaleString()+'㎡'+(stats.n?' · '+esc(Model.compare(stats.n)):' · 첫 나무를 기다리고 있어요')+'</p><p class="muted tiny">'+stageNote+'</p></div>'+forestSummary(items)+'<button class="collection-entry" data-action="collection"><strong>나의 도감</strong><span>나무 '+collection.trees+'/'+collection.totalTrees+' · 방문객 '+collection.visitors+'/'+collection.totalVisitors+'  ›</span></button><div class="space"></div>'+(stats.n?button('월간 기록 보기','calendar'):'')+'<div class="row between">'+(stats.n?button('내 숲 공유하기','shareForest','textbtn'):button('월간 기록 보기','calendar','textbtn'))+button('테마 변경','themes','textbtn')+'</div><p class="muted tiny"></p></section>';
 }
 function calendarHTML(period){
  const [y,m]=period.split('-').map(Number),start=new Date(y,m-1,1).getDay(),days=new Date(y,m,0).getDate();
@@ -1480,6 +1508,15 @@ function openScrapComposer(type='book',query=null,reset=false){
 }
 function addMenu(){openScrapComposer('book','',true)}
 const BOOK_SEARCH_ENDPOINT='https://gytfefnvpqqxveryhopw.supabase.co/functions/v1/super-service';
+// Google Books는 키 없이 호출하면 요청 한도가 매우 낮아 429가 쉽게 뜬다.
+// https://console.cloud.google.com 에서 무료 API 키를 발급해 여기에 넣으면 한도가 크게 늘어난다.
+const GOOGLE_BOOKS_API_KEY='AIzaSyDq4oOZxvJbO9UTR53V9Mm3sGJyCsL8Cvs';
+// 콘텐츠 객체에 _loaded 플래그를 직접 심으면 persist()가 그 값을 그대로
+// localStorage에 저장해버려서, 키 적용 전에 실패했던 책은 키를 넣은 뒤에도
+// 영영 재시도되지 않는 문제가 생긴다. 그래서 시도 상태는 이 페이지가 열려있는
+// 동안만 사는 별도의 Map으로 관리하고, 콘텐츠 객체 자체(=저장되는 데이터)는 건드리지 않는다.
+const detailIntroAttempts=new Map();
+function detailIntroKey(c){return c?.id||('preview:'+(c?.isbn||'')+'|'+(c?.title||''))}
 const BOOK_POPULARITY_ENDPOINT='https://gytfefnvpqqxveryhopw.supabase.co/functions/v1/book-popularity';
 let remoteBookResults=[],bookSearchSeq=0,bookSearchTimer=null;
 let bookSearchRawResults=[],bookSearchActiveQuery='',bookSearchNextPage=2,bookSearchHasMore=false,bookSearchLoadingMore=false,bookSearchStagnantPages=0,bookSearchObserver=null;
@@ -1808,7 +1845,7 @@ function mergeAndRankBooks(primary,supplement,query){
    publisher:existing.publisher||candidate.publisher,
    isbn:existing.isbn||candidate.isbn,
    publishedAt:existing.publishedAt||candidate.publishedAt,
-   contents:existing.contents||candidate.contents,
+   contents:[existing.contents,candidate.contents].filter(Boolean).sort((a,b)=>b.length-a.length)[0]||'',
    searchPopularity:Math.max(Number(existing.searchPopularity)||0,Number(candidate.searchPopularity)||0),
    averageRating:Math.max(Number(existing.averageRating)||0,Number(candidate.averageRating)||0),
    yes24Found:Boolean(existing.yes24Found||candidate.yes24Found),
@@ -2119,7 +2156,9 @@ function unwrapAlbums(payload){
 function normalizeRemoteAlbum(d){
  const providerId=d?.provider_id??d?.providerId??d?.collectionId??'',release=String(d?.release_date||d?.releaseDate||'').trim(),rawGenre=String(d?.genre||d?.primaryGenreName||'').trim(),genre=normalizeAlbumGenre(rawGenre);
  const searchPopularity=Number(d?.popularity??d?.playCount??d?.play_count??d?.listeners??d?.ratingCount??0)||0;
- return {type:'album',title:String(d?.title||d?.collectionName||'').trim(),creator:String(d?.artist||d?.artistName||d?.creator||'').trim(),cover:String(d?.cover_url||d?.artworkUrl100||d?.cover||'').trim(),genre,rawGenre,genreSource:'auto',genreCandidates:genre?[[genre,'Apple Music'],...(rawGenre&&rawGenre!==genre?[[rawGenre,'원본 장르']]:[])]:[],provider:String(d?.provider||'apple').trim(),providerId:String(providerId||'').trim(),releaseDate:release,trackCount:Number(d?.track_count??d?.trackCount)||null,copyright:String(d?.copyright||'').trim(),catalogUrl:String(d?.external_url||d?.collectionViewUrl||d?.catalogUrl||'').trim(),source:'Apple Music 앨범 검색',searchPopularity,averageRating:Number(d?.averageRating??d?.rating??0)||0};
+ // Apple Music/iTunes 검색 응답에는 보통 소개문구가 없음. 있을 때만 채우고, 없으면 빈 문자열로 유지해 book/movie와 필드 구조를 통일한다.
+ const albumDescription=String(d?.albumDescription||d?.description||d?.longDescription||d?.notes||'').trim();
+ return {type:'album',title:String(d?.title||d?.collectionName||'').trim(),creator:String(d?.artist||d?.artistName||d?.creator||'').trim(),cover:String(d?.cover_url||d?.artworkUrl100||d?.cover||'').trim(),genre,rawGenre,genreSource:'auto',genreCandidates:genre?[[genre,'Apple Music'],...(rawGenre&&rawGenre!==genre?[[rawGenre,'원본 장르']]:[])]:[],provider:String(d?.provider||'apple').trim(),providerId:String(providerId||'').trim(),releaseDate:release,trackCount:Number(d?.track_count??d?.trackCount)||null,copyright:String(d?.copyright||'').trim(),albumDescription,catalogUrl:String(d?.external_url||d?.collectionViewUrl||d?.catalogUrl||'').trim(),source:'Apple Music 앨범 검색',searchPopularity,averageRating:Number(d?.averageRating??d?.rating??0)||0};
 }
 function renderRemoteAlbums(results,message=''){
  const el=$('musicCatalogResults');if(!el)return;
@@ -2919,7 +2958,7 @@ document.addEventListener('click',async e=>{
   state.selected=pool[(index+1)%pool.length].id;commit();window.scrollTo(0,0);return
  }
  if(a==='detail'){openDetail(id);return}
- if(a==='back'){go(view==='calendar'?'forest':detailOrigin);return}
+ if(a==='back'){if(candidatePreview){closeCandidateDetail();return}go(view==='calendar'?'forest':detailOrigin);return}
  if(a==='toToday'){go('today');return}
  if(a==='toScrap'){go('scrap');return}
  if(a==='calendar'){go('calendar');return}
@@ -3946,6 +3985,111 @@ async function ensureTasteIntro(c){
  }
 }
 
+// 카카오 책 검색의 contents는 책 소개 전문이 아니라 고정 길이 발췌라서
+// 말줄임표 없이 문장 중간에서 끊긴다. 상세 화면에서만 Google Books 원문으로 보강한다.
+function looksTruncatedIntro(value){
+ const s=String(value||'').trim();
+ if(s.length<150)return false;
+ return !/(?:[.!?。…”"』」)\]]|다|요|음|임)$/.test(s);
+}
+// Google Books는 API 키 없이 쓰면 요청 한도가 낮아 429(Too Many Requests)가 쉽게 뜬다.
+// 재시도는 오히려 같은 한도를 더 빨리 소진시키므로, 한 번 막히면 곧바로 길게 쉬고
+// 그 안에서는 아예 요청을 보내지 않는다. 가장 확실한 해결책은 GOOGLE_BOOKS_API_KEY 발급이다.
+let googleBooksCooldownUntil=0;
+async function queryGoogleBooksDescription(q,tn,an,timeoutMs){
+ if(Date.now()<googleBooksCooldownUntil){
+  console.debug('[송림 소개보강] 쿨다운 중이라 요청 생략',q);
+  return '';
+ }
+ const controller=new AbortController();
+ const timer=setTimeout(()=>controller.abort(),timeoutMs);
+ try{
+  const url='https://www.googleapis.com/books/v1/volumes?q='+encodeURIComponent(q)+'&maxResults=5&printType=books'+(GOOGLE_BOOKS_API_KEY?'&key='+GOOGLE_BOOKS_API_KEY:'');
+  const res=await fetch(url,{signal:controller.signal});
+  if(res.status===429){
+   console.debug('[송림 소개보강] 429 응답 - 5분간 요청 중단',q);
+   googleBooksCooldownUntil=Date.now()+300000;
+   return '';
+  }
+  if(!res.ok)return '';
+  const payload=await res.json(),items=Array.isArray(payload?.items)?payload.items:[];
+  if(!items.length)return '';
+  const ranked=items.map(it=>{
+   const v=it?.volumeInfo||{},vt=Model.norm(v.title||''),va=Model.norm((v.authors||[]).join(' '));
+   let score=0;
+   if(tn&&vt===tn)score+=10;else if(tn&&(vt.includes(tn)||tn.includes(vt)))score+=6;
+   if(an&&va.includes(an))score+=4;
+   if(v.description)score+=3;
+   return {v,score};
+  }).sort((a,b)=>b.score-a.score);
+  const best=ranked.find(r=>r.v.description)||ranked[0];
+  return String(best?.v?.description||'').replace(/<[^>]+>/g,' ').replace(/\s+\n/g,'\n').trim();
+ }catch{
+  return '';
+ }finally{
+  clearTimeout(timer);
+ }
+}
+
+async function fetchYes24BookDescription(c){
+ try{
+  const isbn=primaryIsbn13(c?.isbn)||String(c?.isbn||'').split(/\s+/).filter(Boolean)[0]||'';
+  if(!isbn)return '';
+  const res=await fetch('https://gytfefnvpqqxveryhopw.supabase.co/functions/v1/book-intro',{
+   method:'POST',
+   headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({isbn})
+  });
+  if(!res.ok)return '';
+  const data=await res.json();
+  return String(data?.intro||'').trim();
+ }catch(e){
+  console.debug('[송림 YES24 소개보강] 실패',c?.title,e);
+  return '';
+ }
+}
+
+async function fetchGoogleBookDescription(c){
+ const isbn=primaryIsbn13(c?.isbn)||String(c?.isbn||'').split(/\s+/).filter(Boolean)[0]||'';
+ const title=String(c?.title||'').replace(/<[^>]+>/g,'').trim();
+ const author=String(c?.creator||'').split(',')[0].trim();
+ if(!isbn&&!title)return '';
+ const tn=Model.norm(title),an=Model.norm(author);
+ // ISBN 검색은 정확한 판(版)을 찾지만, 국내서는 Google Books에 등록돼 있어도
+ // description이 비어있는 경우가 흔하다. 요청 수를 아끼기 위해 순차로 시도하고,
+ // ISBN 쪽에서 이미 설명을 찾으면 제목 검색은 생략한다.
+ if(isbn){
+  const byIsbn=await queryGoogleBooksDescription('isbn:'+isbn,tn,an,4500);
+  if(byIsbn)return byIsbn;
+ }
+ if(title)return await queryGoogleBooksDescription('intitle:'+title+(author?' inauthor:'+author:''),tn,an,4500);
+ return '';
+}
+async function ensureDetailIntro(c){
+ if(!c||c.type!=='book')return;
+ const key=detailIntroKey(c);
+ if(detailIntroAttempts.has(key))return;
+ if(c.contents&&!looksTruncatedIntro(c.contents))return;
+ detailIntroAttempts.set(key,'loading');
+ try{
+  const yes24Description=await fetchYes24BookDescription(c);
+  const description=yes24Description || await fetchGoogleBookDescription(c);
+  if(description&&description.length>String(c.contents||'').length){
+   console.debug('[송림 소개보강] 성공',c.title,'길이',String(c.contents||'').length,'→',description.length);
+   c.contents=description;
+   if(c.id&&get(c.id)===c)persist();
+   if(view==='detail')render();
+  }else{
+   console.debug('[송림 소개보강] Google Books에 더 나은 소개가 없음',c.title,c.isbn);
+  }
+ }catch(e){
+  console.debug('[송림 소개보강] 실패',c.title,e);
+  // 소개 보강 실패는 상세 화면 표시를 막지 않는다.
+ }finally{
+  detailIntroAttempts.set(key,'done');
+ }
+}
+
 function renderTastePage(){
  let c=tastePool[tasteIndex],isAdd=tasteMode==='add';
  while(c?.type==='book'&&isExcludedBookCandidate(c)){
@@ -3967,7 +4111,7 @@ function renderTastePage(){
  const heading=isAdd
   ?'<div class="taste-heading"><h1>취향을 조금 더<br>알려주세요</h1><p class="creator">처음엔 신작과 인기작부터, 반응이 쌓이면 취향에 맞는 작품 비중이 커져요.<br>원하는 만큼 보고 언제든 닫을 수 있어요.</p></div>'
   :'<div class="taste-heading"><h1>몇 작품만 알려주시면<br>첫 추천을 골라드릴게요</h1><p class="creator">'+esc(({book:'책',album:'음반',movie:'영화'}[tastePreferredType]||'선택한 유형'))+'부터 5개 작품을 빠르게 살펴봐주세요.</p><div class="taste-progress" aria-label="첫 추천 작품 '+initialProgress+'번째, 전체 '+INITIAL_TASTE_TARGET+'개"><span>'+initialProgress+' / '+INITIAL_TASTE_TARGET+'</span><span class="taste-dots" aria-hidden="true">'+Array.from({length:INITIAL_TASTE_TARGET},(_,i)=>'<i class="'+(i<=tasteReviewed?'on':'')+'"></i>').join('')+'</span></div></div>';
- return (tasteNotice?'<p class="note" role="status">'+esc(tasteNotice)+'</p>':'')+heading+'<div class="onboard-card"><div class="taste-cover-stage">'+cover(c)+'</div><small>'+typeName[c.type]+'</small><h2 title="'+esc(c.title)+'">'+esc(c.title)+'</h2><p class="creator" title="'+esc(c.creator)+'">'+esc(c.creator)+'</p>'+(tasteIntroText(c)?'<p class="taste-intro">'+esc(tasteIntroText(c))+'</p>':'')+'</div><div class="taste-actions">'+button('보고 싶어요','flowInterested')+button('이미 경험했어요','flowExperienced','secondary')+button('넘기기','flowSkip','textbtn')+'</div>'
+ return (tasteNotice?'<p class="note" role="status">'+esc(tasteNotice)+'</p>':'')+heading+'<div class="onboard-card"><div class="taste-cover-stage">'+cover(c)+'</div><small>'+typeName[c.type]+'</small><h2 title="'+esc(c.title)+'">'+esc(c.title)+'</h2><p class="creator" title="'+esc(c.creator)+'">'+esc(c.creator)+'</p>'+button('상세보기','tasteDetail','textbtn taste-detail-link')+'</div><div class="taste-actions">'+button('보고 싶어요','flowInterested')+button('이미 경험했어요','flowExperienced','secondary')+button('넘기기','flowSkip','textbtn')+'</div>'
 }
 
 function response(type){const c=window.tasteCandidate;state.profile.responses??={};state.profile.responses[c.type+':'+c.title]=type;persist()}
@@ -3975,7 +4119,8 @@ function nextTaste(){if(!tastePool[tasteIndex])return;tasteIndex++;tasteReviewed
 function finishEntry(){authSession.finished=true;state.onboarded=true;saveSession();persist();view='today';flowTo('app')}
 document.addEventListener('click',async e=>{
  const b=e.target.closest('[data-action]');if(!b||b.disabled)return;const a=b.dataset.action;
- if(['flowInterested','flowExperienced','flowSkip'].includes(a)&&(authRoute!=='taste'||!window.tasteCandidate))return;
+ if(['flowInterested','flowExperienced','flowSkip','tasteDetail'].includes(a)&&(authRoute!=='taste'||!window.tasteCandidate))return;
+ if(a==='tasteDetail'){openCandidateDetail(window.tasteCandidate);return}
  if(a==='flowTasteMore'){
   const refillTypes=tastePreferredType?[tastePreferredType]:['book','album','movie'];
   if(!refillTypes.some(type=>(tasteQueryDecks[type]?.length||tasteExploreDecks[type]?.length))){
