@@ -1515,6 +1515,7 @@ function detailIntroKey(c){return c?.id||('preview:'+(c?.isbn||'')+'|'+(c?.title
 const BOOK_POPULARITY_ENDPOINT='https://gytfefnvpqqxveryhopw.supabase.co/functions/v1/book-popularity';
 let remoteBookResults=[],bookSearchSeq=0,bookSearchTimer=null;
 let bookSearchRawResults=[],bookSearchActiveQuery='',bookSearchNextPage=2,bookSearchHasMore=false,bookSearchLoadingMore=false,bookSearchStagnantPages=0,bookSearchObserver=null;
+let scrapAddedBookKeys=new Set();
 const BOOK_SEARCH_PAGE_SIZE=20;
 const MUSIC_SEARCH_ENDPOINT='https://gytfefnvpqqxveryhopw.supabase.co/functions/v1/music-search';
 const MUSIC_POPULARITY_ENDPOINT='https://gytfefnvpqqxveryhopw.supabase.co/functions/v1/music-popularity';
@@ -1598,6 +1599,9 @@ function applyPopularityInfo(book,info){
  book.yes24StarScore=Number(info?.starScore)||0;
  book.yes24BestsellerRank=Number(info?.bestsellerRank)||null;
  book.yes24SteadyRank=Number(info?.steadyRank)||null;
+ // YES24 상세/보강 응답의 쪽수 필드를 내부 length로 통일
+ const yes24Pages=Number(info?.length||info?.pages||info?.pageCount||info?.page)||0;
+ if(yes24Pages>0)book.length=yes24Pages;
  if(!book.cover&&info?.cover)book.cover=String(info.cover);
  if(!book.catalogUrl&&info?.link)book.catalogUrl=String(info.link);
  if(!book.publisher&&info?.publisher)book.publisher=String(info.publisher);
@@ -1617,8 +1621,19 @@ async function enrichBookPopularity(results,seq){
   if(!res.ok)return;
 
   const payload=await res.json();
+  const responseBooks = Array.isArray(payload?.books)
+    ? payload.books
+    : Array.isArray(payload?.data?.books)
+      ? payload.data.books
+      : (payload?.isbn ? [payload] : []);
+
+  // 단일 ISBN 응답도 보강 API 응답으로 처리
+  if(!responseBooks.length && payload?.length && payload?.isbn){
+    responseBooks.push(payload);
+  }
+
   const infoMap=new Map(
-   (Array.isArray(payload?.books)?payload.books:[])
+   responseBooks
     .map(info=>[primaryIsbn13(info?.isbn13||info?.isbn),info])
     .filter(([isbn])=>isbn)
   );
@@ -1635,9 +1650,8 @@ async function enrichBookPopularity(results,seq){
 
   if(seq!==bookSearchSeq||!$('catalogResults'))return;
 
-  remoteBookResults=mergeAndRankBooks(bookSearchRawResults,[],bookSearchActiveQuery||'')
-   .filter(c=>!isExcludedBookCandidate(c));
-
+  // 이미 화면에 보여준 목록의 순서를 흔들지 않도록, 재정렬 없이
+  // 같은 순서 그대로(내용만 갱신된 상태로) 다시 그린다.
   renderRemoteBooks(remoteBookResults);
  }catch{}
 }
@@ -1849,6 +1863,7 @@ function mergeAndRankBooks(primary,supplement,query){
    yes24StarScore:Math.max(Number(existing.yes24StarScore)||0,Number(candidate.yes24StarScore)||0),
    yes24BestsellerRank:[existing.yes24BestsellerRank,candidate.yes24BestsellerRank].filter(Boolean).sort((a,b)=>a-b)[0]||null,
    yes24SteadyRank:[existing.yes24SteadyRank,candidate.yes24SteadyRank].filter(Boolean).sort((a,b)=>a-b)[0]||null,
+   length:existing.length||candidate.length||null,
    serverTargets:[...new Set([...(existing.serverTargets||[]),...(candidate.serverTargets||[])])],
    serverHitCount:(Number(existing.serverHitCount)||1)+(Number(candidate.serverHitCount)||1),
    bestServerRank:Math.min(Number(existing.bestServerRank)||999,Number(candidate.bestServerRank)||999),
@@ -1953,7 +1968,9 @@ function renderRemoteBooks(results,message=''){
     (c.publisher?'<div class="badge">'+esc(c.publisher)+'</div>':'')+
     (c.isbn?'<div class="badge">ISBN '+esc(c.isbn)+'</div>':'')+
    '</div>'+
-   button('스크랩','addRemoteBook','textbtn','data-index="'+i+'"')+
+   (scrapAddedBookKeys.has(bookResultKey(c))
+    ?'<button type="button" class="textbtn" disabled aria-label="이번 추가에서 저장한 콘텐츠">✓ 저장됨</button>'
+    :button('스크랩','addRemoteBook','textbtn','data-index="'+i+'"'))+
   '</div>'
  ).join('');
 
@@ -2252,7 +2269,7 @@ function saved(c,eventId,options={}){
  if(options.keepOpen){persist();render();if(options.action!==undefined&&options.index!==undefined)markScrapped(options.action,options.index);return}
  closeModal();commit()
 }
-async function addRemoteBook(index){const d=remoteBookResults[index];if(!d)return;if(!cleanGenreValue(d.genre))await enrichBookGenre(d);const id=Model.uid(),c=Model.add(state,d,id);saved(c,id,{keepOpen:true,action:'addRemoteBook',index})}
+async function addRemoteBook(index){const d=remoteBookResults[index];if(!d)return;if(!cleanGenreValue(d.genre))await enrichBookGenre(d);if(!(Number(d.length)>0)&&primaryIsbn13(d?.isbn))await enrichBookPopularity([d],bookSearchSeq).catch(()=>{});const id=Model.uid(),c=Model.add(state,d,id);scrapAddedBookKeys.add(bookResultKey(d));saved(c,id,{keepOpen:true,action:'addRemoteBook',index})}
 function addRemoteAlbum(index){const d=remoteAlbumResults[index];if(!d)return;const id=Model.uid(),c=Model.add(state,d,id);saved(c,id,{keepOpen:true,action:'addRemoteAlbum',index})}
 function addRemoteMovie(index){const d=remoteMovieResults[index];if(!d)return;const id=Model.uid(),c=Model.add(state,d,id);saved(c,id,{keepOpen:true,action:'addRemoteMovie',index})}
 function record(id){
@@ -3787,8 +3804,12 @@ async function enrichTasteBookPopularity(candidates){
   if(!res.ok)return candidates;
 
   const payload=await res.json();
+  const responseBooks = Array.isArray(payload?.books)
+    ? payload.books
+    : (payload?.isbn ? [payload] : []);
+
   const infoMap=new Map(
-   (Array.isArray(payload?.books)?payload.books:[])
+   responseBooks
     .map(info=>[primaryIsbn13(info?.isbn13||info?.isbn),info])
     .filter(([isbn])=>isbn)
   );
