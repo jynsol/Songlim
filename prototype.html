@@ -4191,4 +4191,34 @@ authRoute='welcome';
 render();
 cloudBootstrap().then(()=>render());
 </script>
+
+<style id="pointer-press-feedback-mobile">
+/* PC mouse + mobile touch 공통 눌림 피드백 */
+button[data-action], .primary, .fab, .social-kakao, .taste-type-option {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+button[data-action].is-pressed,
+.primary.is-pressed,
+.fab.is-pressed,
+.social-kakao.is-pressed,
+.taste-type-option.is-pressed {
+  transform: scale(.97);
+  filter: brightness(.94);
+}
+</style>
+<script id="pointer-press-feedback-script">
+(()=>{
+  const selector='button[data-action], .primary, .fab, .social-kakao, .taste-type-option';
+  const down=e=>{
+    const el=e.target.closest(selector);
+    if(el) el.classList.add('is-pressed');
+  };
+  const up=()=>document.querySelectorAll('.is-pressed').forEach(el=>el.classList.remove('is-pressed'));
+  document.addEventListener('pointerdown',down,{passive:true});
+  document.addEventListener('pointerup',up,{passive:true});
+  document.addEventListener('pointercancel',up,{passive:true});
+  document.addEventListener('pointerleave',up,{passive:true});
+})();
+</script>
 </body></html>
