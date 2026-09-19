@@ -321,19 +321,51 @@ input,select,textarea{
 </style>
 
 <style id="forest-tree-tooltip-style">
-.forest-tree-tooltip{
-  position:absolute;z-index:6;min-width:132px;max-width:220px;padding:9px 11px;
-  border:1px solid rgba(221,228,223,.95);border-radius:10px;background:rgba(255,255,255,.96);
-  box-shadow:0 6px 18px rgba(31,48,39,.12);backdrop-filter:blur(8px);
-  pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .12s ease,transform .12s ease;
-}
-.forest-tree-tooltip.show{opacity:1;transform:translateY(0)}
-.forest-tree-tooltip strong{display:block;font-size:12px;line-height:1.45;color:var(--ink);overflow-wrap:anywhere}
-.forest-tree-tooltip small{display:block;margin-top:2px;font-size:10px;line-height:1.45;color:var(--muted);overflow-wrap:anywhere}
-.forest-viewport [data-tree]{cursor:default}
-.forest-viewport [data-tree]:hover{filter:drop-shadow(0 0 4px rgba(63,133,84,.18))}
+/* Forest tree label — 웹은 마우스오버, 모바일은 탭. 둘 다 나무 머리 위에 붙는 같은 카드를 쓴다.
+   hover  : 읽기 전용 미리보기 (포인터가 나무를 벗어나면 사라짐)
+   pinned : 탭/클릭으로 고정. 카드를 누르면 콘텐츠 상세로 이동, 나무·배경·팬/줌하면 닫힘 */
+.forest-viewport{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.forest-viewport,.forest-viewport *{-webkit-tap-highlight-color:transparent}
+.forest-viewport [data-visitor]{pointer-events:none}
+.forest-viewport [data-tree]{cursor:default;transition:opacity .2s ease}
+.forest-viewport.has-pin [data-tree]:not(.is-focus){opacity:.5}
 
-@media(hover:none),(pointer:coarse){.forest-tree-tooltip{display:none!important}.forest-viewport:not(.editing) [data-tree],.forest-viewport:not(.editing) .tree-hit{pointer-events:none!important}}
+.tree-ring{fill:rgba(63,133,84,.12);stroke:#3F8554;stroke-width:1.5;stroke-opacity:.85;pointer-events:none;transform-box:fill-box;transform-origin:center;animation:treeRingIn .24s cubic-bezier(.2,.8,.2,1) both}
+.tree-ring.hover{fill:rgba(63,133,84,.08);stroke-opacity:.5}
+@keyframes treeRingIn{from{opacity:0;transform:scale(.55)}to{opacity:1;transform:scale(1)}}
+
+.forest-tree-tooltip{
+  position:absolute;z-index:6;left:0;top:0;margin:0;
+  display:flex;align-items:center;gap:10px;
+  width:max-content;min-width:116px;max-width:min(240px,calc(100% - 16px));
+  padding:10px 12px;text-align:left;
+  border:1px solid #dfe6dc;border-radius:12px;background:#fff;color:var(--ink);
+  box-shadow:0 8px 24px rgba(31,48,39,.14),0 1px 2px rgba(31,48,39,.06);
+  pointer-events:none;opacity:0;visibility:hidden;
+  transform:translateY(5px) scale(.97);transform-origin:var(--ax,50%) 100%;
+  transition:opacity .14s ease,transform .18s cubic-bezier(.2,.8,.2,1),visibility 0s linear .18s;
+}
+.forest-tree-tooltip.below{transform:translateY(-5px) scale(.97);transform-origin:var(--ax,50%) 0}
+.forest-tree-tooltip.show,.forest-tree-tooltip.below.show{opacity:1;visibility:visible;transform:none;transition-delay:0s}
+.forest-tree-tooltip.pinned{pointer-events:auto;cursor:pointer}
+.forest-tree-tooltip.pinned:not(:disabled):active{box-shadow:inset 0 0 0 999px rgba(63,133,84,.10),0 8px 24px rgba(31,48,39,.14)}
+.forest-tree-tooltip:focus-visible{outline:2px solid #3F8554;outline-offset:2px}
+.forest-tree-tooltip::after{content:"";position:absolute;left:calc(var(--ax,50%) - 5px);bottom:-6px;width:10px;height:10px;background:#fff;border:solid #dfe6dc;border-width:0 1px 1px 0;border-bottom-right-radius:2px;transform:rotate(45deg)}
+.forest-tree-tooltip.below::after{bottom:auto;top:-6px;border-width:1px 0 0 1px;border-radius:2px 0 0 0}
+.ftt-body{display:block;flex:1;min-width:0}
+.forest-tree-tooltip strong{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-size:13px;font-weight:650;line-height:1.4;letter-spacing:-.2px;color:var(--ink);overflow-wrap:anywhere}
+.forest-tree-tooltip small{display:flex;align-items:center;gap:6px;margin-top:5px;font-size:11px;line-height:1.3;color:var(--muted);min-width:0}
+.forest-tree-tooltip small span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ftt-type{flex:none;font-style:normal;font-size:10.5px;font-weight:650;padding:1px 6px;border-radius:5px;background:#F0F2F1;color:#5f676c}
+.ftt-type[data-type="book"]{background:#E4F2DA;color:#356C45}
+.ftt-type[data-type="album"]{background:#E7F2FA;color:var(--brand-progress-ink)}
+.ftt-type[data-type="movie"]{background:#FBF3D5;color:var(--brand-complete-ink)}
+.ftt-go{flex:none;display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#EFF5EC;color:#356C45;font-size:16px;line-height:1;padding-bottom:1px}
+@media(prefers-reduced-motion:reduce){
+  .forest-tree-tooltip{transition:opacity .01s linear,visibility 0s linear .01s;transform:none!important}
+  .tree-ring{animation:none}
+  .forest-viewport [data-tree]{transition:none}
+}
 </style>
 
 <style id="unified-active-feedback">
@@ -2572,37 +2604,91 @@ function editMemo(id,logId){
 <script>
 function setupForest(){
  const vp=$('forestViewport'),world=vp?.querySelector('#forest-world');if(!vp||!world)return;
- const pointers=new Map();let prev=null,suppressClick=false;
- const tip=document.createElement('div');tip.className='forest-tree-tooltip';tip.setAttribute('role','tooltip');vp.appendChild(tip);
- const hideTreeTip=()=>{tip.classList.remove('show');tip.removeAttribute('data-for')};
- const showTreeTip=(e,tree)=>{
-  if(e.pointerType&&e.pointerType!=='mouse')return hideTreeTip();
-  const id=tree?.getAttribute('data-tree')||'';const c=id?get(id):null;if(!c)return hideTreeTip();
-  const type=({book:'책',album:'음악',movie:'영화'}[c.type]||'콘텐츠'),genre=String(c.genre||'미분류');
-  tip.innerHTML='<strong>'+esc(c.title)+'</strong><small>'+esc(type+' · '+genre)+'</small>';
-  tip.setAttribute('data-for',id);tip.classList.add('show');
-  const r=vp.getBoundingClientRect(),pad=10,tw=Math.min(220,Math.max(132,tip.offsetWidth||160)),th=tip.offsetHeight||48;
-  let x=e.clientX-r.left+12,y=e.clientY-r.top-th-12;
-  if(x+tw>r.width-pad)x=e.clientX-r.left-tw-12;if(x<pad)x=pad;if(y<pad)y=e.clientY-r.top+14;if(y+th>r.height-pad)y=r.height-th-pad;
-  tip.style.left=x+'px';tip.style.top=y+'px';
+ const pointers=new Map();let prev=null,suppressClick=false,sel=null;
+ const SVG_NS='http://www.w3.org/2000/svg',TYPE_LABEL={book:'책',album:'음반',movie:'영화'},TAP_RADIUS=24;
+ const tip=document.createElement('button');tip.type='button';tip.className='forest-tree-tooltip';tip.setAttribute('aria-hidden','true');tip.tabIndex=-1;vp.appendChild(tip);
+
+ /* 선택/호버된 나무 발밑 링 — SVG 요소라 iOS Safari에서도 확실히 그려진다(CSS filter 글로우는 SVG 자식에 안 먹는 경우가 있음). */
+ const setFocusRing=(g,mode)=>{
+  vp.querySelectorAll('.tree-ring').forEach(r=>r.remove());
+  vp.querySelectorAll('.is-focus').forEach(x=>x.classList.remove('is-focus'));
+  if(!g)return;
+  const shadow=g.querySelector('ellipse'),rx=(parseFloat(shadow?.getAttribute('rx'))||22)*1.3+3;
+  const ring=document.createElementNS(SVG_NS,'ellipse');
+  ring.setAttribute('class','tree-ring '+mode);
+  ring.setAttribute('cx',shadow?.getAttribute('cx')||'0');ring.setAttribute('cy',shadow?.getAttribute('cy')||'10');
+  ring.setAttribute('rx',rx.toFixed(1));ring.setAttribute('ry',(rx*.44).toFixed(1));
+  ring.setAttribute('vector-effect','non-scaling-stroke');
+  if(shadow)shadow.after(ring);else g.prepend(ring);
+  g.classList.add('is-focus');
  };
- vp.addEventListener('pointerleave',hideTreeTip);
+ const hideTip=()=>{
+  if(!sel&&!tip.classList.contains('show'))return;
+  sel=null;tip.classList.remove('show','pinned');tip.setAttribute('aria-hidden','true');tip.tabIndex=-1;
+  tip.removeAttribute('data-action');tip.removeAttribute('data-id');tip.removeAttribute('aria-label');
+  vp.classList.remove('has-pin');setFocusRing(null);
+ };
+ /* 카드는 마우스 커서가 아니라 '나무'에 붙는다: 머리 위 중앙, 공간이 없으면 발밑으로 뒤집히고, 화살표가 나무를 가리킨다. */
+ const placeTip=g=>{
+  const vr=vp.getBoundingClientRect(),gr=g.getBoundingClientRect(),pad=8,gap=10;
+  tip.style.left='0px';tip.style.top='0px';
+  const tw=tip.offsetWidth,th=tip.offsetHeight,cx=gr.left+gr.width/2-vr.left;
+  const x=Math.min(Math.max(cx-tw/2,pad),Math.max(pad,vr.width-tw-pad));
+  let y=gr.top-vr.top-th-gap,below=false;
+  if(y<pad){below=true;y=gr.bottom-vr.top+gap}
+  if(y+th>vr.height-pad)y=Math.max(pad,vr.height-th-pad);
+  tip.style.left=x.toFixed(1)+'px';tip.style.top=y.toFixed(1)+'px';
+  tip.style.setProperty('--ax',Math.min(Math.max(cx-x,18),Math.max(18,tw-18)).toFixed(1)+'px');
+  tip.classList.toggle('below',below);
+ };
+ const showTip=(g,mode)=>{
+  const id=g.getAttribute('data-tree')||'',c=id?get(id):null;if(!c){hideTip();return}
+  const pin=mode==='pin',genre=String(c.genre||'').trim()||'미분류';
+  tip.innerHTML='<span class="ftt-body"><strong>'+esc(c.title)+'</strong><small><i class="ftt-type" data-type="'+esc(c.type)+'">'+(TYPE_LABEL[c.type]||'콘텐츠')+'</i><span>'+esc(genre)+'</span></small></span>'+(pin?'<span class="ftt-go" aria-hidden="true">›</span>':'');
+  tip.classList.toggle('pinned',pin);
+  if(pin){tip.removeAttribute('aria-hidden');tip.tabIndex=0;tip.dataset.action='detail';tip.dataset.id=id;tip.setAttribute('aria-label',c.title+' 상세 보기')}
+  else{tip.setAttribute('aria-hidden','true');tip.tabIndex=-1;tip.removeAttribute('data-action');tip.removeAttribute('data-id');tip.removeAttribute('aria-label')}
+  vp.classList.toggle('has-pin',pin);
+  setFocusRing(g,mode);placeTip(g);
+  tip.classList.add('show');sel={g,mode};
+ };
+
+ /* 터치는 손가락이 굵고 나무는 작다 → 나무 히트영역이 화면상 반지름 24px(지름 48px)보다 작으면 그만큼 넓혀서 가장 가까운 나무를 잡는다. */
+ const nearestTree=(x,y,minR)=>{
+  let best=null,bestScore=1;
+  vp.querySelectorAll('[data-tree]').forEach(g=>{
+   const h=g.querySelector('.tree-hit');if(!h)return;
+   const r=h.getBoundingClientRect(),eff=Math.max(Math.max(r.width,r.height)/2,minR),score=Math.hypot(x-(r.left+r.width/2),y-(r.top+r.height/2))/eff;
+   if(score<bestScore){bestScore=score;best=g}
+  });
+  return best;
+ };
+ const pickTree=e=>{
+  const hit=e.target.closest?.('[data-tree]');
+  if(hit&&!e.target.classList?.contains('tree-hit'))return hit;
+  return nearestTree(e.clientX,e.clientY,e.pointerType==='mouse'?0:TAP_RADIUS)||hit||null;
+ };
+
+ vp.addEventListener('pointerleave',()=>{if(sel?.mode==='hover')hideTip()});
  const apply=()=>{const max=(zoomState.scale-1)*190;zoomState.x=Math.max(-max,Math.min(max,zoomState.x));zoomState.y=Math.max(-max,Math.min(max,zoomState.y));world.setAttribute('transform','translate('+(360*(1-zoomState.scale)+zoomState.x)+' '+(270*(1-zoomState.scale)+zoomState.y)+') scale('+zoomState.scale+')')};
  window.applyForest=apply;
  vp.addEventListener('pointerdown',e=>{
-  hideTreeTip();
-  const tree=e.target.closest?.('[data-tree]');
-  if(tree&&!forestEditMode){e.preventDefault(); try{tree.blur?.()}catch{}}
-  pointers.set(e.pointerId,{x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,moved:false,treeId:tree?.getAttribute('data-tree')||''});
+  if(tip.contains(e.target))return;
+  const direct=e.target.closest?.('[data-tree]');
+  if(direct&&!forestEditMode){e.preventDefault(); try{direct.blur?.()}catch{}}
+  if(pointers.size>=1)hideTip();
+  const tree=pickTree(e);
+  pointers.set(e.pointerId,{x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,moved:false,tree,treeId:tree?.getAttribute('data-tree')||''});
   prev=null;
  });
  vp.addEventListener('pointermove',e=>{
-  const hoverTree=e.target.closest?.('[data-tree]');
-  if(hoverTree&&pointers.size===0)showTreeTip(e,hoverTree);else if(pointers.size===0)hideTreeTip();
+  if(e.pointerType==='mouse'&&pointers.size===0){
+   if(!sel||sel.mode==='hover'){const t=e.target.closest?.('[data-tree]');if(t){if(!sel||sel.g!==t)showTip(t,'hover')}else hideTip()}
+   return;
+  }
   if(!pointers.has(e.pointerId))return;
-  hideTreeTip();
   const before=pointers.get(e.pointerId),moved=before.moved||Math.hypot(e.clientX-before.startX,e.clientY-before.startY)>7;
-  if(moved&&!before.moved){try{vp.setPointerCapture(e.pointerId)}catch{}}
+  if(moved&&!before.moved){hideTip();try{vp.setPointerCapture(e.pointerId)}catch{}}
   pointers.set(e.pointerId,{...before,x:e.clientX,y:e.clientY,moved});
   const pts=[...pointers.values()];
   if(pts.length>=2){const d=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);if(prev)zoomState.scale=Math.max(1,Math.min(3.5,zoomState.scale*d/prev));prev=d}
@@ -2611,14 +2697,18 @@ function setupForest(){
  });
  const up=e=>{
   const p=pointers.get(e.pointerId);pointers.delete(e.pointerId);prev=null;
-  if(!p)return;
-  if(!p.moved&&p.treeId&&forestEditMode){suppressClick=true;openTreePicker(p.treeId);setTimeout(()=>suppressClick=false,0)}
+  if(!p||p.moved||pointers.size>0)return;
+  if(forestEditMode){if(p.treeId){hideTip();suppressClick=true;openTreePicker(p.treeId);setTimeout(()=>suppressClick=false,0)}return}
+  if(!p.tree){hideTip();return}
+  if(sel?.mode==='pin'&&sel.g===p.tree)hideTip();else showTip(p.tree,'pin');
  };
  vp.addEventListener('pointerup',up);vp.addEventListener('pointercancel',e=>{pointers.delete(e.pointerId);prev=null});
- vp.addEventListener('wheel',e=>{e.preventDefault();zoomState.scale=Math.max(1,Math.min(3.5,zoomState.scale+(e.deltaY>0?-.15:.15)));apply()},{passive:false});
+ vp.addEventListener('wheel',e=>{e.preventDefault();hideTip();zoomState.scale=Math.max(1,Math.min(3.5,zoomState.scale+(e.deltaY>0?-.15:.15)));apply()},{passive:false});
  vp.addEventListener('click',e=>{if(suppressClick||(!forestEditMode&&e.target.closest?.('[data-tree]'))){e.preventDefault();e.stopPropagation(); if(document.activeElement&&document.activeElement!==document.body)document.activeElement.blur?.(); return}});
- vp.addEventListener('dblclick',e=>{if(e.target.closest?.('[data-tree]'))return;zoomState={scale:1,x:0,y:0};apply()});
- vp.addEventListener('keydown',e=>{if(!['+','=','-','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','0'].includes(e.key))return;e.preventDefault();if(e.key==='+'||e.key==='=')zoomState.scale=Math.min(3.5,zoomState.scale+.25);if(e.key==='-')zoomState.scale=Math.max(1,zoomState.scale-.25);if(e.key==='0')zoomState={scale:1,x:0,y:0};if(e.key==='ArrowLeft')zoomState.x+=25;if(e.key==='ArrowRight')zoomState.x-=25;if(e.key==='ArrowUp')zoomState.y+=25;if(e.key==='ArrowDown')zoomState.y-=25;apply()});
+ vp.addEventListener('dblclick',e=>{if(e.target.closest?.('[data-tree]')||tip.contains(e.target))return;hideTip();zoomState={scale:1,x:0,y:0};apply()});
+ vp.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&sel){e.preventDefault();hideTip();vp.focus({preventScroll:true});return}
+  if(!['+','=','-','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','0'].includes(e.key))return;e.preventDefault();hideTip();if(e.key==='+'||e.key==='=')zoomState.scale=Math.min(3.5,zoomState.scale+.25);if(e.key==='-')zoomState.scale=Math.max(1,zoomState.scale-.25);if(e.key==='0')zoomState={scale:1,x:0,y:0};if(e.key==='ArrowLeft')zoomState.x+=25;if(e.key==='ArrowRight')zoomState.x-=25;if(e.key==='ArrowUp')zoomState.y+=25;if(e.key==='ArrowDown')zoomState.y-=25;apply()});
  apply();
  clearTimeout(window.__songrimVisitorTimer);const visitor=vp.querySelector('[data-visitor]');if(visitor){const id=visitor.dataset.visitor;if(id&&!collectionState().visitorsSeen.includes(id)){window.__songrimVisitorTimer=setTimeout(()=>{if(view!=='forest'||!document.body.contains(visitor))return;collectionState().visitorsSeen.push(id);persist();const found=FOREST_VISITORS.find(v=>v.id===id);if(found)toast('새로운 방문객 · '+found.name+'를 만났어요.')},2600)}}
  if('IntersectionObserver'in window)new IntersectionObserver(es=>vp.classList.toggle('paused',!es[0].isIntersecting)).observe(vp);
