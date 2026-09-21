@@ -497,7 +497,7 @@ button,summary{touch-action:manipulation}
 
 <style id="songrim-app-v48">
 /* App foundation */
-:root{--ink:#252c2a;--muted:#6f7a80;--line:#e8edef;--soft:#f5f8fa;--blue:#3b7b52;--brand-green:#3b7b52;--brand-green-light:#3b7b52;--brand-leaf:#edf5e8;--brand-sky:#e7f2fa;--brand-progress-ink:#3e657d;--grad:#3b7b52;--page-title-size:24px;--section-title-size:17px;--control-radius:12px;--section-gap:20px}
+:root{--ink:#252c2a;--muted:#6f7a80;--line:#e8edef;--soft:#f5f8fa;--blue:#3b7b52;--brand-green:#3b7b52;--brand-green-light:#3b7b52;--brand-leaf:#edf5e8;--brand-sky:#e7f2fa;--brand-sun:#f6e5a6;--brand-progress-ink:#3e657d;--status-active-ink:#386449;--status-done-ink:#3e657d;--grad:#3b7b52;--page-title-size:24px;--section-title-size:17px;--control-radius:12px;--section-gap:20px}
 html,body{background:#f2f6f7;color:var(--ink)}
 body{font:14px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;letter-spacing:-.15px}
 .app{width:100%;max-width:430px;background:#fff}
@@ -532,9 +532,9 @@ textarea{min-height:112px}.card{padding:18px;border:1px solid var(--line);border
 .type-tabs{margin-top:8px;border-bottom:1px solid var(--line)}.type-tab{min-height:46px;font-size:14px;color:var(--muted)}
 .type-tab.active{color:var(--ink);font-weight:700}.type-tab.active:after{left:16px;right:16px;height:2px;border-radius:0;background:var(--ink)}
 .status-filter{gap:6px;padding:14px 0 3px}.chip,.status-filter .chip{min-height:44px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--muted);font-size:12px}
-.chip.active,.status-filter .chip.active{border-color:#dbe8d5;background:var(--brand-leaf);color:#386449;font-weight:600}
-.status-filter .chip.active[data-status="active"]{border-color:#cee2ef;background:var(--brand-sky);color:var(--brand-progress-ink)}
-.status-filter .chip.active[data-status="done"]{border-color:#dbe8d5;background:var(--brand-leaf);color:#386449}
+.chip.active,.status-filter .chip.active{border-color:#dbe8d5;background:var(--brand-leaf);color:var(--status-active-ink);font-weight:600}
+.status-filter .chip.active[data-status="active"]{border-color:#dbe8d5;background:var(--brand-leaf);color:var(--status-active-ink)}
+.status-filter .chip.active[data-status="done"]{border-color:#cee2ef;background:var(--brand-sky);color:var(--status-done-ink)}
 .scrap-list-tools{min-height:48px}.sort-button{font-size:12px;color:var(--muted);min-height:44px}
 .content-list{gap:0}.content-row{min-height:106px;padding:16px 0;border:0;border-bottom:1px solid var(--line);border-radius:0;gap:14px;background:#fff;box-shadow:none}
 .content-row:last-child{border-bottom:0}.content-row .title{font-size:16px;font-weight:650;line-height:1.5;margin:4px 0;letter-spacing:-.4px}
@@ -563,7 +563,7 @@ textarea{min-height:112px}.card{padding:18px;border:1px solid var(--line);border
 /* Calendar and account */
 .month-head{margin:0 0 20px;gap:12px}.month-head>.textbtn{font-size:18px;font-weight:650;color:var(--ink)}
 .cal{gap:4px 2px}.cal .weekday{padding:8px 0 12px;font-size:11px;color:#939b95}.day{min-height:78px;border-radius:8px;padding:6px 0;font-size:12px;color:#4c564f}
-.day.today>span:first-child{width:24px;height:24px;background:var(--blue);line-height:24px}.day.completed{background:#edf5e8}.day .plus{color:var(--blue)}
+.day.today>span:first-child{width:24px;height:24px;background:var(--brand-sun);color:#635427;font-weight:650;line-height:24px}.day.completed{background:var(--brand-sky)}.day .plus{color:var(--blue)}
 .page[data-view="calendar"] .summary{font-size:12px;line-height:1.7;margin:12px 0 20px}.calendar-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:20px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:24px 0}
 .calendar-stats strong{display:block;font-size:20px;font-weight:650}.calendar-stats span{display:block;font-size:12px;color:var(--muted);margin-top:3px}
 .profile-summary{display:flex;align-items:center;gap:14px;padding:22px 0}.profile-avatar{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;background:#edf5e8;color:var(--blue);font-size:20px;font-weight:650;flex-shrink:0}
@@ -659,7 +659,7 @@ textarea{min-height:112px}.card{padding:18px;border:1px solid var(--line);border
 .profile-summary{width:100%;text-align:left}.profile-summary strong{display:block;font-size:18px;line-height:1.5}.profile-summary small{display:block;margin-top:3px;font-size:12px;color:var(--muted)}
 .profile-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.settings-group>h2{font-size:12px;font-weight:500;color:var(--muted);margin-bottom:6px}
 .content-row-meta{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:8px;font-size:11px;color:var(--muted)}
-.record-status.active{color:var(--brand-progress-ink)}.record-status.done{color:#53715a}.row-rating{color:#847448}
+.record-status.active{color:var(--status-active-ink)}.record-status.done{color:var(--status-done-ink)}.row-rating{color:#847448}
 .fab{display:flex;align-items:center;justify-content:center;gap:6px}.fab svg{width:18px;height:18px}
 .recent-completed>.row>.textbtn{min-height:36px;padding-block:4px;font-size:12px}
 .recent-completed>.stack{gap:0}.recent-completed .content-row{padding-inline:0}
@@ -669,8 +669,209 @@ textarea{min-height:112px}.card{padding:18px;border:1px solid var(--line);border
 .taste-type-option[data-type="book"]{border-color:#dbe8d5;background:#f3f8ef;color:#386449}
 .taste-type-option[data-type="album"]{border-color:#d7e6ee;background:#f0f7fb;color:#3e657d}
 .taste-type-option[data-type="movie"]{border-color:#e3e8ea;background:#f7f9fa;color:#58666c}
-.record-actions>.textbtn:not(.completion-action){background:#f0f7fb;border-color:#dfebf1;color:var(--brand-progress-ink)}
+.record-actions>.textbtn:not(.completion-action){background:#f3f8ef;border-color:#dfe9db;color:var(--status-active-ink)}
 </style>
+<style id="forest-layout-v50">
+/* Forest controls share the title row, leaving the scene unobstructed. */
+.forest-heading{margin-bottom:12px;gap:10px}
+.forest-heading .page-title{flex-shrink:0;white-space:nowrap}
+.forest-header-actions{display:flex;align-items:center;justify-content:flex-end;gap:12px;min-width:0}
+.forest-header-actions [data-picker="year"]{font-size:13px;font-weight:500;letter-spacing:-.2px;white-space:nowrap;min-height:44px;padding:0;color:var(--ink)}
+.forest-header-actions .forest-season-button,.forest-header-actions .forest-edit-control{min-height:44px;padding:0;font-size:12px;white-space:nowrap;color:var(--muted)}
+.forest-header-actions .forest-edit-control{color:var(--blue);font-weight:650}
+.forest-header-actions .forest-edit-control[aria-pressed=true]{background:transparent}
+.forest-garden{border-radius:14px;background:#f7f9fa}
+.forest-garden.is-snow{background:#eaf1f5}
+#page .forest-garden #forestViewport{
+ height:clamp(360px,52vh,480px);
+ height:clamp(360px,52svh,480px);
+ min-height:360px;
+ aspect-ratio:auto;
+ border-radius:0;
+ touch-action:none;
+}
+.forest-page-section>.forest-edit-hint{margin:0;padding:10px 0 0;text-align:right}
+.forest-page-section>.forest-empty{padding:4px 0 12px}
+.forest-overview{padding:20px 0 22px}
+.forest-total{align-items:center;gap:12px}
+.forest-total h2{flex-shrink:0}
+.forest-total .forest-area{
+ display:block;
+ max-width:65%;
+ margin:0;
+ color:#596b61;
+ font-size:13px;
+ font-weight:500;
+ line-height:1.5;
+ word-break:keep-all;
+ overflow-wrap:anywhere;
+}
+.forest-metrics{margin-top:10px}
+@media(max-width:360px){
+ .forest-total .forest-area{font-size:12px}
+ .forest-heading{gap:8px}
+ .forest-heading .page-title{font-size:22px}
+ .forest-header-actions{gap:8px}
+ .forest-header-actions [data-picker="year"]{font-size:12px}
+}
+
+</style>
+<style id="songlim-design-system">
+/* Songlim: leaf green + sky blue, with bright yellow reserved for small rating accents. */
+:root{
+ --accent:#5c875e;--accent-end:#628a62;--accent-ink:#486b49;--accent-soft:#eff5ed;--accent-line:#d3e2d1;
+ --sky:#759fb9;--sky-ink:#486e87;--sky-soft:#eef5fa;--sky-line:#d5e5f0;
+ --ink:#2d3733;--muted:#6d7772;--line:#e5ebe7;--soft:#f7f9f7;--surface:#fff;
+ --blue:var(--accent);--brand-green:var(--accent);--brand-green-light:var(--accent-end);
+ --grad:linear-gradient(115deg,#568059,#577f5a);
+ --brand-leaf:var(--accent-soft);--brand-sky:var(--sky-soft);--brand-sun:#fff7d7;--brand-star:#f4cc54;
+ --brand-progress-ink:var(--sky-ink);--brand-complete-ink:var(--sky-ink);--status-active-ink:var(--accent-ink);--status-done-ink:var(--sky-ink);
+ --page-title-size:24px;--section-title-size:17px;--control-radius:12px;--section-gap:24px
+}
+html,body{background:#f4f7f4;color:var(--ink)}
+body{font-size:14px;line-height:1.6;letter-spacing:-.2px}
+.app{background:var(--surface)}
+.head{height:56px;border-color:var(--line);padding-inline:20px}
+.brand{font-size:18px;gap:7px;letter-spacing:-.5px}.brand svg{color:var(--accent)}
+.head .iconbtn{color:var(--muted);font-size:12px}.head .iconbtn svg{width:19px;height:19px}
+.page{padding:24px 20px calc(104px + env(safe-area-inset-bottom))}
+.page>section{margin-bottom:32px}.page>section:last-child{margin-bottom:0}
+.page-heading{min-height:44px;align-items:center;gap:12px}
+.page-heading .page-title,h1{font-size:var(--page-title-size);font-weight:700;letter-spacing:-.7px;line-height:1.4}
+.page-heading+.space{height:20px!important}
+h2,.section-title{font-size:17px;font-weight:650;line-height:1.45;letter-spacing:-.4px}
+h3{font-size:15px;line-height:1.5;font-weight:650}
+.creator,.summary,.page-description{color:var(--muted);line-height:1.6}
+small,.muted{color:var(--muted)}.rule{margin:24px 0;border-color:var(--line)}
+/* Primary action, secondary action, and quiet navigation. */
+.primary,.primary.grad,.entry-page .primary,.fab{background:var(--grad);color:#fff;box-shadow:none}
+.primary,.secondary{min-height:50px;padding:13px 16px;border-radius:12px;font-size:14px;line-height:1.5;font-weight:650;gap:8px}
+.secondary{background:var(--sky-soft);color:var(--sky-ink);border:1px solid transparent}
+.textbtn{color:var(--muted);font-size:13px;min-height:44px;font-weight:500}
+.iconbtn{border-radius:12px}.more>summary{font-size:22px;color:var(--muted);background:transparent}
+.primary:not(:disabled):active,.fab:not(:disabled):active{filter:brightness(.95)}
+.secondary:not(:disabled):active,.chip:not(:disabled):active{filter:brightness(.97)}
+button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.fab{min-height:48px;padding:12px 18px;border-radius:16px;box-shadow:0 4px 14px #486b4916;font-size:13px;gap:7px}
+.textbtn.danger,.menu-row.danger,.form-error,.entry-error{color:#a95854}
+a{color:var(--sky-ink)}
+/* Bottom navigation */
+.tabs{background:#fff;border-color:var(--line);padding:7px 12px max(8px,env(safe-area-inset-bottom))}
+.tabs button{font-size:11px;min-height:50px;gap:5px;line-height:1.3;color:var(--muted);font-weight:500}
+.tabs button.active{color:var(--accent-ink);font-weight:650}
+.tabs button svg{width:23px;height:23px;border-radius:8px}
+.tabs button.active svg{background:var(--accent-soft);box-shadow:0 0 0 5px var(--accent-soft)}
+/* Fields, filters, selection state */
+input,select,textarea{font-size:16px;min-height:48px;padding:12px 14px;background:#fff;border:1px solid var(--line);border-radius:12px;color:var(--ink);line-height:1.5}
+input::placeholder,textarea::placeholder{color:#87969b}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px #5c875e12;outline:none}
+input[type=checkbox],input[type=radio]{min-height:20px;accent-color:var(--accent)}
+label{font-size:13px;font-weight:550;color:var(--ink);margin:18px 0 7px}
+.scrap-fixed-search input[type=search],.scrap-search-block input[type=search]{background:var(--soft);border:1px solid transparent;border-radius:12px;font-size:16px}
+.scrap-fixed-search input[type=search]:focus,.scrap-search-block input[type=search]:focus{border-color:var(--accent-line);box-shadow:none}
+.type-tabs{margin-top:8px}.type-tab,.composer-type-tab{font-size:14px;min-height:46px;color:var(--muted)}
+.type-tab.active,.composer-type-tab.active,.collection-tab.active{color:var(--accent-ink);font-weight:650}
+.type-tab.active:after,.composer-type-tab.active:after,.collection-tab.active:after{background:var(--accent);height:2px;border-radius:2px}
+.status-filter{gap:6px;padding:14px 0 4px}
+.chip,.status-filter .chip{min-height:40px;padding:8px 12px;border:1px solid transparent;border-radius:10px;background:var(--soft);font-size:12px;color:var(--muted)}
+.chip.active,.status-filter .chip.active,.status-filter .chip.active[data-status="active"],.status-filter .chip.active[data-status="done"]{background:var(--accent-soft);border-color:var(--accent-line);color:var(--accent-ink);font-weight:650}
+.more-menu,.inline-picker-panel{border-color:var(--line);border-radius:14px;box-shadow:0 8px 28px #29383c12;padding:6px}
+.more-menu button,.inline-picker-panel button{border-radius:8px;font-size:13px;min-height:44px}
+.inline-picker-panel button[aria-pressed=true]{background:var(--accent-soft);color:var(--accent-ink)}
+/* Scrap rows: artwork, title, metadata, then status. */
+.scrap-list-tools{min-height:48px;color:var(--muted)}
+.content-row{padding:16px 0;min-height:106px;gap:14px;border-color:var(--line)}
+.content-row .title{font-size:16px;line-height:1.5;font-weight:650;margin:3px 0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.content-row .creator{font-size:12px;line-height:1.5;margin-top:3px}
+.content-row .badge{font-size:11px;letter-spacing:0;color:var(--muted)}
+.content-row-meta{font-size:11px;gap:8px;row-gap:3px;margin-top:7px}
+.record-status.active{color:var(--status-active-ink)}.record-status.done{color:var(--status-done-ink)}.row-rating{color:var(--muted)}.rating-star{color:var(--brand-star);font-size:13px}
+.cover{border-radius:5px;background:#eff3f4;color:#7a8d94;border-color:#e7ecee}
+/* Today: the growth drawing and caption form one clear block. */
+.today-work{margin-top:18px;gap:14px;padding-bottom:18px;border-color:var(--line)}
+.today-work .title{font-size:20px;line-height:1.45;letter-spacing:-.5px;overflow-wrap:anywhere}
+.today-work .creator{font-size:13px}.today-work .bookpage{font-size:12px;color:var(--muted);margin-top:5px}
+.today-work+.center{padding:12px 0 4px}
+.today-work+.center .growth{height:clamp(190px,27svh,236px);margin:0 auto 4px}
+.today-growth-caption{display:block;font-size:12px;line-height:1.6;color:var(--muted);margin:0 0 18px}
+.today-growth-caption strong{font-weight:600;color:var(--accent-ink)}
+.record-actions{gap:8px}.record-actions>.textbtn:not(.completion-action){background:var(--accent-soft);border:1px solid transparent;border-radius:12px;color:var(--accent-ink)}
+.record-actions>.completion-action{font-size:13px;color:var(--muted);min-height:44px}
+.today-history,.recent-completed{margin-top:28px;padding-top:24px;border-color:var(--line)}
+.today-history h3,.recent-completed h3{font-size:17px;font-weight:650}
+.past-record{padding:14px 0}.past-memo{font-size:13px;line-height:1.7}
+/* Forest: title/year, then an integrated theme/edit toolbar. */
+.forest-heading{min-height:44px;margin-bottom:16px;gap:12px}
+.forest-heading .page-title{font-size:var(--page-title-size)}
+.forest-header-actions{gap:0}.forest-header-actions [data-picker="year"]{font-size:13px;min-height:44px;font-weight:550;color:var(--muted);padding:8px 0 8px 12px}
+.forest-garden{border-radius:18px;background:linear-gradient(160deg,#f0f6fa 0%,#f3f7ef 100%);border:1px solid var(--line)}
+.forest-garden.is-snow{background:var(--sky-soft)}
+.forest-tools{padding:8px 12px 0 16px;min-height:48px;gap:12px}
+.forest-tools .forest-season-button,.forest-tools .forest-edit-control{min-height:40px;line-height:1.4;font-size:12px;padding:8px 4px;color:var(--muted);font-weight:500}
+.forest-tools .forest-edit-control{color:var(--accent-ink);padding-inline:10px;border-radius:10px}
+.forest-tools .forest-edit-control[aria-pressed=true]{background:#e4eedf;color:var(--accent-ink);font-weight:650}
+#page .forest-garden #forestViewport{height:clamp(316px,46svh,424px);min-height:316px}
+.forest-overview{padding:22px 0 24px}.forest-total h2{font-size:28px;letter-spacing:-.6px;line-height:1.35}.forest-total h2 span{font-size:14px;color:var(--muted)}
+.forest-total .forest-area{font-size:12px;line-height:1.6;color:var(--muted);font-weight:400;max-width:62%}
+.forest-metrics{padding:14px 0;margin-top:16px;border-radius:12px;background:var(--soft)}
+.forest-metric{font-size:12px;gap:7px}.forest-metric strong{font-size:15px}.forest-metric+.forest-metric{border-color:#dfe7e9}
+.forest-next{margin-top:10px}.forest-next p{font-size:12px;color:var(--muted)}
+.forest-records{padding-top:24px}.forest-insight-heading{margin-bottom:10px}.forest-insight-heading h2{font-size:17px}
+.forest-page-section .forest-summary>div{min-height:44px;gap:12px}.forest-page-section .forest-summary small{font-size:12px}
+.forest-summary .average-score span{color:var(--brand-star)}
+.forest-page-section .collection-entry{padding:16px 14px;margin-top:20px;border:1px solid var(--line);border-radius:14px;min-height:84px;background:#fff}
+.collection-entry .collection-cover{background:var(--soft);border-radius:12px}.collection-entry-copy small{font-size:12px}
+.forest-actions{margin-top:12px}.forest-actions .secondary{min-height:48px}
+.forest-tree-tooltip{border-color:var(--line);border-radius:12px;box-shadow:0 6px 20px #29383c1a}.forest-tree-tooltip small span{color:var(--accent-ink);font-weight:600}
+.ftt-type[data-type="book"]{background:var(--brand-leaf);color:var(--status-active-ink)}.ftt-type[data-type="album"]{background:var(--brand-sky);color:var(--brand-progress-ink)}.ftt-type[data-type="movie"]{background:#eff2f3;color:#64727a}
+.ftt-go{background:var(--accent-soft);color:var(--accent-ink)}.tree-ring{stroke:var(--accent)}
+/* Detail, records, and account share neutral surfaces. */
+.detail-title-row h1{font-size:24px;line-height:1.45}.detail-cover-row{margin:8px 0;padding:20px 0;gap:20px}
+.detail-metrics,.review-copy,.note,.ocr-review-note{background:var(--soft);border-radius:14px;color:var(--muted)}
+.detail-metrics{background:var(--sky-soft);padding:16px;gap:16px}.detail-metrics strong{color:var(--ink)}.detail-intro{color:#4d5e64;line-height:1.8}
+.review-copy{color:var(--ink);font-size:14px;line-height:1.8;padding:18px}.history{border-color:var(--line);padding:16px 0}
+.day.today>span:first-child{background:#568059;color:#fff}.day.completed{background:var(--sky-soft)}
+.profile-avatar{background:var(--accent-soft);color:var(--accent-ink);border-radius:16px}
+.profile-stats{padding:18px 0;background:var(--soft);border:0;border-radius:14px}.profile-stats>div+div{border-color:#dfe7e9}
+.settings-group{margin-top:28px}.settings-group>h2{font-size:12px;color:var(--muted);margin-bottom:6px}.menu-row{min-height:56px;border-color:var(--line);font-size:14px}
+/* Drawers and collection use the same corners and selection treatment. */
+.sheet-back{background:#20323b55}.sheet{border-radius:22px 22px 0 0;padding:20px 20px max(24px,env(safe-area-inset-bottom))}
+.sheet:before{background:#dce5e7}.sheet-head h2{font-size:18px;line-height:1.45}.sheet-head{margin-bottom:18px}
+.card,.onboard-card,.flow-account{border-radius:14px;border-color:var(--line)}
+.collection-card,.tree-picker-option,.visitor-card{border-radius:14px;border-color:var(--line)}
+.collection-card.selected,.tree-picker-option.current,.theme-grid button.active{border-color:var(--accent-line);background:var(--accent-soft);color:var(--accent-ink)}
+.collection-card .tree-toggle{background:var(--accent-soft);color:var(--accent-ink);border-radius:8px}.collection-card .tree-toggle.off{background:var(--soft);color:var(--muted)}
+.tree-picker-head svg,.visitor-hint{background:var(--soft)}
+.taste-type-option[data-type="book"],.taste-type-option[data-type="album"],.taste-type-option[data-type="movie"]{background:var(--soft);border-color:var(--line);color:var(--ink)}
+.scrap-composer-sheet{padding:0;border-radius:0}.scrap-composer-sheet .sheet-head{margin-bottom:0}.scrap-session-footer{border-color:var(--line);background:#fff}
+.toast{background:#36483a;border-radius:12px;color:#fff}.toast button{color:#d8e9e9}
+.empty{padding:48px 12px}.empty h2,.empty h3{font-size:18px}.empty p{color:var(--muted);font-size:13px}
+@media(max-width:360px){.page,.head{padding-inline:16px}.sheet{padding-inline:16px}.scrap-composer-sheet{padding:0}.status-filter .chip{padding-inline:10px}.forest-heading .page-title{font-size:24px}.forest-header-actions [data-picker="year"]{font-size:13px}.content-row{gap:12px}.forest-total .forest-area{max-width:58%}}
+@media(min-width:700px){.sheet{border-radius:20px}.scrap-composer-sheet{border-radius:20px}.app{border-color:var(--line)}}
+
+.status-filter .chip.active[data-status="done"]{background:var(--sky-soft);border-color:var(--sky-line);color:var(--sky-ink)}
+.forest-insight-heading .textbtn,.forest-actions .secondary{color:var(--sky-ink)}
+.rating-half-stars .star .fill,.rating .on,.star-fill,.forest-summary .average-score span{color:var(--brand-star)}
+.rating-half-stars .star .fill,.star-fill{filter:drop-shadow(0 .3px .15px #ac852733)}
+
+/* Dividers belong between records, never below the last record. */
+.today-history h3{margin-bottom:0}
+.today-history-list{margin-top:6px}
+.today-history-list .past-record{border:0;padding:14px 0;color:var(--ink)}
+.today-history-list .past-record+.past-record{border-top:1px solid var(--line)}
+.today-history-list .past-record:last-child{padding-bottom:0}
+.today-history .history-more{display:block;margin-top:10px;text-align:left;color:var(--sky-ink)}
+.page[data-view="today"]>.recent-completed{margin-top:0}
+.recent-completed>.row{min-height:40px;align-items:center}
+.history:last-child{border-bottom:0}
+.settings-group>.menu-row{border:0}
+.settings-group>.menu-row+.menu-row{border-top:1px solid var(--line)}
+.forest-tree-tooltip:after{border-color:var(--line)}
+.forest-tree-tooltip:focus-visible{outline-color:var(--accent)}
+.tree-ring{fill:#5c875e12}.tree-ring.hover{fill:#5c875e08}
+.record-actions>.row>strong{font-size:14px;font-weight:600;color:var(--ink)}
+</style>
+
 </head><body><div class="app"><div id="storageAlert"></div><header class="head" id="head"></header><main class="page" id="page"></main><nav class="tabs" id="tabs" aria-label="주 메뉴"></nav></div><div id="overlay"></div><div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 /* iOS Safari는 요소에 touch 이벤트 리스너가 연결돼 있어야 :active 상태(눌림 효과)를 인식합니다.
@@ -902,7 +1103,7 @@ function detailMetadata(c){
 function recentCompleted(){
  const items=state.items.filter(c=>c.completed).sort((a,b)=>(b.completed==='unknown'?'':b.completed).localeCompare(a.completed==='unknown'?'':a.completed)||(b.completedAt||0)-(a.completedAt||0)||b.id.localeCompare(a.id)).slice(0,2);
  if(!items.length)return '';
- return '<section class="recent-completed"><div class="row between"><h3>최근 완료</h3>'+button('나의 숲 <span aria-hidden="true">›</span>','tab','textbtn','data-tab="forest"')+'</div><div class="stack">'+items.map(c=>'<button class="content-row" data-action="detail" '+attr(c.id)+'><svg class="recent-tree-thumb" width="70" height="74" viewBox="-57 -82 114 104" aria-hidden="true">'+treeArt(c)+'</svg><div class="grow"><span class="badge">'+typeName[c.type]+'</span><div class="title">'+esc(c.title)+'</div><small>'+(c.completed==='unknown'?'완료일 미상':esc(c.completed.replaceAll('-','.')))+(c.rating?' · ★ '+c.rating:'')+'</small></div><span class="muted" aria-hidden="true">›</span></button>').join('')+'</div></section>';
+ return '<section class="recent-completed"><div class="row between"><h3>최근 완료</h3>'+button('나의 숲 <span aria-hidden="true">›</span>','tab','textbtn','data-tab="forest"')+'</div><div class="stack">'+items.map(c=>'<button class="content-row" data-action="detail" '+attr(c.id)+'><svg class="recent-tree-thumb" width="70" height="74" viewBox="-57 -82 114 104" aria-hidden="true">'+treeArt(c)+'</svg><div class="grow"><span class="badge">'+typeName[c.type]+'</span><div class="title">'+esc(c.title)+'</div><small>'+(c.completed==='unknown'?'완료일 미상':esc(c.completed.replaceAll('-','.')))+(c.rating?' · <span class="rating-star" aria-hidden="true">★</span> '+c.rating:'')+'</small></div><span class="muted" aria-hidden="true">›</span></button>').join('')+'</div></section>';
 }
 function renderToday(){return renderTodayBase()+recentCompleted()}
 function averageStars(value){
@@ -924,10 +1125,12 @@ function forestGenreStats(items){
  for(const c of completed){
   const label=forestGenreLabel(c);if(!label)continue;classified++;
   const key=Model.norm(label),entry=counts.get(key);
-  if(entry)entry.count++;else counts.set(key,{label,count:1});
+  const latest=c.completed==='unknown'?'':c.completed,latestAt=Number(c.completedAt)||0;
+  if(entry){entry.count++;if(latest>entry.latest||(latest===entry.latest&&latestAt>entry.latestAt)){entry.latest=latest;entry.latestAt=latestAt}}
+  else counts.set(key,{label,count:1,latest,latestAt});
  }
- const ranked=[...counts.values()].sort((a,b)=>b.count-a.count||a.label.localeCompare(b.label,'ko'));
- const count=ranked[0]?.count||0,top=ranked.filter(entry=>entry.count===count);
+ const ranked=[...counts.values()].sort((a,b)=>b.count-a.count||b.latest.localeCompare(a.latest)||b.latestAt-a.latestAt||a.label.localeCompare(b.label,'ko'));
+ const count=ranked[0]?.count||0,top=ranked.slice(0,1);
  return {total:completed.length,classified,unclassified:completed.length-classified,ranked,top,count};
 }
 function forestSummary(items){
@@ -1077,10 +1280,23 @@ function growth(stage,c){
  const soil='<ellipse cx="160" cy="188" rx="45" ry="7" fill="#3B6653" opacity=".07"/><path d="M132 186Q160 178 188 186" fill="none" stroke="#D8E4D6" stroke-width="2" stroke-linecap="round"/>';
  let art='';
  if(stage===3&&c)art='<g transform="translate(160 160) scale(1.95)">'+treeArt(c,'basic')+'</g>';
- else if(stage===2)art='<path d="M158 183C162 162 159 148 161 127" fill="none" stroke="#92725A" stroke-width="4.5" stroke-linecap="round"/><path d="M160 163Q142 149 137 137M161 150Q179 137 184 125" fill="none" stroke="#A18565" stroke-width="2.5" stroke-linecap="round"/>'+leaf('M158 157C133 161 115 147 116 122C139 120 159 132 158 157Z','url(#'+uid+'-leaf)')+leaf('M162 143C160 119 178 101 202 104C202 128 185 144 162 143Z','url(#'+uid+'-leaf)')+leaf('M161 128C145 115 146 92 161 79C179 96 178 116 161 128Z','#9EBA7F')+'<path d="M156 152Q138 133 123 128M166 138Q184 119 195 111M161 124V91" fill="none" stroke="#EEF2CF" stroke-width="1.6" opacity=".65" stroke-linecap="round"/>';
+
+ else if(stage===2)art='<g class="growth-young-tree">'+
+ '<path d="M154 186C157 168 156 153 158 137L159 104L164 104C163 129 162 156 166 186Z" fill="#92745A"/>'+
+ '<path d="M159 177C160 157 160 134 161 112" fill="none" stroke="#B39774" stroke-width="2.2" stroke-linecap="round"/>'+
+ '<path d="M159 163C148 153 137 144 130 130M162 150C175 141 185 127 191 113" fill="none" stroke="#92745A" stroke-width="3.3" stroke-linecap="round"/>'+
+ '<path d="M158 126C149 114 145 103 145 90M163 120C173 108 177 99 179 88" fill="none" stroke="#A88A67" stroke-width="2.8" stroke-linecap="round"/>'+
+ '<path d="M169 96C169 85 179 78 190 83C201 80 210 90 207 100C215 109 206 122 194 122C184 130 169 122 169 112C163 107 164 101 169 96Z" fill="#6F9565"/>'+
+ '<path d="M117 111C109 105 113 94 122 92C124 81 139 78 148 84C160 85 164 98 157 107C162 118 151 128 140 126C128 133 115 124 117 111Z" fill="#7FA76C"/>'+
+ '<path d="M140 88C132 82 138 70 149 69C152 59 167 59 174 67C186 66 194 78 188 88C191 100 177 107 167 102C155 109 140 101 140 88Z" fill="#96B775"/>'+
+ '<path d="M143 113C143 103 154 96 164 100C173 93 187 98 188 109C198 114 194 128 183 132C174 141 159 137 154 132C143 132 136 121 143 113Z" fill="#83AA6B"/>'+
+ '<path d="M146 78C144 72 153 67 159 70C163 64 171 69 172 74C166 74 166 79 160 80C155 78 153 83 149 83Z" fill="#B8CD92" opacity=".72"/>'+
+ '<path d="M118 99C119 91 129 88 135 91C141 87 147 93 146 98C138 99 133 97 128 104Z" fill="#A9C384" opacity=".68"/>'+
+ '<path d="M151 112C151 104 161 102 167 107C175 102 182 106 182 112C173 112 171 119 165 118C159 114 155 118 151 116Z" fill="#AEC98A" opacity=".65"/>'+
+ '</g>';
  else if(stage===1)art='<path d="M159 184C158 164 162 150 163 138" fill="none" stroke="#7D9466" stroke-width="3.8" stroke-linecap="round"/>'+leaf('M161 158C139 162 123 150 121 133C143 127 160 139 161 158Z','url(#'+uid+'-leaf)')+leaf('M162 144C161 124 178 113 196 116C194 136 180 148 162 144Z','#A5C386')+'<path d="M157 154Q140 142 129 139M166 141Q181 129 189 123" fill="none" stroke="#E4EBC1" stroke-width="1.5" stroke-linecap="round"/>';
  else art='<path d="M146 180C137 167 146 148 165 147C181 151 184 164 174 178C166 190 153 189 146 180Z" fill="url(#'+uid+'-seed)"/><path d="M148 177Q151 160 169 151" fill="none" stroke="#E0BB86" stroke-width="1.7" stroke-linecap="round"/><path d="M162 185Q177 173 177 163" fill="none" stroke="#805A40" stroke-width="1.2" opacity=".45"/>';
- return '<svg class="growth" viewBox="0 0 320 220" role="img" aria-label="'+esc(stage===3&&c?category(c).label+' 나무':['씨앗','새싹','어린 나무','나무'][stage]||'씨앗')+'"><defs><radialGradient id="'+uid+'-bg" cx=".4" cy=".35" r=".7"><stop stop-color="#F9FBF1"/><stop offset="1" stop-color="#E6EFDF"/></radialGradient><linearGradient id="'+uid+'-leaf" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#AFCF88"/><stop offset=".6" stop-color="#78A575"/><stop offset="1" stop-color="#4E8366"/></linearGradient><linearGradient id="'+uid+'-seed" x2=".7" y2="1"><stop stop-color="#CBA576"/><stop offset="1" stop-color="#947051"/></linearGradient></defs><circle cx="160" cy="112" r="95" fill="url(#'+uid+'-bg)"/><path d="M82 167Q89 151 99 151M228 164Q239 159 243 166" fill="none" stroke="#CEDDC9" stroke-width="2" stroke-linecap="round"/>'+soil+art+'</svg>';
+ return '<svg class="growth" viewBox="0 0 320 220" role="img" aria-label="'+esc(stage===3&&c?category(c).label+' 나무':['씨앗','새싹','어린 나무','나무'][stage]||'씨앗')+'"><defs><radialGradient id="'+uid+'-bg" cx=".4" cy=".35" r=".7"><stop stop-color="#F9FBF1"/><stop offset="1" stop-color="#E6EFDF"/></radialGradient><linearGradient id="'+uid+'-leaf" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#AFCF88"/><stop offset=".6" stop-color="#78A575"/><stop offset="1" stop-color="#4E8366"/></linearGradient><linearGradient id="'+uid+'-seed" x2=".7" y2="1"><stop stop-color="#CBA576"/><stop offset="1" stop-color="#947051"/></linearGradient></defs><circle cx="160" cy="112" r="95" fill="url(#'+uid+'-bg)"/>'+soil+art+'</svg>';
 }
 function hash(s){let n=2166136261;for(const c of s)n=Math.imul(n^c.charCodeAt(0),16777619);return n>>>0}
 // Hand-cut forest: irregular silhouettes, tapered stems and a few opaque colour planes.
@@ -1776,9 +1992,10 @@ function closeCandidateDetail(){
  render();window.scrollTo(0,0);
 }
 function cover(c,small=false){return c.cover?'<img class="cover '+c.type+'" src="'+esc(c.cover)+'" alt="'+esc(c.title)+' 표지">':'<div class="cover '+c.type+'" aria-label="'+esc(c.title)+' 표지 없음">'+icon(c.type)+'</div>'}
-function row(c,choose=false){return '<button class="content-row" data-action="'+(choose?'choose':'detail')+'" '+attr(c.id)+'>'+cover(c)+'<div class="grow"><span class="badge">'+typeName[c.type]+'</span><div class="title">'+esc(c.title)+'</div><div class="creator">'+esc(c.creator||'제작자 미확인')+'</div><div class="content-row-meta"><span class="record-status '+Model.status(c)+'">'+statusName[Model.status(c)]+'</span>'+(validRating(c.rating)?'<span class="row-rating">★ '+c.rating+'</span>':'')+(c.saves.length>1?'<span>스크랩 '+c.saves.length+'회</span>':'')+'</div></div><span class="muted" aria-hidden="true">›</span></button>'}
+function row(c,choose=false){return '<button class="content-row" data-action="'+(choose?'choose':'detail')+'" '+attr(c.id)+'>'+cover(c)+'<div class="grow"><span class="badge">'+typeName[c.type]+'</span><div class="title">'+esc(c.title)+'</div><div class="creator">'+esc(c.creator||'제작자 미확인')+'</div><div class="content-row-meta"><span class="record-status '+Model.status(c)+'">'+statusName[Model.status(c)]+'</span>'+(validRating(c.rating)?'<span class="row-rating"><span class="rating-star" aria-hidden="true">★</span> '+c.rating+'</span>':'')+(c.saves.length>1?'<span>스크랩 '+c.saves.length+'회</span>':'')+'</div></div><span class="muted" aria-hidden="true">›</span></button>'}
 function menu(c){return '<details class="more"><summary aria-label="콘텐츠 메뉴">⋯</summary><div class="more-menu">'+button('다른 스크랩으로 바꾸기','pick','')+button('콘텐츠 상세 보기','detail','',attr(c.id))+'</div></details>'}
 function render(){
+ window.__songrimForestCleanup?.();window.__songrimForestCleanup=null;
  forestVisibilityObserver?.disconnect();forestVisibilityObserver=null;
  if(authRoute!=='app'){renderEntry();return}
  $('tabs').hidden=false;$('page').classList.remove('entry-page','taste-page');$('page').dataset.view=view;$('head').dataset.view=view;
@@ -1790,6 +2007,12 @@ function render(){
  if(view==='forest')setupForest();
  if(!storageOK&& !$('storageAlert').innerHTML)$('storageAlert').innerHTML='<div class="storage-alert">이 환경에서는 자동 저장을 사용할 수 없어요.</div>';
 }
+function todayGrowthCaption(c){
+ const stage=Model.stage(c),days=new Set((c.logs||[]).map(l=>l.date)).size;
+ const name=['씨앗','새싹','어린 나무','나무'][stage];
+ const message=stage===0?'첫 경험이 남았어요':stage===3?'나의 숲에 심었어요':days+'일째 경험하며 자라고 있어요';
+ return '<p class="growth-label today-growth-caption"><strong>'+name+'</strong><span aria-hidden="true"> · </span>'+message+'</p>';
+}
 function renderTodayBase(){
  let c=selected();if(c?.completed)c=null;const active=state.items.find(x=>!x.completed&&(x.logs.length||x.importedProgress));if(active&&!c)c=active;
  if(!state.onboarded&&!state.items.length)return '<section><div class="page-heading"><h1 class="page-title">오늘</h1></div><div class="center today-empty">'+growth(0)+'<h2>첫 작품을 담아보세요</h2><p class="creator">책, 음반, 영화를 기록할 수 있어요.</p><div class="space"></div>'+button('첫 스크랩 추가하기','add')+'</div></section>';
@@ -1800,10 +2023,9 @@ function renderTodayBase(){
   c=chosen;
  }
 
- const stages=['씨앗','새싹','자라는 중'];
  const logs=[...c.logs].sort((a,b)=>b.date.localeCompare(a.date));
  const track=c.type==='album'&&c.tracks.length?'<div class="row between"><span class="small-link">오늘의 곡 · '+esc(c.tracks[c.trackIndex%c.tracks.length])+'</span>'+button('듣기 ↗','external','textbtn',attr(c.id))+'</div><details class="collapse"><summary>다른 곡 선택</summary>'+c.tracks.map((t,i)=>button(esc(t),'track','textbtn','data-index="'+i+'" '+attr(c.id))).join('')+'</details>':'';
- return '<section><div class="page-heading"><h1 class="page-title">오늘의 '+typeName[c.type]+'</h1>'+menu(c)+'</div><div class="today-work">'+cover(c)+'<button type="button" class="grow" data-action="detail" '+attr(c.id)+' style="text-align:left"> <div class="title">'+esc(c.title)+'</div><p class="creator">'+esc(c.creator||'제작자 미확인')+'</p>'+(c.type==='book'&&logs.find(l=>l.page)?'<p class="bookpage">마지막 기록 · '+esc(logs.find(l=>l.page).page)+'쪽</p>':(logs.length?'<p class="bookpage">최근 기록 · '+esc(logs[0].date)+'</p>':''))+'</button></div><div class="center">'+growth(Model.stage(c),c)+'<p class="growth-label">'+stages[Model.stage(c)]+'</p></div>'+track+recordActions(c)+(c.type==='movie'?button('보러 가기 ↗','external','textbtn',attr(c.id)):'')+(state.items.some(item=>!item.completed&&item.id!==c.id)?button('다른 작품 고르기','nextCandidate','textbtn',attr(c.id)):'')+resumeExperiences(c)+todayHistory(c)+'</section>';
+ return '<section><div class="page-heading"><h1 class="page-title">오늘의 '+typeName[c.type]+'</h1>'+menu(c)+'</div><div class="today-work">'+cover(c)+'<button type="button" class="grow" data-action="detail" '+attr(c.id)+' style="text-align:left"> <div class="title">'+esc(c.title)+'</div><p class="creator">'+esc(c.creator||'제작자 미확인')+'</p>'+(c.type==='book'&&logs.find(l=>l.page)?'<p class="bookpage">마지막 기록 · '+esc(logs.find(l=>l.page).page)+'쪽</p>':(logs.length?'<p class="bookpage">최근 기록 · '+esc(logs[0].date)+'</p>':''))+'</button></div><div class="center">'+growth(Model.stage(c),c)+todayGrowthCaption(c)+'</div>'+track+recordActions(c)+(c.type==='movie'?button('보러 가기 ↗','external','textbtn',attr(c.id)):'')+(state.items.some(item=>!item.completed&&item.id!==c.id)?button('다른 작품 고르기','nextCandidate','textbtn',attr(c.id)):'')+resumeExperiences(c)+todayHistory(c)+'</section>';
 }
 function resumeExperiences(current){
  const active=state.items.filter(c=>c.id!==current.id&&!c.completed&&(c.logs.length||c.importedProgress));
@@ -1846,22 +2068,32 @@ function renderDetail(){
  return '<section><div class="detail-title-row"><div><h1>'+esc(c.title)+'</h1>'+(c.originalTitle&&c.originalTitle!==c.title?'<p class="original-title">'+esc(c.originalTitle)+'</p>':'')+'</div><details class="more"><summary aria-label="콘텐츠 관리">⋯</summary><div class="more-menu">'+button('기본 정보 수정','editInfo','',attr(c.id))+(c.completed?button('완료 취소','undoComplete','',attr(c.id)):'')+button('스크랩 삭제','delete','',attr(c.id))+'</div></details></div><p class="creator">'+esc(c.creator||'제작자 미확인')+' · '+typeName[c.type]+' · '+statusName[Model.status(c)]+'</p>'+'<div class="detail-cover-row"><div>'+cover(c)+'</div><div class="grow"><small>내 별점</small><button class="rating-inline" data-action="rating" '+attr(c.id)+' aria-label="별점 수정">'+(validRating(c.rating)?averageStars(c.rating):'<span class="muted">아직 별점 없음</span>')+'</button></div></div>'+ detailMetadata(c)+introHTML+((c.completed&&!c.review)?'':'<div class="rule"></div>')+(c.completed?'':(c.type==='movie'?button('오늘 봤어요','record','primary grad',attr(c.id)):button('경험 시작','startExperience','primary grad',attr(c.id))))+(c.review?'<div class="review-copy"><h3>나의 감상</h3><p>'+esc(c.review)+'</p></div>':'')+'<div class="rule"></div><h3>경험 기록</h3>'+(logs.length?logHTML(logs[0])+(logs.length>1?'<details class="collapse"><summary>지난 기록 '+(logs.length-1)+'개 보기</summary>'+logs.slice(1).map(logHTML).join('')+'</details>':''):'<p class="creator">아직 일일 기록이 없어요.</p>')+'</section>';
 }
 function forestRecordYear(c){if(c.completed&&c.completed!=='unknown')return c.completed.slice(0,4);const date=new Date(c.completedAt||c.saves?.[0]?.at||Date.now());return Number.isNaN(date.getTime())?now().slice(0,4):String(date.getFullYear())}
+function forestGrowthLabel(stats){
+ if(!stats.n)return '';
+ if(stats.n<=2)return '화분 하나만큼 자랐어요';
+ const reference=Model.refs.reduce((nearest,current)=>Math.abs(current[1]-stats.area)<Math.abs(nearest[1]-stats.area)?current:nearest);
+ return reference[0]+'만큼 자랐어요';
+}
 function renderForest(){
  const items=Model.completed(state,year),stats=Model.stats(items),theme=state.themes[year]||'basic',snow=theme==='snow'||theme==='winter';
  const expansion=forestExpansionMeta(stats.n),collection=collectionCounts();
  const periods=[...new Set([now().slice(0,4),...state.items.filter(c=>c.completed).map(forestRecordYear)])].sort().reverse();
  const periodPicker=inlinePicker(year+'년','year',periods.map(y=>[y,y+'년']),year);
  const types='<div class="forest-metrics">'+[['book','책'],['album','음반'],['movie','영화']].map(([type,label])=>'<div class="forest-metric"><span>'+label+'</span><strong>'+stats[type]+'</strong></div>').join('')+'</div>';
- const total='<div class="forest-total"><h2>'+stats.n.toLocaleString()+'<span>그루</span></h2><div class="forest-area"><span>숲 면적</span><strong>'+stats.area.toLocaleString()+' ㎡</strong></div></div>';
+ const total='<div class="forest-total"><h2>'+stats.n.toLocaleString()+'<span>그루</span></h2>'+(stats.n?'<p class="forest-area">'+esc(forestGrowthLabel(stats))+'</p>':'')+'</div>';
  const next=stats.n&&expansion.nextAt?'<div class="forest-next"><p>다음 확장까지 '+expansion.remaining+'그루</p></div>':'';
- return '<section class="forest-page-section"><div class="page-heading forest-heading"><h1 class="page-title">나의 숲</h1>'+periodPicker+'</div>'+
- '<div class="forest-garden '+(snow?'is-snow':'')+'"><div class="forest-tools"><span class="forest-stage">'+esc(expansion.label)+'</span><div class="forest-tool-actions">'+button((snow?'설산':'기본 숲')+' <span aria-hidden="true">⌄</span>','themes','forest-season-button','aria-label="숲 테마 변경"')+(stats.n?button(forestEditMode?'완료':'꾸미기','forestEdit','forest-edit-control','aria-pressed="'+forestEditMode+'"'):'')+'</div></div><div class="forest-scene"><div class="forest-viewport '+(forestEditMode?'editing':'')+'" id="forestViewport" data-theme="'+(snow?'snow':'basic')+'" tabindex="0" aria-label="'+(forestEditMode?'꾸미기 중. 바꿀 나무를 선택하세요.':stats.n+'그루의 숲. 나무를 선택해 기록을 볼 수 있습니다.')+'">'+forestSVG(items,theme)+'</div>'+(forestEditMode?'<p class="forest-edit-hint">바꿀 나무를 선택하세요</p>':'')+(stats.n?'':'<p class="forest-empty">완료한 작품이 나무로 쌓여요</p>')+'</div></div>'+
+ const controls='<div class="forest-header-actions">'+periodPicker+'</div>';
+ const toolbar='<div class="forest-tools">'+button((snow?'설산':'기본 숲')+' <span aria-hidden="true">⌄</span>','themes','forest-season-button','aria-label="숲 테마 변경"')+(stats.n?button(forestEditMode?'완료':'꾸미기','forestEdit','forest-edit-control','aria-pressed="'+forestEditMode+'"'):'')+'</div>';
+ return '<section class="forest-page-section"><div class="page-heading forest-heading"><h1 class="page-title">나의 숲</h1>'+controls+'</div>'+
+ '<div class="forest-garden '+(snow?'is-snow':'')+'">'+toolbar+'<div class="forest-scene"><div class="forest-viewport '+(forestEditMode?'editing':'')+'" id="forestViewport" data-theme="'+(snow?'snow':'basic')+'" tabindex="0" aria-label="'+(forestEditMode?'꾸미기 중. 바꿀 나무를 선택하세요.':stats.n+'그루의 숲. 나무를 선택해 기록을 볼 수 있습니다.')+'">'+forestSVG(items,theme)+'</div></div></div>'+
+ (forestEditMode?'<p class="forest-edit-hint">바꿀 나무를 선택하세요</p>':'')+(stats.n?'':'<p class="forest-empty">완료한 작품이 나무로 쌓여요</p>')+
  '<div class="forest-overview">'+total+types+next+'</div>'+
  (stats.n>FOREST_VISIBLE_LIMIT?'<p class="forest-limit-note">최근 '+FOREST_VISIBLE_LIMIT+'그루 표시</p>':'')+
  '<div class="forest-records"><div class="forest-insight-heading"><h2>기록 요약</h2>'+button('월간 기록 <span aria-hidden="true">›</span>','calendar','textbtn')+'</div>'+forestSummary(items)+'</div>'+
  '<button class="collection-entry" data-action="collection"><span class="collection-cover" aria-hidden="true"><svg viewBox="-65 -86 130 108"><g transform="translate(-25 3) scale(.65)">'+speciesArt('fir',theme)+'</g><g transform="translate(18 9) scale(.84)">'+speciesArt('oak',theme)+'</g></svg></span><span class="collection-entry-copy"><strong>나의 도감</strong><small>나무 '+collection.trees+'/'+collection.totalTrees+' · 방문객 '+collection.visitors+'/'+collection.totalVisitors+'</small></span><span class="collection-entry-arrow" aria-hidden="true">›</span></button>'+
  '<div class="forest-actions">'+(stats.n?button(icon('share')+'숲 공유하기','shareForest','secondary'):button(icon('plus')+'스크랩 추가','add','primary'))+'</div></section>';
 }
+
 function calendarHTML(period){
  const [y,m]=period.split('-').map(Number),start=new Date(y,m-1,1).getDay(),days=new Date(y,m,0).getDate();
  let html='<div class="cal">'+['일','월','화','수','목','금','토'].map(d=>'<div class="weekday">'+d+'</div>').join('')+'<div></div>'.repeat(start);
@@ -2886,7 +3118,8 @@ function todayHistory(c){
  if(c.type!=='book')return '';
  const past=c.logs.filter(l=>l.date<now()).sort((a,b)=>b.date.localeCompare(a.date));
  if(!past.length)return '';
- return '<div class="today-history"><h3>지난 기록</h3>'+past.slice(0,3).map(l=>'<button class="past-record" data-action="editLog" '+attr(c.id)+' data-log="'+esc(l.id)+'"><span class="muted">'+esc(l.date)+'</span><span class="past-memo">'+esc(l.memo||'읽었어요')+'</span></button>').join('')+(past.length>3?button('전체 기록 보기','detail','textbtn',attr(c.id)):'')+'</div>';
+ const rows=past.slice(0,3).map(l=>'<button class="past-record" data-action="editLog" '+attr(c.id)+' data-log="'+esc(l.id)+'"><span class="muted">'+esc(l.date)+'</span><span class="past-memo">'+esc(l.memo||'읽었어요')+'</span></button>').join('');
+ return '<div class="today-history"><h3>지난 기록</h3><div class="today-history-list">'+rows+'</div>'+(past.length>3?button('전체 기록 보기','detail','textbtn history-more',attr(c.id)):'')+'</div>';
 }
 function editMemo(id,logId){
  const l=get(id)?.logs.find(l=>l.id===logId);if(!l)return;
@@ -2895,17 +3128,28 @@ function editMemo(id,logId){
 
 </script>
 <script>
-let forestViewportYear=null;
-function initializeForestViewport(){
- if(forestViewportYear===year)return;
- const count=Model.completed(state,year).length;
- zoomState={scale:count<=5?1.65:count<=80?1.15:1,x:0,y:0};
- forestViewportYear=year;
+let forestViewportYear=null,forestViewportFrame=null;
+function forestCameraFrame(vp,world,bounds=world.getBBox()){
+ const unit=Math.min(vp.clientWidth/720,vp.clientHeight/540)||1;
+ const padding=20,visibleW=vp.clientWidth/unit,visibleH=vp.clientHeight/unit;
+ const fit=Math.min((vp.clientWidth-padding*2)/(Math.max(1,bounds.width)*unit),(vp.clientHeight-padding*2)/(Math.max(1,bounds.height)*unit));
+ return {bounds:{x:bounds.x,y:bounds.y,width:bounds.width,height:bounds.height},unit,visibleW,visibleH,padding:padding/unit,fit,min:fit*.92,max:fit*3.25,cx:bounds.x+bounds.width/2,cy:bounds.y+bounds.height/2,tier:forestLayoutConfig(Model.completed(state,year).length).tier};
 }
+function forestFittedState(frame){return {scale:frame.fit,x:(360-frame.cx)*frame.fit,y:(270-frame.cy)*frame.fit}}
+function initializeForestViewport(frame){
+ const previous=forestViewportFrame;
+ if(forestViewportYear!==year||!previous||previous.tier!==frame.tier||zoomState.scale<=previous.fit*1.03){zoomState=forestFittedState(frame)}
+ else{
+  const scale=Math.max(frame.min,Math.min(frame.max,zoomState.scale/previous.fit*frame.fit)),ratio=scale/zoomState.scale;
+  zoomState={scale,x:zoomState.x*ratio,y:zoomState.y*ratio};
+ }
+ forestViewportYear=year;forestViewportFrame=frame;
+}
+
 function setupForest(){
  const vp=$('forestViewport'),world=vp?.querySelector('#forest-world');if(!vp||!world)return;
  const pointers=new Map();let prev=null,suppressClick=false,sel=null;
- initializeForestViewport();
+
 
  const SVG_NS='http://www.w3.org/2000/svg',TYPE_LABEL={book:'책',album:'음반',movie:'영화'},TAP_RADIUS=24;
  const tip=document.createElement('button');tip.type='button';tip.className='forest-tree-tooltip';tip.setAttribute('aria-hidden','true');tip.tabIndex=-1;vp.appendChild(tip);
@@ -2972,12 +3216,61 @@ function setupForest(){
  };
 
  vp.addEventListener('pointerleave',()=>{if(sel?.mode==='hover')hideTip()});
- vp.addEventListener('focusin',e=>{const g=e.target.closest?.('[data-tree]');if(g&&g.matches(':focus-visible'))showTip(g,'pin')});
- vp.addEventListener('focusout',e=>{if(e.target.closest?.('[data-tree]')&&!tip.contains(e.relatedTarget))hideTip()});
- const apply=()=>{const max=(zoomState.scale-1)*190;zoomState.x=Math.max(-max,Math.min(max,zoomState.x));zoomState.y=Math.max(-max,Math.min(max,zoomState.y));world.setAttribute('transform','translate('+(360*(1-zoomState.scale)+zoomState.x)+' '+(270*(1-zoomState.scale)+zoomState.y)+') scale('+zoomState.scale+')')};
- window.applyForest=apply;
+ vp.addEventListener('focusin',e=>{const g=e.target.closest?.('[data-tree]');if(g&&pointers.size===0&&g.matches(':focus-visible'))showTip(g,'pin')});
+ vp.addEventListener('focusout',e=>{if(sel?.mode!=='pin'&&e.target.closest?.('[data-tree]')&&!tip.contains(e.relatedTarget))hideTip()});
+ let camera=forestCameraFrame(vp,world),zoomFrame=0,zoomTarget,lastZoomFrame=0;
+ initializeForestViewport(camera);
+ zoomTarget={...zoomState};
+ const clampCamera=s=>{
+  s.scale=Math.max(camera.min,Math.min(camera.max,s.scale));
+  const homeX=(360-camera.cx)*s.scale,homeY=(270-camera.cy)*s.scale;
+  const maxX=Math.max(0,(camera.bounds.width*s.scale-camera.visibleW+camera.padding*2)/2);
+  const maxY=Math.max(0,(camera.bounds.height*s.scale-camera.visibleH+camera.padding*2)/2);
+  s.x=Math.max(homeX-maxX,Math.min(homeX+maxX,s.x));
+  s.y=Math.max(homeY-maxY,Math.min(homeY+maxY,s.y));
+  return s;
+ };
+ const apply=()=>{
+  clampCamera(zoomState);
+  world.setAttribute('transform','translate('+(360*(1-zoomState.scale)+zoomState.x)+' '+(270*(1-zoomState.scale)+zoomState.y)+') scale('+zoomState.scale+')');
+ };
+ const stopZoom=()=>{cancelAnimationFrame(zoomFrame);zoomFrame=0;lastZoomFrame=0;zoomTarget={...zoomState}};
+ const animateZoom=timestamp=>{
+  if(!vp.isConnected){stopZoom();return}
+  const elapsed=lastZoomFrame?Math.min(40,timestamp-lastZoomFrame):16;lastZoomFrame=timestamp;
+  const ease=1-Math.exp(-elapsed/65);
+  for(const key of ['scale','x','y'])zoomState[key]+=(zoomTarget[key]-zoomState[key])*ease;
+  apply();
+  if(Math.abs(zoomTarget.scale-zoomState.scale)<.0002&&Math.abs(zoomTarget.x-zoomState.x)<.05&&Math.abs(zoomTarget.y-zoomState.y)<.05){zoomState={...zoomTarget};apply();zoomFrame=0;lastZoomFrame=0}
+  else zoomFrame=requestAnimationFrame(animateZoom);
+ };
+ const smoothTo=next=>{
+  zoomTarget=clampCamera({...next});
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches){stopZoom();zoomState={...next};apply();zoomTarget={...zoomState};return}
+  if(!zoomFrame)zoomFrame=requestAnimationFrame(animateZoom);
+ };
+ const zoomAt=(scale,point={x:360,y:270})=>{
+  const next=Math.max(camera.min,Math.min(camera.max,scale)),ratio=next/zoomTarget.scale;
+  smoothTo({scale:next,x:point.x-360-(point.x-360-zoomTarget.x)*ratio,y:point.y-270-(point.y-270-zoomTarget.y)*ratio});
+ };
+ const fitForest=()=>{hideTip();smoothTo(forestFittedState(camera))};
+ const svgPoint=(x,y)=>new DOMPoint(x,y).matrixTransform(vp.querySelector('svg').getScreenCTM().inverse());
+ window.applyForest=()=>{stopZoom();apply();zoomTarget={...zoomState}};
+ const observer=typeof ResizeObserver!=='undefined'?new ResizeObserver(()=>{
+  if(!vp.isConnected)return;
+  const next=forestCameraFrame(vp,world,camera.bounds);
+  if(Math.abs(next.visibleW-camera.visibleW)<.01&&Math.abs(next.visibleH-camera.visibleH)<.01&&Math.abs(next.unit-camera.unit)<.00001)return;
+  hideTip();stopZoom();const prior=camera;camera=next;
+  if(zoomState.scale<=prior.fit*1.03)zoomState=forestFittedState(camera);
+  else{const scale=zoomState.scale/prior.fit*camera.fit,ratio=scale/zoomState.scale;zoomState={scale,x:zoomState.x*ratio,y:zoomState.y*ratio}}
+  forestViewportFrame=camera;apply();zoomTarget={...zoomState};
+ }):null;
+ observer?.observe(vp);
+ window.__songrimForestCleanup=()=>{stopZoom();observer?.disconnect()};
+
  vp.addEventListener('pointerdown',e=>{
   if(tip.contains(e.target))return;
+  stopZoom();
   const direct=e.target.closest?.('[data-tree]');
   if(direct&&!forestEditMode&&e.pointerType==='mouse'){e.preventDefault(); try{direct.blur?.()}catch{}}
   if(pointers.size>=1){hideTip();pointers.forEach(p=>p.moved=true)}
@@ -2992,7 +3285,7 @@ function setupForest(){
    return;
   }
   if(!pointers.has(e.pointerId))return;
-  const before=pointers.get(e.pointerId),moved=before.moved||Math.hypot(e.clientX-before.startX,e.clientY-before.startY)>7;
+  const before=pointers.get(e.pointerId),moved=before.moved||Math.hypot(e.clientX-before.startX,e.clientY-before.startY)>(e.pointerType==='mouse'?7:10);
   if(moved&&!before.moved){hideTip();if(e.pointerType==='mouse'){try{vp.setPointerCapture(e.pointerId)}catch{}}}
   pointers.set(e.pointerId,{...before,x:e.clientX,y:e.clientY,moved});
   const pts=[...pointers.values()];
@@ -3002,17 +3295,17 @@ function setupForest(){
    if(prev&&prev.d>0){
     const svg=vp.querySelector('svg'),m=svg.getScreenCTM().inverse();
     const old=new DOMPoint(prev.x,prev.y).matrixTransform(m),cur=new DOMPoint(mid.x,mid.y).matrixTransform(m);
-    const scale=Math.max(1,Math.min(4.5,zoomState.scale*mid.d/prev.d)),ratio=scale/zoomState.scale;
+    const scale=Math.max(camera.min,Math.min(camera.max,zoomState.scale*mid.d/prev.d)),ratio=scale/zoomState.scale;
     zoomState.x=cur.x-360-(old.x-360-zoomState.x)*ratio;
     zoomState.y=cur.y-270-(old.y-270-zoomState.y)*ratio;
     zoomState.scale=scale;
    }prev=mid;
   }
   else if(moved){
-   if(zoomState.scale>1){const unit=Math.min(vp.clientWidth/720,vp.clientHeight/540);zoomState.x+=(e.clientX-before.x)/unit;zoomState.y+=(e.clientY-before.y)/unit}
+   if(zoomState.scale>camera.fit*1.03||e.pointerType==='mouse'){zoomState.x+=(e.clientX-before.x)/camera.unit;zoomState.y+=(e.clientY-before.y)/camera.unit}
    else if(e.pointerType!=='mouse')window.scrollBy(0,before.y-e.clientY);
   }
-  apply();
+  apply();zoomTarget={...zoomState};
  });
  const up=e=>{
   const p=pointers.get(e.pointerId);pointers.delete(e.pointerId);prev=null;
@@ -3022,16 +3315,25 @@ function setupForest(){
   if(sel?.mode==='pin'&&sel.g===p.tree)hideTip();else showTip(p.tree,'pin');
  };
  vp.addEventListener('pointerup',up);vp.addEventListener('pointercancel',e=>{pointers.delete(e.pointerId);prev=null});
- vp.addEventListener('wheel',e=>{e.preventDefault();hideTip();zoomState.scale=Math.max(1,Math.min(4.5,zoomState.scale+(e.deltaY>0?-.15:.15)));apply()},{passive:false});
- vp.addEventListener('click',e=>{if(suppressClick||(!forestEditMode&&e.target.closest?.('[data-tree]'))){e.preventDefault();e.stopPropagation(); if(document.activeElement&&document.activeElement!==document.body)document.activeElement.blur?.(); return}});
- vp.addEventListener('dblclick',e=>{if(e.target.closest?.('[data-tree]')||tip.contains(e.target))return;hideTip();zoomState={scale:1,x:0,y:0};apply()});
+ vp.addEventListener('wheel',e=>{
+  e.preventDefault();if(!e.deltaY)return;hideTip();
+  const unit=e.deltaMode===1?16:e.deltaMode===2?vp.clientHeight:1;
+  const delta=Math.max(-64,Math.min(64,e.deltaY*unit));
+  zoomAt(zoomTarget.scale*Math.exp(-delta*.001),svgPoint(e.clientX,e.clientY));
+ },{passive:false});
+ vp.addEventListener('click',e=>{if(suppressClick||(!forestEditMode&&e.target.closest?.('[data-tree]'))){e.preventDefault();e.stopPropagation(); return}});
+ vp.addEventListener('dblclick',e=>{if(e.target.closest?.('[data-tree]')||tip.contains(e.target))return;fitForest()});
  vp.addEventListener('keydown',e=>{
   const tree=e.target.closest?.('[data-tree]');
   if(tree&&['Enter',' '].includes(e.key)){e.preventDefault();if(forestEditMode)openTreePicker(tree.dataset.tree);else showTip(tree,'pin');return}
   if(e.key==='Escape'&&sel){e.preventDefault();hideTip();vp.focus({preventScroll:true});return}
-  if(!['+','=','-','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','0'].includes(e.key))return;e.preventDefault();hideTip();if(e.key==='+'||e.key==='=')zoomState.scale=Math.min(4.5,zoomState.scale+.25);if(e.key==='-')zoomState.scale=Math.max(1,zoomState.scale-.25);if(e.key==='0')zoomState={scale:1,x:0,y:0};if(e.key==='ArrowLeft')zoomState.x+=25;if(e.key==='ArrowRight')zoomState.x-=25;if(e.key==='ArrowUp')zoomState.y+=25;if(e.key==='ArrowDown')zoomState.y-=25;apply()});
+  if(!['+','=','-','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','0'].includes(e.key))return;e.preventDefault();hideTip();
+  if(e.key==='0'){fitForest();return}
+  if(['+','=','-'].includes(e.key)){zoomAt(zoomTarget.scale*(e.key==='-'?1/1.12:1.12));return}
+  stopZoom();if(e.key==='ArrowLeft')zoomState.x+=25;if(e.key==='ArrowRight')zoomState.x-=25;if(e.key==='ArrowUp')zoomState.y+=25;if(e.key==='ArrowDown')zoomState.y-=25;apply();zoomTarget={...zoomState};
+ });
  apply();
- if(pendingForestArrival){const arrived=[...vp.querySelectorAll('[data-tree]')].find(g=>g.dataset.tree===pendingForestArrival);if(arrived){const pos=arrived.transform.baseVal.getItem(0).matrix;zoomState.scale=Math.max(zoomState.scale,1.65);zoomState.x=(360-pos.e)*zoomState.scale;zoomState.y=(290-pos.f)*zoomState.scale;apply();showTip(arrived,'pin');arrived.querySelector('.tree-art')?.classList.add('forest-arrival');pendingForestArrival=null}}
+ if(pendingForestArrival){const arrived=[...vp.querySelectorAll('[data-tree]')].find(g=>g.dataset.tree===pendingForestArrival);if(arrived){const pos=arrived.transform.baseVal.getItem(0).matrix;zoomState.scale=Math.min(camera.max,Math.max(zoomState.scale,camera.fit*1.15));zoomState.x=(360-pos.e)*zoomState.scale;zoomState.y=(290-pos.f)*zoomState.scale;apply();zoomTarget={...zoomState};showTip(arrived,'pin');arrived.querySelector('.tree-art')?.classList.add('forest-arrival');pendingForestArrival=null}}
  clearTimeout(window.__songrimVisitorTimer);
  const layer=world.querySelector('#forest-visitor-layer'),cfg=forestLayoutConfig(Model.completed(state,year).length);
  let visitorBorn=0;
@@ -3588,7 +3890,7 @@ async function makeShare(kind){
    const [y,m]=month.split('-').map(Number),start=new Date(y,m-1,1).getDay(),days=new Date(y,m,0).getDate(),cell=132;
    ctx.textAlign='center';ctx.font='25px "Noto Sans KR",sans-serif';ctx.fillStyle='#888';['일','월','화','수','목','금','토'].forEach((d,i)=>ctx.fillText(d,144+i*cell,280));
    for(let d=1;d<=days;d++){const i=start+d-1,x=144+(i%7)*cell,yy=335+Math.floor(i/7)*137,date=month+'-'+String(d).padStart(2,'0'),list=state.items.filter(c=>c.completed===date||c.logs.some(l=>l.date===date)).sort((a,b)=>Number(b.completed===date)-Number(a.completed===date));ctx.fillStyle='#333';ctx.font='26px "Noto Sans KR",sans-serif';ctx.fillText(String(d),x,yy);
-    if(list.length){ctx.fillStyle='#eef2f3';ctx.fillRect(x-28,yy+12,56,74);if(list[0].cover){try{const img=await loadImage(list[0].cover);ctx.drawImage(img,x-28,yy+12,56,74)}catch{}}else{ctx.fillStyle='#64747b';ctx.font='18px "Noto Sans KR",sans-serif';ctx.fillText(typeName[list[0].type],x,yy+55)}if(list[0].completed===date){ctx.fillStyle='#3F8554';ctx.beginPath();ctx.arc(x+24,yy+80,12,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font='18px sans-serif';ctx.fillText('✓',x+24,yy+86)}if(list.length>1){ctx.font='20px "Noto Sans KR",sans-serif';ctx.fillStyle='#356C45';ctx.fillText('+'+(list.length-1),x+39,yy+84)}}
+    if(list.length){ctx.fillStyle='#eef2f3';ctx.fillRect(x-28,yy+12,56,74);if(list[0].cover){try{const img=await loadImage(list[0].cover);ctx.drawImage(img,x-28,yy+12,56,74)}catch{}}else{ctx.fillStyle='#64747b';ctx.font='18px "Noto Sans KR",sans-serif';ctx.fillText(typeName[list[0].type],x,yy+55)}if(list[0].completed===date){ctx.fillStyle='#DCEEF8';ctx.beginPath();ctx.arc(x+24,yy+80,12,0,Math.PI*2);ctx.fill();ctx.fillStyle='#3E657D';ctx.font='18px sans-serif';ctx.fillText('✓',x+24,yy+86)}if(list.length>1){ctx.font='20px "Noto Sans KR",sans-serif';ctx.fillStyle='#356C45';ctx.fillText('+'+(list.length-1),x+39,yy+84)}}
    }
    ctx.textAlign='left';ctx.font='600 39px "Noto Sans KR",sans-serif';ctx.fillStyle='#333';ctx.fillText('이번 달 완료한 '+st.n+'개의 경험',76,1210);ctx.font='27px "Noto Sans KR",sans-serif';ctx.fillStyle='#777';ctx.fillText('책 '+st.book+' · 음반 '+st.album+' · 영화 '+st.movie,76,1270);
   }
