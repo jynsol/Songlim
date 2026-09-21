@@ -1,7 +1,7 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#ffffff"><title>송림 · 작동 프로토타입 · BOOK/ALBUM/MOVIE</title><style>
 :root{--ink:#20262c;--muted:#767d83;--line:#e9ecee;--soft:#f8f9fa;--blue:#3F8554;--grad:linear-gradient(115deg,#3F8554,#4B8C58)}
 *{box-sizing:border-box}body{margin:0;font:15px/1.65 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;word-break:keep-all}button,input,select,textarea{font:inherit}button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button:disabled{opacity:.4;cursor:default}button{border:0;background:none;color:inherit;transition:transform .1s ease,filter .1s ease,box-shadow .1s ease}a{text-decoration:none}button:focus-visible,a:focus-visible{outline:2px solid var(--blue);outline-offset:3px}input,select,textarea{border:1px solid #dde2e5;border-radius:8px;padding:11px 12px;max-width:100%;width:100%;background:white;color:var(--ink)}input[type=checkbox],input[type=radio]{width:20px;height:20px}textarea{resize:vertical;min-height:90px}label{display:block;font-size:13px;margin:15px 0 6px}h1,h2,h3,p{margin:0}h1{font-size:25px;letter-spacing:-.7px;line-height:1.4}h2{font-size:21px;letter-spacing:-.6px}h3{font-size:16px}small,.muted{color:var(--muted);font-size:12px}.app{max-width:430px;margin:0 auto;background:#fff;min-height:100dvh;position:relative}.head{height:68px;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;background:#ffffffed;position:sticky;top:0;z-index:4;border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}.head h1{font-size:18px}.brand{font-weight:750;font-size:20px;display:flex;align-items:center;gap:7px}.brand svg{color:#3F8554}.iconbtn{min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:8px}.row{display:flex;align-items:center;gap:10px}.between{justify-content:space-between}.grow{flex:1;min-width:0}.page{padding:24px 20px 116px}.page>section{margin-bottom:28px}.primary,.secondary{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;padding:12px 16px;border-radius:9px;font-weight:650;font-size:14px}.primary{background:var(--blue);color:#fff}.primary.grad{background:var(--grad)}.secondary{background:white;border:1px solid #dfe4e7;color:#444}.textbtn{min-height:44px;padding:10px 4px;color:#626b73}.textbtn.danger,.menu-row.danger{color:#a63e3e}.stack{display:grid;gap:10px}.center{text-align:center}.space{height:22px}.rule{border-top:1px solid var(--line);margin:22px 0}.card{padding:18px;border:1px solid var(--line);border-radius:14px;background:#fff}.growth{display:block;width:100%;height:210px;margin:12px auto 10px}.growth-label{font-size:12px;color:var(--muted);margin-bottom:16px}.title{font-size:23px;font-weight:700;line-height:1.45;margin:4px 0}.creator{font-size:13px;color:var(--muted);margin-top:5px}
-.more{position:relative}.more>summary{list-style:none;min-width:44px;min-height:44px;display:grid;place-items:center;cursor:pointer}.more>summary::-webkit-details-marker{display:none}.more-menu{position:absolute;right:0;top:44px;width:190px;padding:8px;background:white;box-shadow:0 8px 35px #20304018;border:1px solid var(--line);border-radius:10px;z-index:8}.more-menu button{display:block;min-height:44px;width:100%;text-align:left;padding:10px;font-size:13px;border-bottom:1px solid var(--line)}.more-menu button:last-child{border-bottom:0}.tabs{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,430px);display:flex;padding:10px 10px max(12px,env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--line);z-index:5;box-shadow:0 -1px 0 #fff}.tabs button{flex:1;display:grid;justify-items:center;gap:4px;min-height:46px;color:#868e92;font-size:11px}.tabs button.active{color:#3F8554;font-weight:700}.tabs svg{width:21px;height:21px}.chips{display:flex;gap:7px;overflow-x:auto;padding:12px 0;scrollbar-width:none}.chip{white-space:nowrap;min-height:40px;padding:7px 13px;border:1px solid #e5e8eb;border-radius:22px;color:var(--muted);font-size:12px}.content-list{display:grid;gap:10px}.content-row{width:100%;display:flex;align-items:center;text-align:left;border:1px solid var(--line);border-radius:12px;padding:15px;background:#fff;min-width:0}.content-row .title{font-size:16px;margin:5px 0}.cover{width:58px;height:80px;object-fit:cover;flex-shrink:0;border-radius:4px;display:grid;place-items:center;background:#f2f3f4;color:#79838a;font-size:21px;border:1px solid #e5e7e9}.cover.album{height:58px}.badge{font-size:11px;color:#6b747a}.summary{font-size:12px;color:var(--muted);margin:6px 0 16px}.fab{position:fixed;bottom:calc(80px + max(12px,env(safe-area-inset-bottom)));right:max(calc((100vw - 430px)/2 + 20px),20px);padding:12px 17px;background:var(--grad);color:white;border-radius:26px;font-size:13px;font-weight:650;z-index:3}.list-footer{height:78px}.empty{padding:48px 10px;text-align:center}.empty p{font-size:13px;color:var(--muted);margin:10px 0 24px}.note{padding:12px 14px;background:#f7f8f9;border-radius:8px;font-size:12px;color:#687077}.history{padding:14px 0;border-bottom:1px solid var(--line);font-size:13px}.history p{white-space:pre-wrap;overflow-wrap:anywhere}.collapse{margin:12px 0;font-size:13px}.collapse>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;color:#69747b}.forest-viewport{height:390px;overflow:hidden;border-radius:16px;touch-action:none;position:relative}.forest-viewport svg{width:100%;height:100%;display:block;user-select:none}.area{margin-top:20px}.area h2{font-size:21px;margin-bottom:7px}.area p{font-size:12px;color:#777}.leaf{animation:sway 5s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom}@keyframes sway{to{rotate:2deg}}
+.more{position:relative}.more>summary{list-style:none;min-width:44px;min-height:44px;display:grid;place-items:center;cursor:pointer}.more>summary::-webkit-details-marker{display:none}.more-menu{position:absolute;right:0;top:44px;width:190px;padding:8px;background:white;box-shadow:0 8px 35px #20304018;border:1px solid var(--line);border-radius:10px;z-index:8}.more-menu button{display:block;min-height:44px;width:100%;text-align:left;padding:10px;font-size:13px;border-bottom:1px solid var(--line)}.more-menu button:last-child{border-bottom:0}.tabs{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,430px);display:flex;padding:10px 10px max(12px,env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--line);z-index:5;box-shadow:0 -1px 0 #fff}.tabs button{flex:1;display:grid;justify-items:center;gap:4px;min-height:46px;color:#868e92;font-size:11px}.tabs button.active{color:#3F8554;font-weight:700}.tabs svg{width:21px;height:21px}.chips{display:flex;gap:7px;overflow-x:auto;padding:12px 0;scrollbar-width:none}.chip{white-space:nowrap;min-height:40px;padding:7px 13px;border:1px solid #e5e8eb;border-radius:22px;color:var(--muted);font-size:12px}.content-list{display:grid;gap:10px}.content-row{width:100%;display:flex;align-items:center;text-align:left;border:1px solid var(--line);border-radius:12px;padding:15px;background:#fff;min-width:0}.content-row .title{font-size:16px;margin:5px 0}.cover{width:58px;height:80px;object-fit:cover;flex-shrink:0;border-radius:4px;display:grid;place-items:center;background:#f2f3f4;color:#79838a;font-size:21px;border:1px solid #e5e7e9}.cover.album{height:58px}.badge{font-size:11px;color:#6b747a}.summary{font-size:12px;color:var(--muted);margin:6px 0 16px}.fab{position:fixed;bottom:calc(80px + max(12px,env(safe-area-inset-bottom)));right:max(calc((100vw - 430px)/2 + 20px),20px);padding:12px 17px;background:var(--grad);color:white;border-radius:26px;font-size:13px;font-weight:650;z-index:3}.list-footer{height:78px}.empty{padding:48px 10px;text-align:center}.empty p{font-size:13px;color:var(--muted);margin:10px 0 24px}.note{padding:12px 14px;background:#f7f8f9;border-radius:8px;font-size:12px;color:#687077}.history{padding:14px 0;border-bottom:1px solid var(--line);font-size:13px}.history p{white-space:pre-wrap;overflow-wrap:anywhere}.collapse{margin:12px 0;font-size:13px}.collapse>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;color:#69747b}.forest-viewport{height:390px;overflow:hidden;border-radius:16px;touch-action:pan-y;position:relative}.forest-viewport svg{width:100%;height:100%;display:block;user-select:none}.area{margin-top:20px}.area h2{font-size:21px;margin-bottom:7px}.area p{font-size:12px;color:#777}.leaf{animation:sway 5s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom}@keyframes sway{to{rotate:2deg}}
 .hidden-glow{animation:hiddenGlow 4.2s ease-in-out infinite}.hidden-glow.alt{animation-delay:-2.1s}.hidden-twinkle{animation:hiddenTwinkle 2.8s ease-in-out infinite}.hidden-twinkle.alt{animation-delay:-1.4s}.hidden-twinkle.slow{animation-duration:3.8s}.hidden-ornament-glow{animation:hiddenOrnament 3.2s ease-in-out infinite}.hidden-ornament-glow.alt{animation-delay:-1.6s}.hidden-ice-sheen{animation:hiddenIceSheen 4.4s ease-in-out infinite}.hidden-ice-sheen.alt{animation-delay:-2.2s}@keyframes hiddenGlow{0%,18%,100%{opacity:.04}38%,56%{opacity:.18}70%{opacity:.08}}@keyframes hiddenTwinkle{0%,22%,100%{opacity:.06}38%,52%{opacity:.95}66%{opacity:.18}}@keyframes hiddenOrnament{0%,20%,100%{opacity:.08}42%,58%{opacity:.56}72%{opacity:.16}}@keyframes hiddenIceSheen{0%,24%,100%{opacity:.10}40%,60%{opacity:.52}74%{opacity:.16}}
 @media(prefers-reduced-motion:reduce){.leaf,.hidden-glow,.hidden-twinkle,.hidden-ornament-glow,.hidden-ice-sheen{animation:none}}.paused .leaf{animation-play-state:paused}.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;text-align:center}.cal .weekday{font-size:11px;color:#8a9399;padding:8px 0}.day{min-height:75px;display:flex;flex-direction:column;align-items:center;padding:5px 0;font-size:11px;border-radius:7px;position:relative}.day.today>span:first-child{color:white;border-radius:50%;width:22px;height:22px;display:grid;place-items:center}.day img,.day .mini-cover{width:25px;height:33px;object-fit:cover;margin-top:3px;border-radius:2px;background:#eff1f2;font-size:10px;overflow:hidden;display:grid;place-items:center}.day .plus{font-size:9px;color:#356C45}.day.completed{background:#F5F0D9}.month-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.menu-row{width:100%;min-height:56px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);text-align:left;font-size:14px}.sheet-back{position:fixed;inset:0;background:#15202b55;z-index:20;display:flex;align-items:flex-end;justify-content:center}.sheet{background:#fff;border-radius:20px 20px 0 0;width:min(100%,460px);max-height:90dvh;overflow-y:auto;overscroll-behavior:contain;padding:18px 22px max(26px,env(safe-area-inset-bottom))}.sheet-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.sheet-head h2{font-size:19px}.sheet .primary{margin-top:18px}.toast{position:fixed;bottom:160px;left:50%;transform:translateX(-50%);width:min(calc(100% - 40px),380px);padding:13px 16px;background:#252d34;color:white;border-radius:9px;z-index:15;font-size:13px;display:flex;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 3px 14px #0002}.toast button{color:#F6E5A6;white-space:nowrap;min-height:30px}.toast:empty{display:none}.preview{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:8px;margin:10px 0}.rating{display:flex;gap:5px}.rating-inline{display:block;background:none;border:0;padding:4px 0;text-align:left;min-height:44px}.rating button{font-size:28px;color:#bbb;padding:4px;min-width:44px;min-height:44px}.rating .on{color:var(--brand-star)}.theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.theme-grid button{border:1px solid var(--line);border-radius:10px;padding:14px 4px;min-height:74px}.theme-grid button.active{color:#3F8554}.tiny{font-size:11px}.offscreen{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.form-error{color:#a13e3e;font-size:12px;margin-top:8px}.dev{border-top:1px solid #eee;padding-top:14px;margin-top:28px}.dev summary{font-size:12px;color:#888;min-height:44px;cursor:pointer}.storage-alert{background:#fff5db;color:#705a2d;padding:10px;font-size:12px}.thumbs{display:flex;gap:8px;overflow:auto;margin:12px 0}.thumbs img{height:90px;max-width:100px;object-fit:cover;border-radius:6px}.checkrow{display:flex;align-items:center;gap:10px;border-bottom:1px solid #eee;padding:12px 0}.checkrow label{margin:0;flex:1}.share-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.share-actions .primary{margin:0}.back-title{font-size:17px;font-weight:650}.small-link{font-size:12px}.bookpage{font-size:12px;color:#777;margin-top:8px}
 @media(min-width:700px){.app{border-inline:1px solid #e5e7e9}.sheet-back{align-items:center}.sheet{border-radius:18px}}
@@ -47,7 +47,12 @@ input[type="search"]::-webkit-search-cancel-button {
 input[type="search"] {
   touch-action: manipulation;
 }
-.compact-meta .content-meta-line{margin-top:14px;font-size:13px;color:var(--muted)}.compact-meta .content-meta-line>div{line-height:1.6}.compact-meta .content-meta-line>div+div{margin-top:2px}.compact-meta .content-meta-head strong{display:block;font-size:18px}.compact-meta .content-meta-head small{display:block;margin-top:4px}.current-tree{display:flex;flex-direction:column;align-items:flex-end;justify-content:center;min-width:70px;flex-shrink:0}.current-tree strong{font-size:14px;margin-top:4px}</style><style>
+.compact-meta .content-meta-line{margin-top:14px;font-size:13px;color:var(--muted)}.compact-meta .content-meta-line>div{line-height:1.6}.compact-meta .content-meta-line>div+div{margin-top:2px}.compact-meta .content-meta-head strong{display:block;font-size:18px}.compact-meta .content-meta-head small{display:block;margin-top:4px}.current-tree{display:flex;flex-direction:column;align-items:flex-end;justify-content:center;min-width:70px;flex-shrink:0}.current-tree strong{font-size:14px;margin-top:4px}
+.forest-arrival{transform-box:fill-box;transform-origin:50% 100%;animation:forest-arrival .7s ease-out both}
+.completion-tree .growth{animation:forest-arrival .7s ease-out both}
+@keyframes forest-arrival{0%{scale:.88}55%{scale:1.12}100%{scale:1}}
+@media(prefers-reduced-motion:reduce){.forest-arrival,.completion-tree .growth{animation:none}}
+</style><style>
 /* Consistent spacing and action alignment. */
 .page{padding-bottom:calc(104px + env(safe-area-inset-bottom))}
 .page>section{min-width:0}.page>section:last-child{margin-bottom:0}
@@ -191,11 +196,11 @@ input,select,textarea{
   overscroll-behavior-x:contain;
   -webkit-overflow-scrolling:touch;
 }
-/* The forest keeps its own gesture handling without allowing the page itself to pan sideways. */
+/* Touch gestures preserve vertical page scrolling. Mouse wheel zooms the forest. */
 .forest-viewport{
   max-width:100%;
   overflow:hidden;
-  touch-action:none;
+  touch-action:pan-y;
 }
 .sheet-back{
   overflow-x:hidden;
@@ -876,16 +881,16 @@ function speciesArt(speciesId,theme='basic'){
   out+=path('M-24-48Q-8-59 4-51Q15-57 25-47Q13-38 1-40Q-10-34-24-48Z',c[1],'',1,'opacity=".76"');
   [[-18,-51],[10,-51],[25,-37]].forEach(d=>out+=circle(d[0],d[1],1.5,'#EFE7DF','.62'));
  }else if(sp.id==='zelkova'){
-  out+=path('M0 13Q0-12 0-41M0-18L-35-30M0-22L36-34','none',tr,5.5);
-  out+=polygon('-51,-35 -37,-49 -15,-53 1,-49 18,-52 41,-45 51,-31 42,-18 17,-16 0,-20 -18,-15 -42,-20',c[0]);
-  out+=polygon('-34,-38 -18,-47 0,-43 16,-47 34,-38 20,-28 0,-29 -18,-27',c[1],'opacity=".68"');
+  out+=path('M0 13V-20M0-17L-30-46M0-17L0-53M0-17L32-45','none',tr,4.5);
+  out+=polygon('-52,-46 -38,-61 -17,-68 7,-68 32,-61 52,-46 34,-35 15,-31 0,-30 -18,-33 -37,-37',c[0]);
+  out+=polygon('-34,-49 -17,-60 3,-61 28,-53 13,-43 -8,-43',c[1],'opacity=".68"');
  }else if(sp.id==='ginkgo'){
   out+=path('M0 13V-43M0-18L-24-36M0-27L22-44','none',tr,4.0);
   out+=path('M0-67Q-34-62-38-39Q-15-47 0-30Q14-47 39-39Q34-62 0-67Z',c[0]);
   out+=path('M0-59Q-19-55-23-43Q-9-47 0-36Q8-48 24-43Q19-56 0-59Z',c[1],'',1,'opacity=".72"');
  }else if(sp.id==='metasequoia'){
   out+=path('M0 14V-72','none',tr,3.2);
-  [[-68,11],[-54,17],[-39,22],[-23,27],[-6,31]].forEach((a,i)=>{const y=a[0],w=a[1];out+=polygon('0,'+y+' '+(-w)+','+(y+22)+' 0,'+(y+15)+' '+w+','+(y+22),c[i%3]);});
+  [[-76,7],[-60,11],[-44,15],[-28,19],[-12,23]].forEach((a,i)=>{const y=a[0],w=a[1];out+=polygon('0,'+y+' '+(-w)+','+(y+22)+' 0,'+(y+15)+' '+w+','+(y+22),c[i%3]);});
  }else if(sp.id==='maple'){
   out+=path('M0 13Q-1-12 0-42M0-21L-28-42M0-29L24-50','none',tr,4.4);
   out+=polygon('-39,-45 -24,-59 -8,-45 -24,-30',c[0]);
@@ -915,11 +920,12 @@ function speciesArt(speciesId,theme='basic'){
   out+=ellipse(-1,-61,23,7,c[2],'transform="rotate(-3 -1 -61)"');
  }else if(sp.id==='cedar'){
   out+=path('M0 14V-70','none',tr,3.2);
-  [[-65,12],[-49,19],[-32,25],[-13,31]].forEach((a,i)=>{const y=a[0],w=a[1];out+=polygon('0,'+y+' '+(-w)+','+(y+24)+' 0,'+(y+17)+' '+w+','+(y+24),c[i%3]);});
+  out+=path('M0-76L-10-54L-8-48L-18-29L-15-24L-26 0Q0 8 26 0L15-24L18-29L8-48L10-54Z',c[0]);
+  out+=path('M0-67L-4-44L-11-24L-16-4L0 0Z',c[1],'',1,'opacity=".7"');
  }else if(sp.id==='hackberry'){
   out+=path('M-4 13Q-6-7-2-31M5 13Q7-8 2-38M0-17L-36-31M1-24L35-38','none',tr,6.2);
-  out+=polygon('-50,-31 -33,-50 -8,-48 2,-36 -8,-18 -35,-15',c[0]);
-  out+=polygon('-7,-43 17,-54 47,-36 37,-17 12,-19 0,-29',c[1]);
+  out+=polygon('-51,-24 -42,-40 -22,-43 -7,-34 -6,-16 -31,-12',c[0]);
+  out+=polygon('-10,-42 10,-58 31,-55 47,-39 39,-20 16,-16 0,-26',c[1]);
  }else if(sp.id==='fringe'){
   // Preserved: user liked this composition and palette.
   out+=path('M0 13Q-2-11 1-40M0-18L-24-37M0-27L24-46','none',tr,3.8);
@@ -928,7 +934,7 @@ function speciesArt(speciesId,theme='basic'){
  }else if(sp.id==='fir'){
   // Preserved: user liked this composition and palette.
   out+=path('M0 14V-68','none',tr,3.3);
-  [[-64,11],[-51,18],[-36,24],[-20,29],[-4,32]].forEach((a,i)=>{const y=a[0],w=a[1];out+=path('M0 '+y+'L'+(-w*.7)+' '+(y+13)+'L'+(-w)+' '+(y+20)+'L'+(-w*.32)+' '+(y+18)+'L0 '+(y+12)+'L'+(w*.34)+' '+(y+18)+'L'+w+' '+(y+20)+'L'+(w*.7)+' '+(y+13)+'Z',c[i%3]);});
+  [[-67,12],[-44,25],[-18,36]].forEach((a,i)=>{const y=a[0],w=a[1];out+=path('M0 '+y+'L'+(-w*.7)+' '+(y+13)+'L'+(-w)+' '+(y+20)+'L'+(-w*.32)+' '+(y+18)+'L0 '+(y+12)+'L'+(w*.34)+' '+(y+18)+'L'+w+' '+(y+20)+'L'+(w*.7)+' '+(y+13)+'Z',c[i%3]);});
  }else if(sp.id==='cypress'){
   // Preserved: user liked this composition and palette.
   out+=path('M0 13V-59','none',tr,3.5);
@@ -1299,9 +1305,9 @@ function forestSVG(items,theme='basic',animated=true){
  const ground=theme==='snow'?'#E3ECEF':'#D9E9CC',top={x:cx,y:cy-cfg.boardH/2-marginY},right={x:cx+cfg.boardW/2+marginX,y:cy},bottom={x:cx,y:cy+cfg.boardH/2+marginY},left={x:cx-cfg.boardW/2-marginX,y:cy},depth=18;
  const groundPath='M'+top.x+' '+top.y+' L'+right.x+' '+right.y+' L'+bottom.x+' '+bottom.y+' L'+left.x+' '+left.y+' Z',leftSide='M'+left.x+' '+left.y+' L'+bottom.x+' '+bottom.y+' L'+bottom.x+' '+(bottom.y+depth)+' L'+left.x+' '+(left.y+depth)+' Z',rightSide='M'+bottom.x+' '+bottom.y+' L'+right.x+' '+right.y+' L'+right.x+' '+(right.y+depth)+' L'+bottom.x+' '+(bottom.y+depth)+' Z';
  const decorations=forestDecorations(cfg,project,theme,layout.emptySlots,layout.featureSlots);
- const trees=points.map(p=>{const hiddenKind=p.c?.hiddenTree,hiddenBoost=hiddenKind?hiddenTreeScale(hiddenKind,theme):1,sc=((p.scale||cfg.treeScale)*hiddenBoost).toFixed(3),shadowRx=((p.profile?.radius||24)*.70*hiddenBoost).toFixed(1),shadowRy=(Math.max(3.6,(p.profile?.radius||24)*.13*hiddenBoost)).toFixed(1),snowBase=theme==='snow'?'<ellipse cx="0" cy="13" rx="'+Math.max(9,(p.profile?.radius||24)*.5*hiddenBoost).toFixed(1)+'" ry="4.1" fill="#F8FBFC" opacity=".92"/>':'';return '<g data-tree="'+esc(p.c.id)+'" role="button" tabindex="0" aria-label="'+esc(p.c.title+' · '+String(p.c.genre||category(p.c).label))+'" transform="translate('+p.x.toFixed(1)+' '+p.y.toFixed(1)+') scale('+sc+')"><ellipse cx="4" cy="10" rx="'+shadowRx+'" ry="'+shadowRy+'" fill="#708579" opacity=".11"/>'+snowBase+'<circle class="tree-hit" cx="0" cy="-27" r="38" fill="transparent" pointer-events="all"/>'+treeArt(p.c,theme)+'</g>'}).join('');
+ const trees=points.map(p=>{const hiddenKind=p.c?.hiddenTree,hiddenBoost=hiddenKind?hiddenTreeScale(hiddenKind,theme):1,sc=((p.scale||cfg.treeScale)*hiddenBoost).toFixed(3),shadowRx=((p.profile?.radius||24)*.70*hiddenBoost).toFixed(1),shadowRy=(Math.max(3.6,(p.profile?.radius||24)*.13*hiddenBoost)).toFixed(1),snowBase=theme==='snow'?'<ellipse cx="0" cy="13" rx="'+Math.max(9,(p.profile?.radius||24)*.5*hiddenBoost).toFixed(1)+'" ry="4.1" fill="#F8FBFC" opacity=".92"/>':'';return '<g data-tree="'+esc(p.c.id)+'" role="button" tabindex="0" aria-label="'+esc(p.c.title+' · '+String(p.c.genre||category(p.c).label))+'" transform="translate('+p.x.toFixed(1)+' '+p.y.toFixed(1)+') scale('+sc+')"><ellipse cx="4" cy="10" rx="'+shadowRx+'" ry="'+shadowRy+'" fill="#708579" opacity=".11"/>'+snowBase+'<circle class="tree-hit" cx="0" cy="-27" r="38" fill="transparent" pointer-events="all"/>'+'<g filter="url(#forestTreeEdge)">'+treeArt(p.c,theme)+'</g></g>'}).join('');
  const visitor=n?forestVisitorArt(items,animated):'',patches=[{x:cx-cfg.boardW*.22,y:cy-cfg.boardH*.11,rx:cfg.boardW*.12,ry:cfg.boardH*.05,o:.10},{x:cx+cfg.boardW*.16,y:cy-cfg.boardH*.08,rx:cfg.boardW*.10,ry:cfg.boardH*.046,o:.08},{x:cx-cfg.boardW*.03,y:cy+cfg.boardH*.17,rx:cfg.boardW*.14,ry:cfg.boardH*.055,o:.07}].map((g,i)=>'<ellipse cx="'+g.x.toFixed(1)+'" cy="'+g.y.toFixed(1)+'" rx="'+g.rx.toFixed(1)+'" ry="'+g.ry.toFixed(1)+'" fill="'+(theme==='snow'?(i===1?'#D6E3E7':'#EEF4F6'):(i===1?'#c9dcb9':'#d4e3c7'))+'" opacity="'+(theme==='snow'?Math.min(.36,g.o+.15):g.o)+'"/>').join('');
- return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 540" role="group" aria-label="'+n+'그루의 '+({basic:'기본',snow:'설산'}[theme])+' 숲"><defs><linearGradient id="groundFill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+(theme==='snow'?'#F2F6F7':'#E5F0DA')+'"/><stop offset=".58" stop-color="'+ground+'"/><stop offset="1" stop-color="'+(theme==='snow'?'#D7E3E6':'#D0E1C2')+'"/></linearGradient><clipPath id="groundClip"><path d="'+groundPath+'"/></clipPath></defs><rect width="720" height="540" fill="transparent"/>'+(theme==='snow'?'<path d="M55 224 177 58 275 191 368 31 541 221 598 99 720 247" fill="#c4d4db"/><path d="m135 115 42-57 40 54-29-12-13 17-12-17zM317 99 51-68 55 73-39-18-19 22-17-23z" fill="#f8fbfc"/>':'')+'<g id="forest-world"><path d="'+groundPath+'" fill="url(#groundFill)"/><g clip-path="url(#groundClip)">'+patches+decorations+'</g><path d="'+groundPath+'" fill="none" stroke="#bdd0b1" stroke-width="1.5" opacity=".46"/><path d="'+leftSide+'" fill="#938874" opacity=".98"/><path d="'+rightSide+'" fill="#ab9f8a" opacity=".98"/>'+trees+visitor+'</g></svg>';
+ return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 540" role="group" aria-label="'+n+'그루의 '+({basic:'기본',snow:'설산'}[theme])+' 숲"><defs><filter id="forestTreeEdge" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB"><feMorphology in="SourceAlpha" operator="dilate" radius=".9" result="edge"/><feFlood flood-color="#F1F4E9" flood-opacity=".8"/><feComposite in2="edge" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><linearGradient id="groundFill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+(theme==='snow'?'#F2F6F7':'#E5F0DA')+'"/><stop offset=".58" stop-color="'+ground+'"/><stop offset="1" stop-color="'+(theme==='snow'?'#D7E3E6':'#D0E1C2')+'"/></linearGradient><clipPath id="groundClip"><path d="'+groundPath+'"/></clipPath></defs><rect width="720" height="540" fill="transparent"/>'+(theme==='snow'?'<path d="M55 224 177 58 275 191 368 31 541 221 598 99 720 247" fill="#c4d4db"/><path d="m135 115 42-57 40 54-29-12-13 17-12-17zM317 99 51-68 55 73-39-18-19 22-17-23z" fill="#f8fbfc"/>':'')+'<g id="forest-world"><path d="'+groundPath+'" fill="url(#groundFill)"/><g clip-path="url(#groundClip)">'+patches+decorations+'</g><path d="'+groundPath+'" fill="none" stroke="#bdd0b1" stroke-width="1.5" opacity=".46"/><path d="'+leftSide+'" fill="#938874" opacity=".98"/><path d="'+rightSide+'" fill="#ab9f8a" opacity=".98"/>'+trees+visitor+'</g></svg>';
 }
 
 
@@ -1504,6 +1510,7 @@ function cloudSetupModal(message=''){
 const KEY='songrim.prototype.v3';
 let forestEditMode=false,forestVisibilityObserver=null;
 const typeName={book:'책',album:'음반',movie:'영화'},statusName={all:'전체',saved:'아직 안 본 것',active:'경험 중',done:'완료'};
+let pendingForestArrival=null;
 let state=Model.empty(),view='today',detailId=null,detailOrigin='scrap',picking=false,year=String(new Date().getFullYear()),month=Model.today().slice(0,7),modal=null,zoomState={scale:1,x:0,y:0},storageOK=true,toastTimer,undoAction=null,shareBlob=null,shareURL=null,photoFiles=[],ocrGeneration=0,ocrBusy=false,candidates=[],authMode=false,candidatePreview=null,candidatePreviewReturn=null;
 const $=id=>document.getElementById(id);
 function load(){
@@ -2650,6 +2657,8 @@ function editMemo(id,logId){
 function setupForest(){
  const vp=$('forestViewport'),world=vp?.querySelector('#forest-world');if(!vp||!world)return;
  const pointers=new Map();let prev=null,suppressClick=false,sel=null;
+ if(Model.completed(state,year).length<=5)zoomState={scale:1.65,x:0,y:0};
+
  const SVG_NS='http://www.w3.org/2000/svg',TYPE_LABEL={book:'책',album:'음반',movie:'영화'},TAP_RADIUS=24;
  const tip=document.createElement('button');tip.type='button';tip.className='forest-tree-tooltip';tip.setAttribute('aria-hidden','true');tip.tabIndex=-1;vp.appendChild(tip);
 
@@ -2720,10 +2729,10 @@ function setupForest(){
  vp.addEventListener('pointerdown',e=>{
   if(tip.contains(e.target))return;
   const direct=e.target.closest?.('[data-tree]');
-  if(direct&&!forestEditMode){e.preventDefault(); try{direct.blur?.()}catch{}}
-  if(pointers.size>=1)hideTip();
+  if(direct&&!forestEditMode&&e.pointerType==='mouse'){e.preventDefault(); try{direct.blur?.()}catch{}}
+  if(pointers.size>=1){hideTip();pointers.forEach(p=>p.moved=true)}
   const tree=pickTree(e);
-  pointers.set(e.pointerId,{x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,moved:false,tree,treeId:tree?.getAttribute('data-tree')||''});
+  pointers.set(e.pointerId,{x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,moved:pointers.size>0,tree,treeId:tree?.getAttribute('data-tree')||''});
   prev=null;
  });
  vp.addEventListener('pointermove',e=>{
@@ -2733,11 +2742,12 @@ function setupForest(){
   }
   if(!pointers.has(e.pointerId))return;
   const before=pointers.get(e.pointerId),moved=before.moved||Math.hypot(e.clientX-before.startX,e.clientY-before.startY)>7;
-  if(moved&&!before.moved){hideTip();try{vp.setPointerCapture(e.pointerId)}catch{}}
+  if(moved&&!before.moved){hideTip();if(e.pointerType==='mouse'){try{vp.setPointerCapture(e.pointerId)}catch{}}}
   pointers.set(e.pointerId,{...before,x:e.clientX,y:e.clientY,moved});
+  if(e.pointerType!=='mouse')return;
   const pts=[...pointers.values()];
   if(pts.length>=2){const d=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);if(prev)zoomState.scale=Math.max(1,Math.min(3.5,zoomState.scale*d/prev));prev=d}
-  else if(zoomState.scale>1&&moved){zoomState.x+=(e.clientX-before.x)*720/vp.clientWidth;zoomState.y+=(e.clientY-before.y)*540/vp.clientHeight}
+  else if(zoomState.scale>1&&moved){const unit=Math.min(vp.clientWidth/720,vp.clientHeight/540);zoomState.x+=(e.clientX-before.x)/unit;zoomState.y+=(e.clientY-before.y)/unit}
   apply();
  });
  const up=e=>{
@@ -2757,6 +2767,7 @@ function setupForest(){
   if(e.key==='Escape'&&sel){e.preventDefault();hideTip();vp.focus({preventScroll:true});return}
   if(!['+','=','-','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','0'].includes(e.key))return;e.preventDefault();hideTip();if(e.key==='+'||e.key==='=')zoomState.scale=Math.min(3.5,zoomState.scale+.25);if(e.key==='-')zoomState.scale=Math.max(1,zoomState.scale-.25);if(e.key==='0')zoomState={scale:1,x:0,y:0};if(e.key==='ArrowLeft')zoomState.x+=25;if(e.key==='ArrowRight')zoomState.x-=25;if(e.key==='ArrowUp')zoomState.y+=25;if(e.key==='ArrowDown')zoomState.y-=25;apply()});
  apply();
+ if(pendingForestArrival){const arrived=[...vp.querySelectorAll('[data-tree]')].find(g=>g.dataset.tree===pendingForestArrival);if(arrived){const pos=arrived.transform.baseVal.getItem(0).matrix;zoomState.scale=Math.max(zoomState.scale,1.65);zoomState.x=(360-pos.e)*zoomState.scale;zoomState.y=(290-pos.f)*zoomState.scale;apply();showTip(arrived,'pin');arrived.querySelector('[filter]')?.classList.add('forest-arrival');pendingForestArrival=null}}
  clearTimeout(window.__songrimVisitorTimer);const visitor=vp.querySelector('[data-visitor]');if(visitor){const id=visitor.dataset.visitor;if(id&&!collectionState().visitorsSeen.includes(id)){window.__songrimVisitorTimer=setTimeout(()=>{if(view!=='forest'||!document.body.contains(visitor))return;collectionState().visitorsSeen.push(id);persist();const found=FOREST_VISITORS.find(v=>v.id===id);if(found)toast('새로운 방문객 · '+found.name+'를 만났어요.')},2600)}}
  if('IntersectionObserver'in window){forestVisibilityObserver=new IntersectionObserver(es=>vp.classList.toggle('paused',!es[0].isIntersecting));forestVisibilityObserver.observe(vp)}
 }
@@ -3346,6 +3357,8 @@ document.addEventListener('click',async e=>{
   if(scrapFlowActive&&modal!=='scrap-composer'&&['link','photo','info','review'].includes(modal)){openScrapComposer(scrapComposerState.type,null,false);return}
   closeModal();return
  }
+ if(a==='completionForest'){const c=get(b.dataset.id);if(c)year=forestRecordYear(c);zoomState={scale:1,x:0,y:0};go('forest');return}
+ if(a==='completionNext'){go('today');return}
  if(a==='confirm'){const fn=window.pendingConfirm;window.pendingConfirm=null;closeModal();fn?.();return}
  if(a==='toastUndo'){const fn=undoAction;undoAction=null;$('toast').innerHTML='';fn?.();return}
  if(a==='add'){addMenu();return}
@@ -3622,13 +3635,13 @@ document.addEventListener('submit',async e=>{
   const returnView=view,returnScroll=window.scrollY;
   c.rating=validRating($('ratingValue').value);c.review=$('reviewMemo').value.trim();
   const advance=f.dataset.advance==='yes';
-  if(advance&&!c.completed){Model.complete(state,c.id,now());assignAutoSpecies(c,true)}
+  if(advance&&!c.completed){Model.complete(state,c.id,now());assignAutoSpecies(c,true);pendingForestArrival=c.id}
   if(advance){
    const next=state.items.filter(item=>!item.completed).sort((a,b)=>b.saves.length-a.saves.length||(b.saves.at(-1)?.at||0)-(a.saves.at(-1)?.at||0))[0];
    state.selected=next?.id||null;picking=false;sessionStorageSafe('candidate','0');
   }
   closeModal();commit();
-  if(advance)requestAnimationFrame(()=>window.scrollTo(0,returnScroll));
+  if(advance){showModal('나무가 심어졌어요','<div class="center completion-tree">'+growth(3,c)+'<p>'+esc(c.title)+'</p></div>'+button('내 숲 보기','completionForest','primary',attr(c.id))+button('다음 선택','completionNext','textbtn'),'completion-celebration');return}
   toast(advance?(returnView==='today'&&state.selected?'나무가 심어졌어요. 다음 콘텐츠를 준비했어요.':state.selected?'나무가 심어졌어요.':'나무가 심어졌어요. 모아둔 콘텐츠를 모두 경험했어요.'):'평점과 감상을 저장했어요.');
  }
  
