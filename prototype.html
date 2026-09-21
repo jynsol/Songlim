@@ -1,4 +1,4 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#ffffff"><title>송림 · 작동 프로토타입 · BOOK/ALBUM/MOVIE</title><style>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#ffffff"><title>송림</title><style>
 :root{--ink:#20262c;--muted:#767d83;--line:#e9ecee;--soft:#f8f9fa;--blue:#3F8554;--grad:linear-gradient(115deg,#3F8554,#4B8C58)}
 *{box-sizing:border-box}body{margin:0;font:15px/1.65 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;word-break:keep-all}button,input,select,textarea{font:inherit}button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button:disabled{opacity:.4;cursor:default}button{border:0;background:none;color:inherit;transition:transform .1s ease,filter .1s ease,box-shadow .1s ease}a{text-decoration:none}button:focus-visible,a:focus-visible{outline:2px solid var(--blue);outline-offset:3px}input,select,textarea{border:1px solid #dde2e5;border-radius:8px;padding:11px 12px;max-width:100%;width:100%;background:white;color:var(--ink)}input[type=checkbox],input[type=radio]{width:20px;height:20px}textarea{resize:vertical;min-height:90px}label{display:block;font-size:13px;margin:15px 0 6px}h1,h2,h3,p{margin:0}h1{font-size:25px;letter-spacing:-.7px;line-height:1.4}h2{font-size:21px;letter-spacing:-.6px}h3{font-size:16px}small,.muted{color:var(--muted);font-size:12px}.app{max-width:430px;margin:0 auto;background:#fff;min-height:100dvh;position:relative}.head{height:68px;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;background:#ffffffed;position:sticky;top:0;z-index:4;border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}.head h1{font-size:18px}.brand{font-weight:750;font-size:20px;display:flex;align-items:center;gap:7px}.brand svg{color:#3F8554}.iconbtn{min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:8px}.row{display:flex;align-items:center;gap:10px}.between{justify-content:space-between}.grow{flex:1;min-width:0}.page{padding:24px 20px 116px}.page>section{margin-bottom:28px}.primary,.secondary{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;padding:12px 16px;border-radius:9px;font-weight:650;font-size:14px}.primary{background:var(--blue);color:#fff}.primary.grad{background:var(--grad)}.secondary{background:white;border:1px solid #dfe4e7;color:#444}.textbtn{min-height:44px;padding:10px 4px;color:#626b73}.textbtn.danger,.menu-row.danger{color:#a63e3e}.stack{display:grid;gap:10px}.center{text-align:center}.space{height:22px}.rule{border-top:1px solid var(--line);margin:22px 0}.card{padding:18px;border:1px solid var(--line);border-radius:14px;background:#fff}.growth{display:block;width:100%;height:210px;margin:12px auto 10px}.growth-label{font-size:12px;color:var(--muted);margin-bottom:16px}.title{font-size:23px;font-weight:700;line-height:1.45;margin:4px 0}.creator{font-size:13px;color:var(--muted);margin-top:5px}
 .more{position:relative}.more>summary{list-style:none;min-width:44px;min-height:44px;display:grid;place-items:center;cursor:pointer}.more>summary::-webkit-details-marker{display:none}.more-menu{position:absolute;right:0;top:44px;width:190px;padding:8px;background:white;box-shadow:0 8px 35px #20304018;border:1px solid var(--line);border-radius:10px;z-index:8}.more-menu button{display:block;min-height:44px;width:100%;text-align:left;padding:10px;font-size:13px;border-bottom:1px solid var(--line)}.more-menu button:last-child{border-bottom:0}.tabs{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,430px);display:flex;padding:10px 10px max(12px,env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--line);z-index:5;box-shadow:0 -1px 0 #fff}.tabs button{flex:1;display:grid;justify-items:center;gap:4px;min-height:46px;color:#868e92;font-size:11px}.tabs button.active{color:#3F8554;font-weight:700}.tabs svg{width:21px;height:21px}.chips{display:flex;gap:7px;overflow-x:auto;padding:12px 0;scrollbar-width:none}.chip{white-space:nowrap;min-height:40px;padding:7px 13px;border:1px solid #e5e8eb;border-radius:22px;color:var(--muted);font-size:12px}.content-list{display:grid;gap:10px}.content-row{width:100%;display:flex;align-items:center;text-align:left;border:1px solid var(--line);border-radius:12px;padding:15px;background:#fff;min-width:0}.content-row .title{font-size:16px;margin:5px 0}.cover{width:58px;height:80px;object-fit:cover;flex-shrink:0;border-radius:4px;display:grid;place-items:center;background:#f2f3f4;color:#79838a;font-size:21px;border:1px solid #e5e7e9}.cover.album{height:58px}.badge{font-size:11px;color:#6b747a}.summary{font-size:12px;color:var(--muted);margin:6px 0 16px}.fab{position:fixed;bottom:calc(80px + max(12px,env(safe-area-inset-bottom)));right:max(calc((100vw - 430px)/2 + 20px),20px);padding:12px 17px;background:var(--grad);color:white;border-radius:26px;font-size:13px;font-weight:650;z-index:3}.list-footer{height:78px}.empty{padding:48px 10px;text-align:center}.empty p{font-size:13px;color:var(--muted);margin:10px 0 24px}.note{padding:12px 14px;background:#f7f8f9;border-radius:8px;font-size:12px;color:#687077}.history{padding:14px 0;border-bottom:1px solid var(--line);font-size:13px}.history p{white-space:pre-wrap;overflow-wrap:anywhere}.collapse{margin:12px 0;font-size:13px}.collapse>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;color:#69747b}.forest-viewport{height:390px;overflow:hidden;border-radius:16px;touch-action:pan-y;position:relative}.forest-viewport svg{width:100%;height:100%;display:block;user-select:none}.area{margin-top:20px}.area h2{font-size:21px;margin-bottom:7px}.area p{font-size:12px;color:#777}.leaf{animation:sway 5s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom}@keyframes sway{to{rotate:2deg}}
@@ -493,6 +493,184 @@ button,summary{touch-action:manipulation}
 @media(max-height:700px){.taste-page .onboard-card{min-height:230px}.taste-cover-stage{height:145px}.taste-page .onboard-card .cover{width:104px;height:144px}.taste-page .onboard-card .cover.album{height:104px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
+
+
+<style id="songrim-app-v48">
+/* App foundation */
+:root{--ink:#252c2a;--muted:#6f7a80;--line:#e8edef;--soft:#f5f8fa;--blue:#3b7b52;--brand-green:#3b7b52;--brand-green-light:#3b7b52;--brand-leaf:#edf5e8;--brand-sky:#e7f2fa;--brand-progress-ink:#3e657d;--grad:#3b7b52;--page-title-size:24px;--section-title-size:17px;--control-radius:12px;--section-gap:20px}
+html,body{background:#f2f6f7;color:var(--ink)}
+body{font:14px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;letter-spacing:-.15px}
+.app{width:100%;max-width:430px;background:#fff}
+.head{height:56px;padding:6px 20px;background:#fff;border-bottom:1px solid var(--line);backdrop-filter:none}
+.brand{font-size:19px;font-weight:750;gap:6px;letter-spacing:-.7px}
+.head .row{gap:4px;flex-wrap:nowrap}.head .iconbtn{gap:4px;color:var(--ink)}
+.head .tiny{font-size:12px}.back-title{font-size:16px;font-weight:650}.head .row>.iconbtn:first-child{margin-left:-10px}
+.page{padding:22px 20px calc(100px + env(safe-area-inset-bottom))}.page>section{margin-bottom:30px}
+.page-heading{min-height:40px;gap:12px}.page-heading .page-title,h1{font-size:24px;font-weight:700;letter-spacing:-.65px;line-height:1.4}
+h2,.section-title{font-size:17px;letter-spacing:-.3px;line-height:1.45}h3{font-size:15px;font-weight:650}
+.creator,.summary,.page-description{font-size:13px;line-height:1.6;color:var(--muted)}
+.page-description{margin-top:6px}.space{height:20px}.rule{margin:24px 0;border-color:var(--line)}
+.tabs{padding:7px 12px max(7px,env(safe-area-inset-bottom));border-top:1px solid var(--line);box-shadow:none;background:#fff}
+.tabs button{min-height:50px;gap:4px;padding:4px 0;color:#849198;font-size:11px;font-weight:500;line-height:1.3}
+.tabs button.active{color:var(--blue);font-weight:700}
+.iconbtn{min-width:44px;min-height:44px;border-radius:10px}.textbtn{font-size:13px;min-height:44px;color:#68716b}
+.primary,.primary.grad,.entry-page .primary,.fab{background:var(--blue);box-shadow:none}
+.primary,.secondary{min-height:50px;padding:12px 16px;font-size:14px;font-weight:650;border-radius:12px;gap:7px}
+.secondary{border:1px solid #e2e7e1;background:#fff;color:var(--ink)}.primary:disabled,.secondary:disabled{opacity:.4}
+.fab{min-height:48px;padding:13px 19px;border-radius:14px;bottom:calc(80px + env(safe-area-inset-bottom));font-size:14px}
+button:not(:disabled):active{filter:brightness(.96)}button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+input,select,textarea{border:1px solid #dfe4de;border-radius:10px;padding:12px;color:var(--ink);background:#fff;min-height:48px;line-height:1.45}
+input::placeholder,textarea::placeholder{color:#9aa09c}input:focus,select:focus,textarea:focus{outline:none;border-color:#6c957c;box-shadow:0 0 0 2px #35755310}
+input[type=checkbox],input[type=radio]{min-height:20px;accent-color:var(--blue)}label{margin:18px 0 7px;font-size:13px;font-weight:550}
+textarea{min-height:112px}.card{padding:18px;border:1px solid var(--line);border-radius:12px;box-shadow:none}
+.note,.ocr-review-note{background:var(--soft);border-radius:10px;color:#68716b;font-size:12px;line-height:1.7}
+
+/* Library and search */
+.scrap-fixed-search{top:56px;padding:0 0 10px;box-shadow:none;margin:0;background:#fff}
+.scrap-fixed-search input[type=search],.scrap-search-block input[type=search]{min-height:48px;border:1px solid transparent;background:#f1f6f9;border-radius:11px;padding:12px 14px}
+.scrap-fixed-search input[type=search]:focus,.scrap-search-block input[type=search]:focus{border-color:#a7bfae;box-shadow:none}
+.type-tabs{margin-top:8px;border-bottom:1px solid var(--line)}.type-tab{min-height:46px;font-size:14px;color:var(--muted)}
+.type-tab.active{color:var(--ink);font-weight:700}.type-tab.active:after{left:16px;right:16px;height:2px;border-radius:0;background:var(--ink)}
+.status-filter{gap:6px;padding:14px 0 3px}.chip,.status-filter .chip{min-height:44px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--muted);font-size:12px}
+.chip.active,.status-filter .chip.active{border-color:#dbe8d5;background:var(--brand-leaf);color:#386449;font-weight:600}
+.status-filter .chip.active[data-status="active"]{border-color:#cee2ef;background:var(--brand-sky);color:var(--brand-progress-ink)}
+.status-filter .chip.active[data-status="done"]{border-color:#dbe8d5;background:var(--brand-leaf);color:#386449}
+.scrap-list-tools{min-height:48px}.sort-button{font-size:12px;color:var(--muted);min-height:44px}
+.content-list{gap:0}.content-row{min-height:106px;padding:16px 0;border:0;border-bottom:1px solid var(--line);border-radius:0;gap:14px;background:#fff;box-shadow:none}
+.content-row:last-child{border-bottom:0}.content-row .title{font-size:16px;font-weight:650;line-height:1.5;margin:4px 0;letter-spacing:-.4px}
+.content-row .creator{font-size:12px;margin-top:3px}.content-row .badge{font-size:11px;color:#879089;line-height:1.5}
+.content-meta-footer{display:flex;align-items:center;gap:8px;margin-top:7px;font-size:11px;color:var(--muted)}.content-meta-footer .status-label{color:var(--blue)}
+.content-row .row.between{gap:4px 8px}.cover{width:52px;height:72px;border:1px solid #00000008;border-radius:4px;background:#f0f5f7;color:#788d98;box-shadow:none}.cover.album{height:52px}
+.list-footer{height:56px}.empty{padding:54px 12px}.empty h2,.empty h3{font-size:18px;line-height:1.5}.empty p{font-size:13px;line-height:1.7;margin:8px 0 22px}
+.more-menu,.inline-picker-panel{padding:5px;border:1px solid var(--line);border-radius:12px;box-shadow:0 5px 20px #2429260d}
+.more-menu button,.inline-picker-panel button{min-height:46px;padding:11px 12px;font-size:13px}.inline-picker-panel button[aria-pressed=true]{color:var(--blue);background:#edf4ee}
+
+/* Today and content detail */
+.today-work{margin:20px 0 0;padding:0 0 18px;gap:14px;border-bottom:1px solid var(--line)}
+.today-work .cover{width:46px;height:64px}.today-work .cover.album{height:46px}.today-work .title{font-size:20px;line-height:1.4;font-weight:700;letter-spacing:-.5px}
+.today-work .creator{font-size:12px;margin-top:4px}.today-work .bookpage{font-size:11px;margin-top:4px;color:var(--muted)}
+.record-actions{gap:8px}.record-actions>.textbtn{border-color:var(--line);border-radius:10px}.record-actions>.completion-action{border:0;border-radius:0;min-height:44px;color:var(--muted);font-size:12px}
+.today-empty h2{font-size:20px}.today-history{margin-top:26px;padding-top:22px;border-color:var(--line)}.today-history h3{font-size:15px}
+.past-record{padding:16px 0;border-color:var(--line)}.past-memo{font-size:13px;line-height:1.7;margin-top:6px}
+.recent-completed{padding-top:24px;border-color:var(--line)}.recent-completed h2{font-size:17px}
+.detail-title-row{align-items:flex-start;gap:12px}.detail-title-row h1{font-size:24px;line-height:1.4;letter-spacing:-.6px}
+.detail-cover-row{gap:20px;padding:18px 0;margin:8px 0}.detail-cover-row .cover{width:92px;height:128px}.detail-cover-row .cover.album{width:108px;height:108px}
+.detail-metrics{padding:16px;background:var(--soft);border-radius:12px;margin:16px 0;gap:16px}.detail-metrics strong{font-size:14px;font-weight:650}
+.detail-intro{font-size:14px;line-height:1.85;margin-top:10px;color:#4e5751}.original-title{font-size:13px;color:var(--muted)}
+.review-copy{margin-top:20px;padding:16px;background:var(--soft);border-radius:12px;font-size:14px;line-height:1.8}.history{padding:16px 0;font-size:13px;line-height:1.8;border-color:var(--line)}
+.collapse>summary{font-size:13px;color:var(--muted)}.rating button{color:#d8dcd6}.rating .on{color:var(--brand-star)}
+
+/* Calendar and account */
+.month-head{margin:0 0 20px;gap:12px}.month-head>.textbtn{font-size:18px;font-weight:650;color:var(--ink)}
+.cal{gap:4px 2px}.cal .weekday{padding:8px 0 12px;font-size:11px;color:#939b95}.day{min-height:78px;border-radius:8px;padding:6px 0;font-size:12px;color:#4c564f}
+.day.today>span:first-child{width:24px;height:24px;background:var(--blue);line-height:24px}.day.completed{background:#edf5e8}.day .plus{color:var(--blue)}
+.page[data-view="calendar"] .summary{font-size:12px;line-height:1.7;margin:12px 0 20px}.calendar-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:20px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:24px 0}
+.calendar-stats strong{display:block;font-size:20px;font-weight:650}.calendar-stats span{display:block;font-size:12px;color:var(--muted);margin-top:3px}
+.profile-summary{display:flex;align-items:center;gap:14px;padding:22px 0}.profile-avatar{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;background:#edf5e8;color:var(--blue);font-size:20px;font-weight:650;flex-shrink:0}
+.profile-summary h2{font-size:20px}.profile-summary p{font-size:12px;color:var(--muted);margin-top:3px}.profile-summary>.iconbtn{margin-left:auto}
+.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;padding:20px 0;border-block:1px solid var(--line);text-align:center;margin:0 0 24px}.profile-stats>div+div{border-left:1px solid var(--line)}
+.profile-stats strong{display:block;font-size:21px;font-weight:650;line-height:1.4}.profile-stats span,.profile-stats small{display:block;font-size:12px;color:var(--muted);margin-top:4px}
+.settings-group{margin-top:28px}.settings-group>h3{font-size:12px;font-weight:500;color:var(--muted);margin-bottom:6px}
+.menu-row{min-height:56px;padding:15px 0;font-size:14px;border-color:var(--line);line-height:1.5}.menu-row>span:not(.muted){color:#a1a8a2;font-size:18px}.menu-row.danger,.textbtn.danger{color:#ac514c}
+.page[data-view="my"] .menu-row:last-child{border-bottom:0}
+
+/* Sheets and onboarding */
+.sheet-back{background:#1c2d3760}.sheet{width:min(100%,430px);border-radius:20px 20px 0 0;padding:20px 22px max(26px,env(safe-area-inset-bottom));box-shadow:none}
+.sheet:before{content:"";display:block;width:32px;height:4px;margin:-8px auto 16px;border-radius:2px;background:#dce1db}.sheet-head{margin-bottom:16px;gap:12px}.sheet-head h2{font-size:18px;font-weight:700}
+.sheet .primary{margin-top:20px}.sheet .share-actions .primary{margin-top:0}.toast{background:#303b33;border-radius:12px;box-shadow:none;font-size:13px;bottom:110px;padding:14px 16px}.toast button{color:#cce4d2}
+.scrap-composer-sheet:before{display:none}.scrap-composer-sheet{border-radius:0;padding:0}.scrap-composer-sheet .sheet-head{min-height:64px;padding:10px 20px;margin:0}.scrap-composer-sheet .sheet-head h2{font-size:19px}
+.composer-type-tabs{padding:0 20px 12px}.composer-type-tab{min-height:46px;font-size:14px}.composer-type-tab.active:after{background:var(--ink);left:20%;right:20%;bottom:2px}
+.scrap-shortcuts{gap:22px;padding:6px 20px 10px}.scrap-shortcuts .textbtn{font-size:12px;min-height:44px}.scrap-results{padding:0 20px 24px}.scrap-composer-body .content-row{padding:16px 0}
+.scrap-composer-body .content-row>.textbtn{min-width:52px;min-height:44px;color:var(--blue)}.scrap-session-footer{box-shadow:none;border-color:var(--line);padding:12px 20px max(12px,env(safe-area-inset-bottom))}
+.ocr-match{border-color:var(--line);border-radius:10px;padding:12px}.theme-grid button{border-radius:12px;border-color:var(--line)}.theme-grid button.active{border-color:#bed3c1;background:#eff5ef;color:var(--blue)}
+.entry-page{padding:28px 24px 36px;min-height:calc(100dvh - 56px)}.entry-hero{padding:18px 0 28px}.entry-hero h1{font-size:28px;line-height:1.4;letter-spacing:-.9px}.entry-kicker{letter-spacing:0;font-size:13px;margin-bottom:12px;color:var(--blue)}
+.entry-note{font-size:12px;line-height:1.7;color:var(--muted)}.entry-steps{gap:5px;margin:4px 0 22px}.entry-steps span{height:3px}.entry-steps .on{background:var(--blue)}
+.onboard-card{border-radius:12px;background:var(--soft);padding:24px 18px}.flow-account{padding:16px;border-color:var(--line);border-radius:12px}.flow-account strong{font-size:14px}.flow-account small{margin-top:5px}
+.social-start{border-radius:12px;min-height:50px;font-weight:600}.social-start-list{gap:10px}.entry-divider{margin:20px 0}
+.taste-type-option,.taste-type-option[data-type="book"],.taste-type-option[data-type="album"],.taste-type-option[data-type="movie"]{min-height:54px;background:#fff;border:1px solid #e2e7e1;border-radius:12px;color:var(--ink);font-size:14px}
+#page.taste-page{min-height:calc(100dvh - 56px);padding:22px 24px 0}.taste-page .taste-heading h1{font-size:24px;max-width:100%;line-height:1.4}.taste-page .onboard-card .cover{box-shadow:none}.taste-actions{padding-top:14px;gap:8px}.taste-actions .textbtn{min-height:44px}
+@media(min-width:700px){.app{border-inline:1px solid #e4e8e1}.sheet{border-radius:18px}.scrap-composer-sheet{border-radius:18px}}
+@media(max-width:360px){.page,.head{padding-inline:16px}.sheet{padding-inline:18px}.content-row{gap:11px}.content-row .title{font-size:15px}.profile-stats strong{font-size:19px}}
+
+.forest-heading{min-height:44px;align-items:center;margin-bottom:16px}
+.forest-heading .page-title{font-size:24px;letter-spacing:-.7px;color:var(--ink)}
+.forest-heading .inline-picker>.textbtn{font-size:14px;font-weight:600;color:var(--ink);padding:8px 0 8px 12px}
+.forest-heading .year-picker{left:auto;right:0}
+.forest-garden{background:linear-gradient(160deg,#edf6fa 0%,#f1f7f4 56%,#f3f8ed 100%);border:0;border-radius:12px;box-shadow:none;overflow:hidden}
+.forest-garden.is-snow{background:#edf5fa}
+.forest-tools{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:52px;padding:6px 12px 0 16px}
+.forest-stage{font-size:13px;font-weight:600;color:#667366}
+.forest-tool-actions{display:flex;align-items:center;gap:8px}
+.forest-season-button,.forest-edit-control{display:inline-flex;align-items:center;justify-content:center;gap:5px;width:auto!important;min-height:44px;padding:8px 4px;border:0;border-radius:6px;background:transparent;color:#536653;font-size:12px;font-weight:500;white-space:nowrap}
+.forest-tool-actions .forest-edit-control{color:var(--blue);font-weight:650}
+.forest-edit-control[aria-pressed=true]{background:#e3ede5;padding-inline:10px}
+.forest-garden .forest-scene,.forest-garden.is-snow .forest-scene{background:transparent}
+#page .forest-garden .forest-viewport{height:264px;min-height:0;aspect-ratio:auto;border-radius:0;background:transparent;isolation:isolate}
+.forest-edit-hint{margin:0;padding:0 12px 14px;font-size:12px;text-align:center;color:#536653}
+.forest-overview{padding:20px 0 22px}
+.forest-total{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.forest-total h2{font-size:28px;line-height:1.3;font-weight:750;letter-spacing:-.8px;color:var(--ink);font-variant-numeric:tabular-nums}
+.forest-total h2 span{font-size:15px;font-weight:500;letter-spacing:0;margin-left:4px;color:var(--ink)}
+.forest-area{display:flex;align-items:baseline;gap:6px;text-align:right;color:var(--muted);font-size:12px}
+.forest-area strong{font-size:14px;color:#515c54;font-weight:500}
+.forest-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:14px 0 0;padding:12px 0;border:0;background:transparent}
+.forest-metric{display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;color:var(--muted)}
+.forest-metric+.forest-metric{border-left:1px solid var(--line)}
+.forest-metric strong{margin-left:2px;font-size:15px;font-weight:650;color:var(--ink)}
+
+.forest-next{margin-top:10px}
+
+.forest-next p{font-size:12px;line-height:1.4;color:var(--muted);margin:0}
+.forest-next strong{color:#536653;font-weight:500}
+.forest-records{border-top:1px solid var(--line);padding-top:22px}
+.forest-insight-heading{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px;gap:8px}
+.forest-insight-heading h2{font-size:17px;letter-spacing:-.4px;color:var(--ink);font-weight:700}
+.forest-insight-heading .textbtn{font-size:12px;min-height:36px;padding:4px 0;color:var(--muted)}
+.forest-page-section .forest-summary{display:grid;gap:0;border:0;border-radius:0;margin:0;padding:0;background:transparent}
+.forest-page-section .forest-summary>div{display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:18px;min-height:44px;margin:0;padding:8px 0;border:0;border-radius:0;background:transparent}
+.forest-page-section .forest-summary small{font-size:13px;color:var(--muted);line-height:1.5}
+.forest-page-section .forest-summary h3{font-size:14px;text-align:right;font-weight:600;color:var(--ink);letter-spacing:-.2px;line-height:1.5;overflow-wrap:anywhere}
+.forest-summary .forest-summary-value{display:flex;justify-content:flex-end;align-items:center;gap:8px;min-width:0;text-align:right}
+.forest-summary .forest-summary-count{white-space:nowrap;font-size:11px!important}
+.forest-summary .average-score{display:inline-flex;align-items:center;gap:6px;font-size:16px;font-weight:650}
+.forest-summary .average-score span{font-size:16px;color:#d6a43b}
+.forest-summary .average-score small{font-size:12px;font-weight:400}
+.forest-page-section .collection-entry{display:flex;align-items:center;gap:12px;width:100%;min-height:88px;margin:20px 0 0;padding:16px 0;border:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:0;background:#fff;text-align:left}
+.collection-entry .collection-cover{display:block;width:48px;height:48px;background:transparent;border-radius:0;flex-shrink:0;overflow:hidden}
+.collection-cover svg{width:100%;height:100%;padding:2px}
+.collection-entry .collection-entry-copy{display:block;flex:1;min-width:0}
+.collection-entry-copy strong{display:block;font-size:14px;font-weight:650;color:var(--ink)}
+.collection-entry-copy small{display:block;font-size:12px;color:var(--muted);margin-top:3px}
+.collection-entry-arrow{font-size:21px!important;color:#a0a7a1!important}
+.forest-actions{display:flex;gap:10px;margin-top:18px}
+.forest-actions button{min-height:46px;gap:7px;font-size:13px}
+.forest-actions svg{width:16px;height:16px}
+.forest-empty{padding:4px 0 16px;text-align:center;color:var(--muted);font-size:12px}
+.forest-limit-note{margin:8px 0;font-size:11px;color:var(--muted)}
+.collection-card,.tree-picker-option{border-radius:12px;background:#fff;border-color:var(--line);box-shadow:none}
+.collection-card.selected,.tree-picker-option.current{background:#f3f7f2;border-color:#8fae93;box-shadow:none}
+.collection-card strong,.tree-picker-option strong{color:var(--ink)}
+.collection-card small,.tree-picker-option small{font-size:12px;color:var(--muted)}
+.collection-card .tree-toggle{border-radius:7px;min-height:40px;background:#f0f4ef;color:var(--blue)}
+.tree-picker-head svg{background:#f4f6f2;border-radius:10px}
+@media(max-width:360px){#page .forest-garden .forest-viewport{height:232px}.forest-tool-actions{gap:5px}.forest-total h2{font-size:26px}.forest-summary .forest-summary-value{gap:5px}.forest-summary .forest-summary-count{font-size:10px!important}}
+
+
+.profile-summary{width:100%;text-align:left}.profile-summary strong{display:block;font-size:18px;line-height:1.5}.profile-summary small{display:block;margin-top:3px;font-size:12px;color:var(--muted)}
+.profile-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.settings-group>h2{font-size:12px;font-weight:500;color:var(--muted);margin-bottom:6px}
+.content-row-meta{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:8px;font-size:11px;color:var(--muted)}
+.record-status.active{color:var(--brand-progress-ink)}.record-status.done{color:#53715a}.row-rating{color:#847448}
+.fab{display:flex;align-items:center;justify-content:center;gap:6px}.fab svg{width:18px;height:18px}
+.recent-completed>.row>.textbtn{min-height:36px;padding-block:4px;font-size:12px}
+.recent-completed>.stack{gap:0}.recent-completed .content-row{padding-inline:0}
+.entry-page[data-view=welcome]{justify-content:flex-start;padding-top:36px}.entry-page[data-view=welcome] .entry-hero{padding-top:0}.entry-page[data-view=welcome] .entry-hero h1{font-size:25px;letter-spacing:-.8px}
+
+
+.taste-type-option[data-type="book"]{border-color:#dbe8d5;background:#f3f8ef;color:#386449}
+.taste-type-option[data-type="album"]{border-color:#d7e6ee;background:#f0f7fb;color:#3e657d}
+.taste-type-option[data-type="movie"]{border-color:#e3e8ea;background:#f7f9fa;color:#58666c}
+.record-actions>.textbtn:not(.completion-action){background:#f0f7fb;border-color:#dfebf1;color:var(--brand-progress-ink)}
+</style>
 </head><body><div class="app"><div id="storageAlert"></div><header class="head" id="head"></header><main class="page" id="page"></main><nav class="tabs" id="tabs" aria-label="주 메뉴"></nav></div><div id="overlay"></div><div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 /* iOS Safari는 요소에 touch 이벤트 리스너가 연결돼 있어야 :active 상태(눌림 효과)를 인식합니다.
@@ -580,6 +758,8 @@ function inferBookGenre(data){
 }
 function normalizeBookGenre(raw,data){
  const value=cleanGenreValue(raw),merged={...(data||{}),rawGenre:value};
+ const known=BOOK_GENRE_RULES.find(([name])=>name.toLocaleLowerCase()===value.toLocaleLowerCase());
+ if(known)return known[0];
  if(value){const normalized=inferBookGenre({title:'',contents:value,creator:'',publisher:'',rawGenre:value});if(normalized)return normalized;}
  return inferBookGenre(merged);
 }
@@ -693,7 +873,7 @@ function contentMetadata(c){
  let candidates=Array.isArray(c.genreCandidates)?c.genreCandidates:[];
  if(genreSource!=='user'){
   if(c.type==='movie'&&Array.isArray(c.genreIds)&&c.genreIds.length){const info=movieGenreInfo(c.genreIds);genre=info.primary||genre;candidates=info.candidates.length?info.candidates:candidates}
-  else genre=normalizeGenreForType(c.type,genre,{...c,genre:genre||rawGenre});
+  else genre=normalizeGenreForType(c.type,genre||rawGenre,{...c,genre:genre||rawGenre});
  }
  return {genre,rawGenre,genreSource:genreSource||'auto',treeCategory:mappedCategory(c.type,genre).id,genreMappingVersion:3,genreCandidates:candidates,length:Number(c.length)>0?Number(c.length):null,review:String(c.review||'')};
 }
@@ -719,13 +899,45 @@ function detailMetadata(c){
  if(idLine.length)meta.push(idLine.join(' · '));
  return '<div class="detail-metrics compact-meta"><div><div class="content-meta-head"><strong>'+top+'</strong>'+tree+'</div><div class="content-meta-line">'+meta.map(m=>'<div>'+m+'</div>').join('')+'</div></div>'+(c.completed?'<div class="current-tree"><small>현재 나무</small><strong>'+esc(contentSpecies(c)?.name||'나무')+'</strong></div>':'')+'</div>'
 }
-function recentCompleted(){if(!state.items.length)return '';const items=state.items.filter(c=>c.completed).sort((a,b)=>(b.completed==='unknown'?'':b.completed).localeCompare(a.completed==='unknown'?'':a.completed)||(b.completedAt||0)-(a.completedAt||0)||b.id.localeCompare(a.id)).slice(0,2);return '<section class="recent-completed"><div class="row between"><h3>최근 완료</h3><span class="muted">나의 숲에 남은 경험</span></div><div class="space"></div><div class="stack">'+(items.length?items.map(c=>'<button class="content-row" data-action="detail" '+attr(c.id)+'><svg class="recent-tree-thumb" width="70" height="74" viewBox="-57 -82 114 104" aria-hidden="true">'+treeArt(c)+'</svg><div class="grow"><small>'+esc(c.genre||'미분류')+' · '+esc(forestCategoryLabel(c))+' 계열</small><div class="title">'+esc(c.title)+'</div><small>'+(c.completed==='unknown'?'완료일 미상':esc(c.completed))+(c.rating?' · ★ '+c.rating:' · 평점 미등록')+'</small></div><span>›</span></button>').join(''):'<div class="card"><h3>아직 쌓인 나무가 없어요!</h3><p class="creator">콘텐츠를 완료하면 이곳에 남아요.</p></div>')+'</div></section>'}
+function recentCompleted(){
+ const items=state.items.filter(c=>c.completed).sort((a,b)=>(b.completed==='unknown'?'':b.completed).localeCompare(a.completed==='unknown'?'':a.completed)||(b.completedAt||0)-(a.completedAt||0)||b.id.localeCompare(a.id)).slice(0,2);
+ if(!items.length)return '';
+ return '<section class="recent-completed"><div class="row between"><h3>최근 완료</h3>'+button('나의 숲 <span aria-hidden="true">›</span>','tab','textbtn','data-tab="forest"')+'</div><div class="stack">'+items.map(c=>'<button class="content-row" data-action="detail" '+attr(c.id)+'><svg class="recent-tree-thumb" width="70" height="74" viewBox="-57 -82 114 104" aria-hidden="true">'+treeArt(c)+'</svg><div class="grow"><span class="badge">'+typeName[c.type]+'</span><div class="title">'+esc(c.title)+'</div><small>'+(c.completed==='unknown'?'완료일 미상':esc(c.completed.replaceAll('-','.')))+(c.rating?' · ★ '+c.rating:'')+'</small></div><span class="muted" aria-hidden="true">›</span></button>').join('')+'</div></section>';
+}
 function renderToday(){return renderTodayBase()+recentCompleted()}
 function averageStars(value){
  const score=Math.max(0,Math.min(5,Number(value)||0));
  return '<span class="average-stars" role="img" aria-label="5점 만점에 '+score.toFixed(1)+'점">'+Array.from({length:5},(_,i)=>'<span class="average-star" aria-hidden="true"><span class="star-empty">★</span><span class="star-fill" style="width:'+Math.max(0,Math.min(100,(score-i)*100))+'%">★</span></span>').join('')+'</span>';
 }
-function forestSummary(items){const counts=new Map();items.forEach(c=>{const label=String(c.genre||'').trim();if(label)counts.set(label,(counts.get(label)||0)+1)});const top=[...counts].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]))[0],rated=items.filter(c=>validRating(c.rating));return '<div class="card forest-summary"><div><small>가장 많이 경험한 장르</small><h3>'+ (top?esc(top[0]):'아직 기록이 없어요')+'</h3></div><div><small>평균 별점</small><h3>'+(rated.length?averageStars(rated.reduce((n,c)=>n+Number(c.rating),0)/rated.length):'아직 별점이 없어요')+'</h3></div></div>'}
+// Count the selected year's completed works once each, using their saved primary genre.
+// Candidate genres and tree choices describe different things and never add votes.
+function forestGenreLabel(c){
+ const value=cleanGenreValue(c.genre).replace(/\s+/g,' ');if(!value)return '';
+ const key=Model.norm(value),known=(GENRE_POOL[c.type]||[]).find(label=>Model.norm(label)===key);
+ if(known)return known;
+ // Keep a person's custom classification; normalize provider labels without guessing from a title.
+ if(c.genreSource==='user')return value;
+ return cleanGenreValue(normalizeGenreForType(c.type,value,{title:''}))||value;
+}
+function forestGenreStats(items){
+ const completed=items.filter(c=>c.completed),counts=new Map();let classified=0;
+ for(const c of completed){
+  const label=forestGenreLabel(c);if(!label)continue;classified++;
+  const key=Model.norm(label),entry=counts.get(key);
+  if(entry)entry.count++;else counts.set(key,{label,count:1});
+ }
+ const ranked=[...counts.values()].sort((a,b)=>b.count-a.count||a.label.localeCompare(b.label,'ko'));
+ const count=ranked[0]?.count||0,top=ranked.filter(entry=>entry.count===count);
+ return {total:completed.length,classified,unclassified:completed.length-classified,ranked,top,count};
+}
+function forestSummary(items){
+ const genres=forestGenreStats(items),rated=items.filter(c=>c.completed&&validRating(c.rating));
+ const names=genres.top.map(entry=>entry.label),fullName=names.join(' · ');
+ const headline=names.length?names.slice(0,2).join(' · ')+(names.length>2?' 외 '+(names.length-2):''):'—';
+ const countLabel=names.length?(names.length>1?'각 ':'')+genres.count+'개':'';
+ const average=rated.length?(rated.reduce((n,c)=>n+Number(c.rating),0)/rated.length).toFixed(1):null;
+ return '<div class="forest-summary"><div><small>많이 본 장르</small><div class="forest-summary-value"><h3 title="'+esc(fullName)+'">'+esc(headline)+'</h3>'+(countLabel?'<small class="forest-summary-count">'+esc(countLabel)+'</small>':'')+'</div></div><div><small>평균 별점</small><div class="average-score">'+(average?'<span aria-hidden="true">★</span>'+average+'<small>/ 5</small>':'—')+'</div></div></div>';
+}
 function collectionState(){if(!state.collection||typeof state.collection!=='object')state.collection={treeChoices:{},disabledSpeciesIds:[],visitorsSeen:[]};if(!state.collection.treeChoices)state.collection.treeChoices={};if(!Array.isArray(state.collection.disabledSpeciesIds))state.collection.disabledSpeciesIds=[];if(!Array.isArray(state.collection.visitorsSeen))state.collection.visitorsSeen=[];return state.collection}
 function completedAll(){return state.items.filter(c=>c.completed)}
 function categoryExperienceCount(categoryId){return completedAll().filter(c=>category(c).id===categoryId).length}
@@ -756,11 +968,11 @@ function hiddenTreeName(kind,theme=currentCollectionTheme()){return hiddenVisual
 function previewSpeciesArt(speciesId,theme='basic'){return ((theme==='snow'||theme==='winter')?snowTreeArt({id:'preview-'+speciesId,speciesId}):speciesArt(speciesId,'basic'))}
 function hiddenCollectionHTML(){
  const theme=currentCollectionTheme(),unlocked=allRegularTreesUnlocked(),items=hiddenVisuals(theme),limit=hiddenTreeLimit(year),used=hiddenTreeUsed(year);
- return '<section class="hidden-tree-section"><div class="hidden-tree-head"><div><h3>히든 나무</h3><p class="collection-group-subgenres">'+(theme==='snow'?'설산 테마':'기본 숲')+' · 테마 전환 시 같은 히든 슬롯의 모습도 함께 바뀌어요.</p></div><small>'+(unlocked?('배치 '+used+'/'+limit+'그루'):'일반 20종 수집 후 해금')+'</small></div><div class="collection-grid">'+items.map(v=>'<div class="collection-card hidden-tree-card '+(unlocked?'':'locked')+'"><svg viewBox="-57 -82 114 104" aria-hidden="true">'+(unlocked?hiddenTreeArt(v.id,theme):speciesArt('paulownia'))+'</svg><strong>'+(unlocked?esc(v.name):'???')+'</strong><small>'+(unlocked?esc(v.desc):'일반 나무 20종을 모두 발견하면 열려요.')+'</small></div>').join('')+'</div>'+(unlocked?'<p class="hidden-limit-note">완료 나무가 50 · 100 · 150 · 200그루가 될 때 히든 배치 가능 수가 최대 5그루까지 늘어나요.</p>':'')+'</section>';
+ return '<section class="hidden-tree-section"><div class="hidden-tree-head"><div><h3>히든 나무</h3><p class="collection-group-subgenres">'+(theme==='snow'?'설산 테마':'기본 숲')+'</p></div><small>'+(unlocked?('배치 '+used+'/'+limit+'그루'):'일반 20종 수집 후 해금')+'</small></div><div class="collection-grid">'+items.map(v=>'<div class="collection-card hidden-tree-card '+(unlocked?'':'locked')+'"><svg viewBox="-57 -82 114 104" aria-hidden="true">'+(unlocked?hiddenTreeArt(v.id,theme):speciesArt('paulownia'))+'</svg><strong>'+(unlocked?esc(v.name):'???')+'</strong><small>'+(unlocked?esc(v.desc):'일반 나무 20종을 모두 발견하면 열려요.')+'</small></div>').join('')+'</div>'+(unlocked?'<p class="hidden-limit-note">완료 나무가 50 · 100 · 150 · 200그루가 될 때 히든 배치 가능 수가 최대 5그루까지 늘어나요.</p>':'')+'</section>';
 }
 let collectionTab='trees';
-function treeCollectionHTML(){const counts=collectionCounts(),disabled=new Set(collectionState().disabledSpeciesIds),visualTheme=currentCollectionTheme();return '<div class="collection-progress"><strong>'+counts.trees+' / '+counts.totalTrees+'종</strong><small>발견한 나무를<br>자동 배치에 함께 써요.</small></div>'+TREE_CATEGORIES.map(cat=>{const amount=categoryExperienceCount(cat.id),species=speciesForCategory(cat.id),activeIds=new Set(activeSpecies(cat.id).map(t=>t.id)),subgenres=compactExperiencedGenres(cat.id);return '<section class="collection-group"><div class="collection-group-head"><div><h3>'+esc(cat.label)+'</h3><p class="collection-group-subgenres">'+esc(subgenres)+'</p></div><span>완료 경험 '+amount+'개</span></div><div class="collection-grid">'+species.map(t=>{const unlocked=speciesUnlocked(t),active=unlocked&&activeIds.has(t.id);return '<div class="collection-card '+(unlocked?'':'locked ')+(active?'selected':'')+'"><svg viewBox="-57 -82 114 104" aria-hidden="true">'+previewSpeciesArt(t.id,visualTheme)+'</svg><strong>'+(unlocked?esc(t.name):'???')+'</strong><small>'+(unlocked?(active?'자동 배치에 사용 중':'발견한 나무'):(amount+'/'+t.need+' · 이 장르 경험이 쌓이면 발견'))+'</small>'+(unlocked?button(active?'사용 중':'사용하기','treeToggle','tree-toggle '+(active?'':'off'),'data-category="'+cat.id+'" data-species="'+t.id+'" aria-pressed="'+active+'"'):'')+'</div>'}).join('')+'</div></section>'}).join('')+hiddenCollectionHTML()}
-function visitorCollectionHTML(){const seen=new Set(collectionState().visitorsSeen),counts=collectionCounts();return '<div class="collection-progress"><strong>'+counts.visitors+' / '+counts.totalVisitors+'종</strong><small>숲을 보다 보면<br>가끔 방문객을 만나요.</small></div><div class="visitor-grid">'+FOREST_VISITORS.map(v=>{const found=seen.has(v.id);return '<div class="visitor-card '+(found?'':'locked')+'"><div class="visitor-art">'+(found?'<svg viewBox="-36 -44 72 60" aria-hidden="true">'+visitorArt(v.id)+'</svg>':'●')+'</div><strong>'+(found?esc(v.name):'???')+'</strong><small>'+(found?'만난 방문객':'아직 만나지 못했어요')+'</small></div>'}).join('')+'</div><div class="visitor-hint">방문객은 직접 배치하거나 키우지 않아요. 숲에 찾아온 방문객을 만나면 도감에 기록됩니다.</div>'}
+function treeCollectionHTML(){const counts=collectionCounts(),disabled=new Set(collectionState().disabledSpeciesIds),visualTheme=currentCollectionTheme();return '<div class="collection-progress"><strong>'+counts.trees+' / '+counts.totalTrees+'종</strong><small>자동 배치할 나무를 선택하세요</small></div>'+TREE_CATEGORIES.map(cat=>{const amount=categoryExperienceCount(cat.id),species=speciesForCategory(cat.id),activeIds=new Set(activeSpecies(cat.id).map(t=>t.id)),subgenres=compactExperiencedGenres(cat.id);return '<section class="collection-group"><div class="collection-group-head"><div><h3>'+esc(cat.label)+'</h3><p class="collection-group-subgenres">'+esc(subgenres)+'</p></div><span>완료 경험 '+amount+'개</span></div><div class="collection-grid">'+species.map(t=>{const unlocked=speciesUnlocked(t),active=unlocked&&activeIds.has(t.id);return '<div class="collection-card '+(unlocked?'':'locked ')+(active?'selected':'')+'"><svg viewBox="-57 -82 114 104" aria-hidden="true">'+previewSpeciesArt(t.id,visualTheme)+'</svg><strong>'+(unlocked?esc(t.name):'???')+'</strong>'+(unlocked?'':'<small>'+amount+'/'+t.need+'개 완료 시 발견</small>')+(unlocked?button(active?'사용 중':'사용하기','treeToggle','tree-toggle '+(active?'':'off'),'data-category="'+cat.id+'" data-species="'+t.id+'" aria-pressed="'+active+'"'):'')+'</div>'}).join('')+'</div></section>'}).join('')+hiddenCollectionHTML()}
+function visitorCollectionHTML(){const seen=new Set(collectionState().visitorsSeen),counts=collectionCounts();return '<div class="collection-progress"><strong>'+counts.visitors+' / '+counts.totalVisitors+'종</strong><small>만난 방문객</small></div><div class="visitor-grid">'+FOREST_VISITORS.map(v=>{const found=seen.has(v.id);return '<div class="visitor-card '+(found?'':'locked')+'"><div class="visitor-art">'+(found?'<svg viewBox="-36 -44 72 60" aria-hidden="true">'+visitorArt(v.id)+'</svg>':'●')+'</div><strong>'+(found?esc(v.name):'???')+'</strong><small>'+(found?'만난 방문객':'아직 만나지 못했어요')+'</small></div>'}).join('')+'</div><div class="visitor-hint">숲에서 만난 방문객은 도감에 기록돼요.</div>'}
 function collectionHTML(tab=collectionTab){collectionTab=tab;return '<div class="collection-tabs">'+button('나무','collectionTab','collection-tab '+(tab==='trees'?'active':''),'data-tab="trees"')+button('방문객','collectionTab','collection-tab '+(tab==='visitors'?'active':''),'data-tab="visitors"')+'</div>'+(tab==='visitors'?visitorCollectionHTML():treeCollectionHTML())}
 function openCollection(tab=collectionTab){collectionTab=tab;showModal('나의 도감',collectionHTML(tab),'collection')}
 function treePickerHTML(c){
@@ -860,132 +1072,145 @@ share:'<path d="M7 10H4v12h16V10h-3M12 16V2m-5 5 5-5 5 5"/>'
 function icon(name){return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICON[name]||ICON.book)+'</svg>'}
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function growth(stage,c){
- if(stage===3&&c)return '<svg class="growth" viewBox="0 0 320 220" role="img" aria-label="'+esc(category(c).label)+' 나무"><circle cx="160" cy="110" r="94" fill="#E4F2DA"/><g transform="translate(160 168) scale(2)">'+treeArt(c,'basic')+'</g></svg>'; 
- if(stage===1||stage===2){
-  const poly=(points,color)=>'<polygon points="'+points+'" fill="'+color+'" stroke-linejoin="round"/>';
-  const sprout='<path d="M160 181Q156 151 163 119" fill="none" stroke="#6B7954" stroke-width="4.5" stroke-linecap="round"/>'
-   +poly('160,151 143,152 127,142 120,124 139,125 153,137','#728D60')
-   +poly('120,124 139,125 153,137 160,151 140,140','#A3B88A')
-   +poly('161,132 163,113 177,99 196,94 193,113 180,128','#55744F')
-   +poly('163,113 177,99 196,94 178,113 161,132','#8FA875');
-  const bush='<path d="M160 181L158 146M159 165L135 143M159 158L181 135" fill="none" stroke="#806D53" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>'
-   +poly('151,134 163,115 186,112 207,125 211,146 192,158 167,152','#4F7053')
-   +poly('169,122 186,116 203,127 189,137 171,135','#7F9967')
-   +poly('105,144 115,126 137,122 158,133 162,153 144,165 120,160','#69865A')
-   +poly('112,139 123,128 139,126 151,136 137,146 121,146','#92AA78')
-   +poly('133,122 141,102 161,92 181,102 190,121 173,136 150,135','#789663')
-   +poly('141,108 161,96 179,105 168,118 153,119','#A4B987');
-  return '<svg class="growth" viewBox="0 0 320 220" role="img" aria-label="'+(stage===1?'새싹':'덤불')+'"><defs><linearGradient id="growthNaturalBg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#F1F4EC"/><stop offset="1" stop-color="#E2EBD7"/></linearGradient></defs><circle cx="160" cy="115" r="94" fill="url(#growthNaturalBg)"/><ellipse cx="160" cy="185" rx="'+(stage===1?'30':'48')+'" ry="6" fill="#526B49" opacity=".10"/>'+(stage===1?sprout:bush)+'</svg>';
- }
- let drawing=stage===0?'<ellipse cx="160" cy="170" rx="15" ry="10" fill="#ad9570" transform="rotate(-25 160 170)"/>':'<path d="M160 184v-81" stroke="#93836b" stroke-width="8"/><ellipse cx="133" cy="113" rx="34" ry="42" fill="#73B66B"/><ellipse cx="186" cy="113" rx="34" ry="42" fill="#5CA764"/><ellipse cx="160" cy="82" rx="38" ry="42" fill="#A0CC83"/>';
- return '<svg class="growth" viewBox="0 0 320 220" role="img" aria-label="'+['씨앗','싹','덤불','나무'][stage]+'"><defs><linearGradient id="growthBg" x2="1" y2="1"><stop stop-color="#DCEEF8"/><stop offset=".55" stop-color="#E4F2DA"/><stop offset="1" stop-color="#FBF3D5"/></linearGradient></defs><circle cx="160" cy="115" r="94" fill="url(#growthBg)"/><ellipse cx="160" cy="188" rx="49" ry="8" fill="#D2E5BE"/>'+drawing+'</svg>';
+ const uid='growth-'+(growth.serial=(growth.serial||0)+1);
+ const leaf=(d,fill)=>'<path d="'+d+'" fill="'+fill+'"/>';
+ const soil='<ellipse cx="160" cy="188" rx="45" ry="7" fill="#3B6653" opacity=".07"/><path d="M132 186Q160 178 188 186" fill="none" stroke="#D8E4D6" stroke-width="2" stroke-linecap="round"/>';
+ let art='';
+ if(stage===3&&c)art='<g transform="translate(160 160) scale(1.95)">'+treeArt(c,'basic')+'</g>';
+ else if(stage===2)art='<path d="M158 183C162 162 159 148 161 127" fill="none" stroke="#92725A" stroke-width="4.5" stroke-linecap="round"/><path d="M160 163Q142 149 137 137M161 150Q179 137 184 125" fill="none" stroke="#A18565" stroke-width="2.5" stroke-linecap="round"/>'+leaf('M158 157C133 161 115 147 116 122C139 120 159 132 158 157Z','url(#'+uid+'-leaf)')+leaf('M162 143C160 119 178 101 202 104C202 128 185 144 162 143Z','url(#'+uid+'-leaf)')+leaf('M161 128C145 115 146 92 161 79C179 96 178 116 161 128Z','#9EBA7F')+'<path d="M156 152Q138 133 123 128M166 138Q184 119 195 111M161 124V91" fill="none" stroke="#EEF2CF" stroke-width="1.6" opacity=".65" stroke-linecap="round"/>';
+ else if(stage===1)art='<path d="M159 184C158 164 162 150 163 138" fill="none" stroke="#7D9466" stroke-width="3.8" stroke-linecap="round"/>'+leaf('M161 158C139 162 123 150 121 133C143 127 160 139 161 158Z','url(#'+uid+'-leaf)')+leaf('M162 144C161 124 178 113 196 116C194 136 180 148 162 144Z','#A5C386')+'<path d="M157 154Q140 142 129 139M166 141Q181 129 189 123" fill="none" stroke="#E4EBC1" stroke-width="1.5" stroke-linecap="round"/>';
+ else art='<path d="M146 180C137 167 146 148 165 147C181 151 184 164 174 178C166 190 153 189 146 180Z" fill="url(#'+uid+'-seed)"/><path d="M148 177Q151 160 169 151" fill="none" stroke="#E0BB86" stroke-width="1.7" stroke-linecap="round"/><path d="M162 185Q177 173 177 163" fill="none" stroke="#805A40" stroke-width="1.2" opacity=".45"/>';
+ return '<svg class="growth" viewBox="0 0 320 220" role="img" aria-label="'+esc(stage===3&&c?category(c).label+' 나무':['씨앗','새싹','어린 나무','나무'][stage]||'씨앗')+'"><defs><radialGradient id="'+uid+'-bg" cx=".4" cy=".35" r=".7"><stop stop-color="#F9FBF1"/><stop offset="1" stop-color="#E6EFDF"/></radialGradient><linearGradient id="'+uid+'-leaf" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#AFCF88"/><stop offset=".6" stop-color="#78A575"/><stop offset="1" stop-color="#4E8366"/></linearGradient><linearGradient id="'+uid+'-seed" x2=".7" y2="1"><stop stop-color="#CBA576"/><stop offset="1" stop-color="#947051"/></linearGradient></defs><circle cx="160" cy="112" r="95" fill="url(#'+uid+'-bg)"/><path d="M82 167Q89 151 99 151M228 164Q239 159 243 166" fill="none" stroke="#CEDDC9" stroke-width="2" stroke-linecap="round"/>'+soil+art+'</svg>';
 }
 function hash(s){let n=2166136261;for(const c of s)n=Math.imul(n^c.charCodeAt(0),16777619);return n>>>0}
 // Hand-cut forest: irregular silhouettes, tapered stems and a few opaque colour planes.
 // Coordinates remain in the original tree space, so collection previews and hit targets agree.
 function hexShade(hex,amt){const n=parseInt(hex.slice(1),16);let r=(n>>16)&255,g=(n>>8)&255,b=n&255;const adj=v=>Math.max(0,Math.min(255,Math.round(amt>=0?v+(255-v)*amt:v*(1+amt))));r=adj(r);g=adj(g);b=adj(b);return '#'+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1)}
 function smoothClosedPath(p){const n=p.length;let d='M'+p[0][0].toFixed(1)+','+p[0][1].toFixed(1)+' ';for(let i=0;i<n;i++){const p0=p[(i-1+n)%n],p1=p[i],p2=p[(i+1)%n],p3=p[(i+2)%n],c1=[p1[0]+(p2[0]-p0[0])/6,p1[1]+(p2[1]-p0[1])/6],c2=[p2[0]-(p3[0]-p1[0])/6,p2[1]-(p3[1]-p1[1])/6];d+='C'+c1[0].toFixed(1)+','+c1[1].toFixed(1)+' '+c2[0].toFixed(1)+','+c2[1].toFixed(1)+' '+p2[0].toFixed(1)+','+p2[1].toFixed(1)+' '}return d+'Z'}
-function handcutTreeArt(speciesId,winter=false){
- const sp=TREE_SPECIES.find(t=>t.id===speciesId)||TREE_SPECIES[0],id=sp.id;
- const basic={
- birch:['-25,-56 -20,-76 -9,-83 3,-73 8,-54 1,-32 -11,-27 -23,-38','4,-48 8,-68 21,-76 32,-62 34,-45 24,-30 12,-29'],
- oak:['-49,-37 -35,-56 -12,-63 7,-57 30,-59 48,-40 41,-22 16,-16 -9,-20 -32,-17'],
- cherry:['-39,-39 -33,-52 -20,-58 -9,-55 2,-63 17,-58 24,-51 34,-49 39,-34 29,-23 12,-25 0,-20 -14,-25 -28,-22'],
- zelkova:['-51,-45 -37,-60 -15,-68 8,-66 30,-62 51,-47 33,-36 12,-31 -7,-33 -34,-37'],
- ginkgo:['-38,-40 -30,-54 -15,-64 3,-69 24,-59 39,-42 21,-44 4,-32 -2,-30 -17,-43'],
- metasequoia:['-2,-78 -10,-58 1,-62 9,-55','1,-63 -16,-40 -2,-45 13,-38','-1,-46 -22,-22 -2,-27 19,-20','2,-28 -28,-2 -5,-8 24,1'],
- maple:['-39,-46 -26,-60 -7,-48 -20,-31 -31,-35','5,-56 21,-70 39,-55 29,-37 19,-35','-18,-28 -2,-44 17,-31 10,-18 -1,-14'],
- willow:['-34,-48 -20,-60 -5,-57 10,-64 29,-56 34,-46 17,-36 -1,-31 -19,-35'],
- magnolia:['-39,-39 -25,-55 -5,-50 -9,-28 -28,-24','-4,-52 15,-63 35,-49 30,-31 8,-27'],
- crape:['-38,-43 -20,-54 0,-45 -7,-27 -30,-28','3,-53 24,-61 37,-46 30,-30 7,-29'],
- pine:['-54,-39 -43,-47 -23,-50 -5,-43 -13,-35 -35,-32','4,-52 23,-60 43,-57 57,-47 37,-42 14,-44','-23,-64 -9,-71 9,-68 24,-61 10,-56 -9,-58'],
- cedar:['1,-79 -11,-56 -8,-47 -20,-27 -17,-22 -27,-2 -9,4 11,2 26,-3 14,-27 16,-32 7,-52'],
- hackberry:['-51,-26 -42,-41 -23,-46 -8,-36 -5,-18 -29,-12','-11,-42 8,-59 29,-56 46,-41 40,-24 18,-16 2,-26'],
- fringe:['-39,-36 -35,-49 -25,-54 -15,-51 -5,-61 7,-56 17,-58 29,-50 32,-43 41,-35 35,-24 22,-23 11,-28 1,-21 -12,-23 -20,-29 -30,-26'],
- fir:['1,-71 -12,-51 0,-55 12,-49','-2,-49 -27,-26 -10,-30 1,-35 22,-24','2,-25 -37,1 -13,-4 1,-11 35,3'],
- cypress:['0,-73 -10,-63 -17,-44 -13,-27 -15,-13 -7,1 2,6 12,-7 16,-25 13,-43 8,-62'],
- yew:['-17,-65 17,-62 21,-41 19,-29 25,-16 1,-14 -25,-18 -21,-42'],
- juniper:['-55,-43 -36,-51 -18,-49 -6,-41 -24,-33 -44,-35','8,-53 28,-59 44,-56 53,-47 33,-41 14,-44','-11,-64 5,-70 23,-67 30,-60 13,-54 -4,-57'],
- paulownia:['-35,-48 -30,-54 -22,-48 -28,-40','19,-59 25,-65 32,-58 27,-50','26,-31 31,-35 36,-29 30,-25'],
- evergreen:['-32,-48 -16,-65 5,-68 27,-58 37,-40 31,-20 9,-10 -13,-13 -30,-28']
- };
- const alpine={
- birch:['-25,-57 -21,-73 -12,-80 -1,-71 2,-52 -7,-34 -19,-37','2,-51 10,-70 22,-72 32,-57 29,-39 16,-31 6,-36'],
- oak:['-43,-51 -18,-54 6,-50 41,-53 36,-29 20,-16 1,-20 -19,-14 -35,-23'],
- cherry:['-3,-69 21,-60 37,-43 34,-26 17,-17 -2,-22 -25,-16 -40,-34 -29,-55'],
- zelkova:['-49,-36 -33,-53 -7,-65 13,-61 35,-49 49,-32 24,-30 0,-17 -23,-28'],
- ginkgo:['-2,-71 -37,-58 -26,-35 -3,-26 22,-32 39,-56 20,-65'],
- metasequoia:['-1,-80 -11,-58 10,-55','2,-65 -19,-40 17,-42','-1,-49 -24,-24 22,-21','2,-35 -31,-6 -5,-9 28,-5'],
- cedar:['-11,-71 12,-68 17,-48 15,-33 23,-11 5,-7 -20,-12 -16,-39'],
- hackberry:['-48,-49 -23,-54 4,-50 29,-53 48,-48 45,-25 21,-16 0,-22 -22,-16 -47,-24'],
- fir:['-2,-73 -12,-54 10,-51','1,-59 -19,-37 -2,-41 17,-35','-1,-44 -27,-21 -6,-27 24,-18','2,-28 -33,-3 -10,-9 30,0'],
- yew:['-18,-68 16,-64 23,-40 29,-18 3,-15 -27,-20 -23,-40'],
- evergreen:['-32,-59 -9,-62 10,-57 32,-60 40,-38 28,-16 8,-10 -14,-13 -35,-29']
- };
- const colors=winter?['#365B4B','#6F856D','#93A28A']:sp.colors;
- const tr=winter?'#796D60':sp.trunk,leafs=(winter?alpine[id]:null)||basic[id];
- const poly=(points,fill,extra='')=>'<polygon points="'+points+'" fill="'+fill+'" '+extra+'/>';
- const pts=s=>s.trim().split(/\s+/).map(p=>p.split(',').map(Number));
- const str=p=>p.map(a=>a.map(v=>Number(v.toFixed(2))).join(',')).join(' ');
- const bulgeSeed=hash(id)%13;
- const tapered=(points,width,color)=>{
-  const left=[],right=[];
-  points.forEach((p,i)=>{const a=points[Math.max(0,i-1)],b=points[Math.min(points.length-1,i+1)],dx=b[0]-a[0],dy=b[1]-a[1],d=Math.hypot(dx,dy)||1;
-   const taper=1-i/(points.length+1);
-   const bulge=1+.42*Math.sin(i*1.9+bulgeSeed)+.24*Math.sin(i*.85+bulgeSeed*.6);
-   const w=width*taper*.5*Math.max(.38,bulge);
-   left.push([p[0]-dy/d*w,p[1]+dx/d*w]);right.push([p[0]+dy/d*w,p[1]-dx/d*w]);
-  });
-  return '<path d="'+smoothClosedPath([...left,...right.reverse()])+'" fill="'+color+'"/>';
- };
- const lowPolyLeaf=(p,palette,baseIdx,i)=>{
-  const n=p.length,cx=p.reduce((s,q)=>s+q[0],0)/n,cy=p.reduce((s,q)=>s+q[1],0)/n;
-  const curve=smoothClosedPath(p),base=palette[baseIdx];
-  const rot=hash(id+i+'r')%n,ring=[...Array(n)].map((_,k)=>p[(rot+k)%n]);
-  const cutA=Math.max(2,Math.round(n*.55)),arcA=ring.slice(0,cutA),arcB=ring.slice(cutA);
-  const ACCENT_COLOR={maple:'#B97A46'};
-  const forceAccent=id==='cherry'||id==='cypress';
-  const useAccent=forceAccent||(n>=6&&hash(id+i+'ac')%2===0);
-  const colorA=hexShade(base,-.16);
-  const colorB=useAccent?(forceAccent?palette[1]:(ACCENT_COLOR[id]||palette[(baseIdx+1+hash(id+i)%2)%palette.length])):hexShade(base,.15);
-  const accentScale=forceAccent?.8:.58;
-  let o='<path d="'+curve+'" fill="'+base+'"/>';
-  if(arcA.length>=3){const shapeA=arcA.map(([x,y])=>[cx+(x-cx)*.92,cy+(y-cy)*.92]);o+=poly(str(shapeA),colorA,'opacity=".92"')}
-  if(arcB.length>=3){const shapeB=arcB.map(([x,y])=>[cx+(x-cx)*accentScale,cy+(y-cy)*accentScale]);o+=poly(str(shapeB),colorB,'opacity="'+(forceAccent?1:.9)+'"')}
-  o+='<path d="'+curve+'" fill="none" stroke="'+hexShade(base,-.30)+'" stroke-width="1" stroke-linejoin="round" opacity=".4"/>';
-  return '<g class="leaf" style="animation-delay:-'+((baseIdx+i)%5)+'s">'+o+'</g>';
- };
- const thick={birch:3.2,oak:11,cherry:4.6,zelkova:6.5,ginkgo:5,metasequoia:5.5,maple:4.5,willow:5.5,magnolia:4.4,crape:3.8,pine:5.5,cedar:5.5,hackberry:8,fringe:4.4,fir:5,cypress:4.8,yew:4.6,juniper:5.5,paulownia:4.6,evergreen:7};
- const branchThick={birch:2.4,oak:4.3,cherry:3,zelkova:3.8,ginkgo:3.2,maple:3,willow:2.7,magnolia:3.4,crape:2.9,pine:3.7,hackberry:3.9,fringe:3.1,juniper:2.9,paulownia:3.1};
- let out='<ellipse cy="14" rx="22" ry="4.4" fill="'+(winter?'#718792':'#50685A')+'" opacity=".08"/>';
- if(winter)out+=poly('-15,12 -7,9 8,10 18,13 10,16 -10,16', '#F4F8F8');
- const stems=id==='birch'?[[[-10,14],[-9,-19],[-12,-69]],[[7,13],[6,-20],[13,-65]],[[19,12],[18,-13],[23,-44]]]:
- id==='crape'||id==='hackberry'?[[[-5,14],[-7,-8],[-3,-41]],[[5,13],[7,-9],[3,-45]]]:
- id==='willow'||id==='juniper'?[[[-5,14],[3,-4],[7,-28],[3,-43],[10,-60]]]:
- [[[0,14],[-2,-6],[1,-31],[-1,(['metasequoia','cedar','fir','cypress'].includes(id)?-66:id==='paulownia'?-55:-42)]]];
- stems.forEach(s=>out+=tapered(s,thick[id]||3.8,id==='birch'?'#E4E1D6':tr));
- const branches=id==='paulownia'?[[[0,-22],[-16,-35],[-30,-49]],[[1,-33],[13,-48],[26,-60]],[[-1,-10],[-12,-17],[-22,-29]],[[2,-18],[17,-23],[32,-32]],[[-13,-33],[-18,-49]],[[14,-47],[22,-65]]]:
- id==='pine'||id==='juniper'?[[[1,-24],[-12,-32],[-32,-41]],[[3,-36],[20,-43],[34,-51]]]:
- [[[0,-20],[-13,-29],[-28,-40]],[[1,-29],[15,-38],[29,-50]]];
- if(!['metasequoia','cedar','fir','cypress','yew','evergreen'].includes(id))branches.forEach(b=>out+=tapered(b,branchThick[id]||3,tr));
- leafs.forEach((shape,i)=>{
-  const p=pts(shape);
-  out+=lowPolyLeaf(p,colors,i%colors.length,i);
-  if(winter&&id!=='paulownia'&&(i===0||['pine','fir','metasequoia','juniper'].includes(id))){
-   // Snow is built from the crown's own vertices and extends inward, so it cannot float.
-   let k=0;for(let j=1;j<p.length;j++)if(p[j][1]<p[k][1])k=j;
-   const tip=p[k],a=p[(k+p.length-1)%p.length],b=p[(k+1)%p.length],cx=p.reduce((s,q)=>s+q[0],0)/p.length,cy=p.reduce((s,q)=>s+q[1],0)/p.length;
-   const mix=(u,v,t)=>[u[0]+(v[0]-u[0])*t,u[1]+(v[1]-u[1])*t];
-   const l=mix(tip,a,.55),r=mix(tip,b,.55);
-   out+=poly(str([l,tip,r,mix(r,[cx,cy],.18),mix(tip,[cx,cy],.28),mix(l,[cx,cy],.15)]),'#EEF4F4');
-  }
- });
- if(id==='willow')[-23,-10,7,22].forEach((x,i)=>out+=tapered([[x,-47],[x+(i%2?3:-3),-30],[x+(i%2?1:-5),-10],[x-1,2]],2.1,colors[(i+1)%3]));
- if(id==='fringe')[-26,-13,0,14,27].forEach((x,i)=>out+=poly(str([[x,-43-i%2*3],[x+3,-40-i%2*3],[x+1,-30],[x-2,-33]]),winter?'#DCE7DF':'#D9D5AD'));
- if(id==='cherry'||id==='magnolia'||(winter&&['crape','yew'].includes(id))){
-  [[-17,-45],[17,-48],[4,-33]].slice(0,id==='magnolia'?2:3).forEach(([x,y])=>out+=poly(str([[x-2,y],[x,y-2],[x+2,y+1],[x,y+3]]),winter&&id!=='magnolia'?'#B67067':id==='cherry'?'#E3AAB0':'#E6D8C9'));
+function handcutTreeArt(speciesId,winter=false,variant=''){
+ const id=TREE_SPECIES.some(t=>t.id===speciesId)?speciesId:'birch';
+ const uid='botanical-'+(handcutTreeArt.serial=(handcutTreeArt.serial||0)+1);
+ const palettes={birch:['#B9CF8E','#80A46C','#507A5B'],oak:['#A3C17C','#638D60','#34634F'],cherry:['#F9DED5','#EBB7B8','#C78599'],zelkova:['#BFD080','#87A65C','#567C52'],ginkgo:['#F3D47B','#D5B454','#AF8741'],metasequoia:['#9BBE9C','#578A78','#356859'],maple:['#EAB783','#D68D6B','#AB635A'],willow:['#BCD18F','#8CAF7F','#5A8868'],magnolia:['#B9CB8C','#829F6D','#527F60'],crape:['#EFC8CE','#CE9EB8','#9F799A'],pine:['#91B18A','#597D60','#315B4C'],cedar:['#9EC5B1','#608E7D','#386C5D'],hackberry:['#BDC88A','#899E66','#536F51'],fringe:['#DFE7B4','#A7BD88','#6F9573'],fir:['#A2C9BE','#629586','#376C61'],cypress:['#A9C8A8','#6E9A7E','#416F5B'],yew:['#9CB990','#688D6E','#3D6754'],juniper:['#A6C1AE','#74958B','#486F69'],paulownia:['#C3CEA2','#9BB17D','#6D956E'],evergreen:['#A6BC86','#6F956A','#3C6A53']};
+ let [light,mid,dark]=palettes[id];
+ if(winter)[light,mid,dark]=['#B6C9B7','#7E9E91','#4F766E'];
+ if(variant==='gold')[light,mid,dark]=winter?['#A8C7AD','#608D75','#365F52']:['#D6D49A','#93B079','#587F5B'];
+ if(variant==='moon')[light,mid,dark]=winter?['#ECF6F4','#B7D3CE','#7EACA7']:['#D5E1BD','#9FBC9F','#5C8C80'];
+ const path=(d,fill,extra='')=>'<path d="'+d+'" fill="'+fill+'" '+extra+'/>';
+ const line=(d,color,width=1,opacity=1)=>'<path d="'+d+'" fill="none" stroke="'+color+'" stroke-width="'+width+'" stroke-linecap="round" stroke-linejoin="round" opacity="'+opacity+'"/>';
+ const crown=d=>path(d,'url(#'+uid+'-crown)');
+ const glint=(d,o='.55')=>path(d,light,'opacity="'+o+'"');
+ const twig=(d,w=1.8)=>line(d,'#8C765B',w);
+ const leaf=(x,y,angle=0,s=1,color=light)=>'<g transform="translate('+x+' '+y+') rotate('+angle+') scale('+s+')">'+path('M0 0C-4-1-5-5-4-7C0-7 2-4 0 0Z',color)+path('M0 0C3-1 5-3 5-6C1-6-1-3 0 0Z',color)+'</g>';
+ const flower=(x,y,s=1,color='#FFF2E8')=>'<g transform="translate('+x+' '+y+') scale('+s+')">'+path('M0 1C-6 1-7-5-3-6C-3-11 3-11 4-6C9-7 10-1 5 1C7 6 1 9-1 4C-5 8-9 3-4 0Z',color)+'<circle cy="0" r="1.4" fill="#D6AB75"/></g>';
+ let out='<defs><linearGradient id="'+uid+'-crown" x1=".13" y1="0" x2=".82" y2="1"><stop stop-color="'+light+'"/><stop offset=".46" stop-color="'+mid+'"/><stop offset="1" stop-color="'+dark+'"/></linearGradient><linearGradient id="'+uid+'-bark" x1="0" x2="1"><stop stop-color="#AC9171"/><stop offset=".5" stop-color="#8B7159"/><stop offset="1" stop-color="#705B4A"/></linearGradient></defs>';
+ out+='<ellipse cx="1" cy="14" rx="23" ry="4" fill="'+(winter?'#6A9293':'#365D48')+'" opacity=".085"/>';
+ if(winter)out+=path('M-20 13Q-11 9-3 12Q8 8 22 13Q15 18 1 16Q-12 18-20 13Z','#F7FAF8');
+ if(id==='birch'){
+  out+=path('M-13 14Q-15-23-11-65L-8-65Q-11-19-9 14Z','#EDECE0')+path('M6 14Q7-22 12-59L15-59Q11-18 10 14Z','#E9E9DB')+path('M21 13L20-39L23-39L24 13Z','#D5D9C6');
+  out+=twig('M-11-21Q-22-31-24-43M10-15Q23-28 27-38',1.2);
+  out+=crown('M-14-78C-6-75-4-70-6-64C3-61 3-52-1-46C5-36-4-26-13-27C-24-24-33-35-29-44C-36-51-30-61-25-64C-27-71-21-77-14-78Z');
+  out+=crown('M19-71C29-68 30-60 29-55C38-49 38-38 31-33C35-22 23-17 17-21C7-18 1-28 4-36C-2-44 4-55 10-58C10-65 12-69 19-71Z');
+  out+=glint('M-17-73C-11-71-11-62-14-55C-18-54-25-56-26-49C-29-60-24-70-17-73Z')+glint('M18-65Q28-62 24-52Q12-52 7-39Q3-48 13-56Z');
+  out+=line('M-13-12l4-1m-4 12 4 1M8-6l3-1m-1-17 3 1M21-11h3','#7F8B77',1.3,.72);
+ }else if(id==='oak'){
+  out+=path('M-7 14C-4 6-5-12-8-24L-4-43L3-43C4-24 3-4 8 14Q1 11-7 14Z','url(#'+uid+'-bark)');
+  out+=twig('M-2-13Q-19-25-25-40M0-21Q22-29 29-42',3.8);
+  out+=crown('M-43-27C-54-34-47-48-38-50C-37-62-24-68-15-64C-10-77 9-75 17-65C29-69 41-62 42-52C54-49 55-34 46-29C46-17 32-13 24-17C16-11 7-13 1-17C-8-9-21-12-25-18C-34-14-44-19-43-27Z');
+  out+=glint('M-40-42C-37-55-27-59-16-55C-13-67 1-70 10-64C12-57 4-54-3-55C-9-46-20-43-27-48Q-34-44-40-42Z');
+  out+=path('M-21-23Q-9-20-6-27Q6-18 15-25Q30-22 38-30Q38-15 25-18Q12-11 2-19Q-10-12-21-23Z',dark,'opacity=".3"');
+ }else if(id==='cherry'){
+  out+=path('M-4 14Q1-12-4-35L1-44L5-38Q1-15 3 14Z','url(#'+uid+'-bark)')+twig('M1-12Q-21-22-29-41M1-21Q20-32 29-43',2.4);
+  out+=crown('M-40-28C-50-31-48-43-39-47C-43-57-30-64-22-60C-17-71-4-70 2-64C11-75 27-68 27-59C38-62 47-51 42-43C52-33 44-23 35-22C30-11 17-17 12-20C3-12-7-14-13-20C-24-14-39-18-40-28Z');
+  out+=glint('M-39-45Q-42-56-29-57Q-22-54-20-62Q-9-69-3-60Q4-60 5-55Q-4-46-15-50Q-25-42-31-48Z','.8');
+  [[-30,-40,.42],[-9,-58,.42],[15,-52,.46],[33,-36,.4],[-14,-29,.36],[7,-35,.43]].forEach(v=>out+=flower(...v,winter?'#EEF6F2':'#FFF2E8'));
+ }else if(id==='zelkova'){
+  out+=path('M-5 14Q-1-6-6-31L-2-43L4-37Q1-12 6 14Z','url(#'+uid+'-bark)')+twig('M0-7Q-12-29-33-40M0-14Q17-34 37-39M-2-20L3-50',2.7);
+  out+=crown('M-51-39C-50-49-39-57-28-57C-21-70-9-71 0-67C12-76 26-66 29-60C43-61 50-51 52-42C48-34 35-31 24-33C14-26 4-29-2-34C-15-27-28-29-33-34C-42-31-50-35-51-39Z');
+  out+=glint('M-43-46Q-36-57-24-52Q-20-65-7-64Q1-62 3-65Q15-67 22-59Q10-55 2-54Q-10-46-17-50Q-31-42-43-46Z');
+ }else if(id==='ginkgo'){
+  out+=path('M-3 14Q1-10-3-40L2-48L5-35Q2-9 5 14Z','url(#'+uid+'-bark)')+twig('M1-13Q-16-31-24-46M1-19Q18-32 24-47',2.1);
+  out+=crown('M-2-75C4-78 10-72 11-67C19-69 25-64 25-58C35-60 42-50 39-43C48-34 43-25 36-24C28-18 21-22 17-26C12-17 3-16-2-22C-12-15-23-20-25-27C-37-21-45-33-39-40C-46-47-38-59-28-57C-27-66-17-69-12-66C-13-72-8-75-2-75Z');
+  out+=glint('M-3-70Q7-74 6-61Q17-65 19-57Q7-49 0-42Q-4-56-12-60Q-11-70-3-70Z','.8');
+  out+=line('M1-26Q-4-43-17-56M1-27Q11-47 26-49M-6-31Q-21-42-31-43M9-31L31-36',light,.85,.55);
+ }else if(id==='metasequoia'){
+  out+=path('M-3 14L-2-67H1L4 14Z','url(#'+uid+'-bark)');
+  out+=crown('M0-78Q6-64 14-59Q11-56 7-57Q17-44 23-42Q18-38 12-40Q22-24 29-20Q23-16 19-18Q27-7 35-3Q20 5 1-1Q-15 5-32-2Q-26-10-18-17Q-23-16-28-21Q-17-29-11-39Q-18-38-23-42Q-13-47-7-57Q-12-56-15-60Q-5-68 0-78Z');
+  out+=glint('M0-73Q-1-57 4-45Q-5-39-15-42Q-9-50-4-59Q-8-59-9-60Z')+glint('M-4-36Q-5-20 2-5Q-15-2-24-5Q-17-12-13-21Q-19-21-20-23Z','.35');
+  out+=line('M0-64L1-8M-1-44l10 3m-10 13 16 6m-16 8-14 7',dark,.8,.25);
+ }else if(id==='maple'){
+  out+=path('M-4 14Q1-6-5-33L0-42L4-33Q0-10 4 14Z','url(#'+uid+'-bark)')+twig('M0-13Q-19-22-29-40M0-23Q16-33 23-48',2.3);
+  out+=crown('M-42-35Q-47-46-34-50Q-38-59-23-58Q-22-71-10-65Q-2-76 6-65Q19-73 22-59Q38-61 34-49Q50-45 40-35Q47-24 33-24Q29-13 18-21Q9-12 0-20Q-13-11-20-21Q-35-13-35-27Q-48-25-42-35Z');
+  out+=glint('M-32-49Q-27-56-21-53Q-18-65-11-59Q-4-67 0-61Q7-66 12-59Q9-50 1-49Q-8-38-16-45Q-26-41-32-49Z','.65');
+  out+=line('M-17-38l-5-8m5 8 4-9m-4 9-8-1M20-34l-3-7m3 7 5-6m-5 6 7 1',light,1,.5);
+ }else if(id==='willow'){
+  out+=path('M-4 14Q6-8 0-43L5-49Q10-22 7-6Q5 5 2 14Z','url(#'+uid+'-bark)')+twig('M4-25Q-9-46-29-43M4-37Q20-56 34-39',2.2);
+  out+=crown('M-35-4C-42-18-43-40-35-49C-32-61-19-66-8-63C3-74 21-67 24-58C37-58 44-44 40-32C45-20 39-7 33 0Q29-8 31-23Q24-14 23-5Q15-15 20-35Q10-18 11-7Q2-16 5-37Q-4-22-5-9Q-12-20-10-36Q-18-24-17-2Q-25-9-23-34Q-35-18-35-4Z');
+  out+=glint('M-34-42Q-31-59-19-58Q-12-59-7-61Q8-71 16-58Q-1-60-13-44Q-19-36-23-19Q-25-37-16-50Q-28-48-34-42Z','.6');
+  out+=line('M-24-46Q-35-25-32-10M-7-54Q-16-33-14-14M9-56Q1-35 0-19M23-48Q34-31 30-16',light,.9,.65);
+ }else if(id==='magnolia'){
+  out+=path('M-4 14Q0-5-2-33L1-42L5-34Q1-5 5 14Z','url(#'+uid+'-bark)')+twig('M0-15Q-18-25-28-42M1-23Q21-38 25-53',2.4);
+  out+=crown('M-33-25C-44-27-45-39-35-45C-36-55-22-61-14-53C-14-66-2-70 6-62C17-72 30-63 30-53C42-50 42-38 34-33C35-22 23-17 15-23C5-15-7-20-10-25C-17-16-30-17-33-25Z');
+  out+=glint('M-31-43Q-32-54-22-53Q-16-52-12-46Q-14-59-4-62Q4-63 8-56Q7-46-5-43Q-20-39-31-43Z');
+  [[-25,-45,.9],[10,-57,.85],[26,-36,.8],[-5,-29,.72]].forEach(([x,y,s])=>{out+='<g transform="translate('+x+' '+y+') scale('+s+')">'+path('M0 4C-12 0-12-12-6-11C-5-20 4-18 4-10C12-14 15-5 7 1L0 4Z','#FBF3E4')+path('M0 3Q-3-5 0-13Q5-6 3 1Z','#E6DCCB')+'</g>'});
+ }else if(id==='crape'){
+  out+=path('M-8 14Q-2-12-10-37L-6-41Q2-15-2 14ZM1 14Q8-9 5-42L9-46Q13-10 6 14Z','#B99D84')+twig('M-2-9Q-18-21-27-34M7-17Q23-28 27-41',1.8);
+  out+=crown('M-35-25Q-47-31-40-41Q-44-48-34-51Q-28-62-18-55Q-8-61-3-51Q1-64 12-62Q21-72 28-60Q41-59 37-48Q48-41 38-33Q41-22 28-22Q19-12 10-23Q1-16-7-25Q-17-16-25-24Q-32-19-35-25Z');
+  out+=glint('M-35-43Q-34-55-24-50Q-16-58-9-48Q-13-36-24-39Q-30-34-35-43Z')+glint('M7-53Q11-64 19-58Q25-64 31-55Q32-46 23-47Q15-41 7-53Z');
+  [[-31,-41,.33],[-19,-49,.3],[-11,-33,.33],[17,-55,.36],[28,-42,.32],[19,-28,.28]].forEach(v=>out+=flower(...v,'#FAE4E3'));
+ }else if(id==='pine'||id==='juniper'){
+  const wind=id==='juniper';
+  out+=path(wind?'M-8 14Q5 3 1-14Q-3-29 8-43L14-50L17-47Q5-30 8-17Q15 3-1 14Z':'M-5 14Q1-6-5-25Q-9-38 3-50L8-51Q-3-35 1-24Q7-3 3 14Z','url(#'+uid+'-bark)');
+  out+=twig(wind?'M5-12Q-11-27-33-29M6-27Q23-39 37-41M9-42L-5-59':'M-2-20Q-21-31-34-34M0-30Q23-37 34-46M0-43Q-6-55-4-61',3);
+  out+=crown(wind?'M-47-28Q-50-38-38-40Q-33-51-22-43Q-13-47-7-38Q2-31-6-27Q-28-22-47-28Z':'M-48-34Q-53-42-43-45Q-42-52-31-49Q-22-59-12-49Q-1-50 1-40Q-12-32-26-35Q-38-29-48-34Z');
+  out+=crown(wind?'M9-41Q3-47 15-51Q20-61 30-55Q41-60 44-50Q55-47 52-41Q36-35 9-41Z':'M9-45Q3-53 17-55Q18-64 29-60Q38-64 43-55Q53-55 53-47Q34-38 9-45Z');
+  out+=crown(wind?'M-13-60Q-14-68-3-69Q1-77 11-71Q23-74 27-63Q8-56-13-60Z':'M-21-63Q-25-70-14-72Q-8-80 1-74Q12-76 15-68Q24-67 23-61Q3-55-21-63Z');
+  out+=glint(wind?'M-43-35Q-35-46-25-41Q-17-42-13-36Q-31-33-43-35Z':'M-45-42Q-36-51-30-45Q-22-52-15-46Q-26-40-45-42Z');
+  out+=glint(wind?'M16-47Q22-56 31-52Q42-54 45-46Z':'M14-51Q21-61 28-55Q36-60 42-51Z');
+  out+=glint(wind?'M-9-65Q1-74 8-68Q17-70 20-64Z':'M-17-68Q-9-76-1-70Q10-73 14-66Z');
+ }else if(id==='cedar'){
+  out+=path('M-3 14L-2-66H1L4 14Z','url(#'+uid+'-bark)');
+  out+=crown('M0-78Q8-70 8-60Q17-58 15-48Q25-44 21-33Q31-25 27-15Q33-5 25 0Q11 7 1 3Q-11 7-23 2Q-32-2-26-12Q-30-22-20-29Q-26-41-15-46Q-19-57-8-61Q-8-71 0-78Z');
+  out+=glint('M-1-71Q0-54 4-45Q-2-40 1-28Q-6-21-3-6Q-18 2-22-6Q-21-16-14-23Q-18-32-10-38Q-11-53-5-60Z','.65');
+  out+=line('M-5-54l3 9m-8 5 4 9m-9 4 4 8m12-22 4 8m4 10 3 8',light,1,.4);
+ }else if(id==='hackberry'){
+  out+=path('M-6 14Q-3 2-7-20L-4-37H3Q3-9 8 14Q0 10-6 14Z','url(#'+uid+'-bark)')+twig('M0-9Q-23-17-33-34M-1-19Q10-39 32-42',3.2);
+  out+=crown('M-49-28Q-53-40-40-45Q-37-57-24-54Q-17-64-5-59Q3-72 17-66Q26-68 32-56Q45-57 45-45Q55-39 49-29Q47-18 33-21Q24-11 12-21Q1-14-9-21Q-23-14-30-21Q-44-15-49-28Z');
+  out+=glint('M-42-40Q-39-51-28-48Q-18-61-6-53Q0-65 13-63Q24-64 25-54Q15-48 5-50Q-6-40-16-44Q-30-37-42-40Z');
+ }else if(id==='fringe'){
+  out+=path('M-4 14Q1-7-3-36L1-42L5-35Q2-7 5 14Z','url(#'+uid+'-bark)')+twig('M0-17Q-17-26-28-43M1-25Q21-33 26-47',2.1);
+  out+=crown('M-37-25Q-47-30-42-42Q-43-54-30-55Q-26-66-14-59Q-7-71 4-66Q18-73 23-61Q35-64 38-51Q48-45 42-33Q42-22 30-22Q24-13 13-20Q4-12-8-20Q-21-12-28-22Q-34-19-37-25Z');
+  out+=glint('M-35-46Q-35-57-24-53Q-18-64-9-55Q-4-67 7-60Q15-66 21-57Q12-51 3-52Q-5-43-15-47Q-25-40-35-46Z','.7');
+  [[-31,-42],[-19,-52],[-9,-40],[5,-56],[20,-48],[30,-35],[12,-31],[-22,-27]].forEach(([x,y],i)=>{out+='<g transform="translate('+x+' '+y+') rotate('+(i%2?-18:12)+')">'+line('M-3-3Q-5 3-3 7M0-5Q-1 3 1 6M3-3Q2 2 5 5',winter?'#FFFFFF':'#F6F4DF',1.7,.9)+'</g>'});
+ }else if(id==='fir'){
+  out+=path('M-3 14L-2-66H1L4 14Z','url(#'+uid+'-bark)');
+  out+=crown('M0-78Q5-66 13-59Q8-55 4-57Q13-48 21-44Q15-38 8-40Q22-27 30-24Q24-18 15-20Q27-8 37-4Q22 5 0-1Q-21 5-36-4Q-27-9-16-20Q-25-18-30-24Q-19-30-8-40Q-16-38-21-44Q-12-49-4-57Q-10-55-14-59Q-5-67 0-78Z');
+  out+=glint('M0-71Q-1-61 3-59L-9-60Z')+glint('M-2-52Q-1-44 7-42Q-5-39-15-44Z')+glint('M-3-35Q-1-25 9-23Q-10-20-23-25Z')+glint('M-3-15Q1-3 14-3Q-9 1-29-5Z','.5');
+ }else if(id==='cypress'){
+  out+=path('M-3 14L-2-63H1L3 14Z','url(#'+uid+'-bark)');
+  out+=crown('M2-78C7-73 12-64 10-57C16-50 18-40 15-34C21-26 20-17 16-12C18-2 10 5 1 5C-12 6-21-3-17-13C-22-22-18-31-15-36C-18-45-13-54-9-57C-10-66-3-74 2-78Z');
+  out+=glint('M1-73Q2-56 6-47Q-1-34 2-26Q-8-11 0 1Q-13 0-13-10Q-10-20-10-28Q-12-39-7-48Q-8-61 1-73Z','.6');
+  out+=line('M0-65l-2 10M4-42l-2 9M-9-32l1 9M7-20l-3 11',light,.9,.4);
+ }else if(id==='yew'){
+  out+=path('M-4 14Q-1-8-3-47H3Q2-9 5 14Z','url(#'+uid+'-bark)');
+  out+=crown('M-1-71C12-73 24-65 22-55C29-49 28-39 25-33C33-25 29-11 18-10C11-5 3-9 0-10C-9-5-24-9-26-17C-32-23-29-35-25-40C-31-48-23-59-17-60C-15-68-7-71-1-71Z');
+  out+=glint('M-4-66Q9-70 13-60Q13-51 0-48Q-10-40-19-45Q-22-54-13-57Q-13-65-4-66Z');
+  [[-17,-39],[12,-48],[18,-25],[-7,-20],[4,-35]].forEach(([x,y])=>out+='<circle cx="'+x+'" cy="'+y+'" r="1.7" fill="'+(winter?'#D8998A':'#CC8A76')+'"/><circle cx="'+(x-.4)+'" cy="'+(y-.5)+'" r=".5" fill="#F8D9BE"/>');
+ }else if(id==='paulownia'){
+  out+=path('M-4 14Q1-6-2-42L1-54L5-44Q1-10 5 14Z','url(#'+uid+'-bark)')+twig('M0-11Q-19-20-28-37M1-23Q17-37 28-51M0-30Q-13-42-19-55',2.2);
+  out+=crown('M-30-24C-41-20-46-31-39-39C-44-46-35-56-27-50C-28-62-16-67-8-58C-7-70 7-72 13-61C24-70 34-60 31-51C44-50 46-37 34-33C35-20 22-18 16-25C7-16-4-23-6-30C-15-21-22-29-30-24Z');
+  out+=glint('M-34-40Q-38-49-29-47Q-22-47-20-39Q-21-58-10-56Q-3-52-7-43Q-10-34-19-32Q-29-32-34-40Z');
+  [[-17,-59],[4,-65],[21,-57]].forEach(([x,y])=>{out+='<g transform="translate('+x+' '+y+')">'+path('M-3 4Q-8-1-4-4Q-7-9-2-9Q-2-14 2-13Q7-9 3-6Q9-3 5 1Q7 6 1 7Z',winter?'#E4E8E6':'#BCABD1')+line('M-1-8l2 1m-3 6 3 1',winter?'#FFFFFF':'#E6DCEF',1.5)+'</g>'});
+ }else{
+  out+=path('M-5 14Q-2-7-4-42H3Q2-7 6 14Z','url(#'+uid+'-bark)');
+  out+=crown('M-5-73C9-76 24-70 26-61C38-59 44-43 37-33C43-23 34-11 22-12C14-5 2-8-4-12C-17-5-32-13-31-23C-42-27-42-42-33-48C-36-60-22-69-14-66C-14-70-9-73-5-73Z');
+  out+=glint('M-8-67Q9-73 18-62Q20-52 8-49Q-3-44-10-49Q-22-40-29-46Q-32-56-22-60Q-13-59-8-67Z');
  }
- if(id==='birch')[-7,-21].forEach(y=>{out+=poly('-12,'+y+' -7,'+(y-1)+' -7,'+(y+1)+' -12,'+(y+2),'#8A887D');out+=poly('4,'+y+' 9,'+(y+1)+' 9,'+(y+2)+' 4,'+(y+1),'#8A887D')});
+ const marks={birch:[[-17,-45,5,.63],[18,-36,20,.55],[-8,-58,-10,.45]],oak:[[-27,-40,-15,.66],[1,-56,15,.64],[26,-42,35,.7],[8,-27,25,.55]],cherry:[],zelkova:[[-27,-43,15,.64],[1,-51,-10,.6],[29,-43,35,.65]],ginkgo:[[-23,-37,20,.63],[17,-51,-10,.55],[8,-30,20,.55]],metasequoia:[],maple:[[-26,-33,-10,.55],[9,-51,10,.6],[25,-29,20,.55]],willow:[],magnolia:[[-18,-31,20,.68],[19,-44,-15,.65]],crape:[],pine:[[-29,-40,-10,.43],[29,-49,15,.43],[0,-66,0,.4]],cedar:[],hackberry:[[-28,-33,-10,.65],[4,-49,10,.7],[31,-33,20,.65]],fringe:[],fir:[],cypress:[],yew:[[-12,-49,-10,.55],[12,-33,25,.6]],juniper:[[-28,-33,-10,.44],[30,-45,20,.43],[5,-63,0,.4]],paulownia:[[17,-36,-20,1.2],[-23,-38,15,1],[1,-47,0,1.1]],evergreen:[[-18,-44,-10,.9],[13,-53,20,.85],[19,-26,30,.7],[-9,-24,-15,.65]]};
+ (marks[id]||[]).forEach(v=>out+=leaf(...v));
+ if(winter){
+  const snowCaps={birch:'M-25-64Q-27-72-15-78Q-8-76-6-69Q-17-73-25-64M10-58Q10-68 19-71Q27-68 29-62Q18-66 10-58',oak:'M-37-51Q-36-64-23-65Q-17-65-15-64Q-10-77 5-72Q12-71 17-65Q-1-66-9-61Q-24-59-37-51',cherry:'M-38-49Q-39-61-23-60Q-17-71-5-68Q-1-66 2-64Q14-74 24-63Q10-65 4-58Q-13-62-20-55Q-29-57-38-49',zelkova:'M-34-56Q-20-75-1-67Q12-76 28-60Q13-64 2-60Q-12-67-23-59Z',ginkgo:'M-27-58Q-27-68-13-66Q-14-76-2-75Q8-77 11-67Q22-68 25-58Q11-63 5-64Q-6-69-14-60Z',metasequoia:'M0-78Q6-64 14-59Q3-60 0-64Q-4-61-15-60Q-5-68 0-78M-12-41Q-7-41 0-45Q6-42 14-41Q6-35-1-39Q-8-36-12-41M-22-21Q-10-24 0-28Q9-22 22-20Q8-17 0-22Q-12-17-22-21',maple:'M-34-50Q-38-59-23-58Q-22-71-10-65Q-2-76 6-65Q17-72 22-60Q11-65 7-60Q-2-68-10-60Q-20-64-25-53Z',willow:'M-33-50Q-27-65-8-63Q4-73 18-64Q22-62 24-58Q8-63-3-58Q-16-61-33-50Z',magnolia:'M-14-53Q-14-66-2-66Q2-65 6-62Q18-73 29-59Q15-63 7-57Q-2-62-14-53Z',crape:'M-36-50Q-28-62-18-55Q-9-62-4-52Q-19-55-25-49ZM2-53Q4-64 12-62Q21-73 28-60Q39-59 37-49Q21-59 14-54Z',pine:'M-44-45Q-42-52-31-49Q-22-59-12-49Q-3-50 0-42Q-15-48-24-44Q-35-48-44-45M16-55Q18-64 29-60Q39-64 44-54Q29-58 16-55M-18-69Q-10-80 1-74Q12-76 15-68Q0-73-18-69',cedar:'M0-78Q8-70 8-60Q16-58 15-50Q7-53 2-60Q-1-64-8-61Q-8-71 0-78M-20-28Q-12-32-4-31Q0-26 8-27Q3-21-4-24Q-10-20-20-28',hackberry:'M-37-48Q-34-58-24-54Q-17-64-5-59Q3-72 17-66Q28-68 32-56Q22-61 12-60Q-2-64-8-56Q-24-56-37-48',fringe:'M-29-55Q-26-66-14-59Q-7-71 4-66Q18-73 23-61Q33-64 38-52Q23-59 15-58Q6-65-4-58Q-14-62-22-53Z',fir:'M0-78Q5-66 13-59Q4-60 0-65Q-4-60-14-59Q-5-67 0-78M-21-44Q-7-45-2-49Q5-44 21-44Q9-38 0-44Q-13-38-21-44M-30-24Q-11-25-2-30Q8-24 30-24Q17-17 0-23Q-19-18-30-24M-36-4Q-16-6-2-11Q11-5 37-4Q21 3 1-3Q-20 3-36-4',cypress:'M2-78Q12-65 10-57Q16-50 15-44Q5-48 5-57Q-1-62-9-57Q-10-66 2-78M-15-36Q-5-38 0-32Q6-28 15-34Q12-23 1-27Q-6-24-15-36',yew:'M-20-57Q-17-69-1-71Q14-74 22-58Q11-65 3-62Q-7-68-20-57',juniper:'M-40-39Q-33-51-22-43Q-13-47-7-38Q-24-44-40-39M15-51Q20-61 30-55Q41-60 45-49Q29-54 15-51M-10-66Q1-79 11-71Q22-74 27-63Q9-71-10-66',paulownia:'M-27-50Q-28-62-16-61Q-9-62-8-58Q-7-70 5-69Q11-67 13-61Q25-70 31-56Q20-62 13-57Q1-65-6-55Q-18-60-27-50',evergreen:'M-31-53Q-29-67-14-66Q-14-74-3-73Q15-75 24-63Q10-68 2-65Q-7-70-14-62Q-24-63-31-53'};
+  out+=path(snowCaps[id],'#F4F8F4','opacity=".96"');
+ }
  return out;
 }
 function speciesArt(speciesId,theme='basic'){return handcutTreeArt(speciesId,theme==='snow'||theme==='winter')}
@@ -994,68 +1219,16 @@ function snowTreeArt(item){
  return handcutTreeArt(sp.id,true);
 }
 function hiddenTreeArt(kind,theme='basic'){
- const snow=theme==='snow'||theme==='winter',path=(d,fill='none',stroke='',w=1,extra='')=>'<path d="'+d+'" fill="'+fill+'" stroke="'+(stroke||'none')+'" stroke-width="'+w+'" stroke-linecap="round" stroke-linejoin="round" '+extra+'/>',poly=(pts,fill,extra='')=>'<polygon points="'+pts+'" fill="'+fill+'" '+extra+'/>',circle=(x,y,r,fill,opacity='1',extra='')=>'<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+fill+'" opacity="'+opacity+'" '+extra+'/>';
- let out='<ellipse cy="14" rx="24" ry="4.8" fill="'+(snow?'#82949B':'#50685A')+'" opacity=".10"/>';
- if(!snow&&kind==='A'){
-  // Sparkling tree: keep current size, lively gold shimmer.
-  out+=circle(0,-39,34,'#F8EEA0','.15','class="hidden-glow"');
-  out+=path('M0 13Q-2-13 1-49M0-20L-27-37M1-29L26-48','none','#735F4C',5.1);
-  out+=poly('-43,-39 -31,-55 -11,-60 3,-54 18,-61 39,-49 43,-31 26,-18 7,-21 -9,-15 -31,-21','#7FA86F');
-  out+=poly('-30,-47 -14,-56 2,-51 17,-56 31,-45 17,-33 1,-36 -14,-31','#BFD692','opacity=".86"');
-  out+=poly('-18,-54 -6,-59 8,-56 21,-51 11,-44 -1,-47 -13,-43','#DDE7A7','opacity=".78"');
-  [[-31,-42,'#FFF1A8',2.7],[-17,-53,'#FFE173',2.4],[-2,-45,'#FFF6D0',2.3],[13,-52,'#F4D162',2.5],[29,-39,'#FFF1A8',2.4],[-8,-27,'#EFCB57',2.3],[17,-29,'#FFF8E4',2.1],[2,-33,'#F4D865',2.0]].forEach((p,i)=>out+=circle(p[0],p[1],p[3],p[2],'.98','class="hidden-twinkle '+(i%2?'alt':'')+'"'));
-  out+=path('M-35-57v8M-39-53h8M32-55v7M28-51h8M4-62v7M0-58h8M-12-24v6M-15-21h6','none','#FFF4BF',1.7,'class="hidden-twinkle slow" opacity=".95"');
- }else if(!snow&&kind==='B'){
-  // Moonlight tree: elegant metasequoia silhouette made from individual triangular leaf fans.
-  // Upper foliage is luminous sage; lower foliage deepens gradually. Silver + gold points only shimmer in/out.
-  out+=circle(0,-47,37,'#F4E6A2','.09','class="hidden-glow alt"');
-  out+=circle(0,-49,27,'#E9EEDB','.07','class="hidden-glow"');
-  out+=path('M0 16Q-1 2 0-14','none','#66564B',4.6);
-  out+=path('M0-63L-12-55M0-63L12-55M0-51L-18-42M0-51L18-42M0-37L-24-25M0-37L24-25M0-22L-29-8M0-22L29-8','none','#67584D',1.55,'opacity=".34"');
-  // Top: pale, compact triangles
-  out+=poly('0,-88 -11,-69 11,-69','#E8EFD3');
-  out+=poly('-3,-70 -17,-59 -3,-55','#DEEAC6')+poly('3,-70 17,-59 3,-55','#D6E3BC');
-  // Overlapping center diamonds close the empty vertical gap.
-  out+=poly('0,-73 10,-63 0,-53 -10,-63','#D9E6C7','opacity=".96"');
-  out+=poly('0,-61 13,-49 0,-37 -13,-49','#C3D6A8','opacity=".96"');
-  // Upper-middle: light sage
-  out+=poly('-3,-59 -23,-44 -3,-39','#CADBAC')+poly('3,-59 23,-44 3,-39','#C2D3A1');
-  out+=poly('-5,-50 -28,-32 -4,-27','#AFC88D')+poly('5,-50 28,-32 4,-27','#A5BF81');
-  out+=poly('0,-47 15,-34 0,-21 -15,-34','#9FBA80','opacity=".95"');
-  // Lower: darker, broader triangular fans
-  out+=poly('-5,-37 -34,-17 -5,-11','#87A269')+poly('5,-37 34,-17 5,-11','#7C985F');
-  out+=poly('0,-31 16,-18 0,-5 -16,-18','#76905D','opacity=".94"');
-  out+=poly('-4,-23 -31,-5 -4,3','#667F52')+poly('4,-23 31,-5 4,3','#5B7548');
-  out+=poly('0,-17 12,-7 0,4 -12,-7','#5F794B','opacity=".94"');
-  // Silver upper-edge catches and a restrained warm gold vein.
-  out+=path('M-9-70L0-86L9-70M-15-58L-3-68M15-58L3-68M-21-43L-3-57M21-43L3-57','none','#E7ECE6',1.05,'opacity=".54"');
-  out+=path('M-24-30L-5-45M24-30L5-45M-29-15L-5-33M29-15L5-33','none','#D7BA55',1.2,'opacity=".42"');
-  [[0,-79,'#FFF9E8',2.0],[-12,-60,'#E8C65D',1.8],[13,-57,'#EEF1EE',1.7],[-20,-40,'#DDB649',1.8],[19,-35,'#FFF1BE',1.7],[-24,-18,'#E4C45A',1.7],[22,-13,'#E7ECEA',1.6],[2,-27,'#F0D16A',1.7]].forEach((p,i)=>out+=circle(p[0],p[1],p[3],p[2],'.90','class="hidden-twinkle '+(i%2?'alt':'slow')+'"'));
-  out+=path('M-8-76v5M-10.5-73.5h5M16-38v4.5M13.8-35.8h4.5M-20-20v4.5M-22.2-17.8h4.5','none','#F0DEA0',1.2,'class="hidden-twinkle slow" opacity=".68"');
- }else if(snow&&kind==='A'){
-  // Holiday tree: clearer ornaments and ornament-colored sparkle.
-  out+=circle(0,-40,31,'#FFF2B8','.18','class="hidden-glow"');
-  out+=path('M0 15V-75','none','#715A45',4.1);
-  [[-72,14,'#285744'],[-57,21,'#356C55'],[-41,28,'#427A61'],[-24,35,'#2E624B'],[-7,40,'#477E64']].forEach(a=>{const y=a[0],w=a[1],f=a[2];out+=poly('0,'+y+' '+(-w)+','+(y+26)+' 0,'+(y+16)+' '+w+','+(y+26),f);});
-  const ornaments=[[0,-62,'#F1CF5E',3.3],[-16,-49,'#D45459',3.2],[17,-46,'#E7BE4F',3.1],[-26,-30,'#D96763',3.1],[27,-27,'#F0CB61',3.1],[-5,-36,'#529FDA',3.0],[8,-20,'#C94B50',3.2],[-14,-13,'#F1D066',2.9],[17,-9,'#58A7DC',2.8],[4,-47,'#EFE8DC',2.6],[-29,-17,'#6FAF74',2.6],[28,-13,'#C75AA2',2.7]];
-  ornaments.forEach((p,i)=>{out+=circle(p[0],p[1],p[3]*2.15,p[2],'.16','class="hidden-ornament-glow '+(i%2?'alt':'')+'"');out+=circle(p[0],p[1],p[3],p[2],'.99');});
-  out+=poly('0,-86 -3.5,-78 -12,-77 -5.5,-71 -7.5,-62 0,-67.5 7.5,-62 5.5,-71 12,-77 3.5,-78','#F7DC6D');
-  out+=circle(0,-75,13,'#F7DC6D','.11','class="hidden-glow alt"');
-  out+=path('M-12-53Q0-58 12-53M-20-34Q0-40 20-34M-28-15Q0-22 28-15','none','#F8FBFC',2.5,'opacity=".82"');
-  out+=path('M-33-48v7M-36.5-44.5h7M31-34v7M27.5-30.5h7M-6-64v7M-9.5-60.5h7M18-20v6M15-17h6','none','#FFF8D8',1.5,'class="hidden-twinkle slow" opacity=".92"');
+ const snow=theme==='snow'||theme==='winter',gold=kind==='A';
+ let out=handcutTreeArt(gold?'oak':'fir',snow,gold?'gold':'moon');
+ const star=(x,y,s,color)=>'<path d="M0-4Q.7-.7 4 0Q.7.7 0 4Q-.7.7-4 0Q-.7-.7 0-4Z" fill="'+color+'" transform="translate('+x+' '+y+') scale('+s+')"/>';
+ if(gold){
+  [[-30,-39,1],[-13,-57,.85],[12,-54,1.15],[32,-37,.85],[-10,-29,.8],[14,-24,.7]].forEach(([x,y,s],i)=>{out+='<g class="hidden-twinkle '+(i%2?'alt':'slow')+'"><circle cx="'+x+'" cy="'+y+'" r="'+(3*s)+'" fill="'+(snow&&i%2?'#D79383':'#EED597')+'"/><circle cx="'+(x-.7)+'" cy="'+(y-.8)+'" r="'+s+'" fill="#FFF6D4"/></g>'});
+  out+='<g class="hidden-twinkle slow">'+star(-39,-61,.85,'#D1AF68')+star(41,-56,.7,'#E6C987')+star(5,-77,.68,'#E5C987')+'</g>';
  }else{
-  // Ice tree: visible silver sheen with subtle snowfall.
-  out+=circle(0,-39,44,'#DCE3E6','.18','class="hidden-glow alt"');
-  out+=circle(0,-39,33,'#F1F5F6','.11','class="hidden-glow"');
-  out+=path('M0 15V-63','none','#778183',3.8);
-  out+=poly('0,-84 -16,-65 -9,-52 -28,-36 -15,-22 -34,-5 0,10 34,-5 15,-22 28,-36 9,-52 16,-65','#CDD7DA','stroke="#9FAEB3" stroke-width="1.5" opacity=".99"');
-  out+=poly('0,-75 -9,-62 0,-55 9,-62','#F7FBFB','opacity=".96"')+poly('-21,-36 0,-52 21,-36 0,-26','#E5ECEE','opacity=".94"')+poly('-26,-6 0,-25 26,-6 0,3','#BFCBCD','opacity=".86"');
-  out+=poly('-10,-62 0,-72 10,-62 5,-55 -5,-55','#F0F4F5','opacity=".84"');
-  out+=path('M0-83V-59M-15-63H15M-25-36H25M-30-6H30','none','#EEF4F5',1.5,'class="hidden-ice-sheen" opacity=".72"');
-  out+=path('M-18-62Q0-70 18-62M-23-36Q0-44 23-36M-27-7Q0-15 27-7','none','#CFD8DB',1.7,'class="hidden-ice-sheen alt" opacity=".62"');
-  [[0,-65,'#F9FCFC',2.6],[-15,-31,'#E7EEF0',2.3],[15,-31,'#F6FAFA',2.3],[-20,-5,'#D7E0E3',2.2],[20,-5,'#EEF4F5',2.2],[0,-19,'#FFFFFF',2.2]].forEach((p,i)=>out+=circle(p[0],p[1],p[3],p[2],'.96','class="hidden-twinkle '+(i%2?'alt':'slow')+'"'));
-  [[-34,-59,1.7],[-39,-42,1.4],[-33,-18,1.6],[36,-56,1.5],[40,-35,1.7],[33,-11,1.4],[-10,-86,1.5],[14,-82,1.3]].forEach((p,i)=>out+=circle(p[0],p[1],p[2],i%2?'#E6EFF1':'#C8D4D8','.92','class="hidden-twinkle '+(i%2?'alt':'slow')+'"'));
-  out+=path('M-37-61v4M-39-59h4M39-38v4M37-36h4M-11-87v4M-13-85h4','none','#E7EFF1',1.1,'class="hidden-twinkle" opacity=".82"');
+  out+='<path d="M0-69Q-1-42 1-10" fill="none" stroke="'+(snow?'#FFFFFF':'#DCEAC7')+'" stroke-width=".8" opacity=".45"/>';
+  [[0,-68,.7],[-12,-44,.56],[15,-26,.66],[-21,-8,.72],[13,-3,.52]].forEach(([x,y,s],i)=>out+='<g class="hidden-twinkle '+(i%2?'alt':'slow')+'">'+star(x,y,s,snow?'#FFFFFF':'#F0E8BC')+'</g>');
+  out+='<g class="hidden-twinkle slow">'+star(-26,-59,.6,'#BED0C8')+star(29,-46,.5,'#BDCDC4')+'</g>';
  }
  return out;
 }
@@ -1190,12 +1363,13 @@ function forestPlacements(items,cfg){
  }
  const slotMap=new Map(slots.map(s=>[s.key,s])),featureKeys=forestFeatureKeys(cfg);
  const featureSlots=slots.filter(s=>featureKeys.has(s.key)),treeSlots=slots.filter(s=>!featureKeys.has(s.key));
- const cacheKey='natural-v2|'+cfg.id+'|'+items.map(c=>{const p=treeVisualProfile(c);return [c.id,c.completedAt,p.species.id,p.radius,p.scaleBias,c.hiddenTree||'',treeSizeVariance(c)].join(':')}).join('|');
- const cached=forestPlacementCache.get(cacheKey);
+ // Saved tiles belong to records; changing their appearance must not reassign them.
+ const placementKey=()=>JSON.stringify(['fixed-v3',cfg.id,items.map(c=>[c.id,c.completedAt,c.forestTile||''])]);
+ const cached=forestPlacementCache.get(placementKey());
  if(cached){
   const byId=new Map(items.map(c=>[c.id,c]));let changed=false;
-  const placements=cached.map(p=>{const item=byId.get(p.id);if(item.forestTile!=='g:'+p.slot.key){item.forestTile='g:'+p.slot.key;changed=true}return {...p,item}}),used=new Set(placements.map(p=>p.slot.key));
-  return {placements,emptySlots:treeSlots.filter(s=>!used.has(s.key)),featureSlots,changed};
+  const placements=cached.map(p=>{const item=byId.get(p.id),profile=treeVisualProfile(item),sizeVar=item.hiddenTree?1:treeSizeVariance(item);if(item.forestTile!=='g:'+p.slot.key){item.forestTile='g:'+p.slot.key;changed=true}return {...p,item,profile,sizeVar,scale:cfg.treeScale*profile.scaleBias*sizeVar}}),used=new Set(placements.map(p=>p.slot.key));
+  return {placements,emptySlots:treeSlots.filter(s=>!used.has(s.key)),featureSlots:featureSlots.filter(s=>!used.has(s.key)),changed};
  }
  const taken=new Set(),placements=[];let changed=false;
  const distances=new Map(treeSlots.map(slot=>[slot.key,{any:99,species:new Map(),shape:new Map()}]));
@@ -1211,6 +1385,14 @@ function forestPlacements(items,cfg){
  const binsFor=b=>{const keys=[];for(let x=Math.floor((b.x-b.rx)/binSize);x<=Math.floor((b.x+b.rx)/binSize);x++)for(let y=Math.floor((b.y-b.ry)/binSize);y<=Math.floor((b.y+b.ry)/binSize);y++)keys.push(x+','+y);return keys};
  const rememberCrown=b=>{for(const key of binsFor(b)){if(!crownBins.has(key))crownBins.set(key,[]);crownBins.get(key).push(b)}};
  const crownOverlap=box=>{let sum=0;const nearby=new Set();for(const key of binsFor(box))for(const b of crownBins.get(key)||[])nearby.add(b);for(const b of nearby){const dx=(box.x-b.x)/(box.rx+b.rx),dy=(box.y-b.y)/(box.ry+b.ry),penetration=1-dx*dx-dy*dy;if(penetration>0)sum+=penetration*Math.min(box.rx*box.ry,b.rx*b.ry)}return sum};
+ // Reserve every valid existing tile first, even when its record sorts after a new one.
+ // Legacy unprefixed tiles remain supported; old landmark tiles keep their tree.
+ ordered.forEach(item=>{
+  const saved=parseForestTile(item.forestTile),slot=saved&&slotMap.get(saved.key);
+  if(!slot||taken.has(slot.key))return;
+  const tile='g:'+slot.key;if(item.forestTile!==tile){item.forestTile=tile;changed=true}
+  add(item,slot);const placed=placements[placements.length-1];rememberCrown(crown(item,slot,placed.profile,placed.sizeVar));
+ });
  ordered.forEach(item=>{
   if(placements.some(p=>p.item===item))return;
   const profile=treeVisualProfile(item),sizeVar=(item&&item.hiddenTree)?1:treeSizeVariance(item),available=treeSlots.filter(s=>!taken.has(s.key));
@@ -1226,8 +1408,8 @@ function forestPlacements(items,cfg){
   if(best){const tile='g:'+best.key;if(item.forestTile!==tile){item.forestTile=tile;changed=true}add(item,best);rememberCrown(crown(item,best,profile,sizeVar))}
  });
  if(forestPlacementCache.size>=8)forestPlacementCache.delete(forestPlacementCache.keys().next().value);
- forestPlacementCache.set(cacheKey,placements.map(({item,...p})=>({...p,id:item.id})));
- return {placements,emptySlots:treeSlots.filter(s=>!taken.has(s.key)),featureSlots,changed};
+ forestPlacementCache.set(placementKey(),placements.map(({item,...p})=>({...p,id:item.id})));
+ return {placements,emptySlots:treeSlots.filter(s=>!taken.has(s.key)),featureSlots:featureSlots.filter(s=>!taken.has(s.key)),changed};
 }
 const forestArtBoundsCache=new Map();
 function forestTreeObstacles(points,cfg,theme){
@@ -1347,14 +1529,16 @@ function forestSVG(items,theme='basic',animated=true){
  const visibleItems=sortedItems.slice(-FOREST_VISIBLE_LIMIT);
  const layout=forestPlacements(visibleItems,cfg);if(layout.changed)persist();
  const points=layout.placements.map(p=>({...project(p.slot),c:p.item,profile:p.profile,scale:p.scale})).sort((a,b)=>a.y-b.y||a.c.id.localeCompare(b.c.id));
- const ground=theme==='snow'?'#E3ECEF':'#D9E9CC',top={x:cx,y:cy-cfg.boardH/2-marginY},right={x:cx+cfg.boardW/2+marginX,y:cy},bottom={x:cx,y:cy+cfg.boardH/2+marginY},left={x:cx-cfg.boardW/2-marginX,y:cy},depth=18;
- const groundPath='M'+top.x+' '+top.y+' L'+right.x+' '+right.y+' L'+bottom.x+' '+bottom.y+' L'+left.x+' '+left.y+' Z',leftSide='M'+left.x+' '+left.y+' L'+bottom.x+' '+bottom.y+' L'+bottom.x+' '+(bottom.y+depth)+' L'+left.x+' '+(left.y+depth)+' Z',rightSide='M'+bottom.x+' '+bottom.y+' L'+right.x+' '+right.y+' L'+right.x+' '+(right.y+depth)+' L'+bottom.x+' '+(bottom.y+depth)+' Z';
+ const ground=theme==='snow'?'#E3ECEF':'#D9E9CC',top={x:cx,y:cy-cfg.boardH/2-marginY},right={x:cx+cfg.boardW/2+marginX,y:cy},bottom={x:cx,y:cy+cfg.boardH/2+marginY},left={x:cx-cfg.boardW/2-marginX,y:cy},depth=9;
+ const corner=17,vertices=[top,right,bottom,left];
+ const toward=(a,b,d)=>{const length=Math.hypot(b.x-a.x,b.y-a.y);return {x:a.x+(b.x-a.x)*d/length,y:a.y+(b.y-a.y)*d/length}};
+ const groundPath=vertices.map((v,i)=>{const a=toward(v,vertices[(i+3)%4],corner),b=toward(v,vertices[(i+1)%4],corner);return (i?'L':'M')+a.x+' '+a.y+' Q'+v.x+' '+v.y+' '+b.x+' '+b.y}).join(' ')+' Z';
  const decorations=forestDecorations(cfg,project,theme,layout.emptySlots,layout.featureSlots,forestTreeObstacles(points,cfg,theme));
  const overlap=forestOverlapEdges(points,cfg,theme);
  const trees=points.map((p,i)=>{const hiddenKind=p.c?.hiddenTree,hiddenBoost=hiddenKind?hiddenTreeScale(hiddenKind,theme):1,sc=((p.scale||cfg.treeScale)*hiddenBoost).toFixed(3),shadowRx=((p.profile?.radius||24)*.70*hiddenBoost).toFixed(1),shadowRy=(Math.max(3.6,(p.profile?.radius||24)*.13*hiddenBoost)).toFixed(1),snowBase=theme==='snow'?'<ellipse cx="0" cy="13" rx="'+Math.max(9,(p.profile?.radius||24)*.5*hiddenBoost).toFixed(1)+'" ry="4.1" fill="#F8FBFC" opacity=".92"/>':'';return '<g data-tree="'+esc(p.c.id)+'" role="button" tabindex="0" aria-label="'+esc(p.c.title+' · '+String(p.c.genre||category(p.c).label))+'" transform="translate('+p.x.toFixed(1)+' '+p.y.toFixed(1)+') scale('+sc+')"><ellipse cx="4" cy="10" rx="'+shadowRx+'" ry="'+shadowRy+'" fill="#708579" opacity=".11"/>'+snowBase+'<circle class="tree-hit" cx="0" cy="-27" r="38" fill="transparent" pointer-events="all"/>'+overlap.edges[i]+'<g class="tree-art">'+treeArt(p.c,theme)+'</g></g>'});
  const scene=[...trees.map((art,i)=>({y:points[i].y,art})),...decorations].sort((a,b)=>a.y-b.y).map(entry=>entry.art).join('');
  const visitor=n?forestVisitorArt(items,animated):'',patches=[{x:cx-cfg.boardW*.22,y:cy-cfg.boardH*.11,rx:cfg.boardW*.12,ry:cfg.boardH*.05,o:.10},{x:cx+cfg.boardW*.16,y:cy-cfg.boardH*.08,rx:cfg.boardW*.10,ry:cfg.boardH*.046,o:.08},{x:cx-cfg.boardW*.03,y:cy+cfg.boardH*.17,rx:cfg.boardW*.14,ry:cfg.boardH*.055,o:.07}].map((g,i)=>'<ellipse cx="'+g.x.toFixed(1)+'" cy="'+g.y.toFixed(1)+'" rx="'+g.rx.toFixed(1)+'" ry="'+g.ry.toFixed(1)+'" fill="'+(theme==='snow'?(i===1?'#D6E3E7':'#EEF4F6'):(i===1?'#c9dcb9':'#d4e3c7'))+'" opacity="'+(theme==='snow'?Math.min(.36,g.o+.15):g.o)+'"/>').join('');
- return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 540" role="group" aria-label="'+n+'그루의 '+({basic:'기본',snow:'설산'}[theme])+' 숲"><defs>'+overlap.defs+'<filter id="forestTreeEdge" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB"><feMorphology in="SourceAlpha" operator="dilate" radius="1.5" result="spread"/><feGaussianBlur in="spread" stdDeviation=".85" result="edge"/><feFlood flood-color="'+(theme==='snow'?'#BCCFD5':'#B9CE98')+'" flood-opacity=".72"/><feComposite in2="edge" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><linearGradient id="groundFill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+(theme==='snow'?'#F2F6F7':'#E5F0DA')+'"/><stop offset=".58" stop-color="'+ground+'"/><stop offset="1" stop-color="'+(theme==='snow'?'#D7E3E6':'#D0E1C2')+'"/></linearGradient><clipPath id="groundClip"><path d="'+groundPath+'"/></clipPath></defs><rect width="720" height="540" fill="transparent"/>'+(theme==='snow'?'<path d="M55 224 177 58 275 191 368 31 541 221 598 99 720 247" fill="#c4d4db"/><path d="M135 115L177 58 217 112 188 100 175 117 163 100Z M317 99L368 31 423 104 384 86 365 108 348 85Z" fill="#f8fbfc"/>':'')+'<g id="forest-world"><path d="'+groundPath+'" fill="url(#groundFill)"/><g clip-path="url(#groundClip)">'+patches+'</g><path d="'+groundPath+'" fill="none" stroke="#bdd0b1" stroke-width="1.5" opacity=".46"/><path d="'+leftSide+'" fill="#938874" opacity=".98"/><path d="'+rightSide+'" fill="#ab9f8a" opacity=".98"/>'+scene+visitor+'</g></svg>';
+ return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 540" role="group" aria-label="'+n+'그루의 '+({basic:'기본',snow:'설산'}[theme])+' 숲"><defs>'+overlap.defs+'<filter id="forestTreeEdge" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB"><feMorphology in="SourceAlpha" operator="dilate" radius="1.5" result="spread"/><feGaussianBlur in="spread" stdDeviation=".85" result="edge"/><feFlood flood-color="'+(theme==='snow'?'#BCCFD5':'#B9CE98')+'" flood-opacity=".72"/><feComposite in2="edge" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><linearGradient id="groundFill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+(theme==='snow'?'#F2F6F7':'#E5F0DA')+'"/><stop offset=".58" stop-color="'+ground+'"/><stop offset="1" stop-color="'+(theme==='snow'?'#D7E3E6':'#D0E1C2')+'"/></linearGradient><clipPath id="groundClip"><path d="'+groundPath+'"/></clipPath></defs><rect width="720" height="540" fill="transparent"/>'+(theme==='snow'?'<path d="M55 224 177 58 275 191 368 31 541 221 598 99 720 247" fill="#c4d4db"/><path d="M135 115L177 58 217 112 188 100 175 117 163 100Z M317 99L368 31 423 104 384 86 365 108 348 85Z" fill="#f8fbfc"/>':'')+'<g id="forest-world"><ellipse cx="360" cy="'+(cy+cfg.boardH/2+depth)+'" rx="'+(cfg.boardW*.35)+'" ry="13" fill="#899c78" opacity=".09"/><path d="'+groundPath+'" transform="translate(0 '+depth+')" fill="'+(theme==='snow'?'#c2d3d8':'#b5c5a0')+'"/><path d="'+groundPath+'" fill="url(#groundFill)"/><g clip-path="url(#groundClip)">'+patches+'</g><path d="'+groundPath+'" fill="none" stroke="#bdd0b1" stroke-width="1.5" opacity=".46"/>'+scene+visitor+'</g></svg>';
 }
 
 
@@ -1556,7 +1740,7 @@ function cloudSetupModal(message=''){
 
 const KEY='songrim.prototype.v3';
 let forestEditMode=false,forestVisibilityObserver=null;
-const typeName={book:'책',album:'음반',movie:'영화'},statusName={all:'전체',saved:'아직 안 본 것',active:'경험 중',done:'완료'};
+const typeName={book:'책',album:'음반',movie:'영화'},statusName={all:'전체',saved:'보고 싶은',active:'감상 중',done:'완료'};
 let pendingForestArrival=null;
 let state=Model.empty(),view='today',detailId=null,detailOrigin='scrap',picking=false,year=String(new Date().getFullYear()),month=Model.today().slice(0,7),modal=null,zoomState={scale:1,x:0,y:0},storageOK=true,toastTimer,undoAction=null,shareBlob=null,shareURL=null,photoFiles=[],ocrGeneration=0,ocrBusy=false,candidates=[],authMode=false,candidatePreview=null,candidatePreviewReturn=null;
 const $=id=>document.getElementById(id);
@@ -1592,15 +1776,15 @@ function closeCandidateDetail(){
  render();window.scrollTo(0,0);
 }
 function cover(c,small=false){return c.cover?'<img class="cover '+c.type+'" src="'+esc(c.cover)+'" alt="'+esc(c.title)+' 표지">':'<div class="cover '+c.type+'" aria-label="'+esc(c.title)+' 표지 없음">'+icon(c.type)+'</div>'}
-function row(c,choose=false){return '<button class="content-row" data-action="'+(choose?'choose':'detail')+'" '+attr(c.id)+'>'+cover(c)+'<div class="grow"><div class="row between"><span class="badge">'+typeName[c.type]+' · '+statusName[Model.status(c)]+'</span><span class="badge">'+(validRating(c.rating)?'★ '+c.rating+' · ':'')+c.saves.length+'번 스크랩</span></div><div class="title">'+esc(c.title)+'</div><div class="creator">'+esc(c.creator||'제작자 미확인')+'</div></div><span class="muted">›</span></button>'}
+function row(c,choose=false){return '<button class="content-row" data-action="'+(choose?'choose':'detail')+'" '+attr(c.id)+'>'+cover(c)+'<div class="grow"><span class="badge">'+typeName[c.type]+'</span><div class="title">'+esc(c.title)+'</div><div class="creator">'+esc(c.creator||'제작자 미확인')+'</div><div class="content-row-meta"><span class="record-status '+Model.status(c)+'">'+statusName[Model.status(c)]+'</span>'+(validRating(c.rating)?'<span class="row-rating">★ '+c.rating+'</span>':'')+(c.saves.length>1?'<span>스크랩 '+c.saves.length+'회</span>':'')+'</div></div><span class="muted" aria-hidden="true">›</span></button>'}
 function menu(c){return '<details class="more"><summary aria-label="콘텐츠 메뉴">⋯</summary><div class="more-menu">'+button('다른 스크랩으로 바꾸기','pick','')+button('콘텐츠 상세 보기','detail','',attr(c.id))+'</div></details>'}
 function render(){
  forestVisibilityObserver?.disconnect();forestVisibilityObserver=null;
  if(authRoute!=='app'){renderEntry();return}
- $('tabs').hidden=false;$('page').classList.remove('entry-page','taste-page');
+ $('tabs').hidden=false;$('page').classList.remove('entry-page','taste-page');$('page').dataset.view=view;$('head').dataset.view=view;
  const parentTab=view==='detail'?detailOrigin:view;
  const tab=parentTab==='calendar'?'forest':parentTab;
- $('tabs').innerHTML=['today','scrap','forest','my'].map((t,i)=>'<button class="'+(tab===t?'active':'')+'" data-action="tab" data-tab="'+t+'" aria-current="'+(tab===t?'page':'false')+'">'+icon(t)+['오늘','스크랩','나의 숲','MY'][i]+'</button>').join('');
+ $('tabs').innerHTML=['today','scrap','forest','my'].map((t,i)=>'<button class="'+(tab===t?'active':'')+'" data-action="tab" data-tab="'+t+'" aria-current="'+(tab===t?'page':'false')+'">'+icon(t)+['오늘','스크랩','나의 숲','마이'][i]+'</button>').join('');
  $('head').innerHTML=['detail','calendar'].includes(view)?'<div class="row">'+button(icon('back'),'back','iconbtn','aria-label="뒤로가기"')+'<span class="back-title">'+(view==='calendar'?'나의 숲 · 월간 기록':'콘텐츠 상세')+'</span></div>':'<div class="brand">'+icon('forest')+'송림</div>'+(['today','forest'].includes(view)?button(icon('plus')+'<span class="tiny">스크랩</span>','add','iconbtn','aria-label="스크랩 추가"'):'');
  $('page').innerHTML=({today:renderToday,scrap:renderScrap,forest:renderForest,calendar:renderCalendar,my:renderMy,detail:renderDetail}[view]||renderToday)();
  if(view==='forest')setupForest();
@@ -1608,7 +1792,7 @@ function render(){
 }
 function renderTodayBase(){
  let c=selected();if(c?.completed)c=null;const active=state.items.find(x=>!x.completed&&(x.logs.length||x.importedProgress));if(active&&!c)c=active;
- if(!state.onboarded&&!state.items.length)return '<section><div class="page-heading"><h1 class="page-title">오늘</h1></div><div class="center today-empty">'+growth(0)+'<h2>보고 싶은 것을 모아<br>나의 숲으로 남겨요.</h2><p class="creator">스크랩하고, 하나씩 경험해보세요.</p><div class="space"></div>'+button('첫 스크랩 추가하기','add')+'</div></section>';
+ if(!state.onboarded&&!state.items.length)return '<section><div class="page-heading"><h1 class="page-title">오늘</h1></div><div class="center today-empty">'+growth(0)+'<h2>첫 작품을 담아보세요</h2><p class="creator">책, 음반, 영화를 기록할 수 있어요.</p><div class="space"></div>'+button('첫 스크랩 추가하기','add')+'</div></section>';
  if(!c){
   const candidates=state.items.filter(c=>!c.completed).sort((a,b)=>b.saves.length-a.saves.length||(b.saves.at(-1)?.at||0)-(a.saves.at(-1)?.at||0));
   const skip=Number(sessionStorageSafe('candidate'))||0,chosen=candidates[skip%candidates.length];
@@ -1616,10 +1800,10 @@ function renderTodayBase(){
   c=chosen;
  }
 
- const stages=['씨앗 · 첫 경험을 기다려요','싹 · 첫 경험이 남았어요','덤불 · 다른 날의 경험이 쌓였어요'];
+ const stages=['씨앗','새싹','자라는 중'];
  const logs=[...c.logs].sort((a,b)=>b.date.localeCompare(a.date));
  const track=c.type==='album'&&c.tracks.length?'<div class="row between"><span class="small-link">오늘의 곡 · '+esc(c.tracks[c.trackIndex%c.tracks.length])+'</span>'+button('듣기 ↗','external','textbtn',attr(c.id))+'</div><details class="collapse"><summary>다른 곡 선택</summary>'+c.tracks.map((t,i)=>button(esc(t),'track','textbtn','data-index="'+i+'" '+attr(c.id))).join('')+'</details>':'';
- return '<section><div class="page-heading"><h1 class="page-title">오늘의 '+typeName[c.type]+'</h1>'+menu(c)+'</div><div class="today-work">'+cover(c)+'<button type="button" class="grow" data-action="detail" '+attr(c.id)+' style="text-align:left"> <div class="title">'+esc(c.title)+'</div><p class="creator">'+esc(c.creator||'제작자 미확인')+'</p>'+(c.type==='book'&&logs.find(l=>l.page)?'<p class="bookpage">마지막 기록 · '+esc(logs.find(l=>l.page).page)+'쪽</p>':(logs.length?'<p class="bookpage">최근 기록 · '+esc(logs[0].date)+'</p>':''))+'</button></div><div class="center">'+growth(Model.stage(c),c)+'<p class="growth-label">'+stages[Model.stage(c)]+'</p></div>'+track+recordActions(c)+(c.type==='movie'?button('보러 가기 ↗','external','textbtn',attr(c.id)):'')+(state.items.some(item=>!item.completed&&item.id!==c.id)?button('다른 콘텐츠 추천받기','nextCandidate','textbtn',attr(c.id)):'')+resumeExperiences(c)+todayHistory(c)+'</section>';
+ return '<section><div class="page-heading"><h1 class="page-title">오늘의 '+typeName[c.type]+'</h1>'+menu(c)+'</div><div class="today-work">'+cover(c)+'<button type="button" class="grow" data-action="detail" '+attr(c.id)+' style="text-align:left"> <div class="title">'+esc(c.title)+'</div><p class="creator">'+esc(c.creator||'제작자 미확인')+'</p>'+(c.type==='book'&&logs.find(l=>l.page)?'<p class="bookpage">마지막 기록 · '+esc(logs.find(l=>l.page).page)+'쪽</p>':(logs.length?'<p class="bookpage">최근 기록 · '+esc(logs[0].date)+'</p>':''))+'</button></div><div class="center">'+growth(Model.stage(c),c)+'<p class="growth-label">'+stages[Model.stage(c)]+'</p></div>'+track+recordActions(c)+(c.type==='movie'?button('보러 가기 ↗','external','textbtn',attr(c.id)):'')+(state.items.some(item=>!item.completed&&item.id!==c.id)?button('다른 작품 고르기','nextCandidate','textbtn',attr(c.id)):'')+resumeExperiences(c)+todayHistory(c)+'</section>';
 }
 function resumeExperiences(current){
  const active=state.items.filter(c=>c.id!==current.id&&!c.completed&&(c.logs.length||c.importedProgress));
@@ -1640,7 +1824,7 @@ function renderScrap(){
  const typeTabs='<div class="type-tabs" role="group" aria-label="콘텐츠 유형">'+['all','book','movie','album'].map(t=>button(t==='all'?'전체':typeName[t],'filterType','type-tab '+(f.type===t?'active':''),'data-type="'+t+'" aria-pressed="'+(f.type===t)+'"')).join('')+'</div>';
  const statusChips=!picking?'<div class="status-filter" role="group" aria-label="경험 상태">'+['all','saved','active','done'].map(t=>button(statusName[t],'filterStatus','chip '+(f.status===t?'active':''),'data-status="'+t+'" aria-pressed="'+(f.status===t)+'"')).join('')+'</div>':'';
  const sortLabel={recent:'최근 스크랩순',many:'많이 스크랩한 순',old:'오래 스크랩한 순',rating:'별점 높은 순'}[f.sort];
- return '<section><div class="page-heading"><h1 class="page-title">'+ (picking?'오늘 경험할 콘텐츠':'스크랩')+'</h1>'+(picking?button('취소','cancelPick','textbtn'):'')+'</div><div class="space"></div><div class="scrap-fixed-search"><input id="search" type="search" placeholder="제목·제작자 검색" aria-label="스크랩 검색" value="'+esc(f.q)+'"></div>'+typeTabs+statusChips+'<div class="scrap-list-tools"><span class="muted">'+list.length+'개</span>'+inlinePicker(sortLabel,'sort',Object.entries({recent:'최근 스크랩순',many:'많이 스크랩한 순',old:'오래 스크랩한 순',rating:'별점 높은 순'}),f.sort)+'</div><div class="content-list">'+(list.length?list.map(c=>row(c,picking)).join(''):'<div class="empty"><h3>조건에 맞는 콘텐츠가 없어요</h3><p>유형이나 상태를 바꿔보세요.</p>'+button('필터 초기화','resetFilters','textbtn')+'</div>')+'</div><div class="list-footer"></div></section>'+(!picking?button('＋ 스크랩 추가','add','fab'):'');
+ return '<section><div class="page-heading"><h1 class="page-title">'+ (picking?'오늘 경험할 콘텐츠':'스크랩')+'</h1>'+(picking?button('취소','cancelPick','textbtn'):'')+'</div><div class="space"></div><div class="scrap-fixed-search"><input id="search" type="search" placeholder="제목·제작자 검색" aria-label="스크랩 검색" value="'+esc(f.q)+'"></div>'+typeTabs+statusChips+'<div class="scrap-list-tools"><span class="muted">'+list.length+'개</span>'+inlinePicker(sortLabel,'sort',Object.entries({recent:'최근 스크랩순',many:'많이 스크랩한 순',old:'오래 스크랩한 순',rating:'별점 높은 순'}),f.sort)+'</div><div class="content-list">'+(list.length?list.map(c=>row(c,picking)).join(''):(state.items.length?'<div class="empty"><h3>검색 결과가 없어요</h3><p>검색어나 필터를 바꿔보세요.</p>'+button('필터 초기화','resetFilters','textbtn')+'</div>':'<div class="empty"><h3>아직 담은 작품이 없어요</h3><p>보고 싶은 책, 음반, 영화를 추가해보세요.</p></div>'))+'</div><div class="list-footer"></div></section>'+(!picking?button(icon('plus')+'스크랩 추가','add','fab'):'');
 }
 function contentIntroText(c){
  // 상세 화면 전용: tasteIntroText()와 달리 절대 자르지 않고 원본 필드를 그대로 반환한다.
@@ -1663,11 +1847,20 @@ function renderDetail(){
 }
 function forestRecordYear(c){if(c.completed&&c.completed!=='unknown')return c.completed.slice(0,4);const date=new Date(c.completedAt||c.saves?.[0]?.at||Date.now());return Number.isNaN(date.getTime())?now().slice(0,4):String(date.getFullYear())}
 function renderForest(){
- const items=Model.completed(state,year),stats=Model.stats(items),theme=state.themes[year]||'basic';
- const expansion=forestExpansionMeta(stats.n);
- const stageNote=stats.n===0?'첫 경험을 완료하면 나무 한 그루가 자라요.':expansion.label+(expansion.nextAt?' · '+expansion.remaining+'그루를 더 심으면 숲이 넓어져요.':' · 풍성하게 자란 숲이에요.')+(stats.n>FOREST_VISIBLE_LIMIT?' 화면에는 최근 '+FOREST_VISIBLE_LIMIT+'그루를 표시해요. 모든 기록은 스크랩에서 볼 수 있어요.':'');
- const collection=collectionCounts();
- return '<section><div class="page-heading forest-heading"><div role="heading" aria-level="1">'+inlinePicker(year+'년 나의 숲','year',[...new Set([now().slice(0,4),...state.items.filter(c=>c.completed).map(forestRecordYear)])].sort().reverse().map(y=>[y,y+'년']),year)+'</div>'+(stats.n?button(forestEditMode?'완료':'꾸미기','forestEdit','textbtn forest-edit-control','aria-pressed="'+forestEditMode+'"'):'')+'</div><div class="space"></div><div class="forest-scene"><div class="forest-viewport '+(forestEditMode?'editing':'')+'" id="forestViewport" data-theme="'+((theme==='snow'||theme==='winter')?'snow':'basic')+'" tabindex="0" aria-label="'+(forestEditMode?'꾸미기 중. 바꾸고 싶은 나무를 누르세요.':'완료한 콘텐츠가 나무로 쌓인 숲.')+'">'+forestSVG(items,theme)+'</div></div>'+(forestEditMode?'<p class="forest-edit-hint">나무를 누르면 이 콘텐츠에 사용할 나무를 바꿀 수 있어요.</p>':'')+'<div class="area"><strong>'+stats.n.toLocaleString()+'그루의 나무</strong><p class="forest-types">책 '+stats.book+' · 음반 '+stats.album+' · 영화 '+stats.movie+'</p><p class="forest-area-note">'+stats.area.toLocaleString()+'㎡'+(stats.n?' · '+esc(Model.compare(stats.n)):' · 첫 나무를 기다리고 있어요')+'</p><p class="muted tiny">'+stageNote+'</p></div>'+forestSummary(items)+'<button class="collection-entry" data-action="collection"><strong>나의 도감</strong><span>나무 '+collection.trees+'/'+collection.totalTrees+' · 방문객 '+collection.visitors+'/'+collection.totalVisitors+'  ›</span></button><div class="space"></div>'+(stats.n?button('월간 기록 보기','calendar'):'')+'<div class="row between">'+(stats.n?button('내 숲 공유하기','shareForest','textbtn'):button('월간 기록 보기','calendar','textbtn'))+button('테마 변경','themes','textbtn')+'</div><p class="muted tiny"></p></section>';
+ const items=Model.completed(state,year),stats=Model.stats(items),theme=state.themes[year]||'basic',snow=theme==='snow'||theme==='winter';
+ const expansion=forestExpansionMeta(stats.n),collection=collectionCounts();
+ const periods=[...new Set([now().slice(0,4),...state.items.filter(c=>c.completed).map(forestRecordYear)])].sort().reverse();
+ const periodPicker=inlinePicker(year+'년','year',periods.map(y=>[y,y+'년']),year);
+ const types='<div class="forest-metrics">'+[['book','책'],['album','음반'],['movie','영화']].map(([type,label])=>'<div class="forest-metric"><span>'+label+'</span><strong>'+stats[type]+'</strong></div>').join('')+'</div>';
+ const total='<div class="forest-total"><h2>'+stats.n.toLocaleString()+'<span>그루</span></h2><div class="forest-area"><span>숲 면적</span><strong>'+stats.area.toLocaleString()+' ㎡</strong></div></div>';
+ const next=stats.n&&expansion.nextAt?'<div class="forest-next"><p>다음 확장까지 '+expansion.remaining+'그루</p></div>':'';
+ return '<section class="forest-page-section"><div class="page-heading forest-heading"><h1 class="page-title">나의 숲</h1>'+periodPicker+'</div>'+
+ '<div class="forest-garden '+(snow?'is-snow':'')+'"><div class="forest-tools"><span class="forest-stage">'+esc(expansion.label)+'</span><div class="forest-tool-actions">'+button((snow?'설산':'기본 숲')+' <span aria-hidden="true">⌄</span>','themes','forest-season-button','aria-label="숲 테마 변경"')+(stats.n?button(forestEditMode?'완료':'꾸미기','forestEdit','forest-edit-control','aria-pressed="'+forestEditMode+'"'):'')+'</div></div><div class="forest-scene"><div class="forest-viewport '+(forestEditMode?'editing':'')+'" id="forestViewport" data-theme="'+(snow?'snow':'basic')+'" tabindex="0" aria-label="'+(forestEditMode?'꾸미기 중. 바꿀 나무를 선택하세요.':stats.n+'그루의 숲. 나무를 선택해 기록을 볼 수 있습니다.')+'">'+forestSVG(items,theme)+'</div>'+(forestEditMode?'<p class="forest-edit-hint">바꿀 나무를 선택하세요</p>':'')+(stats.n?'':'<p class="forest-empty">완료한 작품이 나무로 쌓여요</p>')+'</div></div>'+
+ '<div class="forest-overview">'+total+types+next+'</div>'+
+ (stats.n>FOREST_VISIBLE_LIMIT?'<p class="forest-limit-note">최근 '+FOREST_VISIBLE_LIMIT+'그루 표시</p>':'')+
+ '<div class="forest-records"><div class="forest-insight-heading"><h2>기록 요약</h2>'+button('월간 기록 <span aria-hidden="true">›</span>','calendar','textbtn')+'</div>'+forestSummary(items)+'</div>'+
+ '<button class="collection-entry" data-action="collection"><span class="collection-cover" aria-hidden="true"><svg viewBox="-65 -86 130 108"><g transform="translate(-25 3) scale(.65)">'+speciesArt('fir',theme)+'</g><g transform="translate(18 9) scale(.84)">'+speciesArt('oak',theme)+'</g></svg></span><span class="collection-entry-copy"><strong>나의 도감</strong><small>나무 '+collection.trees+'/'+collection.totalTrees+' · 방문객 '+collection.visitors+'/'+collection.totalVisitors+'</small></span><span class="collection-entry-arrow" aria-hidden="true">›</span></button>'+
+ '<div class="forest-actions">'+(stats.n?button(icon('share')+'숲 공유하기','shareForest','secondary'):button(icon('plus')+'스크랩 추가','add','primary'))+'</div></section>';
 }
 function calendarHTML(period){
  const [y,m]=period.split('-').map(Number),start=new Date(y,m-1,1).getDay(),days=new Date(y,m,0).getDate();
@@ -1684,7 +1877,7 @@ function calendarHTML(period){
 function renderCalendar(){
  const stats=Model.stats(Model.completed(state,month));
  const recordedDays=new Set(state.items.flatMap(c=>c.logs.map(l=>l.date).concat(c.completed&&c.completed!=='unknown'?[c.completed]:[])).filter(d=>d.startsWith(month))).size;
- return '<section><div class="month-head">'+button('‹','prevMonth','iconbtn','aria-label="이전 달"')+button(month.replace('-','년 ')+'월 ▾','months','textbtn')+button('›','nextMonth','iconbtn','aria-label="다음 달" '+(month>=now().slice(0,7)?'disabled':''))+'</div>'+calendarHTML(month)+'<p class="summary">경험한 콘텐츠를 표지로 표시해요 · 완료한 날은 배경이 옅게 표시돼요</p><p class="summary">이번 달 기록한 날 '+recordedDays+'일</p><div class="rule"></div><p><strong>이번 달 완료한 '+stats.n+'개의 경험</strong></p><p class="summary">책 '+stats.book+' · 음반 '+stats.album+' · 영화 '+stats.movie+'</p>'+button('이번 달 기록 공유하기','shareMonth','primary',recordedDays?'':'disabled')+'</section>';
+ return '<section><div class="month-head">'+button('‹','prevMonth','iconbtn','aria-label="이전 달"')+button(month.replace('-','년 ')+'월 ▾','months','textbtn')+button('›','nextMonth','iconbtn','aria-label="다음 달" '+(month>=now().slice(0,7)?'disabled':''))+'</div>'+calendarHTML(month)+'<p class="summary">기록한 날 '+recordedDays+'일</p><div class="rule"></div><p><strong>완료한 작품 '+stats.n+'개</strong></p><p class="summary">책 '+stats.book+' · 음반 '+stats.album+' · 영화 '+stats.movie+'</p>'+button('기록 공유하기','shareMonth','primary',recordedDays?'':'disabled')+'</section>';
 }
 const TREE_UNLOCK_TEST_CASES=[
  ['book-literature','book','소설'],['book-humanities','book','철학'],['book-science','book','과학'],['album-classical','album','클래식'],['album-popular','album','팝'],['album-roots','album','재즈'],['movie-drama','movie','드라마'],['movie-sf','movie','SF'],['movie-action','movie','액션'],['other','movie','다큐멘터리']
@@ -1702,9 +1895,10 @@ function addTreeUnlockTestData(){
  ensureCompletedSpeciesAssignments();
  persist();render();toast('각 나무에 완료 경험 3개씩 넣었어요. 일반 나무 20종이 모두 해금됩니다.');
 }
+
 function renderMy(){
  const stats=Model.stats(state.items.filter(c=>c.completed));
- return '<section><div class="page-heading"><h1 class="page-title">'+esc(state.profile.name)+'의 기록</h1></div><p class="creator page-description">스크랩 '+state.items.length+'개 · 완료 '+stats.n+'개</p><div class="space"></div>'+button('프로필 <span>›</span>','profile','menu-row')+button('취향 추가 <span>›</span>','tastes','menu-row')+button('오늘의 경험 알림 <span class="muted">체험 안내</span>','notifications','menu-row')+button('데이터 백업 <span>↓</span>','backup','menu-row')+button('백업 복원 <span>↑</span>','restore','menu-row')+'<input id="restoreFile" class="offscreen" type="file" accept="application/json,.json">'+button('서비스·개인정보 안내 <span>›</span>','terms','menu-row')+button('처음 이용 흐름 다시 보기 <span>›</span>','flowReplay','menu-row')+'<div class="rule"></div>'+button('로그아웃','flowLogout','menu-row danger')+button('회원탈퇴','deleteAccount','menu-row danger')+'<details class="dev"><summary>프로토타입 체험 도구</summary><div class="note">기록은 이 브라우저에 저장됩니다. 책은 Kakao, 음악은 Apple Music/iTunes, 영화는 TMDB 데이터를 송림의 Supabase Edge Function을 통해 불러오며, 사진의 글자 인식은 OCR.Space에서 처리합니다.</div><p class="summary">체험 날짜: '+now()+(state.offset?' · 실제 날짜 +'+state.offset+'일':'')+'</p>'+button('다음 날로 체험하기','nextDay','secondary')+button('실제 날짜로 돌아가기','realDay','textbtn')+button('나무 도감 전체 해금 테스트','treeUnlockTest','secondary')+button('데이터 삭제 (전체 초기화)','clear','menu-row danger')+'<p class="tiny muted">면적 비교의 생활 공간 수치는 체험용 설정값입니다.</p></details></section>';
+ return '<section><div class="page-heading"><h1 class="page-title">마이</h1></div><button class="profile-summary" data-action="profile"><span class="profile-avatar">'+icon('my')+'</span><span class="grow"><strong>'+esc(state.profile.name)+'</strong><small>프로필 수정</small></span><span class="muted" aria-hidden="true">›</span></button><div class="profile-stats"><div><strong>'+state.items.length+'</strong><span>스크랩</span></div><div><strong>'+stats.n+'</strong><span>완료</span></div></div><div class="settings-group"><h2>나의 설정</h2>'+button('취향 관리 <span>›</span>','tastes','menu-row')+button('알림 <span>›</span>','notifications','menu-row')+'</div><div class="settings-group"><h2>기록 관리</h2>'+button('데이터 백업 <span>↓</span>','backup','menu-row')+button('백업 복원 <span>↑</span>','restore','menu-row')+'<input id="restoreFile" class="offscreen" type="file" accept="application/json,.json"></div><div class="settings-group"><h2>서비스</h2>'+button('이용약관 및 개인정보 <span>›</span>','terms','menu-row')+button('로그아웃 <span>›</span>','flowLogout','menu-row')+button('회원탈퇴','deleteAccount','menu-row danger')+'</div></section>';
 }
 let modalReturnFocus=null,modalFocusTimer=null;
 function showModal(title,html,kind='generic'){
@@ -2686,7 +2880,7 @@ function editLog(id,logId){
  const c=get(id),l=c?.logs.find(l=>l.id===logId);if(!l)return;
  showModal('경험 기록 수정','<form id="logForm" data-id="'+id+'" data-log="'+logId+'"><label for="logDate">기록 날짜</label><input id="logDate" type="date" max="'+now()+'" required value="'+l.date+'">'+(c.type==='book'?'<label for="logPage">마지막으로 읽은 쪽 · 선택</label><input id="logPage" type="number" min="0" max="100000" value="'+esc(l.page)+'">':'')+'<label for="logMemo">메모 · 선택</label><textarea id="logMemo" maxlength="4000">'+esc(l.memo)+'</textarea><div id="formError" class="form-error"></div><button type="submit" class="primary">수정 저장</button>'+button('이 기록 삭제','deleteLog','textbtn danger',attr(id)+' data-log="'+logId+'"')+'</form>','log');
 }
-function themes(){const current=(state.themes[year]==='snow'||state.themes[year]==='winter')?'snow':'basic';showModal('숲 테마','<div class="theme-grid">'+Object.entries({basic:'기본 숲',snow:'설산'}).map(([v,t])=>button(t,'theme',current===v?'active':'','data-theme="'+v+'"')).join('')+'</div><p class="creator">별도 테마는 설산 1종만 운영합니다. 나무 수와 기록은 그대로 유지됩니다.</p>','themes')}
+function themes(){const current=(state.themes[year]==='snow'||state.themes[year]==='winter')?'snow':'basic';showModal('숲 테마','<div class="theme-grid">'+Object.entries({basic:'기본 숲',snow:'설산'}).map(([v,t])=>button(t,'theme',current===v?'active':'','data-theme="'+v+'"')).join('')+'</div><p class="creator">테마를 바꿔도 기록은 유지돼요.</p>','themes')}
 
 function todayHistory(c){
  if(c.type!=='book')return '';
@@ -2701,10 +2895,17 @@ function editMemo(id,logId){
 
 </script>
 <script>
+let forestViewportYear=null;
+function initializeForestViewport(){
+ if(forestViewportYear===year)return;
+ const count=Model.completed(state,year).length;
+ zoomState={scale:count<=5?1.65:count<=80?1.15:1,x:0,y:0};
+ forestViewportYear=year;
+}
 function setupForest(){
  const vp=$('forestViewport'),world=vp?.querySelector('#forest-world');if(!vp||!world)return;
  const pointers=new Map();let prev=null,suppressClick=false,sel=null;
- if(Model.completed(state,year).length<=5)zoomState={scale:1.65,x:0,y:0};
+ initializeForestViewport();
 
  const SVG_NS='http://www.w3.org/2000/svg',TYPE_LABEL={book:'책',album:'음반',movie:'영화'},TAP_RADIUS=24;
  const tip=document.createElement('button');tip.type='button';tip.className='forest-tree-tooltip';tip.setAttribute('aria-hidden','true');tip.tabIndex=-1;vp.appendChild(tip);
@@ -2863,7 +3064,7 @@ function setupForest(){
  if('IntersectionObserver'in window){forestVisibilityObserver=new IntersectionObserver(es=>vp.classList.toggle('paused',!es[0].isIntersecting));forestVisibilityObserver.observe(vp)}
 }
 function changeMonth(delta){const [y,m]=month.split('-').map(Number),d=new Date(y,m-1+delta,1);const next=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');if(next<=now().slice(0,7)){month=next;render()}}
-function linkAdd(){showModal('링크로 스크랩','<form id="linkForm"><label for="linkInput">콘텐츠 링크</label><input type="url" id="linkInput" placeholder="https://" required><p class="creator">이 프로토타입에서는 링크를 출처로 저장하고 작품을 직접 확인합니다.</p><button type="submit" class="primary">콘텐츠 정보 입력</button></form>','link')}
+function linkAdd(){showModal('링크로 스크랩','<form id="linkForm"><label for="linkInput">콘텐츠 링크</label><input type="url" id="linkInput" placeholder="https://" required><p class="creator">링크를 저장한 뒤 작품 정보를 입력해주세요.</p><button type="submit" class="primary">콘텐츠 정보 입력</button></form>','link')}
 function photoAdd(){photoFiles=[];candidates=[];showModal('사진에서 가져오기','<p class="muted">스크린샷·표지·목록 사진을 선택하세요. 여러 영역을 반복 인식해 제목과 제작자를 묶고, 가장 가능성 높은 콘텐츠를 찾아드려요.</p><label for="photoFiles">사진 선택 · 최대 10장</label><input id="photoFiles" type="file" accept="image/*" multiple><div id="photoThumbs" class="thumbs"></div><div id="ocrProgress" class="summary"></div>'+button('사진 분석하기','runOCR','primary','id="ocrButton" disabled')+button('직접 입력하기','manual','textbtn'),'photo')}
 function ocrCleanLine(line){return String(line||'').replace(/[|_~`^=*<>\\]/g,' ').replace(/[●■□◆◇▶▷◀◁→←↑↓]/g,' ').replace(/\s+/g,' ').trim()}
 const OCR_UI_WORDS=new Set(['서재','기본책장','내책장','내 책장','다운로드','필터','편집','소장','서점','my','검색','메뉴','공유','저장','취소','확인','완료','홈','home','search','share','save','cancel','menu']);
@@ -3406,7 +3607,7 @@ async function nativeShare(){
  else toast('이 브라우저에서는 이미지 저장 후 공유해주세요.');
 }
 function exportBackup(){download(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),'songrim-backup-'+now()+'.json');toast('백업 파일을 다운로드했어요.')}
-function replaceData(s){state=s;ensureCompletedSpeciesAssignments();year=now().slice(0,4);month=now().slice(0,7);zoomState={scale:1,x:0,y:0};closeModal();view='today';persist();render();window.scrollTo(0,0)}
+function replaceData(s){state=s;ensureCompletedSpeciesAssignments();year=now().slice(0,4);month=now().slice(0,7);zoomState={scale:1,x:0,y:0};forestViewportYear=null;closeModal();view='today';persist();render();window.scrollTo(0,0)}
 function purgeOldPrototypeTestData(){
  const before=state.items.length;
  state.items=state.items.filter(c=>!/(기존 독서 테스트 데이터|체험 데이터)/.test(String(c.source||'')));
@@ -3448,7 +3649,7 @@ document.addEventListener('click',async e=>{
   if(scrapFlowActive&&modal!=='scrap-composer'&&['link','photo','info','review'].includes(modal)){openScrapComposer(scrapComposerState.type,null,false);return}
   closeModal();return
  }
- if(a==='completionForest'){const c=get(b.dataset.id);if(c)year=forestRecordYear(c);zoomState={scale:1,x:0,y:0};go('forest');return}
+ if(a==='completionForest'){const c=get(b.dataset.id);if(c)year=forestRecordYear(c);zoomState={scale:1,x:0,y:0};forestViewportYear=null;go('forest');return}
  if(a==='completionNext'){go('today');return}
  if(a==='confirm'){const fn=window.pendingConfirm;window.pendingConfirm=null;closeModal();fn?.();return}
  if(a==='toastUndo'){const fn=undoAction;undoAction=null;$('toast').innerHTML='';fn?.();return}
@@ -3526,7 +3727,7 @@ document.addEventListener('click',async e=>{
   window.open(url,'_blank','noopener,noreferrer');return
  }
  if(a==='track'){c.trackIndex=Number(b.dataset.index);commit();return}
- if(a==='year'){year=b.dataset.year;zoomState={scale:1,x:0,y:0};render();document.querySelector('[data-picker=year]')?.focus();return}
+ if(a==='year'){year=b.dataset.year;zoomState={scale:1,x:0,y:0};forestViewportYear=null;render();document.querySelector('[data-picker=year]')?.focus();return}
  if(a==='collection'){openCollection('trees');return}
  if(a==='collectionTab'){openCollection(b.dataset.tab==='visitors'?'visitors':'trees');return}
  if(a==='treeToggle'){const species=TREE_SPECIES.find(t=>t.id===b.dataset.species&&t.category===b.dataset.category);if(!species||!speciesUnlocked(species))return;const st=collectionState(),disabled=new Set(st.disabledSpeciesIds),isActive=!disabled.has(species.id);if(isActive){if(activeSpecies(species.category).length<=1){toast('이 장르에는 최소 한 종류의 나무가 필요해요.');return}disabled.add(species.id)}else disabled.delete(species.id);st.disabledSpeciesIds=[...disabled];persist();openCollection('trees');return}
@@ -3556,8 +3757,8 @@ document.addEventListener('click',async e=>{
  }
  if(a==='profile'){showModal('프로필','<form id="profileForm"><label for="profileName">이름</label><input id="profileName" maxlength="30" required value="'+esc(state.profile.name)+'"><button class="primary" type="submit">저장</button></form>','profile');return}
  if(a==='tastes'){tasteStart();return}
- if(a==='notifications'){showModal('오늘의 경험 알림','<p>이 HTML 체험본은 앱을 닫은 뒤 정시 알림을 보낼 수 없어요.</p><p class="creator">실제 앱에서는 기본 꺼짐으로 시작하고, 알림을 켤 때 시간과 권한을 설정합니다.</p>'+button('확인','close','secondary'),'notifications');return}
- if(a==='terms'){showModal('프로토타입 안내','<p>결제는 진행하지 않습니다. 로그인한 사용자의 스크랩·경험 기록은 브라우저에 저장하면서 Supabase에도 동기화합니다. 책·음악 검색어는 검색 결과를 받기 위해 송림의 Supabase Edge Function으로 전송됩니다.</p><div class="space"></div><p>외부 검색 링크를 누르면 해당 서비스로 이동합니다. 데이터 보관을 위해 MY에서 백업을 다운로드할 수 있습니다.</p><p class="creator">계정 서비스용 약관과 개인정보 처리방침은 정식 서비스에서 별도로 제공합니다.</p>','terms');return}
+ if(a==='notifications'){showModal('알림','<p>알림 기능을 준비하고 있어요.</p>'+button('확인','close','secondary'),'notifications');return}
+ if(a==='terms'){showModal('서비스 이용 안내','<p>결제는 진행하지 않습니다. 로그인한 사용자의 스크랩·경험 기록은 브라우저에 저장하면서 Supabase에도 동기화합니다. 책·음악 검색어는 검색 결과를 받기 위해 송림의 Supabase Edge Function으로 전송됩니다.</p><div class="space"></div><p>외부 검색 링크를 누르면 해당 서비스로 이동합니다. 데이터 보관을 위해 MY에서 백업을 다운로드할 수 있습니다.</p><p class="creator">계정 서비스용 약관과 개인정보 처리방침은 정식 서비스에서 별도로 제공합니다.</p>','terms');return}
  if(a==='backup'){exportBackup();return}
  if(a==='restore'){$('restoreFile').click();return}
  if(a==='treeUnlockTest'){addTreeUnlockTestData();return}
@@ -3776,7 +3977,7 @@ function orderSeries(pool){
 function discoveryCatalog(){const seen=new Set();return [...CATALOG,...SEED_BOOKS.map(b=>({type:'book',title:b.title,creator:b.creator,genre:b.genre}))].filter(c=>{if(!allowDiscoveryCandidate(c))return false;const key=c.type+':'+Model.norm(c.title)+':'+Model.norm(c.creator);if(seen.has(key))return false;seen.add(key);return true})}
 function renderDiscovery(){
  const completed=state.items.filter(c=>c.completed),known=discoveryCatalog();
- if(!known.length)return '<section><div class="page-heading"><h1 class="page-title">오늘</h1></div><div class="empty"><h2>'+(completed.length?'모아둔 작품을 모두 경험했어요':'다음 경험을 골라볼까요?')+'</h2><p>새로운 작품을 찾거나 직접 스크랩해보세요.</p>'+button('새로운 작품 추천받기','tastes')+button('직접 스크랩하기','add','textbtn')+'</div></section>';
+ if(!known.length)return '<section><div class="page-heading"><h1 class="page-title">오늘</h1></div><div class="empty"><h2>'+(completed.length?'담아둔 작품을 모두 완료했어요':'작품을 추가해보세요')+'</h2>'+button('새로운 작품 추천받기','tastes')+button('직접 스크랩하기','add','textbtn')+'</div></section>';
  const refs=[...completed,...known.filter(c=>['experienced','interested'].includes(state.profile.responses?.[c.type+':'+c.title]))];
  const pool=known.filter(c=>(discoveryType==='all'||c.type===discoveryType)&&!isTasteCandidateSaved(c)&&!hasTasteHistory(c));
  const score=c=>refs.reduce((n,x)=>n+(x.type===c.type?1:0)+(c.genre&&x.genre===c.genre?3:0),0);
@@ -3795,10 +3996,7 @@ authRoute=authSession.signedIn?(authSession.finished?'app':'onboard'):'welcome';
 function saveSession(){try{localStorage.setItem(AUTH_KEY,JSON.stringify(authSession))}catch{toast('로그인 상태를 저장하지 못했어요.')}}
 function flowTo(route){closeModal();authRoute=route;render();window.scrollTo(0,0);if(route==='tasteType')void loadMusicClassicCatalog()}
 function entrySteps(n){return '<div class="entry-steps" aria-label="3단계 중 '+n+'단계">'+[1,2,3].map(i=>'<span class="'+(i<=n?'on':'')+'"></span>').join('')+'</div>'}
-function entryNote(){
- const cloud=cloudPublicKey()?'<span>Supabase 사용자 데이터 동기화 연결됨</span>':'<button type="button" class="textbtn" data-action="cloudSetup">Supabase 연결 설정</button>';
- return '<p class="entry-note">'+cloud+' · 로그인한 계정의 기록은 클라우드와 동기화됩니다.</p>'
-}
+function entryNote(){return cloudPublicKey()?'':'<div class="entry-note">'+button('연결 설정','cloudSetup','textbtn')+'</div>'}
 function loginFields(){
  let lastEmail='';try{lastEmail=localStorage.getItem(CLOUD_LAST_EMAIL_STORAGE)||''}catch{}
  return '<label for="flowEmail">이메일</label><input id="flowEmail" type="email" required autocomplete="email" value="'+esc(lastEmail)+'" placeholder="you@example.com"><label for="flowPassword">비밀번호</label><input id="flowPassword" type="password" required minlength="6" autocomplete="current-password" placeholder="6자 이상">'
@@ -3814,21 +4012,21 @@ function socialStartButton(provider){
 }
 
 function renderEntry(){
- $('tabs').hidden=true;$('page').classList.add('entry-page');$('page').classList.toggle('taste-page',authRoute==='taste');
- $('head').innerHTML='<div class="brand">송림</div>'+(!['welcome','onboard','taste','ready'].includes(authRoute)?button('뒤로','flowBack','textbtn'):'<span class="muted">나의 취향이 자라는 곳</span>');
+ $('tabs').hidden=true;$('page').dataset.view=authRoute;$('head').dataset.view=authRoute;$('page').classList.add('entry-page');$('page').classList.toggle('taste-page',authRoute==='taste');
+ $('head').innerHTML='<div class="brand">송림</div>'+(!['welcome','onboard','taste','ready'].includes(authRoute)?button('뒤로','flowBack','textbtn'):'');
  let h='';
- if(authRoute==='welcome')h='<div class="entry-hero"><div class="entry-kicker">A FOREST OF YOUR OWN</div><h1>보고 싶은 것들이<br>나의 숲이 되도록.</h1><p class="creator">책 한 권, 영화 한 편, 좋아하는 음악까지.<br>모아두고, 경험하고, 오래 기억해요.</p>'+growth(3,{type:'book',genre:'문학'})+'</div>'+button('이메일로 시작하기','flowEmailLogin')+'<div class="center">'+button('이메일로 회원가입','flowSignup','textbtn')+'</div>'+'<div class="entry-divider"><span>또는</span></div>'+'<div class="social-start-list">'+socialStartButton('kakao')+socialStartButton('apple')+socialStartButton('google')+'</div>'+entryNote();
- if(authRoute==='login')h='<div class="entry-hero"><h1>로그인</h1><p class="creator">이메일과 비밀번호를 입력해주세요.</p></div><form id="flowLoginForm">'+loginFields()+'<div id="flowError" class="entry-error" role="alert"></div><button class="primary" type="submit">로그인</button></form>'+button('비밀번호를 잊으셨나요?','flowRecover','textbtn')+entryNote();
+ if(authRoute==='welcome')h='<div class="entry-hero"><h1>책·음반·영화 기록</h1>'+growth(3,{type:'book',genre:'문학'})+'</div>'+button('이메일로 시작하기','flowEmailLogin')+'<div class="center">'+button('이메일로 회원가입','flowSignup','textbtn')+'</div>'+'<div class="entry-divider"><span>또는</span></div>'+'<div class="social-start-list">'+socialStartButton('kakao')+socialStartButton('apple')+socialStartButton('google')+'</div>'+entryNote();
+ if(authRoute==='login')h='<div class="entry-hero"><h1>로그인</h1></div><form id="flowLoginForm">'+loginFields()+'<div id="flowError" class="entry-error" role="alert"></div><button class="primary" type="submit">로그인</button></form>'+button('비밀번호를 잊으셨나요?','flowRecover','textbtn')+entryNote();
  if(authRoute==='social')h='<div class="entry-hero"><h1>'+esc(authSession.method)+'로 시작하기</h1><p class="creator">이 계정으로 송림을 이용할까요?</p></div><div class="flow-account"><strong>송림 테스트 계정</strong><small>demo@songrim.app</small></div>'+button('동의하고 계속하기','flowSocialConfirm')+button('다른 방법으로 로그인','flowWelcome','textbtn')+'<p class="entry-note">외부 로그인 동의 단계를 재현한 화면입니다. 실제 '+esc(authSession.method)+' 계정에 연결하지 않습니다.</p>';
- if(authRoute==='signup')h='<div class="entry-hero"><h1>나만의 숲을 시작해요</h1><p class="creator">이 계정으로 PC와 아이폰의 기록을 이어서 볼 수 있어요.</p></div><form id="flowSignupForm">'+loginFields()+'<label for="flowPasswordConfirm">비밀번호 확인</label><input id="flowPasswordConfirm" required type="password" minlength="6" autocomplete="new-password"><label class="checkrow"><input id="flowTerms" type="checkbox" required>이용약관 및 개인정보 안내에 동의합니다</label>'+button('이용 안내 보기','terms','textbtn')+'<div id="flowError" class="entry-error" role="alert"></div><button class="primary" type="submit">가입하기</button></form>'+entryNote();
+ if(authRoute==='signup')h='<div class="entry-hero"><h1>회원가입</h1></div><form id="flowSignupForm">'+loginFields()+'<label for="flowPasswordConfirm">비밀번호 확인</label><input id="flowPasswordConfirm" required type="password" minlength="6" autocomplete="new-password"><label class="checkrow"><input id="flowTerms" type="checkbox" required>이용약관 및 개인정보 안내에 동의합니다</label>'+button('이용 안내 보기','terms','textbtn')+'<div id="flowError" class="entry-error" role="alert"></div><button class="primary" type="submit">가입하기</button></form>'+entryNote();
  if(authRoute==='recover')h='<div class="entry-hero"><h1>비밀번호를 잊으셨나요?</h1><p class="creator">가입한 이메일로 재설정 안내를 보내요.</p></div><form id="flowRecoverForm"><label for="recoveryEmail">이메일</label><input id="recoveryEmail" type="email" required autocomplete="email"><div id="flowError" class="entry-error" role="alert"></div><button class="primary" type="submit">재설정 안내 받기</button></form>'+entryNote();
  if(authRoute==='recoverSent')h='<div class="entry-hero"><h1>메일을 확인해주세요</h1><p class="creator">비밀번호 재설정 안내를 보냈어요.</p></div>'+button('로그인으로 돌아가기','flowEmailLogin');
- if(authRoute==='profile')h=entrySteps(1)+'<div class="entry-hero"><h1>어떤 이름으로 불러드릴까요?</h1><p class="creator">나의 숲에 남길 이름을 알려주세요.</p></div><form id="flowProfileForm"><label for="flowProfileName">이름 또는 별명</label><input id="flowProfileName" maxlength="30" value="'+esc(authSession.name|| (state.profile.name==='나'?'':state.profile.name))+'" placeholder="이름 또는 별명"><p class="creator">이름은 나중에도 바꿀 수 있어요.</p><button class="primary" type="submit">다음</button></form>';
- if(authRoute==='start')h=entrySteps(2)+'<div class="entry-hero"><h1>첫 스크랩을 시작해볼까요?</h1><p class="creator">보고 싶은 책, 음악, 영화를 하나만 모아보세요.</p></div>'+button('첫 스크랩 시작하기','flowFirstScrap')+'<div class="rule"></div><h3>첫 추천으로 시작할 수도 있어요</h3><p class="creator">작품 5개를 빠르게 살펴보면 첫 추천을 준비해요.</p><div class="space"></div>'+button('첫 추천 받아보기','flowOptionalTaste','secondary')+'<p class="entry-note">추가 취향 선택은 나중에 MY에서 언제든 할 수 있어요.</p>';
- if(authRoute==='tasteType'){const adding=tasteMode==='add';h=(adding?'':entrySteps(2))+'<div class="entry-hero"><h1>'+(adding?'어떤 취향을 더할까요?':'뭘 먼저 추천할까요?')+'</h1><p class="creator">책, 음반, 영화 중 하나를 골라주세요.<br>선택한 유형의 작품만 보여드릴게요.</p></div><div class="taste-type-grid">'+button('책','chooseTasteType','taste-type-option','data-type="book"')+button('음반','chooseTasteType','taste-type-option','data-type="album"')+button('영화','chooseTasteType','taste-type-option','data-type="movie"')+'</div>'+(adding?'':'<p class="entry-note">시작한 뒤에는 MY에서 다른 유형 취향도 더 알려줄 수 있어요.</p>');}
- if(authRoute==='onboard')h=entrySteps(2)+'<div class="entry-hero"><h1>'+esc(state.profile.name)+'님,<br>어떤 걸 좋아하세요?</h1><p class="creator">관심 있는 콘텐츠를 골라 첫 씨앗을 모아요.<br>이미 경험한 작품도 남길 수 있어요.</p></div>'+button('직접 고르기','flowTaste')+button('저장해 둔 스크린샷 가져오기','photoAdd','secondary')+'<div class="flow-account"><strong>지금 모인 콘텐츠 '+state.items.length+'개</strong><small>가져온 콘텐츠는 스크랩에서 이어서 볼 수 있어요.</small></div>'+button(state.items.length?'이 콘텐츠로 시작하기':'취향 선택은 나중에 할게요','flowReady','textbtn');
+ if(authRoute==='profile')h=entrySteps(1)+'<div class="entry-hero"><h1>프로필 설정</h1></div><form id="flowProfileForm"><label for="flowProfileName">이름 또는 별명</label><input id="flowProfileName" maxlength="30" value="'+esc(authSession.name|| (state.profile.name==='나'?'':state.profile.name))+'" placeholder="이름 또는 별명"><p class="creator">이름은 나중에도 바꿀 수 있어요.</p><button class="primary" type="submit">다음</button></form>';
+ if(authRoute==='start')h=entrySteps(2)+'<div class="entry-hero"><h1>첫 작품 추가</h1><p class="creator">보고 싶은 작품을 담아보세요.</p></div>'+button('첫 스크랩 시작하기','flowFirstScrap')+'<div class="rule"></div><h3>추천받기</h3><p class="creator">작품 5개를 살펴보고 취향을 남겨주세요.</p><div class="space"></div>'+button('첫 추천 받아보기','flowOptionalTaste','secondary')+'';
+ if(authRoute==='tasteType'){const adding=tasteMode==='add';h=(adding?'':entrySteps(2))+'<div class="entry-hero"><h1>'+'추천받을 분야'+'</h1></div><div class="taste-type-grid">'+button('책','chooseTasteType','taste-type-option','data-type="book"')+button('음반','chooseTasteType','taste-type-option','data-type="album"')+button('영화','chooseTasteType','taste-type-option','data-type="movie"')+'</div>'+(adding?'':'');}
+ if(authRoute==='onboard')h=entrySteps(2)+'<div class="entry-hero"><h1>'+esc(state.profile.name)+'님,<br>어떤 걸 좋아하세요?</h1><p class="creator">관심 있는 작품이나 이미 본 작품을 추가해보세요.</p></div>'+button('직접 고르기','flowTaste')+button('저장해 둔 스크린샷 가져오기','photoAdd','secondary')+'<div class="flow-account"><strong>지금 모인 콘텐츠 '+state.items.length+'개</strong><small>가져온 콘텐츠는 스크랩에서 이어서 볼 수 있어요.</small></div>'+button(state.items.length?'이 콘텐츠로 시작하기':'취향 선택은 나중에 할게요','flowReady','textbtn');
  if(authRoute==='taste')h=renderTastePage();
- if(authRoute==='ready')h=entrySteps(3)+'<div class="entry-hero center">'+growth(1)+'<h1>'+(state.items.some(c=>!c.completed)?'첫 추천이 준비됐어요':'천천히 골라도 괜찮아요')+'</h1><p class="creator">스크랩 '+state.items.length+'개 · 완료 '+state.items.filter(c=>c.completed).length+'개<br>오늘은 하나를 골라 천천히 경험해보세요.</p></div>'+button('오늘의 경험 시작하기','flowFinish')+'<p class="entry-note">취향은 시작한 뒤 MY에서 언제든 더 알려줄 수 있어요.</p>';
+ if(authRoute==='ready')h=entrySteps(3)+'<div class="entry-hero center">'+growth(1)+'<h1>'+'준비됐어요'+'</h1><p class="creator">스크랩 '+state.items.length+'개 · 완료 '+state.items.filter(c=>c.completed).length+'개</p></div>'+button('시작하기','flowFinish')+'';
  $('page').innerHTML=h;
  if(authRoute==='taste')$('head').innerHTML=tasteMode==='add'?'<div class="back-title">취향 추가</div>'+button('닫기','tasteClose','textbtn taste-exit'):'<div class="brand">송림</div>'+button('그냥 시작하기','flowFinish','textbtn taste-exit');
  if(authRoute==='tasteType'&&tasteMode==='add')$('head').innerHTML='<div class="back-title">취향 추가</div>'+button('닫기','tasteClose','textbtn taste-exit');
@@ -4681,8 +4879,8 @@ function renderTastePage(){
  if(c.type==='book'&&!c.contents&&!c._introLoaded&&!c._introLoading)setTimeout(()=>ensureTasteIntro(c),0);
  const initialProgress=Math.min(tasteReviewed+1,INITIAL_TASTE_TARGET);
  const heading=isAdd
-  ?'<div class="taste-heading"><h1>취향을 조금 더<br>알려주세요</h1><p class="creator">처음엔 신작과 인기작부터, 반응이 쌓이면 취향에 맞는 작품 비중이 커져요.<br>원하는 만큼 보고 언제든 닫을 수 있어요.</p></div>'
-  :'<div class="taste-heading"><h1>몇 작품만 알려주시면<br>첫 추천을 골라드릴게요</h1><p class="creator">'+esc(({book:'책',album:'음반',movie:'영화'}[tastePreferredType]||'선택한 유형'))+'부터 5개 작품을 빠르게 살펴봐주세요.</p><div class="taste-progress" aria-label="첫 추천 작품 '+initialProgress+'번째, 전체 '+INITIAL_TASTE_TARGET+'개"><span>'+initialProgress+' / '+INITIAL_TASTE_TARGET+'</span><span class="taste-dots" aria-hidden="true">'+Array.from({length:INITIAL_TASTE_TARGET},(_,i)=>'<i class="'+(i<=tasteReviewed?'on':'')+'"></i>').join('')+'</span></div></div>';
+  ?'<div class="taste-heading"><h1>관심 있는 작품을 골라주세요</h1></div>'
+  :'<div class="taste-heading"><h1>관심 있는 작품을 골라주세요</h1><p class="creator">작품 5개를 살펴보세요.</p><div class="taste-progress" aria-label="첫 추천 작품 '+initialProgress+'번째, 전체 '+INITIAL_TASTE_TARGET+'개"><span>'+initialProgress+' / '+INITIAL_TASTE_TARGET+'</span><span class="taste-dots" aria-hidden="true">'+Array.from({length:INITIAL_TASTE_TARGET},(_,i)=>'<i class="'+(i<=tasteReviewed?'on':'')+'"></i>').join('')+'</span></div></div>';
  return (tasteNotice?'<p class="note" role="status">'+esc(tasteNotice)+'</p>':'')+heading+'<div class="onboard-card"><div class="taste-cover-stage">'+cover(c)+'</div><small>'+typeName[c.type]+'</small><h2 title="'+esc(c.title)+'">'+esc(c.title)+'</h2><p class="creator" title="'+esc(c.creator)+'">'+esc(c.creator)+'</p>'+button('상세보기','tasteDetail','textbtn taste-detail-link')+'</div><div class="taste-actions">'+button('보고 싶어요','flowInterested')+button('이미 경험했어요','flowExperienced','secondary')+button('넘기기','flowSkip','textbtn')+'</div>'
 }
 
