@@ -647,9 +647,9 @@ const TREE_SPECIES=[
  {id:'oak',category:'book-literature',name:'참나무',need:1,shape:'broad',colors:['#3E674D','#718A5B','#94A56A'],trunk:'#6B5745'},
  {id:'cherry',category:'book-literature',name:'벚나무',need:3,shape:'blossom',colors:['#6F8E5E','#C9A5A7','#A7BA78'],trunk:'#806A64'},
  {id:'zelkova',category:'book-humanities',name:'느티나무',need:3,shape:'umbrella',colors:['#75935E','#A8B874','#527557'],trunk:'#8C8579'},
- {id:'ginkgo',category:'book-science',name:'은행나무',need:1,shape:'fan',colors:['#A6B06E','#C8CF8C','#8F9F64'],trunk:'#77634D'},
+ {id:'ginkgo',category:'book-science',name:'은행나무',need:1,shape:'fan',colors:['#C7A94C','#E4CE74','#A9833D'],trunk:'#77634D'},
  {id:'metasequoia',category:'book-science',name:'메타세쿼이아',need:3,shape:'spire',colors:['#3F6C60','#698B72','#31564D'],trunk:'#675747'},
- {id:'maple',category:'album-classical',name:'단풍나무',need:1,shape:'open',colors:['#C7A94C','#E4CE74','#A9833D'],trunk:'#755F4A'},
+ {id:'maple',category:'album-classical',name:'단풍나무',need:1,shape:'open',colors:['#5F8A5C','#87A46B','#6C9463'],trunk:'#755F4A'},
  {id:'willow',category:'album-classical',name:'버드나무',need:3,shape:'weeping',colors:['#759A76','#9FB388','#5A7D66'],trunk:'#715E4E'},
  {id:'magnolia',category:'album-popular',name:'목련',need:1,shape:'openblossom',colors:['#9EBB72','#87A36A','#C4D19E'],trunk:'#836C58'},
  {id:'crape',category:'album-popular',name:'배롱나무',need:3,shape:'airyblossom',colors:['#789466','#B79C7D','#98AC7E'],trunk:'#C7A78C'},
@@ -943,14 +943,15 @@ function handcutTreeArt(speciesId,winter=false){
   const curve=smoothClosedPath(p),base=palette[baseIdx];
   const rot=hash(id+i+'r')%n,ring=[...Array(n)].map((_,k)=>p[(rot+k)%n]);
   const cutA=Math.max(2,Math.round(n*.55)),arcA=ring.slice(0,cutA),arcB=ring.slice(cutA);
-  const boostAccent=id==='cherry'||id==='cypress';
-  const useAccent=boostAccent||(n>=6&&hash(id+i+'ac')%2===0);
+  const ACCENT_COLOR={maple:'#B97A46'};
+  const forceAccent=id==='cherry'||id==='cypress';
+  const useAccent=forceAccent||(n>=6&&hash(id+i+'ac')%2===0);
   const colorA=hexShade(base,-.16);
-  const colorB=useAccent?(boostAccent?palette[1]:palette[(baseIdx+1+hash(id+i)%2)%palette.length]):hexShade(base,.15);
-  const accentScale=boostAccent?.8:.60;
+  const colorB=useAccent?(forceAccent?palette[1]:(ACCENT_COLOR[id]||palette[(baseIdx+1+hash(id+i)%2)%palette.length])):hexShade(base,.15);
+  const accentScale=forceAccent?.8:.58;
   let o='<path d="'+curve+'" fill="'+base+'"/>';
   if(arcA.length>=3){const shapeA=arcA.map(([x,y])=>[cx+(x-cx)*.92,cy+(y-cy)*.92]);o+=poly(str(shapeA),colorA,'opacity=".92"')}
-  if(arcB.length>=3){const shapeB=arcB.map(([x,y])=>[cx+(x-cx)*accentScale,cy+(y-cy)*accentScale]);o+=poly(str(shapeB),colorB,'opacity="'+(boostAccent?1:.9)+'"')}
+  if(arcB.length>=3){const shapeB=arcB.map(([x,y])=>[cx+(x-cx)*accentScale,cy+(y-cy)*accentScale]);o+=poly(str(shapeB),colorB,'opacity="'+(forceAccent?1:.9)+'"')}
   o+='<path d="'+curve+'" fill="none" stroke="'+hexShade(base,-.30)+'" stroke-width="1" stroke-linejoin="round" opacity=".4"/>';
   return '<g class="leaf" style="animation-delay:-'+((baseIdx+i)%5)+'s">'+o+'</g>';
  };
