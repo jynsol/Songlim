@@ -196,7 +196,7 @@ input,select,textarea{
   overscroll-behavior-x:contain;
   -webkit-overflow-scrolling:touch;
 }
-/* Touch gestures preserve vertical page scrolling. Mouse wheel zooms the forest. */
+/* The forest owns touch gestures; at minimum zoom a one-finger drag scrolls the page. */
 .forest-viewport{
   max-width:100%;
   overflow:hidden;
@@ -484,8 +484,11 @@ button,summary{touch-action:manipulation}
 .today-work .title{margin:0}.today-work .creator{margin-top:6px}
 .content-row .title{margin:4px 0}.content-row .creator{margin-top:4px}
 .type-tabs{margin-top:12px}.status-filter{gap:6px;padding-top:12px;padding-bottom:8px}.status-filter .chip{padding-inline:10px}
-.forest-viewport{height:auto;aspect-ratio:4/3;min-height:240px}
-.forest-viewport [data-tree]:focus-visible{outline:none;filter:drop-shadow(0 0 3px #356c45)}
+.forest-viewport{height:auto;aspect-ratio:4/3;min-height:240px;touch-action:none}
+/* SVG focus outlines are rectangular, especially around animated special trees.
+   Use the existing ground ring as the focus indicator in every interaction mode. */
+.forest-viewport [data-tree],.forest-viewport [data-tree] *{outline:none!important}
+.forest-viewport [data-tree]:focus,.forest-viewport [data-tree]:focus-visible{outline:none!important}
 .forest-viewport.paused *{animation-play-state:paused!important}
 @media(max-height:700px){.taste-page .onboard-card{min-height:230px}.taste-cover-stage{height:145px}.taste-page .onboard-card .cover{width:104px;height:144px}.taste-page .onboard-card .cover.album{height:104px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
@@ -858,7 +861,23 @@ function icon(name){return '<svg width="22" height="22" viewBox="0 0 24 24" fill
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function growth(stage,c){
  if(stage===3&&c)return '<svg class="growth" viewBox="0 0 320 220" role="img" aria-label="'+esc(category(c).label)+' 나무"><circle cx="160" cy="110" r="94" fill="#E4F2DA"/><g transform="translate(160 168) scale(2)">'+treeArt(c,'basic')+'</g></svg>'; 
- let drawing=stage===0?'<ellipse cx="160" cy="170" rx="15" ry="10" fill="#ad9570" transform="rotate(-25 160 170)"/>':stage===1?'<path d="M160 174Q158 133 160 99" stroke="#3F8554" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M159 145Q120 144 111 112Q151 108 159 145" fill="#83BE73"/><path d="M159 143Q128 140 120 121" stroke="#fff" stroke-width="1.6" opacity=".4" fill="none" stroke-linecap="round"/><path d="M161 121Q163 78 205 79Q206 116 161 121" fill="#5CA764"/><path d="M161 119Q175 100 192 90" stroke="#fff" stroke-width="1.6" opacity=".4" fill="none" stroke-linecap="round"/><circle cx="160" cy="97" r="7.5" fill="#F6E5A6" opacity=".7"/><circle cx="160" cy="97" r="5" fill="#EED479"/><circle cx="160" cy="97" r="2" fill="#d99e2e"/>':stage===2?'<path d="M160 183v-65" stroke="#648665" stroke-width="7" stroke-linecap="round"/><ellipse cx="131" cy="147" rx="33" ry="30" fill="#73B66B"/><ellipse cx="190" cy="148" rx="35" ry="31" fill="#5CA764"/><ellipse cx="159" cy="122" rx="34" ry="37" fill="#A0CC83"/><ellipse cx="144" cy="131" rx="17" ry="15" fill="#BEDF9F" opacity=".55"/><ellipse cx="179" cy="127" rx="15" ry="13" fill="#8AC47C" opacity=".5"/><circle cx="119" cy="139" r="5.5" fill="#F6E5A6" opacity=".7"/><circle cx="119" cy="139" r="4" fill="#EED479"/><circle cx="119" cy="139" r="1.5" fill="#d99e2e"/><circle cx="177" cy="153" r="5" fill="#F6E5A6" opacity=".7"/><circle cx="177" cy="153" r="3.5" fill="#F6E5A6"/><circle cx="177" cy="153" r="1.3" fill="#d99e2e"/><circle cx="151" cy="107" r="5.5" fill="#F6E5A6" opacity=".7"/><circle cx="151" cy="107" r="4" fill="#EED479"/><circle cx="151" cy="107" r="1.5" fill="#d99e2e"/>':'<path d="M160 184v-81" stroke="#93836b" stroke-width="8"/><ellipse cx="133" cy="113" rx="34" ry="42" fill="#73B66B"/><ellipse cx="186" cy="113" rx="34" ry="42" fill="#5CA764"/><ellipse cx="160" cy="82" rx="38" ry="42" fill="#A0CC83"/>';
+ if(stage===1||stage===2){
+  const poly=(points,color)=>'<polygon points="'+points+'" fill="'+color+'" stroke-linejoin="round"/>';
+  const sprout='<path d="M160 181Q156 151 163 119" fill="none" stroke="#6B7954" stroke-width="4.5" stroke-linecap="round"/>'
+   +poly('160,151 143,152 127,142 120,124 139,125 153,137','#728D60')
+   +poly('120,124 139,125 153,137 160,151 140,140','#A3B88A')
+   +poly('161,132 163,113 177,99 196,94 193,113 180,128','#55744F')
+   +poly('163,113 177,99 196,94 178,113 161,132','#8FA875');
+  const bush='<path d="M160 181L158 146M159 165L135 143M159 158L181 135" fill="none" stroke="#806D53" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>'
+   +poly('151,134 163,115 186,112 207,125 211,146 192,158 167,152','#4F7053')
+   +poly('169,122 186,116 203,127 189,137 171,135','#7F9967')
+   +poly('105,144 115,126 137,122 158,133 162,153 144,165 120,160','#69865A')
+   +poly('112,139 123,128 139,126 151,136 137,146 121,146','#92AA78')
+   +poly('133,122 141,102 161,92 181,102 190,121 173,136 150,135','#789663')
+   +poly('141,108 161,96 179,105 168,118 153,119','#A4B987');
+  return '<svg class="growth" viewBox="0 0 320 220" role="img" aria-label="'+(stage===1?'새싹':'덤불')+'"><defs><linearGradient id="growthNaturalBg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#F1F4EC"/><stop offset="1" stop-color="#E2EBD7"/></linearGradient></defs><circle cx="160" cy="115" r="94" fill="url(#growthNaturalBg)"/><ellipse cx="160" cy="185" rx="'+(stage===1?'30':'48')+'" ry="6" fill="#526B49" opacity=".10"/>'+(stage===1?sprout:bush)+'</svg>';
+ }
+ let drawing=stage===0?'<ellipse cx="160" cy="170" rx="15" ry="10" fill="#ad9570" transform="rotate(-25 160 170)"/>':'<path d="M160 184v-81" stroke="#93836b" stroke-width="8"/><ellipse cx="133" cy="113" rx="34" ry="42" fill="#73B66B"/><ellipse cx="186" cy="113" rx="34" ry="42" fill="#5CA764"/><ellipse cx="160" cy="82" rx="38" ry="42" fill="#A0CC83"/>';
  return '<svg class="growth" viewBox="0 0 320 220" role="img" aria-label="'+['씨앗','싹','덤불','나무'][stage]+'"><defs><linearGradient id="growthBg" x2="1" y2="1"><stop stop-color="#DCEEF8"/><stop offset=".55" stop-color="#E4F2DA"/><stop offset="1" stop-color="#FBF3D5"/></linearGradient></defs><circle cx="160" cy="115" r="94" fill="url(#growthBg)"/><ellipse cx="160" cy="188" rx="49" ry="8" fill="#D2E5BE"/>'+drawing+'</svg>';
 }
 function hash(s){let n=2166136261;for(const c of s)n=Math.imul(n^c.charCodeAt(0),16777619);return n>>>0}
@@ -1197,14 +1216,35 @@ function visitorArt(id){
  if(id==='hedgehog')return shadow+poly('-25,3 -23,-7 -19,-7 -17,-18 -11,-15 -6,-24 0,-19 7,-24 11,-16 17,-18 21,-5 16,6 -12,8','#776B51')+poly('-19,-4 -13,-15 -6,-12 0,-19 6,-13 10,-15 15,-6 10,3 -13,4','#96866A')+poly('10,-6 19,-5 28,3 22,8 9,7 5,2','#C7AF87')+poly('-12,6 -6,6 -6,10 -13,10','#625B47')+poly('10,6 16,6 16,10 9,10','#625B47')+eye(20,0)+eye(28,3);
  return '<polygon points="0,-26 13,-17 16,-3 7,10 -7,10 -16,-3 -13,-17" fill="#E7DDA3" opacity=".25"/>'+poly('-1,-14 -13,-20 -17,-12 -5,-5','#9BA780')+poly('1,-14 13,-20 17,-12 5,-5','#B6C098')+poly('-4,-18 4,-18 6,-8 4,1 -4,1 -6,-8','#64704E')+poly('-4,-6 4,-6 5,0 0,5 -5,0','#DFCE7F');
 }
+let forestVisitorBag=[],lastForestVisitor='';
+function nextForestVisitor(){
+ const eligible=FOREST_VISITORS.filter(v=>completedAll().length>=v.need);
+ forestVisitorBag=forestVisitorBag.filter(id=>eligible.some(v=>v.id===id));
+ if(!forestVisitorBag.length){
+  forestVisitorBag=eligible.map(v=>v.id);
+  for(let i=forestVisitorBag.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[forestVisitorBag[i],forestVisitorBag[j]]=[forestVisitorBag[j],forestVisitorBag[i]]}
+  if(forestVisitorBag.length>1&&forestVisitorBag[0]===lastForestVisitor)[forestVisitorBag[0],forestVisitorBag[1]]=[forestVisitorBag[1],forestVisitorBag[0]];
+ }
+ lastForestVisitor=forestVisitorBag.shift()||'';
+ return eligible.find(v=>v.id===lastForestVisitor);
+}
+function visitorPosition(cfg,boxes,scale){
+ const rx=cfg.boardW/2+44,ry=cfg.boardH/2+34;
+ const candidates=[];
+ // Include the entire animal and its animation travel in collision tests.
+ for(let i=0;i<2400;i++){
+  const x=360+(Math.random()*2-1)*rx,y=286+(Math.random()*2-1)*ry;
+  const r={left:x-34*scale, right:x+34*scale,top:y-46*scale,bottom:y+14*scale};
+  if(![[r.left,r.top],[r.right,r.top],[r.left,r.bottom],[r.right,r.bottom]].every(([a,b])=>Math.abs(a-360)/rx+Math.abs(b-286)/ry<.98))continue;
+  if(boxes.some(b=>r.left<b.right+3&&r.right>b.left-3&&r.top<b.bottom+3&&r.bottom>b.top-3))continue;
+  candidates.push({x,y});if(candidates.length===40)break;
+ }
+ return candidates[Math.floor(Math.random()*candidates.length)]||null;
+}
 function forestVisitorArt(items,animated=true){
  if(!items.length)return '';
- const eligible=FOREST_VISITORS.filter(v=>completedAll().length>=v.need);if(!eligible.length)return '';
- const key=now()+'-'+year,chosen=eligible[hash(key)%eligible.length],cfg=forestLayoutConfig(items.length);
- // Keep the visitor on the foreground ground margin, inside even the smallest diamond.
- const x=360+cfg.boardW*.12,y=286+cfg.boardH*.36;
- const air=['bird','butterfly','firefly'].includes(chosen.id),scale=+(cfg.treeScale*.55).toFixed(3);
- return '<g data-visitor="'+chosen.id+'" role="img" aria-label="'+chosen.name+'" transform="translate('+x.toFixed(1)+' '+y.toFixed(1)+') scale('+scale+')"><g class="'+(animated?'forest-visitor':'')+'"><g class="'+(animated?(air?'visitor-air':'visitor-motion'):'')+'">'+visitorArt(chosen.id)+'</g></g></g>';
+ if(!animated){const live=document.querySelector('#forestViewport [data-visitor]');if(!live)return '';const copy=live.cloneNode(true);copy.querySelectorAll('[class]').forEach(g=>g.removeAttribute('class'));return copy.outerHTML}
+ return '<g id="forest-visitor-layer" data-animated="'+animated+'"></g>';
 }
 const FOREST_GRID_SIZE=25;
 const FOREST_VISIBLE_LIMIT=300;
@@ -1250,6 +1290,7 @@ function parseForestTile(v){
  if(!Number.isInteger(gx)||!Number.isInteger(gy)||gx<0||gy<0||gx>=FOREST_GRID_SIZE||gy>=FOREST_GRID_SIZE)return null;
  return {gx,gy,key:gx+','+gy};
 }
+const forestPlacementCache=new Map();
 function forestPlacements(items,cfg){
  if(!items.length)return {placements:[],emptySlots:[],featureSlots:[],changed:false};
  const origin=forestStageOrigin(cfg),unit=k=>(hash('forest-grid-v6|'+k)%1000000)/1000000;
@@ -1258,55 +1299,128 @@ function forestPlacements(items,cfg){
   const gx=origin.x+c,gy=origin.y+r,key=gx+','+gy;
   const edge=Math.min(c,cfg.cols-1-c,r,cfg.rows-1-r);
   const centerDX=c-(cfg.cols-1)/2,centerDY=r-(cfg.rows-1)/2;
-  const jitterX=(unit(key+'|jx')-.5)*.12,jitterY=(unit(key+'|jy')-.5)*.12;
+  const jitterX=(unit(key+'|jx')-.5)*.32,jitterY=(unit(key+'|jy')-.5)*.32;
   slots.push({gx,gy,key,c,r,edge,centerDist:Math.hypot(centerDX,centerDY),rx:(c-r)+jitterX,ry:(c+r)+jitterY});
  }
  const slotMap=new Map(slots.map(s=>[s.key,s])),featureKeys=forestFeatureKeys(cfg);
  const featureSlots=slots.filter(s=>featureKeys.has(s.key)),treeSlots=slots.filter(s=>!featureKeys.has(s.key));
+ const cacheKey='natural-v2|'+cfg.id+'|'+items.map(c=>{const p=treeVisualProfile(c);return [c.id,c.completedAt,p.species.id,p.radius,p.scaleBias,c.hiddenTree||'',treeSizeVariance(c)].join(':')}).join('|');
+ const cached=forestPlacementCache.get(cacheKey);
+ if(cached){
+  const byId=new Map(items.map(c=>[c.id,c]));let changed=false;
+  const placements=cached.map(p=>{const item=byId.get(p.id);if(item.forestTile!=='g:'+p.slot.key){item.forestTile='g:'+p.slot.key;changed=true}return {...p,item}}),used=new Set(placements.map(p=>p.slot.key));
+  return {placements,emptySlots:treeSlots.filter(s=>!used.has(s.key)),featureSlots,changed};
+ }
  const taken=new Set(),placements=[];let changed=false;
  const distances=new Map(treeSlots.map(slot=>[slot.key,{any:99,species:new Map(),shape:new Map()}]));
  const ordered=[...items].sort((a,b)=>((a.completedAt||0)-(b.completedAt||0))||a.id.localeCompare(b.id));
  const add=(item,slot)=>{const profile=treeVisualProfile(item),sizeVar=(item&&item.hiddenTree)?1:treeSizeVariance(item);placements.push({item,slot,profile,scale:cfg.treeScale*profile.scaleBias*sizeVar,sizeVar});taken.add(slot.key);for(const target of treeSlots){const entry=distances.get(target.key),d=Math.hypot(slot.gx-target.gx,slot.gy-target.gy);entry.any=Math.min(entry.any,d);entry.species.set(profile.species.id,Math.min(entry.species.get(profile.species.id)??99,d));entry.shape.set(profile.shape,Math.min(entry.shape.get(profile.shape)??99,d))}};
- ordered.forEach(item=>{const saved=parseForestTile(item.forestTile);if(saved&&slotMap.has(saved.key)&&!featureKeys.has(saved.key)&&!taken.has(saved.key))add(item,slotMap.get(saved.key));});
+ // Score the projected crown footprint rather than distance on the diagonal grid.
+ // Use the larger winter silhouette for hidden trees so changing themes keeps positions.
+ const crown=(item,slot,profile,sizeVar)=>{
+  const scale=cfg.treeScale*profile.scaleBias*sizeVar*(item.hiddenTree?hiddenTreeScale(item.hiddenTree,'snow'):1);
+  return {x:slot.rx*cfg.boardW/(2*Math.max(1,cfg.cols-1)),y:slot.ry*cfg.boardH/(2*Math.max(1,cfg.rows-1))-43*scale,rx:(profile.radius+3)*scale*.94+1.5,ry:40*scale*.94+1.5};
+ };
+ const crownBins=new Map(),binSize=32;
+ const binsFor=b=>{const keys=[];for(let x=Math.floor((b.x-b.rx)/binSize);x<=Math.floor((b.x+b.rx)/binSize);x++)for(let y=Math.floor((b.y-b.ry)/binSize);y<=Math.floor((b.y+b.ry)/binSize);y++)keys.push(x+','+y);return keys};
+ const rememberCrown=b=>{for(const key of binsFor(b)){if(!crownBins.has(key))crownBins.set(key,[]);crownBins.get(key).push(b)}};
+ const crownOverlap=box=>{let sum=0;const nearby=new Set();for(const key of binsFor(box))for(const b of crownBins.get(key)||[])nearby.add(b);for(const b of nearby){const dx=(box.x-b.x)/(box.rx+b.rx),dy=(box.y-b.y)/(box.ry+b.ry),penetration=1-dx*dx-dy*dy;if(penetration>0)sum+=penetration*Math.min(box.rx*box.ry,b.rx*b.ry)}return sum};
  ordered.forEach(item=>{
   if(placements.some(p=>p.item===item))return;
   const profile=treeVisualProfile(item),sizeVar=(item&&item.hiddenTree)?1:treeSizeVariance(item),available=treeSlots.filter(s=>!taken.has(s.key));
-  let best=available[0],bestScore=-1e9;
+  let best=available[0],bestScore=-Infinity,bestOverlap=Infinity;
   available.forEach(slot=>{
    const nearest=distances.get(slot.key),minAny=nearest.any,minSame=nearest.species.get(profile.species.id)??99,minShape=nearest.shape.get(profile.shape)??99;
    const tooClose=minAny<1.35?-140:0;
    const score=tooClose+Math.min(minAny,6)*9.2+Math.min(minSame,7)*4.1+Math.min(minShape,5)*2.2+Math.min(slot.edge,5)*.9+slot.centerDist*.24+unit(item.id+'|'+slot.key+'|assign')*.8;
-   if(score>bestScore){best=slot;bestScore=score}
+   const box=crown(item,slot,profile,sizeVar);
+   const overlap=crownOverlap(box);
+   if(overlap<bestOverlap-.01||(Math.abs(overlap-bestOverlap)<=.01&&score>bestScore)){best=slot;bestScore=score;bestOverlap=overlap}
   });
-  if(best){item.forestTile='g:'+best.key;changed=true;add(item,best)}
+  if(best){const tile='g:'+best.key;if(item.forestTile!==tile){item.forestTile=tile;changed=true}add(item,best);rememberCrown(crown(item,best,profile,sizeVar))}
  });
+ if(forestPlacementCache.size>=8)forestPlacementCache.delete(forestPlacementCache.keys().next().value);
+ forestPlacementCache.set(cacheKey,placements.map(({item,...p})=>({...p,id:item.id})));
  return {placements,emptySlots:treeSlots.filter(s=>!taken.has(s.key)),featureSlots,changed};
 }
-function forestDecorations(cfg,project,theme='basic',emptySlots=[],featureSlots=[]){
+const forestArtBoundsCache=new Map();
+function forestTreeObstacles(points,cfg,theme){
+ const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg'),g=document.createElementNS(ns,'g');
+ svg.setAttribute('width','0');svg.setAttribute('height','0');svg.style.cssText='position:absolute;visibility:hidden;pointer-events:none';svg.appendChild(g);document.body.appendChild(svg);
+ try{return points.map(p=>{
+  const art=treeArt(p.c,theme);let b=forestArtBoundsCache.get(art);
+  if(!b){g.innerHTML=art;const r=g.getBBox();b=r.width&&r.height?{x:r.x-2,y:r.y-3,width:r.width+4,height:r.height+6}:{x:-65,y:-125,width:130,height:145};if(forestArtBoundsCache.size>100)forestArtBoundsCache.clear();forestArtBoundsCache.set(art,b)}
+  const z=(p.scale||cfg.treeScale)*(p.c?.hiddenTree?hiddenTreeScale(p.c.hiddenTree,theme):1);
+  return {left:p.x+b.x*z,right:p.x+(b.x+b.width)*z,top:p.y+b.y*z,bottom:p.y+(b.y+b.height)*z};
+ })}finally{svg.remove()}
+}
+function forestDecorationPosition(preferred,candidates,extent,blocked,cfg){
+ const rx=cfg.boardW/2+44,ry=cfg.boardH/2+34;
+ const clear=p=>{const b={left:p.x+extent[0],top:p.y+extent[1],right:p.x+extent[2],bottom:p.y+extent[3]};
+  if(![[b.left,b.top],[b.right,b.top],[b.left,b.bottom],[b.right,b.bottom]].every(([x,y])=>Math.abs(x-360)/rx+Math.abs(y-286)/ry<.98))return false;
+  return !blocked.some(q=>b.left<q.right+4&&b.right>q.left-4&&b.top<q.bottom+4&&b.bottom>q.top-4);
+ };
+ return [preferred,...candidates].sort((a,b)=>(a.x-preferred.x)**2+(a.y-preferred.y)**2-((b.x-preferred.x)**2+(b.y-preferred.y)**2)).find(clear)||null;
+}
+function forestDecorations(cfg,project,theme='basic',emptySlots=[],featureSlots=[],treeBoxes=[]){
  const pieces=[],featureMap=new Map(featureSlots.map(s=>[s.key,s]));
  const at=(key)=>{const s=featureMap.get(key);return s?project(s):null};
+ const blocked=treeBoxes.slice(),candidates=[...emptySlots,...featureSlots].map(project);
+ // Perimeter candidates preserve a few visible details even in dense forests.
+ for(let i=0;i<64;i++){const t=i/64*4,side=Math.floor(t),f=t-side,verts=[[360,286-cfg.boardH/2-22],[360+cfg.boardW/2+28,286],[360,286+cfg.boardH/2+22],[360-cfg.boardW/2-28,286]],a=verts[side],b=verts[(side+1)%4];candidates.push({x:a[0]+(b[0]-a[0])*f,y:a[1]+(b[1]-a[1])*f})}
+ const place=(kind,draw,preferred,extent)=>{
+  const p=forestDecorationPosition(preferred,candidates,extent,blocked,cfg);if(!p)return;
+  blocked.push({left:p.x+extent[0],top:p.y+extent[1],right:p.x+extent[2],bottom:p.y+extent[3]});
+  pieces.push('<g data-decoration="'+kind+'">'+draw(p.x.toFixed(1),p.y.toFixed(1))+'</g>');
+ };
+
  const rock=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".82"><ellipse cy="7" rx="14" ry="4" fill="#7A8D83" opacity=".12"/><path d="M-10 4Q-13-6-5-11Q3-15 9-8Q14-2 9 5Z" fill="#9DA79F"/><path d="M-5-7Q1-11 6-7" fill="none" stroke="#B8C0B9" stroke-width="1.2"/></g>';
  const stump=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".84"><ellipse cy="7" rx="11" ry="3.2" fill="#6F8177" opacity=".12"/><path d="M-6-8L-7 4Q0 9 7 4L6-8Z" fill="#8B6B53"/><ellipse cy="-8" rx="6" ry="3" fill="#B9906A"/><ellipse cy="-8" rx="3" ry="1.4" fill="none" stroke="#8D6C52" stroke-width=".9"/></g>';
  const branch=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".76"><path d="M-15 4Q-4-3 11-1M1-2L8-9M-7 1L-12-6" fill="none" stroke="#806750" stroke-width="3" stroke-linecap="round"/><ellipse cx="9" cy="-8" rx="4" ry="2.2" fill="#839B6D" transform="rotate(-22 9 -8)"/></g>';
  const grass=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".7"><path d="M0 5Q-1-5-6-11M0 5Q1-7 1-13M0 5Q4-4 8-9M0 5Q-6-2-10-4" fill="none" stroke="#78956E" stroke-width="2" stroke-linecap="round"/></g>';
- const flowers=(x,y,s=1,variant=0)=>{const palettes=[['#FFF4CF','#E2B84F','#98B875'],['#FADBCF','#D99168','#94B472'],['#F8F4E8','#E0B447','#A8C07E']][variant%3],dots=[[-11,-2],[-4,3],[4,-3],[11,2],[0,8],[7,8],[-9,7]];return '<g transform="translate('+x+' '+y+') scale('+s+')" opacity="1"><ellipse cx="0" cy="8" rx="21" ry="6" fill="#6F8E69" opacity=".08"/><ellipse cx="-14" cy="9" rx="6.2" ry="2.7" fill="'+palettes[2]+'" opacity=".92"/><ellipse cx="14" cy="9" rx="6" ry="2.6" fill="'+palettes[2]+'" opacity=".9"/>'+dots.map(d=>'<g transform="translate('+d[0]+' '+d[1]+')"><circle cy="-2.6" r="2.7" fill="'+palettes[0]+'"/><circle cx="2.5" r="2.3" fill="'+palettes[0]+'"/><circle cx="-2.5" r="2.3" fill="'+palettes[0]+'"/><circle cy="2.4" r="2.3" fill="'+palettes[0]+'"/><circle r="1.15" fill="'+palettes[1]+'"/></g>').join('')+'</g>'};
+ const flowerPatch=(x,y,s=1,variant=0,snow=false)=>{
+  const palettes=snow?[['#B09ABF','#D5C7DF'],['#CDB878','#EEE0B5']]:[['#CBBE8C','#F1E9C9'],['#B4A0BD','#DBCDDF'],['#C7A49B','#E9D2C5']];
+  const [petal,light]=palettes[variant%palettes.length],blooms=variant%3===0?[[0,0]]:[[-5,2],[6,-2]];
+  return '<g data-flower-patch="'+(snow?'snow':'basic')+'" transform="translate('+x+' '+y+') scale('+s+')"><ellipse cy="9" rx="14" ry="3.5" fill="'+(snow?'#91A8AF':'#617A56')+'" opacity=".12"/>'+(snow?'<path d="M-14 8L-7 5 4 6 12 4 16 8 7 11-8 11Z" fill="#F8FBFC"/>':'')+blooms.map(([a,b],i)=>'<g data-bloom="'+i+'" transform="translate('+a+' '+b+')"><path d="M0 8L0-2" fill="none" stroke="#6E8160" stroke-width="1.5" stroke-linecap="round"/><path d="M0 6L-5 5-7 1-3 2ZM0 8L5 6 7 2 3 3Z" fill="'+(snow?'#849779':'#8FA374')+'"/><path d="M0-2L-5-3-6-7-3-9 0-6 2-10 5-9 5-6 8-4 6-1 3-1 2 3-1 3-3 0Z" fill="'+petal+'"/><path d="M0-3L-3-7-1-8 1-5 3-8 4-6 2-3Z" fill="'+light+'"/><circle cx="1" cy="-3" r="1.55" fill="#D8BE70"/></g>').join('')+'</g>';
+ };
+ const flowers=(x,y,s=1,variant=0)=>flowerPatch(x,y,s,variant,false);
  const well=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".95"><ellipse cy="10" rx="16" ry="5" fill="#647D70" opacity=".08"/><ellipse cy="5" rx="13" ry="5" fill="#AFA79A"/><ellipse cy="4" rx="9" ry="3.2" fill="#8FC7D6"/><path d="M-12 5V-8M12 5V-8M-12-7Q0-19 12-7" fill="none" stroke="#806B59" stroke-width="2.5" stroke-linecap="round"/><path d="M-5-14H5" stroke="#806B59" stroke-width="2.4" stroke-linecap="round"/></g>';
  const pond=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".96"><ellipse cy="8" rx="31" ry="10" fill="#678678" opacity=".08"/><path d="M-30 2Q-25-12-8-12Q5-18 23-8Q34 1 24 13Q9 19-8 15Q-27 16-30 2Z" fill="#8CC5D7"/><path d="M-16-3Q-5-9 7-4" fill="none" stroke="#DFF3F7" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="-25" cy="7" rx="7" ry="2.5" fill="#9CB583" transform="rotate(-26 -25 7)"/><ellipse cx="25" cy="7" rx="7" ry="2.5" fill="#9CB583" transform="rotate(20 25 7)"/></g>';
  const snowRock=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".9"><ellipse cy="7" rx="15" ry="4" fill="#8DA0A5" opacity=".12"/><path d="M-11 4Q-13-5-5-12Q4-15 10-8Q14-1 9 5Z" fill="#8F9D9F"/><path d="M-9-3Q-4-12 5-10Q10-8 11-3Q1-6-9-3Z" fill="#F8FBFC"/></g>';
  const snowPatch=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".82"><ellipse rx="20" ry="6" fill="#F8FBFC"/><ellipse cx="7" cy="-1" rx="10" ry="3.6" fill="#E4EEF2" opacity=".72"/></g>';
  const snowBranch=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".8"><path d="M-16 4Q-4-3 12-1M1-2L9-9M-8 1L-13-6" fill="none" stroke="#756B61" stroke-width="3" stroke-linecap="round"/><path d="M-12-1Q-2-6 8-4" fill="none" stroke="#F8FBFC" stroke-width="2.5" stroke-linecap="round"/></g>';
- const rabbitHole=(x,y,s=1)=>'<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".92"><ellipse cy="9" rx="16" ry="5" fill="#A7B9BF" opacity=".12"/><ellipse cy="7" rx="18" ry="6" fill="#F7FBFC" opacity=".95"/><ellipse cy="3" rx="10" ry="5.2" fill="#919A97"/><ellipse cy="2" rx="6" ry="3" fill="#6F7572"/></g>';
- const berryTree=(x,y,s=1,shape=0)=>{const crowns=['<ellipse cx="0" cy="-26" rx="18" ry="13" fill="#627A55"/><ellipse cx="-12" cy="-17" rx="13" ry="10" fill="#768A63"/><ellipse cx="12" cy="-18" rx="12" ry="9" fill="#5F7650"/>','<polygon points="0,-44 -18,-24 0,-16 18,-24" fill="#667E57"/><polygon points="0,-34 -16,-14 0,-8 16,-14" fill="#7C8F68"/>','<ellipse cx="-6" cy="-25" rx="14" ry="11" fill="#6D845F"/><ellipse cx="10" cy="-29" rx="13" ry="10" fill="#5E7652"/><ellipse cx="6" cy="-16" rx="11" ry="9" fill="#82976D"/>'][shape%3],berries=[[-10,-27],[-2,-19],[8,-28],[13,-17],[-14,-16],[4,-33]].map((b,i)=>'<circle cx="'+b[0]+'" cy="'+b[1]+'" r="'+(i%2?2.3:2.7)+'" fill="'+(i%2?'#B94045':'#D35252')+'"/>').join('');return '<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".95"><ellipse cy="10" rx="16" ry="4" fill="#8DA0A5" opacity=".12"/><ellipse cx="0" cy="11" rx="18" ry="5" fill="#F8FBFC" opacity=".94"/><path d="M0 11Q-1-4 1-34M0-10L-9-20M1-15L11-24" fill="none" stroke="#796A5B" stroke-width="3.6" stroke-linecap="round"/>'+crowns+'<ellipse cx="-3" cy="-32" rx="9" ry="3.6" fill="#F8FBFC" opacity=".94"/>'+berries+'</g>'};
+ const rabbitHole=(x,y,s=1)=>'<g data-snow-decor="burrow" transform="translate('+x+' '+y+') scale('+s+')"><ellipse cy="9" rx="19" ry="6" fill="#879DA6" opacity=".20"/><path d="M-19 6Q-17-9 0-11Q17-9 19 6Q1 14-19 6Z" fill="#F8FBFC"/><path d="M-11 5Q-10-5 0-6Q10-5 11 5Q0 11-11 5Z" fill="#87918B"/><path d="M-8 5Q-7-2 0-3Q7-2 8 5Q0 9-8 5Z" fill="#535F5C"/><path d="M-13-1Q0-11 13-1" fill="none" stroke="#E5EFF2" stroke-width="3" stroke-linecap="round"/><ellipse cx="10" cy="13" rx="2" ry="1.1" fill="#879DA6" opacity=".45"/><ellipse cx="15" cy="17" rx="1.7" ry="1" fill="#879DA6" opacity=".32"/></g>';
+ const snowFlowers=(x,y,s=1,variant=0)=>flowerPatch(x,y,s,variant,true);
+ const snowShrub=(x,y,s=1,shape=0)=>{const crowns=['<ellipse cx="0" cy="-26" rx="18" ry="13" fill="#627A55"/><ellipse cx="-12" cy="-17" rx="13" ry="10" fill="#768A63"/><ellipse cx="12" cy="-18" rx="12" ry="9" fill="#5F7650"/>','<polygon points="0,-44 -18,-24 0,-16 18,-24" fill="#667E57"/><polygon points="0,-34 -16,-14 0,-8 16,-14" fill="#7C8F68"/>','<ellipse cx="-6" cy="-25" rx="14" ry="11" fill="#6D845F"/><ellipse cx="10" cy="-29" rx="13" ry="10" fill="#5E7652"/><ellipse cx="6" cy="-16" rx="11" ry="9" fill="#82976D"/>'][shape%3];return '<g transform="translate('+x+' '+y+') scale('+s+')" opacity=".95"><ellipse cy="10" rx="16" ry="4" fill="#8DA0A5" opacity=".12"/><ellipse cx="0" cy="11" rx="18" ry="5" fill="#F8FBFC" opacity=".94"/><path d="M0 11Q-1-4 1-34M0-10L-9-20M1-15L11-24" fill="none" stroke="#796A5B" stroke-width="3.6" stroke-linecap="round"/>'+crowns+'<ellipse cx="-3" cy="-32" rx="9" ry="3.6" fill="#F8FBFC" opacity=".94"/>'+'</g>'};
  const open=[...emptySlots].sort((a,b)=>(hash('decor-v6|'+a.key)-hash('decor-v6|'+b.key)));
  const take=(count,min=2.4)=>{const out=[];for(const s of open){if(out.some(q=>Math.hypot(s.gx-q.gx,s.gy-q.gy)<min))continue;out.push(s);if(out.length>=count)break}return out};
+ const addExtraFlowers=()=>{
+  if(cfg.tier<1||!open.length)return;
+  const extra=take(2,3.2);
+  extra.forEach((slot,i)=>place(theme==='snow'?'snow-flowers':'flower',(x,y)=>flowerPatch(x,y,1,i+2,theme==='snow'),project(slot),[-17,-14,17,15]));
+ };
  if(theme==='snow'){
-  const picks=take(cfg.tier<=1?1:cfg.tier<=3?4:6,2.8);
-  picks.forEach((s,i)=>{const p=project(s);if(i===0)pieces.push(berryTree(p.x.toFixed(1),p.y.toFixed(1),cfg.tier<=2?.43:.50,i));else if(i%3===1)pieces.push(snowRock(p.x.toFixed(1),p.y.toFixed(1),.72));else pieces.push(snowPatch(p.x.toFixed(1),p.y.toFixed(1),.65))});
-  const extra=cfg.tier>=4?take(10,3.1).slice(5):[];extra.forEach((s,i)=>{const p=project(s);if(i%4===0)pieces.push(rabbitHole(p.x.toFixed(1),p.y.toFixed(1),.72));else if(i%2)pieces.push(berryTree(p.x.toFixed(1),p.y.toFixed(1),.45,i+1));else pieces.push(snowBranch(p.x.toFixed(1),p.y.toFixed(1),.7))});
+  // Choose one spaced set so flowers, burrows and rocks cannot reuse a tile.
+  const picks=take(cfg.tier<=1?2:cfg.tier<=3?5:8,2.5);
+  picks.forEach((slot,i)=>{
+   const p=project(slot);
+   if(i===0)place('snow-shrub',(x,y)=>snowShrub(x,y,cfg.tier<=2?.43:.50),p,[-14,-24,14,9]);
+   else if(i===1||i===4||i===7)place('snow-flowers',(x,y)=>snowFlowers(x,y,1,i),p,[-17,-14,17,15]);
+   else if(i===3)place('burrow',(x,y)=>rabbitHole(x,y,.9),p,[-19,-12,19,18]);
+   else if(i===2)place('snow-rock',(x,y)=>snowRock(x,y,.72),p,[-12,-12,12,9]);
+   else if(i===5)place('snow-patch',(x,y)=>snowPatch(x,y,.7),p,[-15,-5,15,5]);
+   else place('snow-branch',(x,y)=>snowBranch(x,y,.7),p,[-13,-9,13,6]);
+  });
+  addExtraFlowers();
   return pieces.join('');
  }
- [['10,9','flower'],['12,8','flower'],['9,15','flower'],['16,13','flower'],['11,17','flower'],['8,13','well'],['13,15','rock'],['14,8','stump'],['7,10','grass'],['7,16','branch'],['17,14','rock'],['9,17','flower']].forEach(([key,kind],i)=>{const p=at(key);if(!p)return;if(kind==='flower')pieces.push(flowers(p.x.toFixed(1),p.y.toFixed(1),1.18+(i%2)*.08,i));if(kind==='well')pieces.push(well(p.x.toFixed(1),p.y.toFixed(1),.82));if(kind==='rock')pieces.push(rock(p.x.toFixed(1),p.y.toFixed(1),.76));if(kind==='stump')pieces.push(stump(p.x.toFixed(1),p.y.toFixed(1),.74));if(kind==='grass')pieces.push(grass(p.x.toFixed(1),p.y.toFixed(1),.72));if(kind==='branch')pieces.push(branch(p.x.toFixed(1),p.y.toFixed(1),.74))});
- if(cfg.tier>=4){const waterKeys=['15,10','16,10','15,11','16,11'].map(k=>at(k)).filter(Boolean);if(waterKeys.length){const x=waterKeys.reduce((a,p)=>a+p.x,0)/waterKeys.length,y=waterKeys.reduce((a,p)=>a+p.y,0)/waterKeys.length;pieces.push(pond(x.toFixed(1),y.toFixed(1),.86))}}
+ [['10,9','flower'],['12,8','flower'],['9,15','flower'],['16,13','flower'],['11,17','flower'],['8,13','well'],['13,15','rock'],['14,8','stump'],['7,10','grass'],['7,16','branch'],['17,14','rock'],['9,17','flower']].forEach(([key,kind],i)=>{
+  const p=at(key);if(!p)return;
+  const art={flower:[(x,y)=>flowers(x,y,1.08,i),[-19,-16,19,17]],well:[(x,y)=>well(x,y,.82),[-15,-17,15,13]],rock:[(x,y)=>rock(x,y,.76),[-12,-12,12,9]],stump:[(x,y)=>stump(x,y,.74),[-10,-9,10,9]],grass:[(x,y)=>grass(x,y,.72),[-9,-11,9,5]],branch:[(x,y)=>branch(x,y,.74),[-14,-10,13,6]]}[kind];
+  place(kind,art[0],p,art[1]);
+ });
+ if(cfg.tier>=4){const waterKeys=['15,10','16,10','15,11','16,11'].map(k=>at(k)).filter(Boolean);if(waterKeys.length){const p={x:waterKeys.reduce((a,p)=>a+p.x,0)/waterKeys.length,y:waterKeys.reduce((a,p)=>a+p.y,0)/waterKeys.length};place('pond',(x,y)=>pond(x,y,.86),p,[-30,-17,30,18])}}
+ addExtraFlowers();
  return pieces.join('');
 }
 // Only show the pale separator where a foreground tree overlaps a rear tree.
@@ -1337,11 +1451,11 @@ function forestSVG(items,theme='basic',animated=true){
  const points=layout.placements.map(p=>({...project(p.slot),c:p.item,profile:p.profile,scale:p.scale})).sort((a,b)=>a.y-b.y||a.c.id.localeCompare(b.c.id));
  const ground=theme==='snow'?'#E3ECEF':'#D9E9CC',top={x:cx,y:cy-cfg.boardH/2-marginY},right={x:cx+cfg.boardW/2+marginX,y:cy},bottom={x:cx,y:cy+cfg.boardH/2+marginY},left={x:cx-cfg.boardW/2-marginX,y:cy},depth=18;
  const groundPath='M'+top.x+' '+top.y+' L'+right.x+' '+right.y+' L'+bottom.x+' '+bottom.y+' L'+left.x+' '+left.y+' Z',leftSide='M'+left.x+' '+left.y+' L'+bottom.x+' '+bottom.y+' L'+bottom.x+' '+(bottom.y+depth)+' L'+left.x+' '+(left.y+depth)+' Z',rightSide='M'+bottom.x+' '+bottom.y+' L'+right.x+' '+right.y+' L'+right.x+' '+(right.y+depth)+' L'+bottom.x+' '+(bottom.y+depth)+' Z';
- const decorations=forestDecorations(cfg,project,theme,layout.emptySlots,layout.featureSlots);
+ const decorations=forestDecorations(cfg,project,theme,layout.emptySlots,layout.featureSlots,forestTreeObstacles(points,cfg,theme));
  const overlap=forestOverlapEdges(points,cfg,theme);
  const trees=points.map((p,i)=>{const hiddenKind=p.c?.hiddenTree,hiddenBoost=hiddenKind?hiddenTreeScale(hiddenKind,theme):1,sc=((p.scale||cfg.treeScale)*hiddenBoost).toFixed(3),shadowRx=((p.profile?.radius||24)*.70*hiddenBoost).toFixed(1),shadowRy=(Math.max(3.6,(p.profile?.radius||24)*.13*hiddenBoost)).toFixed(1),snowBase=theme==='snow'?'<ellipse cx="0" cy="13" rx="'+Math.max(9,(p.profile?.radius||24)*.5*hiddenBoost).toFixed(1)+'" ry="4.1" fill="#F8FBFC" opacity=".92"/>':'';return '<g data-tree="'+esc(p.c.id)+'" role="button" tabindex="0" aria-label="'+esc(p.c.title+' · '+String(p.c.genre||category(p.c).label))+'" transform="translate('+p.x.toFixed(1)+' '+p.y.toFixed(1)+') scale('+sc+')"><ellipse cx="4" cy="10" rx="'+shadowRx+'" ry="'+shadowRy+'" fill="#708579" opacity=".11"/>'+snowBase+'<circle class="tree-hit" cx="0" cy="-27" r="38" fill="transparent" pointer-events="all"/>'+overlap.edges[i]+'<g class="tree-art">'+treeArt(p.c,theme)+'</g></g>'}).join('');
  const visitor=n?forestVisitorArt(items,animated):'',patches=[{x:cx-cfg.boardW*.22,y:cy-cfg.boardH*.11,rx:cfg.boardW*.12,ry:cfg.boardH*.05,o:.10},{x:cx+cfg.boardW*.16,y:cy-cfg.boardH*.08,rx:cfg.boardW*.10,ry:cfg.boardH*.046,o:.08},{x:cx-cfg.boardW*.03,y:cy+cfg.boardH*.17,rx:cfg.boardW*.14,ry:cfg.boardH*.055,o:.07}].map((g,i)=>'<ellipse cx="'+g.x.toFixed(1)+'" cy="'+g.y.toFixed(1)+'" rx="'+g.rx.toFixed(1)+'" ry="'+g.ry.toFixed(1)+'" fill="'+(theme==='snow'?(i===1?'#D6E3E7':'#EEF4F6'):(i===1?'#c9dcb9':'#d4e3c7'))+'" opacity="'+(theme==='snow'?Math.min(.36,g.o+.15):g.o)+'"/>').join('');
- return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 540" role="group" aria-label="'+n+'그루의 '+({basic:'기본',snow:'설산'}[theme])+' 숲"><defs>'+overlap.defs+'<filter id="forestTreeEdge" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB"><feMorphology in="SourceAlpha" operator="dilate" radius="1.2" result="edge"/><feFlood flood-color="#F1F4E9" flood-opacity=".82"/><feComposite in2="edge" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><linearGradient id="groundFill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+(theme==='snow'?'#F2F6F7':'#E5F0DA')+'"/><stop offset=".58" stop-color="'+ground+'"/><stop offset="1" stop-color="'+(theme==='snow'?'#D7E3E6':'#D0E1C2')+'"/></linearGradient><clipPath id="groundClip"><path d="'+groundPath+'"/></clipPath></defs><rect width="720" height="540" fill="transparent"/>'+(theme==='snow'?'<path d="M55 224 177 58 275 191 368 31 541 221 598 99 720 247" fill="#c4d4db"/><path d="m135 115 42-57 40 54-29-12-13 17-12-17zM317 99 51-68 55 73-39-18-19 22-17-23z" fill="#f8fbfc"/>':'')+'<g id="forest-world"><path d="'+groundPath+'" fill="url(#groundFill)"/><g clip-path="url(#groundClip)">'+patches+decorations+'</g><path d="'+groundPath+'" fill="none" stroke="#bdd0b1" stroke-width="1.5" opacity=".46"/><path d="'+leftSide+'" fill="#938874" opacity=".98"/><path d="'+rightSide+'" fill="#ab9f8a" opacity=".98"/>'+trees+visitor+'</g></svg>';
+ return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 540" role="group" aria-label="'+n+'그루의 '+({basic:'기본',snow:'설산'}[theme])+' 숲"><defs>'+overlap.defs+'<filter id="forestTreeEdge" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB"><feMorphology in="SourceAlpha" operator="dilate" radius="1.5" result="spread"/><feGaussianBlur in="spread" stdDeviation=".85" result="edge"/><feFlood flood-color="'+(theme==='snow'?'#BCCFD5':'#B9CE98')+'" flood-opacity=".72"/><feComposite in2="edge" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><linearGradient id="groundFill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+(theme==='snow'?'#F2F6F7':'#E5F0DA')+'"/><stop offset=".58" stop-color="'+ground+'"/><stop offset="1" stop-color="'+(theme==='snow'?'#D7E3E6':'#D0E1C2')+'"/></linearGradient><clipPath id="groundClip"><path d="'+groundPath+'"/></clipPath></defs><rect width="720" height="540" fill="transparent"/>'+(theme==='snow'?'<path d="M55 224 177 58 275 191 368 31 541 221 598 99 720 247" fill="#c4d4db"/><path d="m135 115 42-57 40 54-29-12-13 17-12-17zM317 99 51-68 55 73-39-18-19 22-17-23z" fill="#f8fbfc"/>':'')+'<g id="forest-world"><path d="'+groundPath+'" fill="url(#groundFill)"/><g clip-path="url(#groundClip)">'+patches+decorations+'</g><path d="'+groundPath+'" fill="none" stroke="#bdd0b1" stroke-width="1.5" opacity=".46"/><path d="'+leftSide+'" fill="#938874" opacity=".98"/><path d="'+rightSide+'" fill="#ab9f8a" opacity=".98"/>'+trees+visitor+'</g></svg>';
 }
 
 
@@ -2758,6 +2872,8 @@ function setupForest(){
  };
 
  vp.addEventListener('pointerleave',()=>{if(sel?.mode==='hover')hideTip()});
+ vp.addEventListener('focusin',e=>{const g=e.target.closest?.('[data-tree]');if(g&&g.matches(':focus-visible'))showTip(g,'pin')});
+ vp.addEventListener('focusout',e=>{if(e.target.closest?.('[data-tree]')&&!tip.contains(e.relatedTarget))hideTip()});
  const apply=()=>{const max=(zoomState.scale-1)*190;zoomState.x=Math.max(-max,Math.min(max,zoomState.x));zoomState.y=Math.max(-max,Math.min(max,zoomState.y));world.setAttribute('transform','translate('+(360*(1-zoomState.scale)+zoomState.x)+' '+(270*(1-zoomState.scale)+zoomState.y)+') scale('+zoomState.scale+')')};
  window.applyForest=apply;
  vp.addEventListener('pointerdown',e=>{
@@ -2767,9 +2883,10 @@ function setupForest(){
   if(pointers.size>=1){hideTip();pointers.forEach(p=>p.moved=true)}
   const tree=pickTree(e);
   pointers.set(e.pointerId,{x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,moved:pointers.size>0,tree,treeId:tree?.getAttribute('data-tree')||''});
-  prev=null;
+  if(e.pointerType!=='mouse'){try{vp.setPointerCapture(e.pointerId)}catch{}}
+  const pts=[...pointers.values()];prev=pts.length>=2?{d:Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y),x:(pts[0].x+pts[1].x)/2,y:(pts[0].y+pts[1].y)/2}:null;
  });
- vp.addEventListener('pointermove',e=>{
+ vp.addEventListener('pointermove' ,e=>{
   if(e.pointerType==='mouse'&&pointers.size===0){
    if(!sel||sel.mode==='hover'){const t=e.target.closest?.('[data-tree]');if(t){if(!sel||sel.g!==t)showTip(t,'hover')}else hideTip()}
    return;
@@ -2778,10 +2895,23 @@ function setupForest(){
   const before=pointers.get(e.pointerId),moved=before.moved||Math.hypot(e.clientX-before.startX,e.clientY-before.startY)>7;
   if(moved&&!before.moved){hideTip();if(e.pointerType==='mouse'){try{vp.setPointerCapture(e.pointerId)}catch{}}}
   pointers.set(e.pointerId,{...before,x:e.clientX,y:e.clientY,moved});
-  if(e.pointerType!=='mouse')return;
   const pts=[...pointers.values()];
-  if(pts.length>=2){const d=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);if(prev)zoomState.scale=Math.max(1,Math.min(3.5,zoomState.scale*d/prev));prev=d}
-  else if(zoomState.scale>1&&moved){const unit=Math.min(vp.clientWidth/720,vp.clientHeight/540);zoomState.x+=(e.clientX-before.x)/unit;zoomState.y+=(e.clientY-before.y)/unit}
+  if(pts.length>=2){
+   hideTip();pointers.forEach(p=>p.moved=true);
+   const mid={d:Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y),x:(pts[0].x+pts[1].x)/2,y:(pts[0].y+pts[1].y)/2};
+   if(prev&&prev.d>0){
+    const svg=vp.querySelector('svg'),m=svg.getScreenCTM().inverse();
+    const old=new DOMPoint(prev.x,prev.y).matrixTransform(m),cur=new DOMPoint(mid.x,mid.y).matrixTransform(m);
+    const scale=Math.max(1,Math.min(3.5,zoomState.scale*mid.d/prev.d)),ratio=scale/zoomState.scale;
+    zoomState.x=cur.x-360-(old.x-360-zoomState.x)*ratio;
+    zoomState.y=cur.y-270-(old.y-270-zoomState.y)*ratio;
+    zoomState.scale=scale;
+   }prev=mid;
+  }
+  else if(moved){
+   if(zoomState.scale>1){const unit=Math.min(vp.clientWidth/720,vp.clientHeight/540);zoomState.x+=(e.clientX-before.x)/unit;zoomState.y+=(e.clientY-before.y)/unit}
+   else if(e.pointerType!=='mouse')window.scrollBy(0,before.y-e.clientY);
+  }
   apply();
  });
  const up=e=>{
@@ -2802,7 +2932,35 @@ function setupForest(){
   if(!['+','=','-','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','0'].includes(e.key))return;e.preventDefault();hideTip();if(e.key==='+'||e.key==='=')zoomState.scale=Math.min(3.5,zoomState.scale+.25);if(e.key==='-')zoomState.scale=Math.max(1,zoomState.scale-.25);if(e.key==='0')zoomState={scale:1,x:0,y:0};if(e.key==='ArrowLeft')zoomState.x+=25;if(e.key==='ArrowRight')zoomState.x-=25;if(e.key==='ArrowUp')zoomState.y+=25;if(e.key==='ArrowDown')zoomState.y-=25;apply()});
  apply();
  if(pendingForestArrival){const arrived=[...vp.querySelectorAll('[data-tree]')].find(g=>g.dataset.tree===pendingForestArrival);if(arrived){const pos=arrived.transform.baseVal.getItem(0).matrix;zoomState.scale=Math.max(zoomState.scale,1.65);zoomState.x=(360-pos.e)*zoomState.scale;zoomState.y=(290-pos.f)*zoomState.scale;apply();showTip(arrived,'pin');arrived.querySelector('.tree-art')?.classList.add('forest-arrival');pendingForestArrival=null}}
- clearTimeout(window.__songrimVisitorTimer);const visitor=vp.querySelector('[data-visitor]');if(visitor){const id=visitor.dataset.visitor;if(id&&!collectionState().visitorsSeen.includes(id)){window.__songrimVisitorTimer=setTimeout(()=>{const bounds=visitor.getBoundingClientRect();if(view!=='forest'||document.hidden||!document.body.contains(visitor)||Number(getComputedStyle(visitor.querySelector('.forest-visitor')||visitor).opacity)<.5||bounds.bottom<=0||bounds.top>=window.innerHeight)return;collectionState().visitorsSeen.push(id);persist();const found=FOREST_VISITORS.find(v=>v.id===id);if(found)toast('새로운 방문객 · '+found.name+'를 만났어요.')},2600)}}
+ clearTimeout(window.__songrimVisitorTimer);
+ const layer=world.querySelector('#forest-visitor-layer'),cfg=forestLayoutConfig(Model.completed(state,year).length);
+ let visitorBorn=0;
+ const spawnVisitor=()=>{
+  if(!layer)return;
+  const boxes=[...world.querySelectorAll('[data-tree]')].map(g=>{
+   const b=g.querySelector('.tree-art').getBBox(),m=g.transform.baseVal.consolidate().matrix;
+   return {left:m.e+b.x*m.a,right:m.e+(b.x+b.width)*m.a,top:m.f+b.y*m.d,bottom:m.f+(b.y+b.height)*m.d};
+  });
+  const scale=cfg.treeScale*.55,pos=visitorPosition(cfg,boxes,scale);
+  layer.innerHTML='';if(!pos)return;
+  const chosen=nextForestVisitor();if(!chosen)return;
+  const air=['bird','butterfly','firefly'].includes(chosen.id);
+  layer.innerHTML='<g data-visitor="'+chosen.id+'" role="img" aria-label="'+chosen.name+'" transform="translate('+pos.x+' '+pos.y+') scale('+scale+')"><g class="forest-visitor"><g class="'+(air?'visitor-air':'visitor-motion')+'">'+visitorArt(chosen.id)+'</g></g></g>';
+  visitorBorn=Date.now();
+ };
+ const visitTick=()=>{
+  if(!vp.isConnected||view!=='forest'||!layer)return;
+  if(!document.hidden&&!vp.classList.contains('paused')){
+   if(!layer?.firstChild||Date.now()-visitorBorn>=18000)spawnVisitor();
+   const v=layer?.querySelector('[data-visitor]');
+   if(v&&!collectionState().visitorsSeen.includes(v.dataset.visitor)){
+    const b=v.getBoundingClientRect(),r=vp.getBoundingClientRect();
+    if(Number(getComputedStyle(v.firstElementChild).opacity)>.5&&b.top>=Math.max(0,r.top)&&b.bottom<=Math.min(innerHeight,r.bottom)&&b.left>=r.left&&b.right<=r.right){collectionState().visitorsSeen.push(v.dataset.visitor);persist()}
+   }
+  }
+  window.__songrimVisitorTimer=setTimeout(visitTick,600);
+ };
+ spawnVisitor();visitTick();
  if('IntersectionObserver'in window){forestVisibilityObserver=new IntersectionObserver(es=>vp.classList.toggle('paused',!es[0].isIntersecting));forestVisibilityObserver.observe(vp)}
 }
 function changeMonth(delta){const [y,m]=month.split('-').map(Number),d=new Date(y,m-1+delta,1);const next=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');if(next<=now().slice(0,7)){month=next;render()}}
