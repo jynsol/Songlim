@@ -738,6 +738,10 @@ body{font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic 
 .page{padding:18px 22px calc(116px + env(safe-area-inset-bottom))}.page>section{margin-bottom:30px}
 h1,.page-heading .page-title{font-size:29px;line-height:1.3;letter-spacing:-1.1px;font-weight:750}
 h2,.section-title{font-size:19px;line-height:1.4;letter-spacing:-.6px;font-weight:700}h3{font-size:16px;font-weight:650}
+.head[hidden]+.page{padding-top:calc(24px + env(safe-area-inset-top))}
+.page-heading-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.heading-scrap{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:44px;padding:8px 12px;border:1px solid #d8d9d2;border-radius:99px;font-size:11px;white-space:nowrap}
+.heading-scrap svg{width:17px;height:17px}
 .page-heading{min-height:42px;gap:10px}.page-caption{font-size:12px;color:var(--muted);margin:7px 0 22px;line-height:1.6}
 .creator,.summary,.page-description{color:var(--muted);font-size:13px;line-height:1.6}small,.muted{color:var(--muted)}
 .section-eyebrow{font-size:10px;font-weight:650;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:block}
@@ -761,7 +765,7 @@ input::placeholder,textarea::placeholder{color:#8c9187;font-size:13px}input:focu
 input[type=checkbox],input[type=radio]{accent-color:#527039;min-height:20px}label{font-size:12px;font-weight:600;margin:18px 0 7px}
 .more-menu,.inline-picker-panel{border-radius:17px;background:#fff;border:1px solid var(--line);box-shadow:0 8px 30px #141a1412;padding:6px}.inline-picker-panel button[aria-pressed=true]{color:var(--accent-ink);background:var(--accent-soft)}
 /* Compact outlined filters above a two-column collection. */
-.scrap-fixed-search{top:68px;padding:0 0 12px;margin:0;background:var(--surface);box-shadow:none}
+.scrap-fixed-search{top:0;padding:0 0 12px;margin:0;background:var(--surface);box-shadow:none}
 .scrap-fixed-search input[type=search],.scrap-search-block input[type=search]{border:1px solid #d9dcd2;border-radius:99px;background:transparent;min-height:48px;padding-left:44px;font-size:15px}
 .scrap-fixed-search>svg{position:absolute;left:16px;top:14px;width:19px;height:19px;color:var(--ink);pointer-events:none}
 .scrap-fixed-search input:focus{border-color:var(--accent);box-shadow:none}
@@ -812,7 +816,7 @@ input[type=checkbox],input[type=radio]{accent-color:#527039;min-height:20px}labe
 .today-empty{padding:22px;background:#edf2e4;border-radius:22px;margin:20px 0}.today-empty h2{font-size:21px}.today-empty .growth{height:220px}
 /* The forest occupies the largest single surface on its page. */
 .forest-heading{margin-bottom:0}.forest-heading .page-title{font-size:29px}.forest-heading+.page-caption{margin:6px 0 20px}
-.forest-header-actions{gap:0}.forest-header-actions [data-picker=year]{font-size:12px;padding:6px 0 6px 10px;min-height:40px;color:var(--muted);font-weight:500}
+.forest-header-actions{gap:8px}.forest-header-actions [data-picker=year]{font-size:12px;padding:6px 0 6px 10px;min-height:40px;color:var(--muted);font-weight:500}
 .forest-garden{background:#eaf0e2;border:0;border-radius:23px;overflow:hidden;position:relative}.forest-garden.is-snow{background:#edf0f2}
 .forest-tools{padding:15px 15px 0;min-height:49px;display:flex;justify-content:space-between;gap:10px;position:relative;z-index:1}
 .forest-tools .forest-season-button,.forest-tools .forest-edit-control{font-size:10px;min-height:32px;line-height:1.4;padding:7px 11px;border-radius:99px;background:#fafcf4b3;color:#3f4b35;border:1px solid #ffffff80;font-weight:550}
@@ -2017,7 +2021,8 @@ function render(){
  const parentTab=view==='detail'?detailOrigin:view;
  const tab=parentTab==='calendar'?'forest':parentTab;
  $('tabs').innerHTML=['today','scrap','forest','my'].map((t,i)=>'<button class="'+(tab===t?'active':'')+'" data-action="tab" data-tab="'+t+'" aria-current="'+(tab===t?'page':'false')+'">'+icon(t)+['오늘','스크랩','나의 숲','마이'][i]+'</button>').join('');
- $('head').innerHTML=['detail','calendar'].includes(view)?'<div class="row">'+button(icon('back'),'back','iconbtn','aria-label="뒤로가기"')+'<span class="back-title">'+(view==='calendar'?'나의 숲 · 월간 기록':'콘텐츠 상세')+'</span></div>':'<div class="brand">'+icon('forest')+'송림</div>'+(['today','forest'].includes(view)?button(icon('plus')+'<span class="tiny">스크랩</span>','add','iconbtn','aria-label="스크랩 추가"'):'');
+ $('head').hidden=!['detail','calendar'].includes(view);
+ $('head').innerHTML=!$('head').hidden?'<div class="row">'+button(icon('back'),'back','iconbtn','aria-label="뒤로가기"')+'<span class="back-title">'+(view==='calendar'?'나의 숲 · 월간 기록':'콘텐츠 상세')+'</span></div>':'';
  $('page').innerHTML=({today:renderToday,scrap:renderScrap,forest:renderForest,calendar:renderCalendar,my:renderMy,detail:renderDetail}[view]||renderToday)();
  if(view==='forest')setupForest();
  if(!storageOK&& !$('storageAlert').innerHTML)$('storageAlert').innerHTML='<div class="storage-alert">이 환경에서는 자동 저장을 사용할 수 없어요.</div>';
@@ -2028,9 +2033,11 @@ function todayGrowthCaption(c){
  const message=stage===0?'첫 경험이 남았어요':stage===3?'나의 숲에 심었어요':days+'일째 경험하며 자라고 있어요';
  return '<p class="growth-label today-growth-caption"><strong>'+name+'</strong><span aria-hidden="true"> · </span>'+message+'</p>';
 }
+function scrapAddButton(){return button(icon('plus')+'<span>스크랩</span>','add','heading-scrap','aria-label="스크랩 추가"')}
+function todayHeading(title='오늘',actions=''){return '<div class="page-heading"><h1 class="page-title">'+title+'</h1><div class="page-heading-actions">'+scrapAddButton()+actions+'</div></div>'}
 function renderTodayBase(){
  let c=selected();if(c?.completed)c=null;const active=state.items.find(x=>!x.completed&&(x.logs.length||x.importedProgress));if(active&&!c)c=active;
- if(!state.onboarded&&!state.items.length)return '<section><div class="page-heading"><h1 class="page-title">오늘</h1></div><div class="center today-empty">'+growth(0)+'<h2>첫 작품을 담아보세요</h2><p class="creator">책, 음반, 영화를 기록할 수 있어요.</p><div class="space"></div>'+button('첫 스크랩 추가하기','add')+'</div></section>';
+ if(!state.onboarded&&!state.items.length)return '<section>'+todayHeading()+'<div class="center today-empty">'+growth(0)+'<h2>첫 작품을 담아보세요</h2><p class="creator">책, 음반, 영화를 기록할 수 있어요.</p><div class="space"></div>'+button('첫 스크랩 추가하기','add')+'</div></section>';
  if(!c){
   const candidates=state.items.filter(c=>!c.completed).sort((a,b)=>b.saves.length-a.saves.length||(b.saves.at(-1)?.at||0)-(a.saves.at(-1)?.at||0));
   const skip=Number(sessionStorageSafe('candidate'))||0,chosen=candidates[skip%candidates.length];
@@ -2040,7 +2047,7 @@ function renderTodayBase(){
 
  const logs=[...c.logs].sort((a,b)=>b.date.localeCompare(a.date));
  const track=c.type==='album'&&c.tracks.length?'<div class="row between"><span class="small-link">오늘의 곡 · '+esc(c.tracks[c.trackIndex%c.tracks.length])+'</span>'+button('듣기 ↗','external','textbtn',attr(c.id))+'</div><details class="collapse"><summary>다른 곡 선택</summary>'+c.tracks.map((t,i)=>button(esc(t),'track','textbtn','data-index="'+i+'" '+attr(c.id))).join('')+'</details>':'';
- return '<section><div class="page-heading"><h1 class="page-title">오늘의 '+typeName[c.type]+'</h1>'+menu(c)+'</div><p class="page-caption">작은 경험이 차곡차곡, 나만의 숲으로.</p><div class="today-hero"><div class="today-work">'+cover(c)+'<button type="button" class="grow" data-action="detail" '+attr(c.id)+' style="text-align:left"> <div class="title">'+esc(c.title)+'</div><p class="creator">'+esc(c.creator||'제작자 미확인')+'</p>'+(c.type==='book'&&logs.find(l=>l.page)?'<p class="bookpage">마지막 기록 · '+esc(logs.find(l=>l.page).page)+'쪽</p>':(logs.length?'<p class="bookpage">최근 기록 · '+esc(logs[0].date)+'</p>':''))+'</button></div><div class="center">'+growth(Model.stage(c),c)+todayGrowthCaption(c)+'</div>'+track+recordActions(c)+(c.type==='movie'?button('보러 가기 ↗','external','textbtn',attr(c.id)):'')+'</div>'+(state.items.some(item=>!item.completed&&item.id!==c.id)?button('다른 작품 고르기 <span aria-hidden="true">›</span>','nextCandidate','textbtn today-switch',attr(c.id)):'')+resumeExperiences(c)+todayHistory(c)+'</section>';
+ return '<section>'+todayHeading('오늘의 '+typeName[c.type],menu(c))+'<p class="page-caption">작은 경험이 차곡차곡, 나만의 숲으로.</p><div class="today-hero"><div class="today-work">'+cover(c)+'<button type="button" class="grow" data-action="detail" '+attr(c.id)+' style="text-align:left"> <div class="title">'+esc(c.title)+'</div><p class="creator">'+esc(c.creator||'제작자 미확인')+'</p>'+(c.type==='book'&&logs.find(l=>l.page)?'<p class="bookpage">마지막 기록 · '+esc(logs.find(l=>l.page).page)+'쪽</p>':(logs.length?'<p class="bookpage">최근 기록 · '+esc(logs[0].date)+'</p>':''))+'</button></div><div class="center">'+growth(Model.stage(c),c)+todayGrowthCaption(c)+'</div>'+track+recordActions(c)+(c.type==='movie'?button('보러 가기 ↗','external','textbtn',attr(c.id)):'')+'</div>'+(state.items.some(item=>!item.completed&&item.id!==c.id)?button('다른 작품 고르기 <span aria-hidden="true">›</span>','nextCandidate','textbtn today-switch',attr(c.id)):'')+resumeExperiences(c)+todayHistory(c)+'</section>';
 }
 function resumeExperiences(current){
  const active=state.items.filter(c=>c.id!==current.id&&!c.completed&&(c.logs.length||c.importedProgress));
@@ -2104,7 +2111,7 @@ function renderForest(){
  const types='<div class="forest-metrics">'+[['book','책'],['album','음반'],['movie','영화']].map(([type,label])=>'<div class="forest-metric"><span>'+icon(type)+label+'</span><strong>'+stats[type]+'</strong></div>').join('')+'</div>';
  const total='<div class="forest-total"><h2>'+stats.n.toLocaleString()+'<span>그루</span></h2>'+(stats.n?'<p class="forest-area">'+esc(forestGrowthLabel(stats))+'</p>':'')+'</div>';
  const next=stats.n&&expansion.nextAt?'<div class="forest-next"><p>다음 확장까지 '+expansion.remaining+'그루</p></div>':'';
- const controls='<div class="forest-header-actions">'+periodPicker+'</div>';
+ const controls='<div class="forest-header-actions page-heading-actions">'+periodPicker+scrapAddButton()+'</div>';
  const toolbar='<div class="forest-tools">'+button((snow?'설산':'기본 숲')+' <span aria-hidden="true">⌄</span>','themes','forest-season-button','aria-label="숲 테마 변경"')+(stats.n?button(forestEditMode?'완료':'꾸미기','forestEdit','forest-edit-control','aria-pressed="'+forestEditMode+'"'):'')+'</div>';
  return '<section class="forest-page-section"><div class="page-heading forest-heading"><h1 class="page-title">나의 숲</h1>'+controls+'</div><p class="page-caption">좋아한 만큼, 나무가 자라는 곳.</p>'+
  '<div class="forest-garden '+(snow?'is-snow':'')+'">'+toolbar+'<div class="forest-scene"><div class="forest-viewport '+(forestEditMode?'editing':'')+'" id="forestViewport" data-theme="'+(snow?'snow':'basic')+'" tabindex="0" aria-label="'+(forestEditMode?'꾸미기 중. 바꿀 나무를 선택하세요.':stats.n+'그루의 숲. 나무를 선택해 기록을 볼 수 있습니다.')+'">'+forestSVG(items,theme)+'</div></div></div>'+
@@ -4301,12 +4308,12 @@ function orderSeries(pool){
 function discoveryCatalog(){const seen=new Set();return [...CATALOG,...SEED_BOOKS.map(b=>({type:'book',title:b.title,creator:b.creator,genre:b.genre}))].filter(c=>{if(!allowDiscoveryCandidate(c))return false;const key=c.type+':'+Model.norm(c.title)+':'+Model.norm(c.creator);if(seen.has(key))return false;seen.add(key);return true})}
 function renderDiscovery(){
  const completed=state.items.filter(c=>c.completed),known=discoveryCatalog();
- if(!known.length)return '<section><div class="page-heading"><h1 class="page-title">오늘</h1></div><div class="empty"><h2>'+(completed.length?'담아둔 작품을 모두 완료했어요':'작품을 추가해보세요')+'</h2>'+button('새로운 작품 추천받기','tastes')+button('직접 스크랩하기','add','textbtn')+'</div></section>';
+ if(!known.length)return '<section>'+todayHeading()+'<div class="empty"><h2>'+(completed.length?'담아둔 작품을 모두 완료했어요':'작품을 추가해보세요')+'</h2>'+button('새로운 작품 추천받기','tastes')+button('직접 스크랩하기','add','textbtn')+'</div></section>';
  const refs=[...completed,...known.filter(c=>['experienced','interested'].includes(state.profile.responses?.[c.type+':'+c.title]))];
  const pool=known.filter(c=>(discoveryType==='all'||c.type===discoveryType)&&!isTasteCandidateSaved(c)&&!hasTasteHistory(c));
  const score=c=>refs.reduce((n,x)=>n+(x.type===c.type?1:0)+(c.genre&&x.genre===c.genre?3:0),0);
  pool.sort((a,b)=>score(b)-score(a));orderSeries(pool);if(discoveryOffset>=pool.length)discoveryOffset=0;discoveryShown=pool.slice(discoveryOffset,discoveryOffset+3);
- return '<section><div class="page-heading"><h1 class="page-title">오늘</h1></div><div class="space"></div><p class="creator">'+(completed.length?'모아둔 콘텐츠를 모두 경험했어요':'첫 관심을 모아보세요')+'</p><h2 class="section-title">다음에는 무엇이 궁금하세요?</h2><p class="creator">'+(refs.length?'지난 경험과 비슷한 유형·장르의 작품을 골라봤어요.':'책·음악·영화 중 관심 있는 것을 골라보세요.')+'</p><div class="chips">'+[['all','전체'],['book','책'],['album','음악'],['movie','영화']].map(([id,label])=>button(label,'discoveryType','chip '+(discoveryType===id?'active':''),'data-type="'+id+'"')).join('')+'</div><div class="stack">'+discoveryShown.map((c,i)=>'<div class="card"><div class="row">'+cover(c)+'<div class="grow"><small>'+typeName[c.type]+'</small><h3>'+esc(c.title)+'</h3><p class="creator">'+esc(c.creator)+'</p></div></div><div class="space"></div>'+button('보고 싶어요','discoverySave','secondary','data-index="'+i+'"')+'</div>').join('')+'</div>'+(pool.length>3?button('다른 후보 3개 보기','discoveryMore','textbtn'):'')+(!pool.length?'<p class="creator">이 유형의 준비된 후보를 모두 살펴봤어요. 다른 유형을 고르거나 직접 스크랩해보세요.</p>':'')+button('직접 스크랩하기','add','secondary')+'</section>';
+ return '<section>'+todayHeading()+'<div class="space"></div><p class="creator">'+(completed.length?'모아둔 콘텐츠를 모두 경험했어요':'첫 관심을 모아보세요')+'</p><h2 class="section-title">다음에는 무엇이 궁금하세요?</h2><p class="creator">'+(refs.length?'지난 경험과 비슷한 유형·장르의 작품을 골라봤어요.':'책·음악·영화 중 관심 있는 것을 골라보세요.')+'</p><div class="chips">'+[['all','전체'],['book','책'],['album','음악'],['movie','영화']].map(([id,label])=>button(label,'discoveryType','chip '+(discoveryType===id?'active':''),'data-type="'+id+'"')).join('')+'</div><div class="stack">'+discoveryShown.map((c,i)=>'<div class="card"><div class="row">'+cover(c)+'<div class="grow"><small>'+typeName[c.type]+'</small><h3>'+esc(c.title)+'</h3><p class="creator">'+esc(c.creator)+'</p></div></div><div class="space"></div>'+button('보고 싶어요','discoverySave','secondary','data-index="'+i+'"')+'</div>').join('')+'</div>'+(pool.length>3?button('다른 후보 3개 보기','discoveryMore','textbtn'):'')+(!pool.length?'<p class="creator">이 유형의 준비된 후보를 모두 살펴봤어요. 다른 유형을 고르거나 직접 스크랩해보세요.</p>':'')+button('직접 스크랩하기','add','secondary')+'</section>';
 }
 document.addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(!b)return;const a=b.dataset.action;
  if(a==='discoveryType'){discoveryType=b.dataset.type;discoveryOffset=0;render()}
@@ -4359,6 +4366,7 @@ function renderIntroduction(){
  return '<h1>'+s[0]+'<br>'+s[1]+'</h1><div class="intro-visual">'+introArt(introductionStep)+'</div><p class="intro-copy">'+s[2]+'</p><div class="intro-footer"><div class="intro-dots" aria-label="3단계 중 '+(introductionStep+1)+'단계">'+[0,1,2].map(i=>'<i class="'+(i===introductionStep?'on':'')+'"></i>').join('')+'</div>'+button((introductionStep===2?'시작하기':'다음')+' <span aria-hidden="true">↗</span>','introNext','intro-next')+'</div>';
 }
 function renderEntry(){
+ $('head').hidden=false;
  $('tabs').hidden=true;$('page').dataset.view=authRoute;$('head').dataset.view=authRoute;$('page').classList.add('entry-page');$('page').classList.toggle('taste-page',authRoute==='taste');$('page').classList.toggle('intro-page',authRoute==='intro');
  $('head').innerHTML=!['welcome','onboard','taste','ready','intro'].includes(authRoute)?'<div class="row">'+button(icon('back'),'flowBack','iconbtn','aria-label="뒤로가기"')+'<span class="back-title">송림</span></div>':'<div class="brand">'+icon('forest')+'송림</div>';
  let h='';
