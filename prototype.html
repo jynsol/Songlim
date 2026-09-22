@@ -1301,21 +1301,21 @@ function growth(stage,c){
  if(stage===3&&c)art='<g transform="translate(160 160) scale(1.95)">'+treeArt(c,'basic')+'</g>';
 
  else if(stage===2)art='<g class="growth-young-tree">'+
- '<path d="M154 186C157 168 156 153 158 137L159 104L164 104C163 129 162 156 166 186Z" fill="#92745A"/>'+
- '<path d="M159 177C160 157 160 134 161 112" fill="none" stroke="#B39774" stroke-width="2.2" stroke-linecap="round"/>'+
- '<path d="M159 163C148 153 137 144 130 130M162 150C175 141 185 127 191 113" fill="none" stroke="#92745A" stroke-width="3.3" stroke-linecap="round"/>'+
- '<path d="M158 126C149 114 145 103 145 90M163 120C173 108 177 99 179 88" fill="none" stroke="#A88A67" stroke-width="2.8" stroke-linecap="round"/>'+
- '<path d="M169 96C169 85 179 78 190 83C201 80 210 90 207 100C215 109 206 122 194 122C184 130 169 122 169 112C163 107 164 101 169 96Z" fill="#6F9565"/>'+
- '<path d="M117 111C109 105 113 94 122 92C124 81 139 78 148 84C160 85 164 98 157 107C162 118 151 128 140 126C128 133 115 124 117 111Z" fill="#7FA76C"/>'+
- '<path d="M140 88C132 82 138 70 149 69C152 59 167 59 174 67C186 66 194 78 188 88C191 100 177 107 167 102C155 109 140 101 140 88Z" fill="#96B775"/>'+
- '<path d="M143 113C143 103 154 96 164 100C173 93 187 98 188 109C198 114 194 128 183 132C174 141 159 137 154 132C143 132 136 121 143 113Z" fill="#83AA6B"/>'+
- '<path d="M146 78C144 72 153 67 159 70C163 64 171 69 172 74C166 74 166 79 160 80C155 78 153 83 149 83Z" fill="#B8CD92" opacity=".72"/>'+
- '<path d="M118 99C119 91 129 88 135 91C141 87 147 93 146 98C138 99 133 97 128 104Z" fill="#A9C384" opacity=".68"/>'+
- '<path d="M151 112C151 104 161 102 167 107C175 102 182 106 182 112C173 112 171 119 165 118C159 114 155 118 151 116Z" fill="#AEC98A" opacity=".65"/>'+
+ '<path d="M154 186C157 168 156 153 158 137L159 104L164 104C163 129 162 156 166 186Z" fill="#826447"/>'+
+ '<path d="M159 177C160 157 160 134 161 112" fill="none" stroke="#A18561" stroke-width="2.2" stroke-linecap="round"/>'+
+ '<path d="M159 163C148 153 137 144 130 130M162 150C175 141 185 127 191 113" fill="none" stroke="#826447" stroke-width="3.3" stroke-linecap="round"/>'+
+ '<path d="M158 126C149 114 145 103 145 90M163 120C173 108 177 99 179 88" fill="none" stroke="#977854" stroke-width="2.8" stroke-linecap="round"/>'+
+ '<path d="M169 96C169 85 179 78 190 83C201 80 210 90 207 100C215 109 206 122 194 122C184 130 169 122 169 112C163 107 164 101 169 96Z" fill="#5D8653"/>'+
+ '<path d="M117 111C109 105 113 94 122 92C124 81 139 78 148 84C160 85 164 98 157 107C162 118 151 128 140 126C128 133 115 124 117 111Z" fill="#6F995C"/>'+
+ '<path d="M140 88C132 82 138 70 149 69C152 59 167 59 174 67C186 66 194 78 188 88C191 100 177 107 167 102C155 109 140 101 140 88Z" fill="#89AE66"/>'+
+ '<path d="M143 113C143 103 154 96 164 100C173 93 187 98 188 109C198 114 194 128 183 132C174 141 159 137 154 132C143 132 136 121 143 113Z" fill="#739A5A"/>'+
+ '<path d="M146 78C144 72 153 67 159 70C163 64 171 69 172 74C166 74 166 79 160 80C155 78 153 83 149 83Z" fill="#AEC582" opacity=".72"/>'+
+ '<path d="M118 99C119 91 129 88 135 91C141 87 147 93 146 98C138 99 133 97 128 104Z" fill="#9EB978" opacity=".68"/>'+
+ '<path d="M151 112C151 104 161 102 167 107C175 102 182 106 182 112C173 112 171 119 165 118C159 114 155 118 151 116Z" fill="#A4BF7E" opacity=".65"/>'+
  '</g>';
- else if(stage===1)art='<path d="M159 184C158 164 162 150 163 138" fill="none" stroke="#7D9466" stroke-width="3.8" stroke-linecap="round"/>'+leaf('M161 158C139 162 123 150 121 133C143 127 160 139 161 158Z','url(#'+uid+'-leaf)')+leaf('M162 144C161 124 178 113 196 116C194 136 180 148 162 144Z','#A5C386')+'<path d="M157 154Q140 142 129 139M166 141Q181 129 189 123" fill="none" stroke="#E4EBC1" stroke-width="1.5" stroke-linecap="round"/>';
- else art='<path d="M146 180C137 167 146 148 165 147C181 151 184 164 174 178C166 190 153 189 146 180Z" fill="url(#'+uid+'-seed)"/><path d="M148 177Q151 160 169 151" fill="none" stroke="#E0BB86" stroke-width="1.7" stroke-linecap="round"/><path d="M162 185Q177 173 177 163" fill="none" stroke="#805A40" stroke-width="1.2" opacity=".45"/>';
- return '<svg class="growth" viewBox="0 0 320 220" role="img" aria-label="'+esc(stage===3&&c?category(c).label+' 나무':['씨앗','새싹','어린 나무','나무'][stage]||'씨앗')+'"><defs><radialGradient id="'+uid+'-bg" cx=".4" cy=".35" r=".7"><stop stop-color="#F9FBF1"/><stop offset="1" stop-color="#E6EFDF"/></radialGradient><linearGradient id="'+uid+'-leaf" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#AFCF88"/><stop offset=".6" stop-color="#78A575"/><stop offset="1" stop-color="#4E8366"/></linearGradient><linearGradient id="'+uid+'-seed" x2=".7" y2="1"><stop stop-color="#CBA576"/><stop offset="1" stop-color="#947051"/></linearGradient></defs><circle cx="160" cy="112" r="95" fill="url(#'+uid+'-bg)"/>'+soil+art+'</svg>';
+ else if(stage===1)art='<path d="M159 184C158 164 162 150 163 138" fill="none" stroke="#698450" stroke-width="3.8" stroke-linecap="round"/>'+leaf('M161 158C139 162 123 150 121 133C143 127 160 139 161 158Z','url(#'+uid+'-leaf)')+leaf('M162 144C161 124 178 113 196 116C194 136 180 148 162 144Z','#93B671')+'<path d="M157 154Q140 142 129 139M166 141Q181 129 189 123" fill="none" stroke="#DBE6B2" stroke-width="1.5" stroke-linecap="round"/>';
+ else art='<path d="M146 180C137 167 146 148 165 147C181 151 184 164 174 178C166 190 153 189 146 180Z" fill="url(#'+uid+'-seed)"/><path d="M148 177Q151 160 169 151" fill="none" stroke="#D6AF79" stroke-width="1.7" stroke-linecap="round"/><path d="M162 185Q177 173 177 163" fill="none" stroke="#704D36" stroke-width="1.2" opacity=".45"/>';
+ return '<svg class="growth" viewBox="0 0 320 220" role="img" aria-label="'+esc(stage===3&&c?category(c).label+' 나무':['씨앗','새싹','어린 나무','나무'][stage]||'씨앗')+'"><defs><radialGradient id="'+uid+'-bg" cx=".4" cy=".35" r=".7"><stop stop-color="#F9FBF1"/><stop offset="1" stop-color="#E6EFDF"/></radialGradient><linearGradient id="'+uid+'-leaf" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#A3C678"/><stop offset=".6" stop-color="#67955F"/><stop offset="1" stop-color="#407556"/></linearGradient><linearGradient id="'+uid+'-seed" x2=".7" y2="1"><stop stop-color="#C29A69"/><stop offset="1" stop-color="#856144"/></linearGradient></defs><circle cx="160" cy="112" r="95" fill="url(#'+uid+'-bg)"/>'+soil+art+'</svg>';
 }
 function hash(s){let n=2166136261;for(const c of s)n=Math.imul(n^c.charCodeAt(0),16777619);return n>>>0}
 // Hand-cut forest: irregular silhouettes, tapered stems and a few opaque colour planes.
@@ -1325,20 +1325,42 @@ function smoothClosedPath(p){const n=p.length;let d='M'+p[0][0].toFixed(1)+','+p
 function handcutTreeArt(speciesId,winter=false,variant=''){
  const id=TREE_SPECIES.some(t=>t.id===speciesId)?speciesId:'birch';
  const uid='botanical-'+(handcutTreeArt.serial=(handcutTreeArt.serial||0)+1);
- const palettes={birch:['#B9CF8E','#80A46C','#507A5B'],oak:['#A3C17C','#638D60','#34634F'],cherry:['#F9DED5','#EBB7B8','#C78599'],zelkova:['#BFD080','#87A65C','#567C52'],ginkgo:['#F3D47B','#D5B454','#AF8741'],metasequoia:['#9BBE9C','#578A78','#356859'],maple:['#EAB783','#D68D6B','#AB635A'],willow:['#BCD18F','#8CAF7F','#5A8868'],magnolia:['#B9CB8C','#829F6D','#527F60'],crape:['#EFC8CE','#CE9EB8','#9F799A'],pine:['#91B18A','#597D60','#315B4C'],cedar:['#9EC5B1','#608E7D','#386C5D'],hackberry:['#BDC88A','#899E66','#536F51'],fringe:['#DFE7B4','#A7BD88','#6F9573'],fir:['#A2C9BE','#629586','#376C61'],cypress:['#A9C8A8','#6E9A7E','#416F5B'],yew:['#9CB990','#688D6E','#3D6754'],juniper:['#A6C1AE','#74958B','#486F69'],paulownia:['#C3CEA2','#9BB17D','#6D956E'],evergreen:['#A6BC86','#6F956A','#3C6A53']};
+ // Slightly deeper foliage separates the existing silhouettes from the pale lime ground.
+ const palettes={
+  birch:['#AEC980','#729A5B','#456D4D'],
+  oak:['#9CBD6F','#578353','#2F5944'],
+  cherry:['#F3D5D1','#DFA6AE','#B5728D'],
+  zelkova:['#B5C871','#78984E','#4B7047'],
+  ginkgo:['#EBD06B','#C8A542','#A17C36'],
+  metasequoia:['#8FB58E','#4D806B','#2F5E4F'],
+  maple:['#E5AB75','#CB805F','#9D574D'],
+  willow:['#AFC77F','#7DA06D','#4E7C5A'],
+  magnolia:['#AFC47C','#72915D','#487252'],
+  crape:['#E5BCD0','#C08BAE','#90688E'],
+  pine:['#85A779','#4E7152','#2B5141'],
+  cedar:['#90BDA3','#54816D','#30614F'],
+  hackberry:['#B0BE79','#7B9057','#486448'],
+  fringe:['#D3DE9F','#99AE75','#628564'],
+  fir:['#94C0AF','#558977','#2E6054'],
+  cypress:['#9CBD98','#608D6E','#38634F'],
+  yew:['#8FAC7F','#5A805E','#355D48'],
+  juniper:['#98B79F','#668A7A','#3D645B'],
+  paulownia:['#B7C48F','#8EA16B','#5F865E'],
+  evergreen:['#9BB277','#61875A','#335F47']
+ };
  let [light,mid,dark]=palettes[id];
- if(winter)[light,mid,dark]=['#B6C9B7','#7E9E91','#4F766E'];
- if(variant==='gold')[light,mid,dark]=winter?['#A8C7AD','#608D75','#365F52']:['#D6D49A','#93B079','#587F5B'];
- if(variant==='moon')[light,mid,dark]=winter?['#ECF6F4','#B7D3CE','#7EACA7']:['#D5E1BD','#9FBC9F','#5C8C80'];
+ if(winter)[light,mid,dark]=['#AEC4AE','#709384','#466C62'];
+ if(variant==='gold')[light,mid,dark]=winter?['#A0C2A4','#55816A','#30564A']:['#CECE89','#84A167','#4C724D'];
+ if(variant==='moon')[light,mid,dark]=winter?['#ECF6F4','#ADCEC7','#70A099']:['#CBD9AC','#8FB08E','#507F70'];
  const path=(d,fill,extra='')=>'<path d="'+d+'" fill="'+fill+'" '+extra+'/>';
  const line=(d,color,width=1,opacity=1)=>'<path d="'+d+'" fill="none" stroke="'+color+'" stroke-width="'+width+'" stroke-linecap="round" stroke-linejoin="round" opacity="'+opacity+'"/>';
  const crown=d=>path(d,'url(#'+uid+'-crown)');
- const glint=(d,o='.55')=>path(d,light,'opacity="'+o+'"');
- const twig=(d,w=1.8)=>line(d,'#8C765B',w);
+ const glint=(d,o='.5')=>path(d,light,'opacity="'+o+'"');
+ const twig=(d,w=1.8)=>line(d,'#7D654E',w);
  const leaf=(x,y,angle=0,s=1,color=light)=>'<g transform="translate('+x+' '+y+') rotate('+angle+') scale('+s+')">'+path('M0 0C-4-1-5-5-4-7C0-7 2-4 0 0Z',color)+path('M0 0C3-1 5-3 5-6C1-6-1-3 0 0Z',color)+'</g>';
  const flower=(x,y,s=1,color='#FFF2E8')=>'<g transform="translate('+x+' '+y+') scale('+s+')">'+path('M0 1C-6 1-7-5-3-6C-3-11 3-11 4-6C9-7 10-1 5 1C7 6 1 9-1 4C-5 8-9 3-4 0Z',color)+'<circle cy="0" r="1.4" fill="#D6AB75"/></g>';
- let out='<defs><linearGradient id="'+uid+'-crown" x1=".13" y1="0" x2=".82" y2="1"><stop stop-color="'+light+'"/><stop offset=".46" stop-color="'+mid+'"/><stop offset="1" stop-color="'+dark+'"/></linearGradient><linearGradient id="'+uid+'-bark" x1="0" x2="1"><stop stop-color="#AC9171"/><stop offset=".5" stop-color="#8B7159"/><stop offset="1" stop-color="#705B4A"/></linearGradient></defs>';
- out+='<ellipse cx="1" cy="14" rx="23" ry="4" fill="'+(winter?'#6A9293':'#365D48')+'" opacity=".085"/>';
+ let out='<defs><linearGradient id="'+uid+'-crown" x1=".13" y1="0" x2=".82" y2="1"><stop stop-color="'+light+'"/><stop offset=".4" stop-color="'+mid+'"/><stop offset="1" stop-color="'+dark+'"/></linearGradient><linearGradient id="'+uid+'-bark" x1="0" x2="1"><stop stop-color="#A08462"/><stop offset=".5" stop-color="#7D624A"/><stop offset="1" stop-color="#624C3B"/></linearGradient></defs>';
+ out+='<ellipse cx="1" cy="14" rx="23" ry="4" fill="'+(winter?'#6A9293':'#365D48')+'" opacity=".10"/>';
  if(winter)out+=path('M-20 13Q-11 9-3 12Q8 8 22 13Q15 18 1 16Q-12 18-20 13Z','#F7FAF8');
  if(id==='birch'){
   out+=path('M-13 14Q-15-23-11-65L-8-65Q-11-19-9 14Z','#EDECE0')+path('M6 14Q7-22 12-59L15-59Q11-18 10 14Z','#E9E9DB')+path('M21 13L20-39L23-39L24 13Z','#D5D9C6');
@@ -1388,7 +1410,7 @@ function handcutTreeArt(speciesId,winter=false,variant=''){
   out+=glint('M-31-43Q-32-54-22-53Q-16-52-12-46Q-14-59-4-62Q4-63 8-56Q7-46-5-43Q-20-39-31-43Z');
   [[-25,-45,.9],[10,-57,.85],[26,-36,.8],[-5,-29,.72]].forEach(([x,y,s])=>{out+='<g transform="translate('+x+' '+y+') scale('+s+')">'+path('M0 4C-12 0-12-12-6-11C-5-20 4-18 4-10C12-14 15-5 7 1L0 4Z','#FBF3E4')+path('M0 3Q-3-5 0-13Q5-6 3 1Z','#E6DCCB')+'</g>'});
  }else if(id==='crape'){
-  out+=path('M-8 14Q-2-12-10-37L-6-41Q2-15-2 14ZM1 14Q8-9 5-42L9-46Q13-10 6 14Z','#B99D84')+twig('M-2-9Q-18-21-27-34M7-17Q23-28 27-41',1.8);
+  out+=path('M-8 14Q-2-12-10-37L-6-41Q2-15-2 14ZM1 14Q8-9 5-42L9-46Q13-10 6 14Z','#AA8B72')+twig('M-2-9Q-18-21-27-34M7-17Q23-28 27-41',1.8);
   out+=crown('M-35-25Q-47-31-40-41Q-44-48-34-51Q-28-62-18-55Q-8-61-3-51Q1-64 12-62Q21-72 28-60Q41-59 37-48Q48-41 38-33Q41-22 28-22Q19-12 10-23Q1-16-7-25Q-17-16-25-24Q-32-19-35-25Z');
   out+=glint('M-35-43Q-34-55-24-50Q-16-58-9-48Q-13-36-24-39Q-30-34-35-43Z')+glint('M7-53Q11-64 19-58Q25-64 31-55Q32-46 23-47Q15-41 7-53Z');
   [[-31,-41,.33],[-19,-49,.3],[-11,-33,.33],[17,-55,.36],[28,-42,.32],[19,-28,.28]].forEach(v=>out+=flower(...v,'#FAE4E3'));
@@ -1495,16 +1517,92 @@ function treeSizeVariance(item){
 // Shared vector art for the forest and collection. Position belongs to the outer group;
 // only the inner group animates so CSS never overwrites SVG world coordinates.
 function visitorArt(id){
- const poly=(p,c)=>'<polygon points="'+p+'" fill="'+c+'" stroke-linejoin="round"/>';
- const eye=(x,y)=>'<circle cx="'+x+'" cy="'+y+'" r="1.25" fill="#343A30"/>';
- const shadow='<ellipse cx="0" cy="8" rx="18" ry="4" fill="#40553C" opacity=".12"/>';
- if(id==='rabbit')return shadow+poly('-20,2 -18,-10 -8,-17 5,-14 12,-4 7,7 -10,8','#B49878')+poly('2,-14 1,-30 5,-40 9,-37 8,-19 12,-17 14,-36 19,-39 21,-34 17,-16 22,-10 17,-3 6,-4','#B49878')+poly('-16,-9 -7,-13 2,-10 5,0 -8,3','#CDB797')+poly('4,-29 5,-35 7,-34 6,-23','#D9C4AA')+poly('-12,4 -5,3 0,7 -12,8','#806D58')+poly('-23,-1 -20,-6 -15,-3 -16,3','#E0D2B8')+eye(16,-12);
- if(id==='bird')return shadow+poly('-18,-7 -10,-19 6,-20 15,-10 10,2 -4,6 -15,0','#7F9270')+poly('3,-23 12,-27 20,-22 21,-13 13,-8 6,-13','#465647')+poly('12,-19 19,-20 19,-15 13,-13','#E4E4C9')+poly('21,-19 28,-16 21,-14','#B59D65')+poly('-18,-6 -28,-15 -25,-2 -15,2','#536849')+poly('-11,-12 1,-14 7,-7 -4,1','#A9B88A')+poly('-7,4 -5,4 -5,9 -10,9 -10,7 -7,7','#74624D')+poly('5,3 7,3 7,9 2,9 2,7 5,7','#74624D')+eye(16,-22);
- if(id==='butterfly')return shadow+poly('-2,-17 -18,-32 -29,-25 -25,-10 -10,-7 -21,0 -17,11 -5,7 0,-2','#C5AC69')+poly('2,-17 18,-32 29,-25 25,-10 10,-7 21,0 17,11 5,7 0,-2','#C5AC69')+poly('-7,-17 -19,-26 -22,-22 -18,-14','#E1CE90')+poly('7,-17 19,-26 22,-22 18,-14','#E1CE90')+poly('-2,-21 2,-21 3,2 0,7 -3,2','#655E45')+'<path d="M-1-20l-5-7M1-20l5-7" fill="none" stroke="#655E45" stroke-width="1.5"/>';
- if(id==='squirrel')return shadow+poly('-12,3 -26,-4 -31,-17 -28,-30 -17,-34 -9,-28 -10,-19 -18,-16 -17,-8 -7,-4','#94724F')+poly('-23,-9 -27,-18 -24,-27 -18,-28 -15,-24 -21,-19','#B49368')+poly('-13,3 -11,-12 -2,-20 10,-14 14,-3 7,8 -5,9','#B28B5D')+poly('0,-19 1,-31 7,-25 14,-26 21,-20 19,-12 8,-10','#B28B5D')+poly('-7,-12 -1,-16 4,-10 3,3 -4,4','#DBBF8A')+poly('5,6 14,5 18,9 4,10','#846648')+eye(16,-20);
- if(id==='hedgehog')return shadow+poly('-25,3 -23,-7 -19,-7 -17,-18 -11,-15 -6,-24 0,-19 7,-24 11,-16 17,-18 21,-5 16,6 -12,8','#776B51')+poly('-19,-4 -13,-15 -6,-12 0,-19 6,-13 10,-15 15,-6 10,3 -13,4','#96866A')+poly('10,-6 19,-5 28,3 22,8 9,7 5,2','#C7AF87')+poly('-12,6 -6,6 -6,10 -13,10','#625B47')+poly('10,6 16,6 16,10 9,10','#625B47')+eye(20,0)+eye(28,3);
- return '<polygon points="0,-26 13,-17 16,-3 7,10 -7,10 -16,-3 -13,-17" fill="#E7DDA3" opacity=".25"/>'+poly('-1,-14 -13,-20 -17,-12 -5,-5','#9BA780')+poly('1,-14 13,-20 17,-12 5,-5','#B6C098')+poly('-4,-18 4,-18 6,-8 4,1 -4,1 -6,-8','#64704E')+poly('-4,-6 4,-6 5,0 0,5 -5,0','#DFCE7F');
+ // Organic silhouettes and small colour planes match the botanical trees.
+ const uid='visitor-'+(visitorArt.serial=(visitorArt.serial||0)+1);
+ const palettes={rabbit:['#D5BE97','#B38D63','#886346'],bird:['#D7CE83','#A6AC6B','#718251'],butterfly:['#F0D993','#D6B45D','#B18A42'],squirrel:['#D6A56A','#B77B43','#805332'],hedgehog:['#B59A74','#8C7453','#64543E'],firefly:['#B5C687','#82985C','#526B41']};
+ const [light,mid,dark]=palettes[id]||palettes.firefly,coat='url(#'+uid+'-coat)';
+ const defs='<defs><linearGradient id="'+uid+'-coat" x1=".18" y1="0" x2=".82" y2="1"><stop stop-color="'+light+'"/><stop offset=".44" stop-color="'+mid+'"/><stop offset="1" stop-color="'+dark+'"/></linearGradient><radialGradient id="'+uid+'-glow"><stop stop-color="#F4DC78" stop-opacity=".5"/><stop offset=".55" stop-color="#E8D786" stop-opacity=".23"/><stop offset="1" stop-color="#E8D786" stop-opacity="0"/></radialGradient></defs>';
+ const path=(d,fill,extra='')=>'<path d="'+d+'" fill="'+fill+'" '+extra+'/>';
+ const line=(d,color,width=1,opacity=1)=>'<path d="'+d+'" fill="none" stroke="'+color+'" stroke-width="'+width+'" stroke-linecap="round" stroke-linejoin="round" opacity="'+opacity+'"/>';
+ const ellipse=(x,y,rx,ry,fill,extra='')=>'<ellipse cx="'+x+'" cy="'+y+'" rx="'+rx+'" ry="'+ry+'" fill="'+fill+'" '+extra+'/>';
+ const eye=(x,y)=>ellipse(x,y,1.25,1.25,'#30382C')+ellipse(x-.32,y-.35,.36,.36,'#FFF6DD');
+ const shadow=ellipse(0,8,18,3.2,'#40553C','opacity=".12"');
+   if(id==='rabbit')return defs+shadow+
+    path('M6-18C3-24 1-34 3-38C4-41 7-40 8-37C10-30 10-24 11-19Z','#A88764')+
+    path('M12-20C12-26 14-35 17-38C19-40 21-38 21-35C21-29 18-22 17-17Z',coat)+
+    path('M5-35C6-37 7-31 8-25L7-23C6-27 5-32 5-35Z','#DDC2AD')+
+    path('M17-34C18-37 19-36 18-31L16-24 15-23C15-27 16-31 17-34Z','#E1C9B3')+
+    path('M-19-5C-24-10-28-6-26-1C-26 3-22 4-18 1Z','#E8DDC4')+
+    path('M-20 4C-23-1-22-10-16-14C-11-18-3-17 3-14C7-12 8-18 12-20C17-23 22-19 23-14C24-11 27-11 26-8C25-5 20-5 17-6C15-3 14 2 15 5L20 6C22 7 21 9 18 9H10C6 8 3 7 0 7L-14 8C-18 8-20 7-20 4Z',coat)+
+    path('M-17-7C-13-13-5-12-1-7C2-3 0 2-4 4C-8 6-13 6-16 3C-19 0-19-4-17-7Z','#DCC7A6','opacity=".66"')+
+    path('M17-11C21-13 23-11 25-10C27-9 25-7 22-7C19-6 17-8 17-11Z','#E9DDC5')+
+    path('M8-4C9-1 9 4 11 6L17 7C18 8 17 9 15 9H9C6 8 5 4 5 1Z','#BD9C74')+
+    path('M-13 5C-9 3-6 4-3 6L1 7C2 9-1 10-4 9H-14C-17 9-17 6-13 5Z','#9C7954')+
+    line('M-13-5C-9-7-4-4-5 0','#A88761',.85,.58)+
+    ellipse(25,-10,1.15,.8,'#665645')+eye(20,-15);
+   if(id==='squirrel')return defs+shadow+
+    path('M-9 5C-17 4-25-2-28-11C-31-21-28-31-21-34C-14-38-7-33-7-26C-7-20-11-16-16-16C-21-16-23-21-20-24C-19-26-16-26-15-24C-18-23-18-20-15-20C-12-20-11-24-13-27C-17-32-23-27-24-22C-26-14-21-9-15-8C-9-8-5-2-9 5Z',coat)+
+    path('M-23-28C-28-21-25-11-19-7C-16-5-13-4-12-1C-20-3-27-10-28-18C-29-23-27-29-23-28Z','#E0B880','opacity=".62"')+
+    path('M-11 3C-14-3-11-12-6-17C-2-21 3-21 7-18C12-16 13-7 12-1C12 4 8 8 1 9L-7 8C-10 8-12 6-11 3Z',coat)+
+    path('M4-19C1-23 2-29 5-30C8-31 10-27 10-25C17-28 22-22 22-17C22-15 27-15 27-12C26-9 21-9 18-10C14-8 10-9 7-12Z',coat)+
+    path('M5-27C7-29 9-25 8-23L5-22Z','#E0B891')+
+    path('M8-14C10-15 12-13 12-9C10-4 9 1 5 5C1 7-3 5-2 2C2-3 3-9 8-14Z','#E4C89B')+
+    path('M17-16C20-17 23-14 26-13C28-11 23-10 20-11C18-11 17-13 17-16Z','#ECD4AA')+
+    line('M-8-12C-10-6-10-1-7 3','#775331',2.1,.92)+
+    line('M-4-16C-6-10-6-3-3 0','#775331',2.1,.9)+
+    line('M-6-14C-8-8-8-3-5 2','#F0D3A0',1.15,.88)+
+    path('M9-6C12-7 15-5 17-4C19-3 17-1 15-2L10-3Z','#B47F4C')+
+    path('M-4 6C0 4 4 5 7 7L12 7C15 8 13 10 10 10H-3C-6 10-7 7-4 6Z','#916039')+
+    ellipse(26,-13,1.05,.75,'#684B32')+eye(19,-19);
+   if(id==='hedgehog')return defs+shadow+
+    path('M-17 5C-19 6-20 9-17 10H-12C-10 9-11 6-12 5Z','#6C5942')+
+    path('M8 5C6 7 7 10 10 10H15C17 9 14 6 13 5Z','#6C5942')+
+    path('M-25 2C-27-2-25-6-23-8L-24-12C-21-12-20-15-18-16L-17-20C-15-19-12-21-11-21L-8-25C-6-23-3-23-1-24L2-26C4-23 7-23 9-22L12-23C13-20 16-19 17-17L20-17C21-13 23-10 22-6C23 0 19 6 13 7C2 10-14 10-22 6C-24 5-25 4-25 2Z',coat)+
+    path('M-20-4C-20-12-11-20-2-20C7-20 15-14 16-7C16-1 11 3 1 4C-10 5-17 3-20-4Z','#B19A74','opacity=".47"')+
+    path('M9-8C15-9 18-4 21-2C23 0 28 1 29 3C29 5 25 6 22 7C17 9 9 8 6 5C3 2 5-4 9-8Z','#D8BF92')+
+    path('M10-5C14-6 17-2 21 0C24 2 26 2 27 4C24 6 18 7 13 5C9 4 8-2 10-5Z','#E4CDA7','opacity=".67"')+
+    line('M-20-5L-18-10M-15-9L-12-15M-8-13L-5-18M0-15L3-19M7-12L10-15M-17 0L-14-4M-9-3L-6-8M-1-5L2-10M5 1L7-3M-10 4L-7 0M-2 3L0 0','#64543E',1.25,.62)+
+    line('M-19-8L-18-11M-10-15L-8-18M-1-18L1-21M8-16L9-17M-14-3L-12-6M-4-7L-2-10','#D6BE95',1,.8)+
+    ellipse(12,-5,2.9,3.1,'#B69A72')+ellipse(12.4,-5.1,1.5,1.9,'#D9BF97')+
+    ellipse(28,3,1.75,1.35,'#514A39')+eye(21,0);
+ if(id==='bird')return defs+shadow+
+  line('M-5 1L-6 8L-11 9M5 0L7 8L3 9','#71583F',1.6)+
+  path('M-15-6Q-23-8-29-15Q-29-6-22-1L-14 1Z','#4C6254')+
+  path('M-20-9C-18-21-5-26 5-22C17-19 20-8 12-1C3 7-11 6-18-2Z',coat)+
+  path('M2-19Q13-22 16-12Q18-3 8 1Q4-3 2-19Z','#ECE1A7')+
+  path('M3-24C4-31 15-34 21-28Q27-24 23-16Q17-10 8-14Z','#3D4C3D')+
+  path('M11-24Q19-27 23-21Q21-15 15-15Q11-17 11-24Z','#F3EBD1')+
+  path('M8-18Q11-15 16-14L12-8Q6-10 5-16Z','#374B3C')+
+  path('M23-23Q27-22 30-20L24-18Z','#977249')+
+  path('M-16-15Q-5-22 6-13Q7-3-7 1Q-14-3-16-15Z','#617E6A')+
+  path('M-14-15Q-5-20 2-15Q-4-12-9-7Z','#89A287')+
+  line('M-9-8Q-3-8 2-11','#CED4AE',1.3,.85)+eye(18,-23);
+ if(id==='butterfly'){
+  const wing=path('M-2-18C-7-30-22-39-28-31C-32-23-27-12-16-9Q-27-8-26 0Q-25 8-17 7L-10 4L-10 10Q-4 8-2 1Z','#696346')+
+   path('M-4-18C-9-27-21-34-25-29Q-29-18-15-12Q-9-12-4-8Z',coat)+
+   path('M-5-6Q-16-12-22-3Q-26 3-19 4Q-9 2-5-2Z',coat)+
+   path('M-20-31Q-14-26-11-17L-14-15Q-18-23-23-27ZM-12-28Q-6-22-4-15L-7-13Q-10-20-15-26Z','#766642')+
+   line('M-7-6L-17 0','#8D753F',1.5,.8)+
+   ellipse(-24,-23,1.4,1.6,'#F4E6B0')+ellipse(-22,-17,1.1,1.1,'#F4E6B0')+
+   ellipse(-18,2,2.2,1.3,'#718C88')+ellipse(-12,2,1.4,1.1,'#B77452');
+  return defs+ellipse(0,9,16,2.6,'#40553C','opacity=".07"')+wing+'<g transform="scale(-1 1)">'+wing+'</g>'+
+   path('M-2-22Q0-25 2-22L2-3Q1 6 0 7Q-2 3-2-3Z','#50543B')+ellipse(0,-23,2.3,2.6,'#454D36')+
+   line('M-1-25Q-2-30-6-32M1-25Q2-30 6-32','#50543B',1.25);
+ }
+ return defs+ellipse(0,-9,22,21,'url(#'+uid+'-glow)')+
+  line('M-2-25Q-4-31-8-33M2-25Q4-31 8-33','#596C45',1.25)+
+  path('M-2-19C-10-29-22-28-22-21Q-24-12-8-9L-2-11Z','#B9C993','opacity=".9"')+
+  path('M2-19C10-29 22-28 22-21Q24-12 8-9L2-11Z','#D1DBAA','opacity=".9"')+
+  line('M-5-17L-17-22M5-17L17-22','#859B6B',1,.75)+
+  line('M-3-12L-9-9M3-12L9-9M-3-6L-8-2M3-6L8-2','#586B44',1.25)+
+  ellipse(0,-3,4.8,8,'#D7C65D')+ellipse(-.6,-2,3.5,5.8,'#F4E48A')+
+  line('M-3 1Q0 2 3 1','#BCAA4F',.8,.7)+
+  path('M0-22Q-7-23-6-15L-4-6Q-1-4 0-7Z',coat)+
+  path('M0-22Q7-23 6-15L4-6Q1-4 0-7Z','#7F9359')+
+  line('M0-21V-8','#4F643D',.9,.8)+ellipse(0,-24,3.8,3.5,'#455D3B')+
+  ellipse(-1.2,-25.2,.65,.65,'#E7EBC0');
 }
+
 let forestVisitorBag=[],lastForestVisitor='';
 function nextForestVisitor(){
  const eligible=FOREST_VISITORS.filter(v=>completedAll().length>=v.need);
