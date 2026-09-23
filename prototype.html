@@ -724,7 +724,7 @@ textarea{min-height:112px}.card{padding:18px;border:1px solid var(--line);border
  --action:#c3e878;--action-ink:#1b2415;--leaf-surface:#edf2e4;--lime:#c3e878;--lemon:#f5f184;--lavender:#ddc7f4;
  --sky:#b899d4;--sky-ink:#59476d;--sky-soft:#ede3f7;--sky-line:#d7c4e8;
  --blue:var(--accent);--brand-green:var(--accent);--brand-green-light:var(--lime);--grad:var(--lime);
- --brand-leaf:var(--accent-soft);--brand-sky:var(--sky-soft);--brand-sun:#f8f4ba;--sun-ink:#655d25;--brand-star:#a68a23;
+ --brand-leaf:var(--accent-soft);--brand-sky:var(--sky-soft);--brand-sun:#f8f4ba;--sun-ink:#655d25;--brand-star:#EDBC32;
  --brand-progress-ink:#554565;--brand-complete-ink:#46592c;--status-active-ink:#554565;--status-done-ink:#46592c;
  --page-title-size:29px;--section-title-size:19px;--control-radius:99px;--section-gap:24px
 }
@@ -818,8 +818,8 @@ input[type=checkbox],input[type=radio]{accent-color:#527039;min-height:20px}labe
 .forest-heading{margin-bottom:0}.forest-heading .page-title{font-size:29px}.forest-heading+.page-caption{margin:6px 0 20px}
 .forest-header-actions{gap:8px}.forest-header-actions [data-picker=year]{font-size:12px;padding:6px 0 6px 10px;min-height:40px;color:var(--muted);font-weight:500}
 .forest-garden{background:#eaf0e2;border:0;border-radius:23px;overflow:hidden;position:relative}.forest-garden.is-snow{background:#edf0f2}
-.forest-tools{padding:15px 15px 0;min-height:49px;display:flex;justify-content:space-between;gap:10px;position:relative;z-index:1}
-.forest-tools .forest-season-button,.forest-tools .forest-edit-control{font-size:10px;min-height:32px;line-height:1.4;padding:7px 11px;border-radius:99px;background:#fafcf4b3;color:#3f4b35;border:1px solid #ffffff80;font-weight:550}
+.forest-tools{padding:0;min-height:0;display:flex;justify-content:space-between;gap:10px;position:absolute;top:15px;left:15px;right:15px;z-index:2;pointer-events:none}
+.forest-tools .forest-season-button,.forest-tools .forest-edit-control{font-size:10px;min-height:44px;line-height:1.4;padding:7px 13px;border-radius:99px;background:#fafcf4e8;color:#3f4b35;border:1px solid #ffffffb3;box-shadow:0 2px 8px #3040250b;backdrop-filter:blur(8px);font-weight:550;pointer-events:auto}
 .forest-tools .forest-edit-control[aria-pressed=true]{background:var(--lime);color:var(--ink)}
 #page .forest-garden #forestViewport{height:clamp(316px,42svh,374px);min-height:316px;aspect-ratio:auto;border-radius:0;background:transparent;touch-action:none}
 #page .forest-garden #forestViewport>svg{-webkit-mask-image:none;mask-image:none}
@@ -890,6 +890,19 @@ button.search-clear,button.search-clear:active,button.search-clear:focus{transfo
 
 </style>
 
+<style id="profile-photo-settings">
+.profile-avatar{overflow:hidden}.profile-avatar img{display:block;width:100%;height:100%;object-fit:cover}
+.profile-summary .profile-bio{display:block;max-width:280px;margin:7px auto 0;font-size:12px;line-height:1.6;color:var(--muted);white-space:pre-wrap;overflow-wrap:anywhere}
+.profile-photo-editor{display:flex;flex-direction:column;align-items:center;padding:12px 0 10px}
+.profile-photo-trigger{display:block;padding:0;border-radius:50%;flex-shrink:0}
+.profile-photo-trigger .profile-avatar-large{width:100px;height:100px}
+.profile-photo-actions{display:flex;justify-content:center;gap:18px;margin-top:4px}
+.profile-photo-status{font-size:11px;line-height:1.6;text-align:center;color:var(--muted);margin:0}
+#profileBio{min-height:82px}.profile-bio-count{text-align:right;font-size:11px;color:var(--muted);margin-top:4px}
+.profile-account{padding:14px 0 0;margin-top:14px;border-top:1px solid var(--line);font-size:12px}
+.profile-account span{display:block;color:var(--muted);margin-bottom:3px}.profile-account strong{font-weight:500;overflow-wrap:anywhere}
+#profileForm>#profileError:empty{display:none}
+</style>
 </head><body><div class="app"><div id="storageAlert"></div><header class="head" id="head"></header><main class="page" id="page"></main><nav class="tabs" id="tabs" aria-label="주 메뉴"></nav></div><div id="overlay"></div><div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 /* iOS Safari는 요소에 touch 이벤트 리스너가 연결돼 있어야 :active 상태(눌림 효과)를 인식합니다.
@@ -1206,12 +1219,15 @@ function openTreePicker(id){const c=get(id);if(!c?.completed)return;showModal('�
 
 function ratingPrompt(c,advance=false){showModal('이 경험은 어땠나요?','<p class="creator">'+esc(c.title)+(advance&&!c.completed?' · 저장하면 나의 숲에 나무가 심어져요.':'')+'</p><form id="ratingForm" data-id="'+esc(c.id)+'" data-advance="'+(advance?'yes':'no')+'"><div class="rating"><div class="rating-half-stars" data-rating-picker></div></div><input type="hidden" id="ratingValue" value="'+(c.rating||'')+'"><p id="ratingText" class="summary">'+(c.rating?c.rating+'점':'평점과 메모는 각각 선택이에요.')+'</p><label for="reviewMemo">감상·메모 · 선택</label><textarea id="reviewMemo" maxlength="4000" placeholder="어떤 장면이나 생각이 남았나요?">'+esc(c.review||'')+'</textarea><div class="space"></div><button class="primary" type="submit">'+(advance?'완료하고 나무 심기':'평점·감상 저장')+'</button>'+button(advance&&!c.completed?'취소하고 돌아가기':'나중에 남기기','close','textbtn')+button('평점만 지우기','clearRating','textbtn',attr(c.id))+'</form>','rating')}
 
+function profilePhotoSource(value){
+ return typeof value==='string'&&value.length<=300000&&/^data:image\/(?:jpeg|png|webp);base64,[A-Za-z0-9+/]+={0,2}$/.test(value)?value:'';
+}
 const Model=(()=>{
  const clone=x=>JSON.parse(JSON.stringify(x));
  const today=(offset=0)=>{const d=new Date();d.setDate(d.getDate()+offset);return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};
  const norm=x=>String(x||'').normalize('NFKC').toLowerCase().replace(/[\s\p{P}]/gu,'');
  const validDate=x=>typeof x==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x)&&!isNaN(new Date(x+'T12:00:00'))&&new Date(x+'T12:00:00').toISOString().slice(0,10)===x;
- const empty=()=>({version:3,items:[],selected:null,themes:{},profile:{name:'나',tastes:[]},collection:{treeChoices:{},disabledSpeciesIds:[],visitorsSeen:[]},onboarded:false,offset:0,filters:{q:'',status:'all',type:'all',sort:'recent'}});
+ const empty=()=>({version:3,items:[],selected:null,themes:{},profile:{name:'나',bio:'',photo:'',tastes:[]},collection:{treeChoices:{},disabledSpeciesIds:[],visitorsSeen:[]},onboarded:false,offset:0,filters:{q:'',status:'all',type:'all',sort:'recent'}});
  const status=c=>c.completed?'done':(c.logs.length||c.importedProgress)?'active':'saved';
  const stage=c=>c.completed?3:Math.min(2,new Set(c.logs.map(l=>l.date)).size);
  const get=(s,id)=>s.items.find(c=>c.id===id);
@@ -1243,7 +1259,7 @@ const Model=(()=>{
   if(new Set(s.items.map(c=>c.id)).size!==s.items.length)throw Error('중복된 콘텐츠 ID가 있어요.');
   s.selected=s.items.some(c=>c.id===raw.selected)?raw.selected:null;
   s.themes=Object.fromEntries(Object.entries(raw.themes||{}).filter(([k])=>/^\d{4}$/.test(k)).map(([k,v])=>[k,(v==='snow'||v==='winter')?'snow':'basic']));
-  s.profile={name:String(raw.profile?.name||'나').slice(0,30),tastes:Array.isArray(raw.profile?.tastes)?raw.profile.tastes.filter(x=>typeof x==='string'):[]};
+  s.profile={name:String(raw.profile?.name||'나').trim().slice(0,30)||'나',bio:String(raw.profile?.bio||'').trim().slice(0,120),photo:profilePhotoSource(raw.profile?.photo),tastes:Array.isArray(raw.profile?.tastes)?raw.profile.tastes.filter(x=>typeof x==='string'):[]};
   s.profile.recommendationHistory=Array.isArray(raw.profile?.recommendationHistory)?[...new Set(raw.profile.recommendationHistory.filter(key=>typeof key==='string'))]:[];
   s.profile.responses=raw.profile?.responses&&typeof raw.profile.responses==='object'?raw.profile.responses:{};
   const validSpecies=new Set(TREE_SPECIES.map(t=>t.id)),validCats=new Set(TREE_CATEGORIES.map(t=>t.id)),validVisitors=new Set(FOREST_VISITORS.map(v=>v.id));
@@ -1871,7 +1887,7 @@ function forestSVG(items,theme='basic',animated=true){
  const trees=points.map((p,i)=>{const hiddenKind=p.c?.hiddenTree,hiddenBoost=hiddenKind?hiddenTreeScale(hiddenKind,theme):1,sc=((p.scale||cfg.treeScale)*hiddenBoost).toFixed(3),shadowRx=((p.profile?.radius||24)*.70*hiddenBoost).toFixed(1),shadowRy=(Math.max(3.6,(p.profile?.radius||24)*.13*hiddenBoost)).toFixed(1),snowBase=theme==='snow'?'<ellipse cx="0" cy="13" rx="'+Math.max(9,(p.profile?.radius||24)*.5*hiddenBoost).toFixed(1)+'" ry="4.1" fill="#F8FBFC" opacity=".92"/>':'';return '<g data-tree="'+esc(p.c.id)+'" role="button" tabindex="0" aria-label="'+esc(p.c.title+' · '+String(p.c.genre||category(p.c).label))+'" transform="translate('+p.x.toFixed(1)+' '+p.y.toFixed(1)+') scale('+sc+')"><ellipse cx="4" cy="10" rx="'+shadowRx+'" ry="'+shadowRy+'" fill="#708579" opacity=".11"/>'+snowBase+'<circle class="tree-hit" cx="0" cy="-27" r="38" fill="transparent" pointer-events="all"/>'+overlap.edges[i]+'<g class="tree-art">'+treeArt(p.c,theme)+'</g></g>'});
  const scene=[...trees.map((art,i)=>({y:points[i].y,art})),...decorations].sort((a,b)=>a.y-b.y).map(entry=>entry.art).join('');
  const visitor=n?forestVisitorArt(items,animated):'',patches=[{x:cx-cfg.boardW*.22,y:cy-cfg.boardH*.11,rx:cfg.boardW*.12,ry:cfg.boardH*.05,o:.10},{x:cx+cfg.boardW*.16,y:cy-cfg.boardH*.08,rx:cfg.boardW*.10,ry:cfg.boardH*.046,o:.08},{x:cx-cfg.boardW*.03,y:cy+cfg.boardH*.17,rx:cfg.boardW*.14,ry:cfg.boardH*.055,o:.07}].map((g,i)=>'<ellipse cx="'+g.x.toFixed(1)+'" cy="'+g.y.toFixed(1)+'" rx="'+g.rx.toFixed(1)+'" ry="'+g.ry.toFixed(1)+'" fill="'+(theme==='snow'?(i===1?'#D6E3E7':'#EEF4F6'):(i===1?'#c9dcb9':'#d4e3c7'))+'" opacity="'+(theme==='snow'?Math.min(.36,g.o+.15):g.o)+'"/>').join('');
- return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 540" role="group" aria-label="'+n+'그루의 '+({basic:'기본',snow:'설산'}[theme])+' 숲"><defs>'+overlap.defs+'<filter id="forestTreeEdge" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB"><feMorphology in="SourceAlpha" operator="dilate" radius="1.5" result="spread"/><feGaussianBlur in="spread" stdDeviation=".85" result="edge"/><feFlood flood-color="'+(theme==='snow'?'#BCCFD5':'#B9CE98')+'" flood-opacity=".72"/><feComposite in2="edge" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><linearGradient id="groundFill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+(theme==='snow'?'#F2F6F7':'#E5F0DA')+'"/><stop offset=".58" stop-color="'+ground+'"/><stop offset="1" stop-color="'+(theme==='snow'?'#D7E3E6':'#D0E1C2')+'"/></linearGradient><clipPath id="groundClip"><path d="'+groundPath+'"/></clipPath></defs><rect width="720" height="540" fill="transparent"/>'+(theme==='snow'?'<path d="M55 224 177 58 275 191 368 31 541 221 598 99 720 247" fill="#c4d4db"/><path d="M135 115L177 58 217 112 188 100 175 117 163 100Z M317 99L368 31 423 104 384 86 365 108 348 85Z" fill="#f8fbfc"/>':'')+'<g id="forest-world"><ellipse cx="360" cy="'+(cy+cfg.boardH/2+depth)+'" rx="'+(cfg.boardW*.35)+'" ry="13" fill="#899c78" opacity=".09"/><path d="'+groundPath+'" transform="translate(0 '+depth+')" fill="'+(theme==='snow'?'#c2d3d8':'#b5c5a0')+'"/><path d="'+groundPath+'" fill="url(#groundFill)"/><g clip-path="url(#groundClip)">'+patches+'</g><path d="'+groundPath+'" fill="none" stroke="#bdd0b1" stroke-width="1.5" opacity=".46"/>'+scene+visitor+'</g></svg>';
+ return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 540" role="group" aria-label="'+n+'그루의 '+({basic:'기본',snow:'설산'}[theme])+' 숲"><defs>'+overlap.defs+'<filter id="forestTreeEdge" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB"><feMorphology in="SourceAlpha" operator="dilate" radius="1.5" result="spread"/><feGaussianBlur in="spread" stdDeviation=".85" result="edge"/><feFlood flood-color="'+(theme==='snow'?'#BCCFD5':'#B9CE98')+'" flood-opacity=".72"/><feComposite in2="edge" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><linearGradient id="groundFill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+(theme==='snow'?'#F2F6F7':'#E5F0DA')+'"/><stop offset=".58" stop-color="'+ground+'"/><stop offset="1" stop-color="'+(theme==='snow'?'#D7E3E6':'#D0E1C2')+'"/></linearGradient><clipPath id="groundClip"><path d="'+groundPath+'"/></clipPath></defs><rect width="720" height="540" fill="transparent"/>'+(theme==='snow'?'<path d="M55 224 177 58 275 191 368 31 541 221 598 99 720 247" fill="#c4d4db"/><path d="M135 115L177 58 217 112 188 100 175 117 163 100Z M317 99L368 31 423 104 384 86 365 108 348 85Z" fill="#f8fbfc"/>':'')+'<g id="forest-world"><ellipse cx="360" cy="'+(cy+cfg.boardH/2+depth)+'" rx="'+(cfg.boardW*.35)+'" ry="13" fill="'+(theme==='snow'?'#8FA7B0':'#899c78')+'" opacity=".09"/><path d="'+groundPath+'" transform="translate(0 '+depth+')" fill="'+(theme==='snow'?'#c2d3d8':'#b5c5a0')+'"/><path d="'+groundPath+'" fill="url(#groundFill)"/><g clip-path="url(#groundClip)">'+patches+'</g><path d="'+groundPath+'" fill="none" stroke="'+(theme==='snow'?'#B8CDD4':'#bdd0b1')+'" stroke-width="1.5" opacity=".46"/>'+scene+visitor+'</g></svg>';
 }
 
 
@@ -2081,7 +2097,7 @@ function load(){
  try{const raw=localStorage.getItem(KEY);if(raw){const previous=JSON.parse(raw);state=Model.validate(previous);const assignedSpecies=ensureCompletedSpeciesAssignments(),remappedSpecies=remapDefaultSpeciesByCategory(),treeMigrated=assignedSpecies||remappedSpecies;if(treeMigrated||previous.items.some((c,i)=>c.genreMappingVersion!==3||c.genre!==state.items[i].genre||c.treeCategory!==state.items[i].treeCategory)){if(!localStorage.getItem(KEY+'.before-genre-mapping-v3'))localStorage.setItem(KEY+'.before-genre-mapping-v3',raw);persist()}}else{const legacy=localStorage.getItem('songrim.records.v1');if(legacy){state=migrateLegacy(JSON.parse(legacy));ensureCompletedSpeciesAssignments();remapDefaultSpeciesByCategory();persist()}}}
  catch(e){storageOK=false;$('storageAlert').innerHTML='<div class="storage-alert">기존 데이터를 읽지 못했어요. MY에서 백업을 복원하거나 새로 시작할 수 있어요.</div>'}
 }
-function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));scheduleCloudSync();return true}catch(e){storageOK=false;$('storageAlert').innerHTML='<div class="storage-alert">브라우저에 저장하지 못했어요. MY에서 백업을 다운로드해주세요.</div>';return false}}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));storageOK=true;$('storageAlert').innerHTML='';scheduleCloudSync();return true}catch(e){storageOK=false;$('storageAlert').innerHTML='<div class="storage-alert">브라우저에 저장하지 못했어요. MY에서 백업을 다운로드해주세요.</div>';return false}}
 function now(){return Model.today(state.offset)}
 function selected(){return Model.get(state,state.selected)}
 function get(id){return Model.get(state,id)}
@@ -2255,9 +2271,64 @@ function addTreeUnlockTestData(){
  persist();render();toast('각 나무에 완료 경험 3개씩 넣었어요. 일반 나무 20종이 모두 해금됩니다.');
 }
 
+let profileEdit=null;
+function profileAvatarHTML(photo=state.profile.photo){
+ const source=profilePhotoSource(photo);
+ return source?'<img src="'+esc(source)+'" alt="프로필 사진">':icon('my');
+}
+function openProfile(){
+ profileEdit={photo:profilePhotoSource(state.profile.photo),loading:false,request:0};
+ const email=cloudSession?.user?.email||'';
+ showModal('프로필 설정','<form id="profileForm"><div class="profile-photo-editor">'+button('<span class="profile-avatar profile-avatar-large" id="profilePhotoPreview">'+profileAvatarHTML(profileEdit.photo)+'</span>','profilePhotoChoose','profile-photo-trigger','aria-label="프로필 사진 변경"')+'<div class="profile-photo-actions">'+button('사진 변경','profilePhotoChoose','textbtn')+button('기본 이미지로','profilePhotoRemove','textbtn','id="profilePhotoRemove" '+(profileEdit.photo?'':'disabled'))+'</div><input id="profilePhotoFile" type="file" accept="image/*" hidden><p id="profilePhotoStatus" class="profile-photo-status" role="status">사진은 가운데를 기준으로 동그랗게 보여요.</p></div><label for="profileName">이름 또는 별명</label><input id="profileName" maxlength="30" required autocomplete="nickname" value="'+esc(state.profile.name)+'"><label for="profileBio">한 줄 소개 · 선택</label><textarea id="profileBio" maxlength="120" rows="2" placeholder="나의 취향을 짧게 소개해보세요.">'+esc(state.profile.bio||'')+'</textarea><div class="profile-bio-count"><span id="profileBioCount">'+String(state.profile.bio||'').length+'</span> / 120</div>'+(email?'<div class="profile-account"><span>로그인 계정</span><strong>'+esc(email)+'</strong></div>':'')+'<p id="profileError" class="form-error" role="alert"></p><button id="profileSave" class="primary" type="submit">저장</button>'+button('취소','close','textbtn')+'</form>','profile');
+}
+function updateProfilePhotoPreview(){
+ if(modal!=='profile'||!$('profileForm')||!profileEdit)return;
+ $('profilePhotoPreview').innerHTML=profileAvatarHTML(profileEdit.photo);
+ $('profilePhotoRemove').disabled=!profileEdit.photo&&!profileEdit.loading;
+ $('profileSave').disabled=profileEdit.loading;
+ $('profilePhotoStatus').textContent=profileEdit.loading?'사진을 준비하고 있어요…':'사진은 가운데를 기준으로 동그랗게 보여요.';
+}
+async function changeProfilePhoto(file,form){
+ if(!file||!form?.isConnected||!profileEdit)return;
+ const draft=profileEdit,ticket=++draft.request;
+ draft.loading=true;$('profileError').textContent='';updateProfilePhotoPreview();
+ let url='';
+ try{
+  if(!file.type.startsWith('image/'))throw Error('사진 파일을 선택해주세요.');
+  if(file.size>15000000)throw Error('15MB 이하의 사진을 선택해주세요.');
+  url=URL.createObjectURL(file);
+  const img=await loadImage(url),width=img.naturalWidth,height=img.naturalHeight;
+  if(!width||!height)throw Error('사진을 읽지 못했어요.');
+  const side=Math.min(width,height),canvas=document.createElement('canvas');
+  canvas.width=canvas.height=256;
+  const ctx=canvas.getContext('2d');
+  ctx.fillStyle='#f7f7f4';ctx.fillRect(0,0,256,256);
+  ctx.drawImage(img,(width-side)/2,(height-side)/2,side,side,0,0,256,256);
+  const photo=profilePhotoSource(canvas.toDataURL('image/jpeg',.86));
+  if(!photo)throw Error('다른 사진을 선택해주세요.');
+  if(profileEdit!==draft||draft.request!==ticket||!form.isConnected)return;
+  draft.photo=photo;
+ }catch(err){
+  if(profileEdit===draft&&draft.request===ticket&&form.isConnected)$('profileError').textContent=err.message==='이미지를 읽지 못했어요.'?'사진을 열지 못했어요. JPG, PNG 또는 WebP 사진을 선택해주세요.':err.message||'사진을 불러오지 못했어요.';
+ }finally{
+  if(url)URL.revokeObjectURL(url);
+  if(profileEdit===draft&&draft.request===ticket&&form.isConnected){draft.loading=false;updateProfilePhotoPreview();}
+ }
+}
+function saveProfile(form){
+ if(!profileEdit||profileEdit.loading||!form.isConnected)return;
+ const name=$('profileName').value.trim().slice(0,30);
+ if(!name){$('profileError').textContent='이름 또는 별명을 입력해주세요.';$('profileName').focus();return;}
+ const previous=state.profile;
+ state.profile={...previous,name,bio:$('profileBio').value.trim().slice(0,120),photo:profilePhotoSource(profileEdit.photo)};
+ if(!persist()){state.profile=previous;$('profileError').textContent='저장하지 못했어요. 저장 공간을 확인한 뒤 다시 시도해주세요.';return;}
+ authSession.name=name;saveSession();profileEdit=null;
+ closeModal();render();toast('프로필을 저장했어요.');
+}
+
 function renderMy(){
  const stats=Model.stats(state.items.filter(c=>c.completed));
- return '<section><div class="page-heading"><h1 class="page-title">마이</h1></div><button class="profile-summary" data-action="profile"><span class="profile-avatar">'+icon('my')+'</span><span class="grow"><strong>'+esc(state.profile.name)+'</strong><small>프로필 수정</small></span><span class="muted" aria-hidden="true">›</span></button><div class="profile-stats"><div><strong>'+state.items.length+'</strong><span>스크랩</span></div><div><strong>'+stats.n+'</strong><span>완료</span></div></div><div class="settings-group"><h2>나의 설정</h2>'+button('취향 관리 <span>›</span>','tastes','menu-row')+button('알림 <span>›</span>','notifications','menu-row')+'</div><div class="settings-group"><h2>기록 관리</h2>'+button('데이터 백업 <span>↓</span>','backup','menu-row')+button('백업 복원 <span>↑</span>','restore','menu-row')+'<input id="restoreFile" class="offscreen" type="file" accept="application/json,.json"></div><div class="settings-group"><h2>서비스</h2>'+button('이용약관 및 개인정보 <span>›</span>','terms','menu-row')+button('로그아웃 <span>›</span>','flowLogout','menu-row')+button('회원탈퇴','deleteAccount','menu-row danger')+'</div></section>';
+ return '<section><div class="page-heading"><h1 class="page-title">마이</h1></div><button class="profile-summary" data-action="profile"><span class="profile-avatar">'+profileAvatarHTML()+'</span><span class="grow"><strong>'+esc(state.profile.name)+'</strong>'+(state.profile.bio?'<span class="profile-bio">'+esc(state.profile.bio)+'</span>':'')+'<small>프로필 수정</small></span><span class="muted" aria-hidden="true">›</span></button><div class="profile-stats"><div><strong>'+state.items.length+'</strong><span>스크랩</span></div><div><strong>'+stats.n+'</strong><span>완료</span></div></div><div class="settings-group"><h2>나의 설정</h2>'+button('취향 관리 <span>›</span>','tastes','menu-row')+button('알림 <span>›</span>','notifications','menu-row')+'</div><div class="settings-group"><h2>기록 관리</h2>'+button('데이터 백업 <span>↓</span>','backup','menu-row')+button('백업 복원 <span>↑</span>','restore','menu-row')+'<input id="restoreFile" class="offscreen" type="file" accept="application/json,.json"></div><div class="settings-group"><h2>서비스</h2>'+button('이용약관 및 개인정보 <span>›</span>','terms','menu-row')+button('로그아웃 <span>›</span>','flowLogout','menu-row')+button('회원탈퇴','deleteAccount','menu-row danger')+'</div></section>';
 }
 let modalReturnFocus=null,modalFocusTimer=null;
 function showModal(title,html,kind='generic'){
@@ -2266,9 +2337,9 @@ function showModal(title,html,kind='generic'){
  dismissToast();modal=kind;const composer=kind==='scrap-composer';
  $('overlay').innerHTML='<div class="sheet-back '+(composer?'scrap-composer-back':'')+'" data-action="backdrop"><section class="sheet '+(composer?'scrap-composer-sheet':'')+'" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"><div class="sheet-head"><h2 id="sheetTitle">'+esc(title)+'</h2>'+button(icon('close'),'close','iconbtn','aria-label="닫기"')+'</div>'+html+'</section></div>';
  document.querySelector('.app').inert=true;
- document.body.style.overflow='hidden';modalFocusTimer=setTimeout(()=>{const sheet=$('overlay').querySelector('.sheet');const target=kind==='confirm'?sheet?.querySelector('[data-action="close"]'):(sheet?.querySelector('input:not([type=hidden]):not(:disabled),textarea:not(:disabled),select:not(:disabled)')||sheet?.querySelector('button:not([data-action="close"])')||sheet?.querySelector('button'));target?.focus()},35);;window.initRatingPicker?.();
+ document.body.style.overflow='hidden';modalFocusTimer=setTimeout(()=>{const sheet=$('overlay').querySelector('.sheet');const target=kind==='confirm'?sheet?.querySelector('[data-action="close"]'):(sheet?.querySelector('input:not([type=hidden]):not([type=file]):not([hidden]):not(:disabled),textarea:not(:disabled),select:not(:disabled)')||sheet?.querySelector('button:not([data-action="close"])')||sheet?.querySelector('button'));target?.focus()},35);;window.initRatingPicker?.();
 }
-function closeModal(){clearTimeout(modalFocusTimer);document.querySelector('.app').inert=false;if(ocrBusy){ocrGeneration++;ocrBusy=false}if(modal==='scrap-composer')scrapFlowActive=false;modal=null;$('overlay').innerHTML='';document.body.style.overflow='';if(modalReturnFocus?.isConnected)modalReturnFocus.focus({preventScroll:true});modalReturnFocus=null;}
+function closeModal(){if(modal==='profile'&&profileEdit){profileEdit.request++;profileEdit=null}clearTimeout(modalFocusTimer);document.querySelector('.app').inert=false;if(ocrBusy){ocrGeneration++;ocrBusy=false}if(modal==='scrap-composer')scrapFlowActive=false;modal=null;$('overlay').innerHTML='';document.body.style.overflow='';if(modalReturnFocus?.isConnected)modalReturnFocus.focus({preventScroll:true});modalReturnFocus=null;}
 function confirmBox(title,text,onConfirm,label='확인'){window.pendingConfirm=onConfirm;showModal(title,'<p>'+esc(text)+'</p>'+button(label,'confirm')+button('취소','close','textbtn'),'confirm')}
 function pick(){picking=true;view='scrap';closeModal();render();window.scrollTo(0,0)}
 let scrapFlowActive=false;
@@ -4184,7 +4255,9 @@ document.addEventListener('click',async e=>{
   if(!shareFresh()){await makeShare(shareKind);toast('최신 기록으로 갱신했어요. 다시 저장해주세요.');return}
   if(shareBlob){download(shareBlob,'songrim-'+(shareKind==='forest'?year:month)+'.png');toast('이미지를 다운로드했어요.')}return
  }
- if(a==='profile'){showModal('프로필','<form id="profileForm"><label for="profileName">이름</label><input id="profileName" maxlength="30" required value="'+esc(state.profile.name)+'"><button class="primary" type="submit">저장</button></form>','profile');return}
+ if(a==='profile'){openProfile();return}
+ if(a==='profilePhotoChoose'){if(modal==='profile')$('profilePhotoFile')?.click();return}
+ if(a==='profilePhotoRemove'){if(modal==='profile'&&profileEdit){profileEdit.request++;profileEdit.photo='';profileEdit.loading=false;$('profileError').textContent='';updateProfilePhotoPreview()}return}
  if(a==='tastes'){tasteStart();return}
  if(a==='notifications'){showModal('알림','<p>알림 기능을 준비하고 있어요.</p>'+button('확인','close','secondary'),'notifications');return}
  if(a==='terms'){showModal('서비스 이용 안내','<p>결제는 진행하지 않습니다. 로그인한 사용자의 스크랩·경험 기록은 브라우저에 저장하면서 Supabase에도 동기화합니다. 책·음악 검색어는 검색 결과를 받기 위해 송림의 Supabase Edge Function으로 전송됩니다.</p><div class="space"></div><p>외부 검색 링크를 누르면 해당 서비스로 이동합니다. 데이터 보관을 위해 MY에서 백업을 다운로드할 수 있습니다.</p><p class="creator">계정 서비스용 약관과 개인정보 처리방침은 정식 서비스에서 별도로 제공합니다.</p>','terms');return}
@@ -4308,10 +4381,12 @@ document.addEventListener('input',e=>{
  scheduleCatalogSearchFromLiveInput(input,460);
 });
 
+document.addEventListener('input',e=>{if(e.target.id==='profileBio'&&$('profileBioCount'))$('profileBioCount').textContent=e.target.value.length});
 document.addEventListener('change',async e=>{
  const el=e.target;
  if(el.dataset.candidate!==undefined){candidates[Number(el.dataset.candidate)].selected=el.checked;renderCandidates()}
  if(el.id==='monthValue'){if(/^\d{4}-\d{2}$/.test(el.value)&&el.value<=now().slice(0,7)){month=el.value;closeModal();render()}else toast('미래 월은 선택할 수 없어요.')}
+ if(el.id==='profilePhotoFile'){const file=el.files?.[0];el.value='';await changeProfilePhoto(file,el.form);return}
  if(el.id==='photoFiles'){
   photoFiles=[...el.files].filter(f=>f.type.startsWith('image/')).slice(0,10);
   $('photoThumbs').innerHTML=photoFiles.map(f=>'<span class="muted">'+esc(f.name)+'</span>').join('');
@@ -4340,7 +4415,7 @@ document.addEventListener('submit',async e=>{
  }
  if(f.id==='linkForm'){const url=$('linkInput').value;try{const u=new URL(url);if(!['https:','http:'].includes(u.protocol))throw Error();infoForm(null,url)}catch{toast('올바른 웹 링크를 입력해주세요.')}}
  if(f.id==='filterForm'){state.filters.sort=$('filterSort').value;closeModal();commit()}
- if(f.id==='profileForm'){state.profile.name=$('profileName').value.trim()||'나';closeModal();commit()}
+ if(f.id==='profileForm'){saveProfile(f);return}
  if(f.id==='tasteForm'){state.profile.tastes=[...f.querySelectorAll('input:checked')].map(x=>x.value);closeModal();commit();toast('취향을 저장했어요.')}
  if(f.id==='memoForm'){const l=get(f.dataset.id)?.logs.find(l=>l.id===f.dataset.log);if(l){l.memo=$('todayMemo').value.trim();closeModal();commit();toast('메모를 저장했어요.')}return}
  if(f.id==='logForm'){
