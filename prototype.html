@@ -4447,33 +4447,51 @@ async function imageData(file){
 }
 function loadImage(src){return new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(Error('이미지를 읽지 못했어요.'));img.src=src})}
 function download(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),15000)}
-let shareKind='forest',shareRevision='';
+function loadShareCover(src,timeoutMs=8000){
+ return new Promise(resolve=>{
+  const img=new Image();let settled=false;
+  const finish=value=>{if(settled)return;settled=true;clearTimeout(timer);img.onload=null;img.onerror=null;if(!value)img.removeAttribute('src');resolve(value)};
+  const timer=setTimeout(()=>finish(null),timeoutMs);
+  // Only origin-clean images may be drawn onto an export canvas.
+  img.crossOrigin='anonymous';img.decoding='async';img.onload=()=>finish(img);img.onerror=()=>finish(null);img.src=src;
+ });
+}
+let shareKind='forest',shareRevision='',shareGeneration=0;
 async function makeShare(kind){
- const snapshot=JSON.stringify({items:state.items,themes:state.themes,year,month});shareRevision=snapshot;shareKind=kind;shareBlob=null;
+ const snapshot=JSON.stringify({items:state.items,themes:state.themes,year,month}),data=JSON.parse(snapshot),generation=++shareGeneration;
+ const current=()=>generation===shareGeneration&&modal==='share';
+ shareRevision=snapshot;shareKind=kind;shareBlob=null;
  showModal('공유 미리보기','<p class="muted">공유 이미지를 준비하고 있어요…</p>','share');
  try{
+  let missingCovers=0;
   const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1350;const ctx=canvas.getContext('2d');
   ctx.fillStyle='#fff';ctx.fillRect(0,0,1080,1350);ctx.fillStyle='#252d33';ctx.font='600 40px "Noto Sans KR",sans-serif';ctx.fillText('송림',76,100);
-  const items=Model.completed(state,kind==='forest'?year:month),st=Model.stats(items);
-  ctx.font='bold 54px "Noto Sans KR",sans-serif';ctx.fillText(kind==='forest'?year+' 나의 문화 숲':month.replace('-','년 ')+'월 기록',76,191);
+  const items=Model.completed(data,kind==='forest'?data.year:data.month),st=Model.stats(items);
+  ctx.font='bold 54px "Noto Sans KR",sans-serif';ctx.fillText(kind==='forest'?data.year+' 나의 문화 숲':data.month.replace('-','년 ')+'월 기록',76,191);
   if(kind==='forest'){
-   const svg=forestSVG(items,state.themes[year]||'basic',false),url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
+   const svg=forestSVG(items,data.themes[data.year]||'basic',false),url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
    try{const img=await loadImage(url);ctx.drawImage(img,56,235,968,726)}finally{URL.revokeObjectURL(url)}
    ctx.fillStyle='#252d33';ctx.font='600 42px "Noto Sans KR",sans-serif';ctx.fillText(Model.compare(st.n),76,1040);ctx.font='bold 64px "Noto Sans KR",sans-serif';ctx.fillText(st.n.toLocaleString()+'그루의 나무',76,1130);
    ctx.font='28px "Noto Sans KR",sans-serif';ctx.fillStyle='#777';ctx.fillText(st.area.toLocaleString()+'㎡ · 책 '+st.book+' · 음반 '+st.album+' · 영화 '+st.movie,76,1190);ctx.font='23px "Noto Sans KR",sans-serif';ctx.fillText('',76,1280);
   }else{
-   const [y,m]=month.split('-').map(Number),start=new Date(y,m-1,1).getDay(),days=new Date(y,m,0).getDate(),cell=132;
+   const [y,m]=data.month.split('-').map(Number),start=new Date(y,m-1,1).getDay(),days=new Date(y,m,0).getDate(),cell=132;
+   const calendarDays=Array.from({length:days},(_,i)=>{const date=data.month+'-'+String(i+1).padStart(2,'0');return {date,list:data.items.filter(c=>c.completed===date||c.logs.some(l=>l.date===date)).sort((a,b)=>Number(b.completed===date)-Number(a.completed===date))}});
+   const sources=[...new Set(calendarDays.map(day=>day.list[0]?.cover).filter(Boolean))];
+   const covers=new Map(await Promise.all(sources.map(async src=>[src,await loadShareCover(src)])));
+   if(!current())return;
+   missingCovers=[...covers.values()].filter(img=>!img).length;
    ctx.textAlign='center';ctx.font='25px "Noto Sans KR",sans-serif';ctx.fillStyle='#888';['일','월','화','수','목','금','토'].forEach((d,i)=>ctx.fillText(d,144+i*cell,280));
-   for(let d=1;d<=days;d++){const i=start+d-1,x=144+(i%7)*cell,yy=335+Math.floor(i/7)*137,date=month+'-'+String(d).padStart(2,'0'),list=state.items.filter(c=>c.completed===date||c.logs.some(l=>l.date===date)).sort((a,b)=>Number(b.completed===date)-Number(a.completed===date));ctx.fillStyle='#333';ctx.font='26px "Noto Sans KR",sans-serif';ctx.fillText(String(d),x,yy);
-    if(list.length){ctx.fillStyle='#eef2f3';ctx.fillRect(x-28,yy+12,56,74);if(list[0].cover){try{const img=await loadImage(list[0].cover);ctx.drawImage(img,x-28,yy+12,56,74)}catch{}}else{ctx.fillStyle='#64747b';ctx.font='18px "Noto Sans KR",sans-serif';ctx.fillText(typeName[list[0].type],x,yy+55)}if(list[0].completed===date){ctx.fillStyle='#DCEEF8';ctx.beginPath();ctx.arc(x+24,yy+80,12,0,Math.PI*2);ctx.fill();ctx.fillStyle='#3E657D';ctx.font='18px sans-serif';ctx.fillText('✓',x+24,yy+86)}if(list.length>1){ctx.font='20px "Noto Sans KR",sans-serif';ctx.fillStyle='#356C45';ctx.fillText('+'+(list.length-1),x+39,yy+84)}}
+   for(let d=1;d<=days;d++){const i=start+d-1,x=144+(i%7)*cell,yy=335+Math.floor(i/7)*137,{date,list}=calendarDays[d-1];ctx.fillStyle='#333';ctx.font='26px "Noto Sans KR",sans-serif';ctx.fillText(String(d),x,yy);
+    if(list.length){const img=covers.get(list[0].cover);ctx.fillStyle='#eef2f3';ctx.fillRect(x-28,yy+12,56,74);if(img){ctx.drawImage(img,x-28,yy+12,56,74)}else{ctx.fillStyle='#64747b';ctx.font='18px "Noto Sans KR",sans-serif';ctx.fillText(typeName[list[0].type],x,yy+55)}if(list[0].completed===date){ctx.fillStyle='#DCEEF8';ctx.beginPath();ctx.arc(x+24,yy+80,12,0,Math.PI*2);ctx.fill();ctx.fillStyle='#3E657D';ctx.font='18px sans-serif';ctx.fillText('✓',x+24,yy+86)}if(list.length>1){ctx.font='20px "Noto Sans KR",sans-serif';ctx.fillStyle='#356C45';ctx.fillText('+'+(list.length-1),x+39,yy+84)}}
    }
    ctx.textAlign='left';ctx.font='600 39px "Noto Sans KR",sans-serif';ctx.fillStyle='#333';ctx.fillText('이번 달 완료한 '+st.n+'개의 경험',76,1210);ctx.font='27px "Noto Sans KR",sans-serif';ctx.fillStyle='#777';ctx.fillText('책 '+st.book+' · 음반 '+st.album+' · 영화 '+st.movie,76,1270);
   }
-  shareBlob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(Error()),'image/png'));
-  if(modal!=='share')return;
+  const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(Error()),'image/png'));
+  if(!current())return;
+  shareBlob=blob;
   if(shareURL)URL.revokeObjectURL(shareURL);shareURL=URL.createObjectURL(shareBlob);
-  showModal('공유 미리보기','<img class="preview" src="'+shareURL+'" alt="'+(kind==='forest'?'전체 숲':'월간 기록')+' 공유 이미지"><div class="share-actions">'+button('공유하기','nativeShare')+button('이미지 저장','saveImage','secondary')+'</div><p class="summary">4:5 · PNG 이미지</p>','share');
- }catch(e){if(modal==='share')showModal('이미지를 만들지 못했어요','<p class="muted">다시 시도해주세요.</p>'+button('다시 시도','retryShare'),'share')}
+  showModal('공유 미리보기','<img class="preview" src="'+shareURL+'" alt="'+(kind==='forest'?'전체 숲':'월간 기록')+' 공유 이미지"><div class="share-actions">'+button('공유하기','nativeShare')+button('이미지 저장','saveImage','secondary')+'</div><p class="summary">4:5 · PNG 이미지</p>'+(missingCovers?'<p class="summary">일부 표지를 불러오지 못해 작품 종류로 표시했어요.</p>':''),'share');
+ }catch(e){if(current())showModal('이미지를 만들지 못했어요','<p class="muted">다시 시도해주세요.</p>'+button('다시 시도','retryShare'),'share')}
 }
 function shareFresh(){return shareRevision===JSON.stringify({items:state.items,themes:state.themes,year,month})}
 async function nativeShare(){
