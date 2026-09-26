@@ -1937,7 +1937,7 @@ const Model=(()=>{
  const clone=x=>JSON.parse(JSON.stringify(x));
  const today=(offset=0)=>{const d=new Date();d.setDate(d.getDate()+offset);return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};
  const norm=x=>String(x||'').normalize('NFKC').toLowerCase().replace(/[\s\p{P}]/gu,'');
- const validDate=x=>typeof x==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x)&&!isNaN(new Date(x+'T12:00:00'))&&new Date(x+'T12:00:00').toISOString().slice(0,10)===x;
+ const validDate=x=>{if(typeof x!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(x))return false;const d=new Date(x+'T00:00:00.000Z');return Number.isFinite(d.getTime())&&d.toISOString().slice(0,10)===x};
  const empty=()=>({version:3,items:[],selected:null,themes:{},profile:{name:'나',bio:'',photo:'',tastes:[]},collection:{treeChoices:{},disabledSpeciesIds:[],visitorsSeen:[]},onboarded:false,offset:0,filters:{q:'',status:'all',type:'all',sort:'recent'}});
  const status=c=>c.completed?'done':(c.logs.length||c.importedProgress)?'active':'saved';
  const stage=c=>c.completed?3:Math.min(2,new Set(c.logs.map(l=>l.date)).size);
@@ -2481,7 +2481,7 @@ window.addEventListener('storage',e=>{
   }
 
   function validTitle(value) {
-    if (value.length < 2 || value.length > 100) return false;
+    if (value.length < 2 || value.length > 100 || /^@[A-Za-z0-9_.]+$/.test(value)) return false;
     if (!/[\p{L}\p{N}]/u.test(value)) return false;
     if (/https?:\/\/|www\.|mailto:|javascript:|data:|<\/?\w+[^>]*>|[{};=]|\b(?:function|console|document|window)\s*[.(]/i.test(value)) return false;
     if (/^[\d\s.,/:-]+$/.test(value) || NAVIGATION.test(value) || DIRECTIVE.test(value)) return false;
@@ -2657,6 +2657,30 @@ window.addEventListener('storage',e=>{
         add(listParts.title, listParts.creator, ctx.type, line, false);
       }
     }
+
+    // Caption lists often use media emoji and commas instead of bullets or
+    // delimiters. Scope each run to its emoji, require list context, and never
+    // treat arbitrary prose commas as title separators.
+    var captionContext = pageTitle + '\n' + text;
+    var captionBlocked = NO_RECOMMEND.test(captionContext) || DIRECTIVE.test(captionContext);
+    var captionList = RECOMMEND.test(captionContext) || /인생\s*(?:책|영화|앨범)|재독|다시\s*읽|(?:top|베스트)\s*\d+|(?:책|영화|앨범)\s*(?:모음|목록|리스트)/i.test(captionContext);
+    if (!captionBlocked && captionList) {
+      var runs = text.matchAll(/(📖|📚|🎬|🎥|💿|📀)\uFE0F?\s*([^📖📚🎬🎥💿📀\r\n]{1,600})/gu);
+      for (var run of runs) {
+        var listType = /📖|📚/.test(run[1]) ? 'book' : /🎬|🎥/.test(run[1]) ? 'movie' : 'album';
+        // Public captions sometimes lose newlines. Cut off recognizable reader
+        // questions and promotional footers, not words inside a work title.
+        var segment = run[2].split(/\s+(?:여러분(?:에게도|은|의|도)?|댓글(?:로|에)?|저도|팔로우|구독)\s|[─━]{2,}/)[0].trim();
+        var titles = segment.split(/\s*[,，、]\s*/);
+        if (titles.length < 2 || titles.length > 15) continue;
+        for (var candidate of titles) {
+          var parts = splitTitleCreator(candidate), name = parts.title;
+          if (name.length > 60 || /[@#\n]|알려주세요|추천해주세요|^좋아요$|좋아해요|고맙|감사|팔로우|구독|https?:/i.test(name)) continue;
+          add(name, parts.creator, listType, run[1] + ' ' + segment, false);
+        }
+      }
+    }
+
     return works.map(function (w) {
       return {title: w.title, creator: w.creator, type: w.type, evidence: w.evidence, confidence: w.confidence};
     });
@@ -2840,13 +2864,31 @@ function validVideoTimestamp(value){return typeof value==='number'&&Number.isFin
 function videoTimestampLabel(value){const t=validVideoTimestamp(value);if(t===null)return '';const h=Math.floor(t/3600),m=Math.floor(t%3600/60),s=t%60;return (h?h+':'+String(m).padStart(2,'0'):String(m))+':'+String(s).padStart(2,'0')}
 function videoEvidenceLink(url,value){const id=youtubeImportVideoID(url),time=validVideoTimestamp(value);return id&&time!==null?'<a href="https://www.youtube.com/watch?v='+id+'&amp;t='+time+'s" target="_blank" rel="noopener noreferrer">영상 '+videoTimestampLabel(time)+'에서 확인 ↗</a>':''}
 function extractYouTubeDescriptionQueries(text,title){
- const clean=String(text||'').normalize('NFKC').split('\n').filter(line=>!/(?:채널\s*구독|구독\s*하기|subscribe|https?:\/\/)/i.test(line)).join('\n');
- return extractLinkWorkQueries(clean,{pageTitle:title}).map(q=>{
-  const match=q.evidence.match(/^\s*(\d{1,2}:\d{2}(?::\d{2})?)/);
+ const clean=String(text||'').slice(0,60000).normalize('NFKC').replace(/https?:\/\/[^\s<>]+/gi,'').split('\n').filter(line=>!/^\s*(?:채널\s*구독|구독\s*하기|subscribe)\b/i.test(line)).join('\n');
+ const queries=extractLinkWorkQueries(clean,{pageTitle:title});
+ // Chapter-only titles need a single, explicit work type in the surrounding context.
+ const context=String(title||'')+'\n'+clean.split('\n').filter(line=>!/^\s*\[?\d{1,2}:\d{2}/.test(line)).slice(0,12).join('\n');
+ const types=[[/책|도서|소설|에세이|\bbooks?\b/i,'book'],[/영화|\bmovies?\b|\bfilms?\b/i,'movie'],[/음반|앨범|\balbums?\b/i,'album']].filter(([pattern])=>pattern.test(context)).map(([,type])=>type);
+ const type=types.length===1?types[0]:'';
+ const creator=type==='book'?(context.match(/(?:^|[\s#])([가-힣A-Za-z][가-힣A-Za-z .·]{1,30}?)\s*(?:작가|저자)(?:\s|의|:)/)?.[1]||'').trim():'';
+ const chapters=[];
+ if(type&&/추천|모음|몰아보기|리스트|목록|\bpicks?\b|recommend|collection/i.test(context)){
+  for(const line of clean.split('\n')){
+   const match=line.match(/^\s*\[?(\d{1,2}:\d{2}(?::\d{2})?)\]?\s+(.+)$/);if(!match)continue;
+   const parts=match[1].split(':').map(Number);if(parts.slice(1).some(n=>n>59))continue;
+   const name=match[2].trim().replace(/^[《〈『「]|[》〉』」]$/g,'').trim();
+   if(name.length<2||name.length>100||/^(?:인트로|인사|소개|오프닝|광고|협찬|공지|구독|마무리|엔딩|아웃트로|intro|outro|sponsor|opening|ending)(?:\s|$|[:：])/i.test(name)||/이전.*지시|시스템.*프롬프트|ignore.*instructions|https?:|[<>]/i.test(name))continue;
+   chapters.push({title:name,creator,type,evidence:line.trim(),timestampSeconds:parts.reduce((n,v)=>n*60+v,0)});
+  }
+ }
+ if(chapters.length>=2){const seen=new Set(queries.map(q=>q.type+':'+q.title.replace(/\s/g,'')));for(const q of chapters){const key=q.type+':'+q.title.replace(/\s/g,'');if(!seen.has(key)){queries.push(q);seen.add(key)}}}
+ return queries.filter(q=>!/^\s*\[?\d{1,2}:\d{2}/.test(q.evidence)||!/^(?:인트로|인사|소개|오프닝|광고|협찬|공지|구독|마무리|엔딩|아웃트로|intro|outro|sponsor|opening|ending)(?:\s|$|[:：])/i.test(q.title)).slice(0,30).map(q=>{
+  const match=q.evidence.match(/^\s*\[?(\d{1,2}:\d{2}(?::\d{2})?)/);
   const timestamp=match?match[1].split(':').reduce((n,v)=>n*60+Number(v),0):null;
   return {...q,source:'description',requiresReview:true,confidence:'possible',...(timestamp!==null?{timestampSeconds:timestamp}:{})};
  });
 }
+
 async function readYouTubeDescription(url,signal){
  if(!cloudSession?.access_token)throw Error('유튜브 내용을 가져오려면 송림에 다시 로그인해주세요.');
  const res=await fetch(SUPABASE_URL+'/functions/v1/youtube-import',{method:'POST',signal,credentials:'omit',referrerPolicy:'no-referrer',headers:cloudAuthHeaders(cloudSession.access_token),body:JSON.stringify({url,mode:'description'})});
@@ -2918,7 +2960,11 @@ function normalizeImportURL(value){
   if(id&&/^[\w-]{11}$/.test(id))return 'https://www.youtube.com/watch?v='+id;
   throw Error('유튜브 영상의 공유 링크를 넣어주세요. 채널이나 재생목록 링크는 사용할 수 없어요.');
  }
- if(['instagram.com','www.instagram.com','m.instagram.com'].includes(host)&&/^\/(?:p|reel|tv)\/[^/]+/.test(u.pathname))return 'https://www.instagram.com'+u.pathname.match(/^\/(?:p|reel|tv)\/[^/]+/)[0]+'/';
+ if(['instagram.com','www.instagram.com','m.instagram.com'].includes(host)){
+  const match=u.pathname.match(/^\/(?:[A-Za-z0-9_.]+\/)?(p|reel|tv)\/([A-Za-z0-9_-]{5,64})\/?$/);
+  if(u.protocol!=='https:'||host==='m.instagram.com'||!match)throw Error('인스타그램 게시물의 https 링크를 확인해주세요.');
+  return 'https://www.instagram.com/'+match[1]+'/'+match[2]+'/';
+ }
  return u.href;
 }
 function normalizeLinkSources(raw){
@@ -2942,8 +2988,9 @@ function rememberLinkImportInput(){const s=linkImportSession;if(!s)return;s.url=
 function renderLinkImportInput(message=''){
  const s=linkImportSession;if(!s)return;s.stage='input';s.error=message;
  const instagramFallback=!!message&&s.instagramReadFailed;
+ const readPreview=message&&s.analyzedText?'<details class="link-import-paste"><summary>불러온 본문 확인</summary><p class="link-import-help">제목이 포함되어 있는지 확인해주세요. 필요한 부분을 아래 입력란에 붙여넣어 다시 찾을 수 있어요.</p><pre style="white-space:pre-wrap;overflow-wrap:anywhere;font:inherit">'+esc(s.analyzedText)+'</pre></details>':'';
  const fallback=instagramFallback?'<p class="link-import-help">글에 제목이 있다면 본문을 붙여넣고, 사진이나 릴스 화면에 있다면 제목이 보이는 캡처를 가져와주세요. 원본 링크는 출처로 함께 보관해요.</p><div class="link-import-alternatives">'+button('본문 붙여넣기','linkImportPaste','textbtn')+button('사진·캡처 가져오기','linkImportPhoto','textbtn')+'</div>':'';
- showModal('링크에서 가져오기','<p class="link-import-intro">추천 글 속 책, 영화, 음반을 찾아 모아드려요.<br>찾은 작품을 확인한 뒤 한 번에 저장할 수 있어요.</p><form id="linkImportForm" class="link-import-input"><label for="linkImportURL">게시글·영상 링크</label><input id="linkImportURL" type="url" maxlength="4096" placeholder="https://" value="'+esc(s.url)+'" autocomplete="off"><p class="link-import-help">인스타그램 게시글이나 유튜브 영상의 공유 링크를 붙여넣어주세요.</p><div id="linkImportError" class="link-import-error" role="status">'+esc(message)+fallback+'</div><details class="link-import-paste" '+(message||s.text?'open':'')+'><summary>본문·설명·자막 직접 붙여넣기</summary><label class="sr-only" for="linkImportText">추천 내용</label><textarea id="linkImportText" maxlength="'+LINK_IMPORT_TEXT_LIMIT+'" placeholder="게시글 본문이나 영상 설명·자막에서 추천 내용을 복사해 붙여넣어주세요.">'+esc(s.text)+'</textarea><p class="link-import-help">본문이 있으면 링크를 읽지 않고 붙여넣은 내용에서 찾아요. 링크 없이도 사용할 수 있어요.</p></details><button type="submit" class="primary">추천 작품 찾기</button></form><div class="link-import-alternatives">'+button('추천 장면을 사진으로 가져오기','linkImportPhoto','textbtn')+button('작품 직접 입력','linkImportManual','textbtn')+'</div><p class="link-import-help">유튜브는 설명란에서 먼저 찾고, 작품명이 없으면 영상의 음성·화면을 분석해요. 인스타그램 사진 속 작품은 사진으로 가져와주세요.</p><details class="link-import-paste"><summary>링크 읽기 안내</summary><p class="link-import-help">유튜브 설명란은 송림 서버에서 먼저 읽고, 영상 분석이 필요할 때만 링크를 Google Gemini에 전달해요. 인스타그램은 송림 서버에서 공개 본문을 읽고, 다른 공개 페이지는 Jina Reader로 읽어요. 외부 분석 서비스에 로그인 정보와 나의 기록은 보내지 않아요. 본문을 붙여넣으면 외부 영상 분석 없이 제목을 찾아요.</p></details>','link');
+ showModal('링크에서 가져오기','<p class="link-import-intro">추천 글 속 책, 영화, 음반을 찾아 모아드려요.<br>찾은 작품을 확인한 뒤 한 번에 저장할 수 있어요.</p><form id="linkImportForm" class="link-import-input"><label for="linkImportURL">게시글·영상 링크</label><input id="linkImportURL" type="url" maxlength="4096" placeholder="https://" value="'+esc(s.url)+'" autocomplete="off"><p class="link-import-help">인스타그램 게시글이나 유튜브 영상의 공유 링크를 붙여넣어주세요.</p><div id="linkImportError" class="link-import-error" role="status">'+esc(message)+fallback+'</div>'+readPreview+'<details class="link-import-paste" '+(message||s.text?'open':'')+'><summary>본문·설명·자막 직접 붙여넣기</summary><label class="sr-only" for="linkImportText">추천 내용</label><textarea id="linkImportText" maxlength="'+LINK_IMPORT_TEXT_LIMIT+'" placeholder="게시글 본문이나 영상 설명·자막에서 추천 내용을 복사해 붙여넣어주세요.">'+esc(s.text)+'</textarea><p class="link-import-help">본문이 있으면 링크를 읽지 않고 붙여넣은 내용에서 찾아요. 링크 없이도 사용할 수 있어요.</p></details><button type="submit" class="primary">추천 작품 찾기</button></form><div class="link-import-alternatives">'+button('추천 장면을 사진으로 가져오기','linkImportPhoto','textbtn')+button('작품 직접 입력','linkImportManual','textbtn')+'</div><p class="link-import-help">유튜브는 설명란에서 먼저 찾고, 작품명이 없으면 영상의 음성·화면을 분석해요. 인스타그램 사진 속 작품은 사진으로 가져와주세요.</p><details class="link-import-paste"><summary>링크 읽기 안내</summary><p class="link-import-help">유튜브 설명란은 송림 서버에서 먼저 읽고, 영상 분석이 필요할 때만 링크를 Google Gemini에 전달해요. 인스타그램은 송림 서버에서 공개 본문을 읽고, 다른 공개 페이지는 Jina Reader로 읽어요. 외부 분석 서비스에 로그인 정보와 나의 기록은 보내지 않아요. 본문을 붙여넣으면 외부 영상 분석 없이 제목을 찾아요.</p></details>','link');
 }
 function renderLinkImportLoading(label){
  const s=linkImportSession;if(!s)return;s.stage='loading';
@@ -3014,7 +3061,7 @@ async function runLinkImport(){
  const s=linkImportSession;if(!s||s.stage==='loading')return;rememberLinkImportInput();
  let url;try{url=normalizeImportURL(s.url)}catch(e){renderLinkImportInput(e.message);return}
  if(!url&&!s.text.trim()){renderLinkImportInput('링크 또는 추천 내용을 입력해주세요.');return}
- s.url=url;s.controller?.abort();s.controller=new AbortController();const run=++s.run,isCurrent=()=>linkImportCurrent(s,run);s.rows=[];s.truncated=false;s.analysisMethod='';s.instagramReadFailed=false;
+ s.url=url;s.controller?.abort();s.controller=new AbortController();const run=++s.run,isCurrent=()=>linkImportCurrent(s,run);s.rows=[];s.truncated=false;s.analysisMethod='';s.instagramReadFailed=false;s.analyzedText='';
  const video=!!youtubeImportVideoID(url)&&!s.text.trim();
  renderLinkImportLoading(s.text.trim()?'붙여넣은 내용에서 제목을 찾고 있어요.':video?'영상 설명란에서 추천 작품을 먼저 찾고 있어요.':'공개된 게시글 본문·영상 설명을 읽고 있어요.');
  const timeout=setTimeout(()=>s.controller.abort(),video?140000:25000);
@@ -3038,7 +3085,7 @@ async function runLinkImport(){
    if(transcript)s.analysisMethod='transcript';
   }
   clearTimeout(timeout);if(!isCurrent())return;s.analyzedText=text;
-  if(!queries.length){renderLinkImportInput('추천 작품 제목을 뚜렷하게 찾지 못했어요. 제목이 나온 본문·설명·자막을 붙여넣거나, 추천 장면을 사진으로 가져와주세요.');return}
+  if(!queries.length){renderLinkImportInput('본문은 읽었지만 작품 제목을 구분하지 못했어요. 불러온 본문을 확인하거나 제목이 나온 부분을 붙여넣어주세요. 사진에만 제목이 있다면 사진으로 가져올 수 있어요.');return}
   let done=0;const results=await ocrMapLimit(queries,3,async q=>{if(!isCurrent())return null;const result=await resolveLinkImportQuery(q,isCurrent);done++;if(isCurrent()&&$('linkImportProgress'))$('linkImportProgress').textContent='작품 정보 확인 중 · '+done+' / '+queries.length+'개';return result});
   if(!isCurrent())return;
   const seen=new Set();s.rows=results.filter(Boolean).filter(row=>{if(!row.options.length)return true;const key=linkWorkKey(row.options[0]);if(seen.has(key))return false;seen.add(key);return true});
@@ -4218,38 +4265,85 @@ function cloudAuthHeaders(token=''){
 async function cloudRequest(path,options={}){
  const key=cloudPublicKey();
  if(!key)throw Error('Supabase Publishable key 연결이 필요해요.');
- const res=await fetch(SUPABASE_URL+path,{...options,headers:{...cloudAuthHeaders(options.token||''),...(options.headers||{})}});
+ const res=await fetch(SUPABASE_URL+path,{...options,signal:options.signal||(typeof AbortSignal!=='undefined'&&AbortSignal.timeout?AbortSignal.timeout(20000):undefined),headers:{...cloudAuthHeaders(options.token||''),...(options.headers||{})}});
  let body=null,text='';
  try{text=await res.text();body=text?JSON.parse(text):null}catch{body=text}
- if(!res.ok)throw Error(body?.msg||body?.message||body?.error_description||body?.error||('Supabase 오류 · HTTP '+res.status));
+ if(!res.ok){const error=Error(body?.msg||body?.message||body?.error_description||body?.error||('Supabase 오류 · HTTP '+res.status));error.status=res.status;throw error}
  return body;
 }
 async function cloudRefresh(){
- if(!cloudSession?.refresh_token)return false;
- try{
-  const data=await cloudRequest('/auth/v1/token?grant_type=refresh_token',{method:'POST',body:JSON.stringify({refresh_token:cloudSession.refresh_token})});
-  saveCloudSession(data);return true;
- }catch{clearCloudSession();return false}
+ if(cloudRefreshPromise)return cloudRefreshPromise;
+ const owner=cloudSession?.user?.id,generation=dataGeneration;if(!owner||!cloudSession?.refresh_token)return false;
+ const run=async()=>{
+  if(!ownerIsCurrent(owner,generation))return false;
+  const stored=loadCloudSession();if(stored?.access_token!==cloudSession.access_token){cloudSession=stored;return true}
+  try{const data=await cloudRequest('/auth/v1/token?grant_type=refresh_token',{method:'POST',body:JSON.stringify({refresh_token:cloudSession.refresh_token})});
+   if(!ownerIsCurrent(owner,generation)||data?.user?.id!==owner)return false;saveCloudSession(data);return true;
+  }catch{return false}
+ };
+ cloudRefreshPromise=navigator.locks?.request?navigator.locks.request('songrim-token:'+owner,run):run();
+ try{return await cloudRefreshPromise}finally{cloudRefreshPromise=null}
 }
+
 async function cloudLogin(email,password){
  const data=await cloudRequest('/auth/v1/token?grant_type=password',{method:'POST',body:JSON.stringify({email,password})});
- saveCloudSession(data);return data;
+ saveCloudSession(data);activateDataOwner(data.user.id);return data;
 }
 async function cloudSignup(email,password){
  return cloudRequest('/auth/v1/signup',{method:'POST',body:JSON.stringify({email,password})});
 }
+// Recovery credentials stay in memory and never replace the active account session.
+let passwordRecoveryToken='',passwordRecoveryEmail='',passwordRecoveryError='';
 async function cloudRecover(email){
- const redirect=(location.protocol==='http:'||location.protocol==='https:')?location.origin+location.pathname:undefined;
- return cloudRequest('/auth/v1/recover',{method:'POST',body:JSON.stringify(redirect?{email,redirect_to:redirect}:{email})});
+ const redirect=['http:','https:'].includes(location.protocol)?location.origin+location.pathname:'';
+ return cloudRequest('/auth/v1/recover'+(redirect?'?redirect_to='+encodeURIComponent(redirect):''),{method:'POST',body:JSON.stringify({email})});
 }
+async function readRecoveryLink(raw){
+ passwordRecoveryToken='';passwordRecoveryEmail='';
+ const url=new URL(raw,location.href),hash=new URLSearchParams(url.hash.slice(1));
+ const allowed=url.origin===new URL(SUPABASE_URL).origin||(url.origin===location.origin&&url.pathname===location.pathname);
+ if(!allowed)throw Error('송림 비밀번호 재설정 메일의 링크를 붙여넣어주세요.');
+ if(hash.get('error')||url.searchParams.get('error'))throw Error('만료되었거나 이미 사용한 링크예요. 재설정 메일을 다시 받아주세요.');
+ const kind=hash.get('type')||url.searchParams.get('type');
+ if(kind!=='recovery')throw Error('비밀번호 재설정 링크인지 확인해주세요. 새 메일을 받아 다시 시도할 수 있어요.');
+ let token=hash.get('access_token');
+ if(!token){
+  const tokenHash=url.searchParams.get('token_hash')||url.searchParams.get('token');
+  if(!tokenHash)throw Error('재설정 인증 정보가 없어요. 새 메일을 받아주세요.');
+  const result=await cloudRequest('/auth/v1/verify',{method:'POST',body:JSON.stringify({token_hash:tokenHash,type:'recovery'})});
+  token=result?.access_token;
+ }
+ if(!token)throw Error('재설정 인증을 완료하지 못했어요.');
+ const user=await cloudRequest('/auth/v1/user',{method:'GET',token});
+ passwordRecoveryToken=token;passwordRecoveryEmail=user.email||'';passwordRecoveryError='';
+}
+async function beginPasswordRecovery(){
+ const hash=new URLSearchParams(location.hash.slice(1)),query=new URLSearchParams(location.search);
+ if(hash.get('type')!=='recovery'&&query.get('type')!=='recovery'&&!hash.has('error')&&!query.has('code'))return false;
+ const raw=location.href;
+ try{history.replaceState(null,'',location.pathname)}catch{}
+ try{await readRecoveryLink(raw);authRoute='resetPassword'}
+ catch{passwordRecoveryError='재설정 링크가 만료되었거나 이 기기에서 확인할 수 없어요. 새 메일을 받아주세요.';authRoute='recover'}
+ return true;
+}
+async function updateRecoveredPassword(password,confirmation){
+ if(password.length<6)throw Error('비밀번호를 6자 이상 입력해주세요.');
+ if(password!==confirmation)throw Error('비밀번호가 일치하지 않아요.');
+ if(!passwordRecoveryToken)throw Error('재설정 메일을 다시 받아주세요.');
+ await cloudRequest('/auth/v1/user',{method:'PUT',token:passwordRecoveryToken,body:JSON.stringify({password})});
+ const token=passwordRecoveryToken;passwordRecoveryToken='';passwordRecoveryEmail='';
+ try{await cloudRequest('/auth/v1/logout?scope=local',{method:'POST',token,body:'{}'})}catch{}
+}
+
 async function cloudLogout(){
- try{
-  if(cloudSession?.access_token)await cloudRequest('/auth/v1/logout',{method:'POST',token:cloudSession.access_token,body:'{}'});
- }catch{}
- clearCloudSession();
+ const session=cloudSession;clearTimeout(cloudSyncTimer);
+ // All successful edits are already durable under this account key.
+ clearCloudSession();activateDataOwner('local');
+ try{if(session?.access_token)await cloudRequest('/auth/v1/logout?scope=local',{method:'POST',token:session.access_token,body:'{}'})}catch{}
 }
 
 async function deleteSongrimAccount(){
+ const deletingOwner=dataOwner,deletingGeneration=dataGeneration;
  if(!cloudSession?.access_token)throw Error('다시 로그인한 뒤 회원탈퇴를 진행해주세요.');
  const key=cloudPublicKey();
  if(!key)throw Error('Supabase 연결 설정이 필요해요.');
@@ -4269,11 +4363,14 @@ async function deleteSongrimAccount(){
 
  if(!res.ok)throw Error(payload?.message||payload?.error||('회원탈퇴 처리 실패 · HTTP '+res.status));
 
- // 서버 삭제 성공 후 이 기기의 로그인/사용자 상태도 정리한다.
- clearCloudSession();
+ // 서버에서 확인된 이 계정의 로컬 스냅샷만 삭제한다.
+ if(localStorage.getItem(KEY+'.legacy-owner')===deletingOwner){localStorage.removeItem(KEY);localStorage.removeItem(KEY+'.legacy-owner');localStorage.removeItem(KEY+'.legacy-reviewed')}
+ for(const key of Object.keys(localStorage))if(key===accountDataKey(deletingOwner)||key.startsWith(accountDataKey(deletingOwner)+':archive:'))localStorage.removeItem(key);
+ if(!ownerIsCurrent(deletingOwner,deletingGeneration))return true;
+ clearCloudSession();activateDataOwner('local');
  authSession={signedIn:false,finished:false};
  try{
-  localStorage.removeItem(KEY);
+  // Legacy unowned backups are retained; never delete another account snapshot.
   localStorage.removeItem(AUTH_KEY);
   localStorage.removeItem(CLOUD_LAST_EMAIL_STORAGE);
  }catch{}
@@ -4282,107 +4379,180 @@ async function deleteSongrimAccount(){
  view='today';
  return true;
 }
-async function cloudFetchState(){
- if(!cloudSession?.access_token||!cloudSession?.user?.id)return null;
- const path='/rest/v1/songrim_user_states?select=state,updated_at&user_id=eq.'+encodeURIComponent(cloudSession.user.id)+'&limit=1';
- try{
-  const rows=await cloudRequest(path,{method:'GET',token:cloudSession.access_token,headers:{Accept:'application/json'}});
-  return Array.isArray(rows)&&rows.length?rows[0]:null;
- }catch(err){
-  if(/JWT|token|401/i.test(String(err.message))&&await cloudRefresh())return cloudFetchState();
-  throw err;
- }
+// Account-owned durable snapshots. Never use the legacy shared record as an upload source.
+let dataOwner='local',dataGeneration=0,dataEnvelope=null,durableState=null,unsavedState=null;
+let cloudWritePromise=null,cloudRefreshPromise=null,cloudReloadPending=false;
+const accountDataKey=owner=>'songrim.account-state.v1:'+encodeURIComponent(owner);
+const stateFingerprint=value=>JSON.stringify({...value,filters:undefined});
+const revisionID=()=>Date.now().toString(36)+'-'+Math.random().toString(36).slice(2);
+function readAccountEnvelope(owner=dataOwner){
+ const raw=localStorage.getItem(accountDataKey(owner));if(!raw)return null;
+ const value=JSON.parse(raw);
+ if(value.owner!==owner||!value.state||typeof value.rev!=='string')throw Error('계정별 저장 기록을 확인해주세요.');
+ return value;
 }
-async function cloudUpsertState(){
- if(cloudApplying||!cloudSession?.access_token||!cloudSession?.user?.id||!cloudPublicKey())return false;
- cloudSyncStatus='syncing';
+function ownerIsCurrent(owner,generation=dataGeneration){
+ return owner===dataOwner&&generation===dataGeneration&&owner===(cloudSession?.user?.id||'local')&&owner===(loadCloudSession()?.user?.id||'local');
+}
+function activateDataOwner(owner){
+ clearTimeout(cloudSyncTimer);dataGeneration++;dataOwner=owner;notificationDataOwner=null;
+ cloudReloadPending=false;unsavedState=null;dataEnvelope=null;state=Model.empty();
+ try{dataEnvelope=readAccountEnvelope(owner);if(dataEnvelope)state=Model.validate(dataEnvelope.state);storageOK=true}catch{storageOK=false}
+ durableState=JSON.stringify(state);
+ cloudSyncStatus=dataEnvelope?.conflict?'conflict':dataEnvelope?.dirty?'pending':owner==='local'?'local':'synced';
+}
+function saveEnvelope(envelope){
+ localStorage.setItem(accountDataKey(envelope.owner),JSON.stringify(envelope));
+ if(envelope.owner===dataOwner){dataEnvelope=envelope;durableState=JSON.stringify(envelope.state)}
+}
+function legacyReviewPending(){try{return dataOwner!=='local'&&localStorage.getItem(KEY+'.legacy-owner')===dataOwner&&!localStorage.getItem(KEY+'.legacy-reviewed')&&!!localStorage.getItem(KEY)}catch{return false}}
+function showStorageStatus(){
+ const el=$('storageAlert');if(!el)return;
+ let message='',actions='';
+ if(!storageOK){message='이 변경을 브라우저에 저장하지 못했어요. 입력 내용을 유지했어요. 공간을 확보한 뒤 다시 저장하거나 미저장 내용을 백업해주세요.';actions=button('미저장 내용 백업','backupUnsaved','textbtn')}
+ else if(cloudReloadPending){message='다른 창에서 기록이 바뀌었어요. 작성 중인 내용을 백업한 뒤 최신 기록을 불러와주세요.';actions=button('작성 내용 백업','backupUnsaved','textbtn')+button('최신 기록 불러오기','reloadAccountData','textbtn')}
+ else if(cloudSyncStatus==='conflict'){message='다른 기기의 기록과 충돌했어요. 이 기기 기록은 보관되어 있어요.';actions=button('두 기록 확인','resolveCloudConflict','textbtn')}
+ else if(cloudSyncStatus==='reauth'){message='이 기기에 저장했어요. 로그인이 만료되어 클라우드 전송을 기다리고 있어요.';actions=button('다시 로그인','flowEmailLogin','textbtn')}
+ else if(cloudSyncStatus==='error'){message='이 기기에 저장했어요. 클라우드 전송을 다시 시도해주세요.';actions=button('다시 전송','retryCloudSync','textbtn')+button('백업','backup','textbtn')}
+ else if(cloudSyncStatus==='pending'||cloudSyncStatus==='syncing')message='이 기기에 저장됨 · 클라우드에 전송 중';
+ else if(legacyReviewPending()){message='계정별 저장으로 전환했어요. 전환 전의 기기 기록도 보관했으니 한 번 확인해주세요.';actions=button('이전 기록 확인','reviewLegacy','textbtn')}
+ el.innerHTML=message?'<div class="storage-alert" role="status">'+message+actions+'</div>':'';
+}
+function persist(){
  try{
-  await cloudRequest('/rest/v1/songrim_user_states?on_conflict=user_id',{
-   method:'POST',
-   token:cloudSession.access_token,
-   headers:{Prefer:'resolution=merge-duplicates,return=minimal'},
-   body:JSON.stringify({user_id:cloudSession.user.id,state})
-  });
-  cloudSyncStatus='synced';return true;
- }catch(err){
-  cloudSyncStatus='error';
-  console.warn('Songrim cloud sync failed:',err);
+  if(!ownerIsCurrent(dataOwner))throw Error('로그인 계정이 바뀌었어요.');
+  const latest=readAccountEnvelope();
+  if((latest?.rev||null)!==(dataEnvelope?.rev||null)){cloudReloadPending=true;throw Error('다른 창의 기록이 바뀌었어요.')}
+  const changed=stateFingerprint(state)!==stateFingerprint(dataEnvelope?.state||Model.empty());
+  const envelope={...dataEnvelope,owner:dataOwner,rev:revisionID(),state:JSON.parse(JSON.stringify(state)),dirty:!!dataEnvelope?.dirty||changed,baseKnown:!!dataEnvelope?.baseKnown,baseVersion:dataEnvelope?.baseVersion||null};
+  saveEnvelope(envelope);storageOK=true;unsavedState=null;
+  if(envelope.dirty&&dataOwner!=='local'){cloudSyncStatus=envelope.conflict?'conflict':'pending';scheduleCloudSync()}
+  showStorageStatus();return true;
+ }catch{
+  unsavedState=JSON.parse(JSON.stringify(state));
+  // Roll back the model, leaving live form controls intact for a retry.
+  if(durableState)state=Model.validate(JSON.parse(durableState));
+  storageOK=false;showStorageStatus();
+  const error=$('formError')||$('flowError');if(error)error.textContent='저장하지 못했어요. 입력 내용을 확인한 뒤 다시 저장해주세요.';
+  document.querySelectorAll('form button[type="submit"]:disabled').forEach(el=>el.disabled=false);
   return false;
  }
 }
+async function cloudAuthorized(path,options,owner,generation){
+ if(!ownerIsCurrent(owner,generation))throw Error('계정이 변경되어 요청을 취소했어요.');
+ try{return await cloudRequest(path,{...options,token:cloudSession.access_token})}
+ catch(err){
+  if(err.status!==401&&!/JWT|token.*expired/i.test(err.message))throw err;
+  if(!await cloudRefresh()||!ownerIsCurrent(owner,generation))throw err;
+  return cloudRequest(path,{...options,token:cloudSession.access_token});
+ }
+}
+async function cloudFetchState(owner=dataOwner,generation=dataGeneration){
+ if(owner==='local'||!cloudSession?.access_token)return null;
+ const rows=await cloudAuthorized('/rest/v1/songrim_user_states?select=state,updated_at&user_id=eq.'+encodeURIComponent(owner)+'&limit=1',{method:'GET',headers:{Accept:'application/json'}},owner,generation);
+ if(!ownerIsCurrent(owner,generation))throw Error('로그인 계정이 변경됐어요.');
+ return Array.isArray(rows)&&rows.length?rows[0]:null;
+}
+async function cloudUpsertState(){
+ if(cloudWritePromise)return cloudWritePromise;
+ const owner=dataOwner,generation=dataGeneration;
+ if(cloudApplying||owner==='local'||!cloudSession?.access_token||!ownerIsCurrent(owner,generation))return false;
+ const work=async()=>{
+  try{
+   let envelope=readAccountEnvelope(owner);
+   if(!envelope?.dirty)return true;
+   if(envelope.conflict){cloudSyncStatus='conflict';return false}
+   cloudSyncStatus='syncing';showStorageStatus();
+   if(!envelope.baseKnown){await cloudLoadForSignedInUser();envelope=readAccountEnvelope(owner);if(!envelope?.dirty)return true;if(envelope.conflict)return false}
+   if(!ownerIsCurrent(owner,generation))return false;
+   const revision=envelope.rev,version=envelope.baseVersion;
+   // Compare-and-swap avoids overwriting a row modified by another device.
+   const path='/rest/v1/songrim_user_states'+(version?'?user_id=eq.'+encodeURIComponent(owner)+'&updated_at=eq.'+encodeURIComponent(version):'');
+   const rows=await cloudAuthorized(path,{method:version?'PATCH':'POST',headers:{Prefer:'return=representation'},body:JSON.stringify({user_id:owner,state:envelope.state,updated_at:new Date().toISOString()})},owner,generation);
+   if(!ownerIsCurrent(owner,generation))return false;
+   if(!Array.isArray(rows)||!rows.length){await cloudLoadForSignedInUser();return false}
+   const latest=readAccountEnvelope(owner);if(!latest)return false;
+   saveEnvelope({...latest,baseKnown:true,baseVersion:rows[0].updated_at,dirty:latest.rev!==revision,rev:revisionID()});
+   cloudSyncStatus=dataEnvelope.dirty?'pending':'synced';
+   if(dataEnvelope.dirty)scheduleCloudSync();return true;
+  }catch(err){
+   if(!ownerIsCurrent(owner,generation))return false;
+   if(err.status===409){try{await cloudLoadForSignedInUser()}catch{cloudSyncStatus='error'}}
+   else cloudSyncStatus=err.status===401||err.status===403?'reauth':'error';
+   return false;
+  }finally{if(ownerIsCurrent(owner,generation))showStorageStatus()}
+ };
+ cloudWritePromise=(navigator.locks?.request?navigator.locks.request('songrim-sync:'+owner,work):work());
+ try{return await cloudWritePromise}finally{cloudWritePromise=null;if(dataGeneration!==generation&&dataEnvelope?.dirty)scheduleCloudSync()}
+}
 function scheduleCloudSync(){
- if(cloudApplying||!cloudSession?.access_token)return;
- clearTimeout(cloudSyncTimer);
- cloudSyncTimer=setTimeout(()=>cloudUpsertState(),500);
+ if(cloudApplying||!cloudSession?.access_token||dataEnvelope?.conflict)return;
+ clearTimeout(cloudSyncTimer);cloudSyncTimer=setTimeout(()=>void cloudUpsertState(),500);
 }
 async function cloudLoadForSignedInUser(){
- const loadingNotificationOwner=cloudSession?.user?.id;notificationDataOwner=null;syncNotifications();
- const row=await cloudFetchState();
- if(row?.state){
-  try{
-   cloudApplying=true;
-   state=Model.validate(row.state);
-   ensureCompletedSpeciesAssignments();
-   // 이전 테스트 버전이 빈 계정에 onboarded=true를 잘못 올린 경우 자동 복구.
-   if(state.onboarded===true && (!Array.isArray(state.items) || state.items.length===0)){
-    state.onboarded=false;
-   }
-   localStorage.setItem(KEY,JSON.stringify(state));
-  }finally{cloudApplying=false}
+ const owner=cloudSession?.user?.id;if(!owner)return;
+ if(dataOwner!==owner)activateDataOwner(owner);
+ const generation=dataGeneration;notificationDataOwner=null;syncNotifications();
+ const row=await cloudFetchState(owner,generation);
+ if(!ownerIsCurrent(owner,generation))return;
+ const latest=readAccountEnvelope(owner),remote=row?.state?Model.validate(row.state):null;
+ if(latest?.dirty&&remote&&(!latest.baseKnown||latest.baseVersion!==row.updated_at)&&stateFingerprint(latest.state)!==stateFingerprint(remote)){
+  saveEnvelope({...latest,rev:revisionID(),conflict:{state:remote,version:row.updated_at}});cloudSyncStatus='conflict';
+ }else if(latest?.dirty&&(!remote||stateFingerprint(latest.state)!==stateFingerprint(remote))){
+  saveEnvelope({...latest,rev:revisionID(),baseKnown:true,baseVersion:row?.updated_at||null});cloudSyncStatus='pending';scheduleCloudSync();
  }else{
-  // 신규 계정은 이 브라우저에 남아 있던 이전 테스트 상태를 가져가지 않는다.
-  // 항상 빈 송림에서 시작한다.
-  const rememberedName=authSession?.name||'';
-  try{
-   cloudApplying=true;
-   state=Model.empty();
-   if(rememberedName)state.profile.name=rememberedName;
-   state.onboarded=false;
-   localStorage.setItem(KEY,JSON.stringify(state));
-  }finally{cloudApplying=false}
-  await cloudUpsertState();
+  const next=remote||latest?.state||Model.empty();
+  // Do not replace a live editor while a background request completes.
+  if(modal&&latest&&stateFingerprint(next)!==stateFingerprint(state)){cloudReloadPending=true;cloudSyncStatus='pending';return}
+  state=next;ensureCompletedSpeciesAssignments();
+  saveEnvelope({owner,rev:revisionID(),state:JSON.parse(JSON.stringify(state)),baseKnown:true,baseVersion:row?.updated_at||null,dirty:!remote});
+  cloudSyncStatus=remote?'synced':'pending';if(!remote)scheduleCloudSync();
  }
- if(cloudSession?.user?.id===loadingNotificationOwner)notificationDataOwner=loadingNotificationOwner;
+ notificationDataOwner=owner;showStorageStatus();
 }
 async function cloudBootstrap(){
- cloudSession=loadCloudSession();
-
- // 실제 Supabase 로그인 세션이 없으면 서비스 소개/시작 화면부터 보여준다.
- if(!cloudSession?.access_token){
-  authSession.signedIn=false;
-  authRoute='welcome';
-  saveSession();
-  return;
- }
-
- try{
-  const exp=Number(cloudSession.expires_at||0)*1000;
-  if(exp&&Date.now()>exp-60000)await cloudRefresh();
-
-  if(!cloudSession?.access_token){
-   authSession.signedIn=false;
-   authRoute='welcome';
-   saveSession();
-   return;
-  }
-
-  authSession.signedIn=true;
-  authSession.method='이메일';
-  await cloudLoadForSignedInUser();
-  authSession.name=state.profile?.name||authSession.name||'';
-  authSession.finished=state.onboarded===true;
-  saveSession();
-
-  // 실제 로그인 세션이 있을 때만 앱/초기설정으로 진입한다.
-  authRoute=authSession.finished?'app':'profile';
- }catch(err){
-  console.warn(err);
-  clearCloudSession();
-  authSession.signedIn=false;
-  authRoute='welcome';
-  saveSession();
- }
+ if(await beginPasswordRecovery())return;
+ cloudSession=loadCloudSession();activateDataOwner(cloudSession?.user?.id||'local');
+ const bootGeneration=dataGeneration;
+ if(!cloudSession?.access_token){authSession={signedIn:false,finished:false};authRoute='welcome';return}
+ authSession={signedIn:true,finished:state.onboarded===true,name:state.profile?.name||'',method:'이메일'};
+ try{await cloudLoadForSignedInUser()}
+ catch(err){if(bootGeneration!==dataGeneration)return;cloudSyncStatus=err.status===401||err.status===403?'reauth':'error';notificationDataOwner=dataOwner;showStorageStatus()}
+ if(bootGeneration!==dataGeneration)return;
+ if(dataOwner!==(cloudSession?.user?.id||'local'))return;
+ authSession.name=state.profile?.name||'';authSession.finished=state.onboarded===true;saveSession();
+ authRoute=authSession.finished?'app':'profile';
 }
+async function handleCloudStorage(event){
+ if(event.key===CLOUD_SESSION_STORAGE||event.key===null){
+  const next=loadCloudSession(),owner=next?.user?.id||'local';cloudSession=next;
+  if(owner===dataOwner)return;
+  // A pending response can no longer apply state after this generation change.
+  closeModal();activateDataOwner(owner);authSession={signedIn:owner!=='local',finished:false};authRoute='welcome';view='today';render();
+  if(owner!=='local'){await cloudBootstrap();render()}return;
+ }
+ if(event.key!==accountDataKey(dataOwner))return;
+ if(modal||document.activeElement?.matches('input,textarea,select')){cloudReloadPending=true;showStorageStatus();return}
+ try{const latest=readAccountEnvelope();if(latest&&latest.rev!==dataEnvelope?.rev){dataEnvelope=latest;state=Model.validate(latest.state);durableState=JSON.stringify(state);cloudSyncStatus=latest.conflict?'conflict':latest.dirty?'pending':'synced';render();showStorageStatus()}}catch{storageOK=false;showStorageStatus()}
+}
+function downloadStateSnapshot(value,label){download(new Blob([JSON.stringify(value,null,2)],{type:'application/json'}),'songrim-'+label+'-'+Model.today()+'.json')}
+function showCloudConflict(){
+ const conflict=dataEnvelope?.conflict;if(!conflict)return;
+ showModal('두 기기의 기록을 확인해주세요','<p>이 기기 '+state.items.length+'개 · 클라우드 '+conflict.state.items.length+'개. 선택하지 않은 기록도 이 기기에 별도 보관합니다.</p>'+button('이 기기 기록 백업','backup','secondary')+button('클라우드 기록 백업','backupRemoteConflict','secondary')+button('클라우드 기록 사용','useRemoteConflict','primary')+button('이 기기 기록 사용','useLocalConflict','secondary'),'sync-conflict');
+}
+async function resolveCloudConflict(useLocal){
+ const owner=dataOwner,generation=dataGeneration;
+ try{
+  const latest=readAccountEnvelope(),row=await cloudFetchState(owner,generation);if(!latest?.conflict||!row||!ownerIsCurrent(owner,generation))return;
+  if(row.updated_at!==latest.conflict.version){await cloudLoadForSignedInUser();showCloudConflict();toast('클라우드 기록이 다시 바뀌었어요. 확인해주세요.');return}
+  // Archive both snapshots before either choice can replace data.
+  localStorage.setItem(accountDataKey(owner)+':archive:'+revisionID(),JSON.stringify(latest));
+  state=Model.validate(useLocal?latest.state:row.state);
+  saveEnvelope({owner,rev:revisionID(),state,baseKnown:true,baseVersion:row.updated_at,dirty:useLocal});
+  cloudSyncStatus=useLocal?'pending':'synced';closeModal();render();if(useLocal)scheduleCloudSync();showStorageStatus();
+ }catch{storageOK=false;showStorageStatus()}
+}
+
 function cloudSetupModal(message=''){
  showModal('Supabase 사용자 데이터 연결',
   '<p class="muted">브라우저용 <strong>Publishable key</strong>를 한 번 저장하면 이 기기에서는 다시 입력하지 않아도 됩니다.</p>'+
@@ -4400,10 +4570,13 @@ let pendingForestArrival=null;
 let state=Model.empty(),view='today',detailId=null,detailOrigin='scrap',picking=false,year=String(new Date().getFullYear()),month=Model.today().slice(0,7),modal=null,zoomState={scale:1,x:0,y:0},storageOK=true,toastTimer,undoAction=null,shareBlob=null,shareURL=null,photoFiles=[],ocrGeneration=0,ocrBusy=false,candidates=[],authMode=false,candidatePreview=null,candidatePreviewReturn=null;
 const $=id=>document.getElementById(id);
 function load(){
- try{const raw=localStorage.getItem(KEY);if(raw){const previous=JSON.parse(raw);state=Model.validate(previous);const assignedSpecies=ensureCompletedSpeciesAssignments(),remappedSpecies=remapDefaultSpeciesByCategory(),treeMigrated=assignedSpecies||remappedSpecies;if(treeMigrated||previous.items.some((c,i)=>c.genreMappingVersion!==3||c.genre!==state.items[i].genre||c.treeCategory!==state.items[i].treeCategory)){if(!localStorage.getItem(KEY+'.before-genre-mapping-v3'))localStorage.setItem(KEY+'.before-genre-mapping-v3',raw);persist()}}else{const legacy=localStorage.getItem('songrim.records.v1');if(legacy){state=migrateLegacy(JSON.parse(legacy));ensureCompletedSpeciesAssignments();remapDefaultSpeciesByCategory();persist()}}}
- catch(e){storageOK=false;$('storageAlert').innerHTML='<div class="storage-alert">기존 데이터를 읽지 못했어요. MY에서 백업을 복원하거나 새로 시작할 수 있어요.</div>'}
+ cloudSession=loadCloudSession();activateDataOwner(cloudSession?.user?.id||'local');
+ // Retain the original shared snapshot for review by the session present at migration.
+ try{if(localStorage.getItem(KEY)&&cloudSession?.user?.id&&!localStorage.getItem(KEY+'.legacy-owner'))localStorage.setItem(KEY+'.legacy-owner',cloudSession.user.id)}catch{}
+ // The pre-account shared key remains untouched for explicit backup/recovery.
+ ensureCompletedSpeciesAssignments();remapDefaultSpeciesByCategory();
 }
-function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));storageOK=true;$('storageAlert').innerHTML='';scheduleCloudSync();return true}catch(e){storageOK=false;$('storageAlert').innerHTML='<div class="storage-alert">브라우저에 저장하지 못했어요. MY에서 백업을 다운로드해주세요.</div>';return false}}
+
 function now(){return Model.today(state.offset)}
 function selected(){return Model.get(state,state.selected)}
 function get(id){return Model.get(state,id)}
@@ -4411,10 +4584,10 @@ function button(text,action,cls='primary',attrs=''){return '<button type="button
 function attr(id){return 'data-id="'+esc(id)+'"'}
 function toast(message,undo){$('toast').classList.remove('planted');clearTimeout(toastTimer);undoAction=undo||null;$('toast').innerHTML='<span>'+esc(message)+'</span>'+(undo?button('취소','toastUndo',''):'');toastTimer=setTimeout(()=>{$('toast').innerHTML='';undoAction=null},3000)}
 function dismissToast(){$('toast').classList.remove('planted');clearTimeout(toastTimer);$('toast').innerHTML='';undoAction=null}
-function commit(){persist();render()}
+function commit(close=false){if(!persist())return false;if(close)closeModal();render();return true}
 function go(next){if(view==='detail'&&next!=='detail')candidatePreview=null;closeModal();if(next!=='forest')forestEditMode=false;if(view==='calendar')sessionStorageSafe('calendarScroll',String(window.scrollY));if(view==='scrap')sessionStorageSafe('scroll',String(window.scrollY));view=next;picking=false;render();window.scrollTo(0,0);if(next==='scrap')window.scrollTo(0,Number(sessionStorageSafe('scroll'))||0);if(next==='calendar')window.scrollTo(0,Number(sessionStorageSafe('calendarScroll'))||0)}
 function sessionStorageSafe(k,v){try{if(v!==undefined)sessionStorage.setItem('sr3-'+k,v);return sessionStorage.getItem('sr3-'+k)}catch{return null}}
-function openDetail(id,origin=view){candidatePreview=null;detailId=id;detailOrigin=origin==='detail'?detailOrigin:origin;go('detail');const c=get(id);if(c?.type==='book'&&!cleanGenreValue(c.genre)&&c.genreSource!=='user'){enrichBookGenre(c).then(()=>{if(c.genre){ensureCompletedSpeciesAssignments();persist();if(view==='detail'&&detailId===id)render()}}).catch(()=>{})}}
+function openDetail(id,origin=view){candidatePreview=null;detailId=id;detailOrigin=origin==='detail'?detailOrigin:origin;go('detail');const c=get(id);if(c?.type==='book'&&!cleanGenreValue(c.genre)&&c.genreSource!=='user'){enrichBookGenre(c).then(()=>{if(c.genre&&get(c.id)===c){ensureCompletedSpeciesAssignments();persist();if(view==='detail'&&detailId===id)render()}}).catch(()=>{})}}
 function openCandidateDetail(c){
  // 추천(취향) 카드의 미저장 후보를 상세 화면에서 미리보기 위한 진입점. Model.add()를 호출하지 않는다.
  if(!c)return;
@@ -4434,6 +4607,7 @@ function cover(c,small=false){return c.cover?'<img class="cover '+c.type+'" src=
 function row(c,choose=false){return '<button class="content-row" data-action="'+(choose?'choose':'detail')+'" '+attr(c.id)+'>'+cover(c)+'<div class="grow"><span class="badge">'+typeName[c.type]+'</span><div class="title">'+esc(c.title)+'</div><div class="creator">'+esc(c.creator||'제작자 미확인')+'</div><div class="content-row-meta"><span class="record-status '+Model.status(c)+'">'+statusName[Model.status(c)]+'</span>'+(validRating(c.rating)?'<span class="row-rating"><span class="rating-star" aria-hidden="true">★</span> '+c.rating+'</span>':'')+(c.saves.length>1?'<span>스크랩 '+c.saves.length+'회</span>':'')+'</div></div><span class="muted" aria-hidden="true">›</span></button>'}
 function menu(c){return '<details class="more"><summary aria-label="콘텐츠 메뉴">⋯</summary><div class="more-menu">'+button('다른 스크랩으로 바꾸기','pick','')+button('콘텐츠 상세 보기','detail','',attr(c.id))+'</div></details>'}
 function render(){
+ showStorageStatus();
  syncLinkImport();
  syncForestSound();
  syncNotifications();
@@ -4447,6 +4621,10 @@ function render(){
  $('head').hidden=!['detail','calendar','sound','notifications'].includes(view);
  $('head').innerHTML=!$('head').hidden?'<div class="row">'+button(icon('back'),'back','iconbtn','aria-label="뒤로가기"')+'<span class="back-title">'+(['sound','notifications'].includes(view)?'설정':view==='calendar'?'나의 숲 · 월간 기록':'콘텐츠 상세')+'</span></div>':'';
  $('page').innerHTML=({today:renderToday,scrap:renderScrap,forest:renderForest,calendar:renderCalendar,my:renderMy,sound:renderForestSoundSettings,notifications:renderNotificationSettings,detail:renderDetail}[view]||renderToday)();
+ if(view==='my'){
+  let legacy=false;try{legacy=localStorage.getItem(KEY)&&localStorage.getItem(KEY+'.legacy-owner')===dataOwner}catch{}
+  $('page').insertAdjacentHTML('beforeend','<section class="settings-section"><h2>기록 보관함</h2><p class="muted">충돌한 기록은 이 계정의 보관함에 남아요.</p>'+button('충돌 기록 백업','syncArchives','secondary')+(legacy?'<p class="muted">계정 분리 전 기록은 소유자를 확인할 수 없어 자동으로 합치지 않았어요. 이전 기록을 내려받아 필요한 경우 복원할 수 있어요.</p>'+button('계정 분리 전 기록 백업','legacyBackup','secondary'):'')+'</section>');
+ }
  if(view==='forest')setupForest();
  updateForestSoundUI();
  if(!storageOK&& !$('storageAlert').innerHTML)$('storageAlert').innerHTML='<div class="storage-alert">이 환경에서는 자동 저장을 사용할 수 없어요.</div>';
@@ -4578,7 +4756,7 @@ function addTreeUnlockTestData(){
   }
  });
  ensureCompletedSpeciesAssignments();
- persist();render();toast('각 나무에 완료 경험 3개씩 넣었어요. 일반 나무 20종이 모두 해금됩니다.');
+ if(!persist())return;render();toast('각 나무에 완료 경험 3개씩 넣었어요. 일반 나무 20종이 모두 해금됩니다.');
 }
 
 let profileEdit=null;
@@ -5541,7 +5719,7 @@ function undoSessionScrap(candidate,index,type){
  if(!item||!eventId){toast('기존 스크랩은 상세 화면에서 관리할 수 있어요.');return}
  item.saves=item.saves.filter(event=>event.id!==eventId);
  if(!item.saves.length&&!item.completed&&!item.logs.length&&!item.rating&&!item.review)Model.remove(state,item.id);
- scrapSessionAdds.delete(item.id);updateScrapSessionCount(-1);persist();
+ if(!persist())return;scrapSessionAdds.delete(item.id);updateScrapSessionCount(-1);
  const el=document.querySelector('[data-action="removeRemote'+type+'"][data-index="'+index+'"]');
  if(el)el.outerHTML=remoteScrapButton(candidate,index,type);
 }
@@ -5563,24 +5741,17 @@ function markScrapped(action,index){
 function removeRemoteBook(index){const c=remoteBookResults[index];undoSessionScrap(c,index,'Book');if(c)scrapAddedBookKeys.delete(bookResultKey(c));}
 
 function saved(c,eventId,options={}){
- state.onboarded=true;dismissToast();
- if(options.keepOpen&&scrapFlowActive){
-  scrapSessionAdds.set(c.id,eventId);persist();updateScrapSessionCount(1);
-  if(options.action!==undefined&&options.index!==undefined)markScrapped(options.action,options.index);
-  return
- }
- if(modal==='info'&&scrapFlowActive&&!options.closeAfter){
-  persist();updateScrapSessionCount(1);openScrapComposer(scrapComposerState.type,null,false);
-  return
- }
- if(options.keepOpen){persist();render();if(options.action!==undefined&&options.index!==undefined)markScrapped(options.action,options.index);return}
- closeModal();commit()
+ state.onboarded=true;if(!persist())return false;dismissToast();
+ if(options.keepOpen&&scrapFlowActive){scrapSessionAdds.set(c.id,eventId);updateScrapSessionCount(1);if(options.action!==undefined&&options.index!==undefined)markScrapped(options.action,options.index);return true}
+ if(modal==='info'&&scrapFlowActive&&!options.closeAfter){updateScrapSessionCount(1);openScrapComposer(scrapComposerState.type,null,false);return true}
+ if(options.keepOpen){render();if(options.action!==undefined&&options.index!==undefined)markScrapped(options.action,options.index);return true}
+ closeModal();render();return true;
 }
 function addRemoteBook(index){
  const d=remoteBookResults[index];if(!d||findSavedWork(d))return;
  const id=Model.uid(),c=Model.add(state,d,id);
+ if(!saved(c,id,{keepOpen:true,action:'addRemoteBook',index}))return;
  scrapAddedBookKeys.add(bookResultKey(d));
- saved(c,id,{keepOpen:true,action:'addRemoteBook',index});
  // 장르·인기도 보강은 백그라운드로 미룬다. 예전엔 이 두 네트워크 요청이
  // 끝나야 스크랩이 저장돼서(버튼엔 아무 표시도 없이) 응답이 느릴 때
  // 사용자가 다시 검색창/탭을 건드리게 됐고, 그게 searchResults()를
@@ -5609,13 +5780,13 @@ function startExperience(id){
  // 읽기/듣기/보기 기록과 완료 처리는 Today 액션에서만 발생한다.
  state.selected=id;
  view='today';
- commit();
+ if(!commit())return;
  toast('오늘의 경험으로 이동했어요.');
 }
 function record(id){
  const c=get(id);if(!c||c.completed)return;
  if(c.type==='movie'){complete(id);return}
- if(Model.log(state,id,now())){state.selected=id;commit();document.querySelector('.growth')?.classList.add('is-growing')}else toast('오늘 기록이 이미 있어요.');
+ if(Model.log(state,id,now())){state.selected=id;if(!commit())return;document.querySelector('.growth')?.classList.add('is-growing')}else toast('오늘 기록이 이미 있어요.');
 }
 function complete(id){const c=get(id);if(!c||c.completed)return;ratingPrompt(c,true)}
 function editLog(id,logId){
@@ -5874,7 +6045,7 @@ function setupForest(){
    const v=layer?.querySelector('[data-visitor]');
    if(v&&!collectionState().visitorsSeen.includes(v.dataset.visitor)){
     const b=v.getBoundingClientRect(),r=vp.getBoundingClientRect();
-    if(Number(getComputedStyle(v.firstElementChild).opacity)>.5&&b.top>=Math.max(0,r.top)&&b.bottom<=Math.min(innerHeight,r.bottom)&&b.left>=r.left&&b.right<=r.right){collectionState().visitorsSeen.push(v.dataset.visitor);persist();announceNewVisitor(v.dataset.visitor)}
+    if(Number(getComputedStyle(v.firstElementChild).opacity)>.5&&b.top>=Math.max(0,r.top)&&b.bottom<=Math.min(innerHeight,r.bottom)&&b.left>=r.left&&b.right<=r.right){collectionState().visitorsSeen.push(v.dataset.visitor);if(persist())announceNewVisitor(v.dataset.visitor)}
    }
   }
   window.__songrimVisitorTimer=setTimeout(visitTick,600);
@@ -6483,19 +6654,19 @@ async function nativeShare(){
  else toast('이 브라우저에서는 이미지 저장 후 공유해주세요.');
 }
 function exportBackup(){download(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),'songrim-backup-'+now()+'.json');toast('백업 파일을 다운로드했어요.')}
-function replaceData(s){state=s;ensureCompletedSpeciesAssignments();year=now().slice(0,4);month=now().slice(0,7);zoomState={scale:1,x:0,y:0};forestViewportYear=null;closeModal();view='today';persist();render();window.scrollTo(0,0)}
+function replaceData(s){state=s;ensureCompletedSpeciesAssignments();if(!persist())return;year=now().slice(0,4);month=now().slice(0,7);zoomState={scale:1,x:0,y:0};forestViewportYear=null;closeModal();view='today';render();window.scrollTo(0,0)}
 function purgeOldPrototypeTestData(){
  const before=state.items.length;
  state.items=state.items.filter(c=>!/(기존 독서 테스트 데이터|체험 데이터)/.test(String(c.source||'')));
  if(state.selected&&!state.items.some(c=>c.id===state.selected))state.selected=state.items[0]?.id||null;
  if(state.items.length!==before)persist();
 }
-purgeOldPrototypeTestData();
+// Automatic deletion of records based on source labels was retired.
 setTimeout(()=>repairMissingBookGenres(36),1200);
 async function resetAll(){
  photoFiles=[];candidates=[];ocrGeneration++;undoAction=null;clearTimeout(toastTimer);$('toast').innerHTML='';
  state=Model.empty();state.profile.name=authSession.name||'나';state.onboarded=authSession.finished===true;
- try{localStorage.setItem(KEY,JSON.stringify(state))}catch{}
+ if(!persist())return;
  await cloudUpsertState();
  view='today';closeModal();render();toast('모든 스크랩과 기록을 삭제했어요.');
 }
@@ -6545,7 +6716,7 @@ document.addEventListener('click',async e=>{
  if(a==='saveCandidates'){
   if(b.disabled)return;b.disabled=true;
   const batch=Model.uid(),chosen=candidates.filter(c=>c.selected),returnScroll=window.scrollY;
-  chosen.forEach((c,i)=>Model.add(state,c,batch+'-'+i));state.onboarded=true;persist();
+  chosen.forEach((c,i)=>Model.add(state,c,batch+'-'+i));state.onboarded=true;if(!persist()){b.disabled=false;return;}
   // Screenshot import is a single batch task. Once the selected works are saved,
   // close the whole add flow instead of reopening the scrap composer.
   if(scrapFlowActive)scrapFlowActive=false;
@@ -6563,57 +6734,57 @@ document.addEventListener('click',async e=>{
  if(a==='removeRemoteAlbum'){removeRemoteAlbum(Number(b.dataset.index));return}
  if(a==='addRemoteMovie'){addRemoteMovie(Number(b.dataset.index));return}
  if(a==='removeRemoteMovie'){removeRemoteMovie(Number(b.dataset.index));return}
- if(a==='choose'){if(c&&!c.completed){state.selected=c.id;state.onboarded=true;go('today');persist()}return}
+ if(a==='choose'){if(c&&!c.completed){state.selected=c.id;state.onboarded=true;if(!persist())return;go('today')}return}
  if(a==='pick'){pick();return}
  if(a==='cancelPick'){go('today');return}
  if(a==='nextCandidate'){
   const pool=state.items.filter(item=>!item.completed).sort((a,b)=>b.saves.length-a.saves.length||(b.saves.at(-1)?.at||0)-(a.saves.at(-1)?.at||0));
   if(pool.length<2)return;
   const index=pool.findIndex(item=>item.id===b.dataset.id);
-  state.selected=pool[(index+1)%pool.length].id;commit();window.scrollTo(0,0);return
+  state.selected=pool[(index+1)%pool.length].id;if(!commit())return;window.scrollTo(0,0);return
  }
  if(a==='detail'){openDetail(id);return}
  if(a==='back'){if(candidatePreview){closeCandidateDetail();return}go(['sound','notifications'].includes(view)?'my':view==='calendar'?'forest':detailOrigin);return}
  if(a==='toToday'){go('today');return}
  if(a==='toScrap'){go('scrap');return}
  if(a==='calendar'){go('calendar');return}
- if(a==='filterType'){state.filters.type=b.dataset.type;commit();return}
- if(a==='filterStatus'){state.filters.status=b.dataset.status;commit();return}
- if(a==='resetFilters'){state.filters={q:'',status:'all',type:'all',sort:'recent'};commit();return}
+ if(a==='filterType'){state.filters.type=b.dataset.type;if(!commit())return;return}
+ if(a==='filterStatus'){state.filters.status=b.dataset.status;if(!commit())return;return}
+ if(a==='resetFilters'){state.filters={q:'',status:'all',type:'all',sort:'recent'};if(!commit())return;return}
  if(a==='inlinePicker'){toggleInlinePicker(b);return}
- if(a==='inlineSort'){if(['recent','many','old','rating'].includes(b.dataset.value)){state.filters.sort=b.dataset.value;commit();document.querySelector('[data-picker=sort]')?.focus()}return}
+ if(a==='inlineSort'){if(['recent','many','old','rating'].includes(b.dataset.value)){state.filters.sort=b.dataset.value;if(!commit())return;document.querySelector('[data-picker=sort]')?.focus()}return}
  if(a==='startExperience'){startExperience(id);return}
  if(a==='record'){record(id);return}
  if(a==='complete'){complete(id);return}
- if(a==='undoComplete'){Model.undoComplete(state,id);closeModal();commit();toast('완료를 취소했어요. 이전 경험 기록은 남아 있어요.');return}
- if(a==='undoLog'){const removed=c.logs.find(l=>l.date===now());c.logs=c.logs.filter(l=>l.date!==now());commit();toast('오늘 기록을 취소했어요.',()=>{if(removed&&!c.logs.some(l=>l.date===removed.date)){c.logs.push(removed);commit()}});return}
+ if(a==='undoComplete'){Model.undoComplete(state,id);if(!commit(true))return;toast('완료를 취소했어요. 이전 경험 기록은 남아 있어요.');return}
+ if(a==='undoLog'){const removed=c.logs.find(l=>l.date===now());c.logs=c.logs.filter(l=>l.date!==now());if(!commit())return;toast('오늘 기록을 취소했어요.',()=>{if(removed&&!c.logs.some(l=>l.date===removed.date)){c.logs.push(removed);commit()}});return}
  if(a==='editMemo'){editMemo(id,b.dataset.log);return}
  if(a==='editLog'){editLog(id,b.dataset.log);return}
- if(a==='deleteLog'){const logId=b.dataset.log;confirmBox('이 기록을 삭제할까요?','선택한 날의 경험 기록만 삭제합니다.',()=>{c.logs=c.logs.filter(l=>l.id!==logId);commit();toast('기록을 삭제했어요.')},'기록 삭제');return}
+ if(a==='deleteLog'){const logId=b.dataset.log;confirmBox('이 기록을 삭제할까요?','선택한 날의 경험 기록만 삭제합니다.',()=>{c.logs=c.logs.filter(l=>l.id!==logId);if(!commit())return;toast('기록을 삭제했어요.')},'기록 삭제');return}
  if(a==='editInfo'){infoForm(c);return}
  if(a==='rescrap'){const event=Model.uid();Model.add(state,c,event);saved(c,event);return}
- if(a==='delete'){confirmBox('스크랩을 삭제할까요?','이 콘텐츠의 스크랩·경험 기록·완료·숲의 나무가 함께 삭제됩니다.',()=>{Model.remove(state,id);go('scrap');persist();toast('스크랩을 삭제했어요.')},'삭제');return}
+ if(a==='delete'){confirmBox('스크랩을 삭제할까요?','이 콘텐츠의 스크랩·경험 기록·완료·숲의 나무가 함께 삭제됩니다.',()=>{Model.remove(state,id);if(!persist())return;go('scrap');toast('스크랩을 삭제했어요.')},'삭제');return}
  if(a==='rating'){ratingPrompt(c,view==='today'&&state.selected===c.id&&!!c.completed);return}
  if(a==='star'){$('ratingValue').value=b.dataset.value;$('ratingText').textContent=b.dataset.value+'점';document.querySelectorAll('.rating button').forEach(el=>el.classList.toggle('on',Number(el.dataset.value)<=Number(b.dataset.value)));return}
- if(a==='clearRating'){c.rating=null;closeModal();commit();return}
+ if(a==='clearRating'){c.rating=null;if(!commit(true))return;return}
  if(a==='editCompletion'){editCompletion(id);return}
  if(a==='external'){
   const query=c.type==='album'&&c.tracks.length?c.creator+' '+c.tracks[c.trackIndex%c.tracks.length]:c.title+' '+c.creator;
   const url=c.type==='book'?'https://search.kyobobook.co.kr/search?keyword='+encodeURIComponent(query):c.type==='album'?(c.catalogUrl||('https://www.youtube.com/results?search_query='+encodeURIComponent(query))):(c.catalogUrl||('https://search.naver.com/search.naver?query='+encodeURIComponent(query+' 영화')));
   window.open(url,'_blank','noopener,noreferrer');return
  }
- if(a==='track'){c.trackIndex=Number(b.dataset.index);commit();return}
+ if(a==='track'){c.trackIndex=Number(b.dataset.index);if(!commit())return;return}
  if(a==='year'){year=b.dataset.year;zoomState={scale:1,x:0,y:0};forestViewportYear=null;render();document.querySelector('[data-picker=year]')?.focus();return}
  if(a==='collection'){openCollection('trees');return}
  if(a==='collectionTab'){openCollection(b.dataset.tab==='visitors'?'visitors':'trees');return}
- if(a==='treeToggle'){const species=TREE_SPECIES.find(t=>t.id===b.dataset.species&&t.category===b.dataset.category);if(!species||!speciesUnlocked(species))return;const st=collectionState(),disabled=new Set(st.disabledSpeciesIds),isActive=!disabled.has(species.id);if(isActive){if(activeSpecies(species.category).length<=1){toast('이 장르에는 최소 한 종류의 나무가 필요해요.');return}disabled.add(species.id)}else disabled.delete(species.id);st.disabledSpeciesIds=[...disabled];persist();openCollection('trees');return}
+ if(a==='treeToggle'){const species=TREE_SPECIES.find(t=>t.id===b.dataset.species&&t.category===b.dataset.category);if(!species||!speciesUnlocked(species))return;const st=collectionState(),disabled=new Set(st.disabledSpeciesIds),isActive=!disabled.has(species.id);if(isActive){if(activeSpecies(species.category).length<=1){toast('이 장르에는 최소 한 종류의 나무가 필요해요.');return}disabled.add(species.id)}else disabled.delete(species.id);st.disabledSpeciesIds=[...disabled];if(!persist())return;openCollection('trees');return}
  if(a==='forestEdit'){forestEditMode=!forestEditMode;render();return}
- if(a==='contentTreePick'){const item=get(b.dataset.id),species=TREE_SPECIES.find(t=>t.id===b.dataset.species);if(item?.completed&&species&&species.category===category(item).id&&speciesUnlocked(species)){item.speciesId=species.id;item.hiddenTree=null;closeModal();commit();toast(species.name+'로 바꿨어요.')}return}
- if(a==='contentHiddenPick'){const item=get(b.dataset.id),kind=b.dataset.hidden;if(!item?.completed||!['A','B'].includes(kind)||!allRegularTreesUnlocked())return;const period=hiddenTreePeriod(item),limit=hiddenTreeLimit(period),used=hiddenTreeUsed(period,item.id);if(!item.hiddenTree&&used>=limit){toast('이 숲에서 사용할 수 있는 히든 나무 수를 모두 사용 중이에요.');return}item.hiddenTree=kind;closeModal();commit();toast(hiddenTreeName(kind,currentCollectionTheme())+'로 바꿨어요.');return}
- if(a==='contentHiddenClear'){const item=get(b.dataset.id);if(item?.completed){item.hiddenTree=null;closeModal();commit();toast('일반 나무로 되돌렸어요. 히든 슬롯을 다시 사용할 수 있어요.')}return}
- if(a==='contentTreeAuto'){const item=get(b.dataset.id);if(item?.completed){item.hiddenTree=null;assignAutoSpecies(item,true);const name=contentSpecies(item)?.name||'나무';closeModal();commit();toast('자동 배치로 '+name+'를 선택했어요.')}return}
+ if(a==='contentTreePick'){const item=get(b.dataset.id),species=TREE_SPECIES.find(t=>t.id===b.dataset.species);if(item?.completed&&species&&species.category===category(item).id&&speciesUnlocked(species)){item.speciesId=species.id;item.hiddenTree=null;if(!commit(true))return;toast(species.name+'로 바꿨어요.')}return}
+ if(a==='contentHiddenPick'){const item=get(b.dataset.id),kind=b.dataset.hidden;if(!item?.completed||!['A','B'].includes(kind)||!allRegularTreesUnlocked())return;const period=hiddenTreePeriod(item),limit=hiddenTreeLimit(period),used=hiddenTreeUsed(period,item.id);if(!item.hiddenTree&&used>=limit){toast('이 숲에서 사용할 수 있는 히든 나무 수를 모두 사용 중이에요.');return}item.hiddenTree=kind;if(!commit(true))return;toast(hiddenTreeName(kind,currentCollectionTheme())+'로 바꿨어요.');return}
+ if(a==='contentHiddenClear'){const item=get(b.dataset.id);if(item?.completed){item.hiddenTree=null;if(!commit(true))return;toast('일반 나무로 되돌렸어요. 히든 슬롯을 다시 사용할 수 있어요.')}return}
+ if(a==='contentTreeAuto'){const item=get(b.dataset.id);if(item?.completed){item.hiddenTree=null;assignAutoSpecies(item,true);const name=contentSpecies(item)?.name||'나무';if(!commit(true))return;toast('자동 배치로 '+name+'를 선택했어요.')}return}
  if(a==='themes'){themes();return}
- if(a==='theme'){state.themes[year]=b.dataset.theme==='snow'?'snow':'basic';closeModal();commit();return}
+ if(a==='theme'){state.themes[year]=b.dataset.theme==='snow'?'snow':'basic';if(!commit(true))return;return}
  if(a==='prevMonth'){changeMonth(-1);return}
  if(a==='nextMonth'){changeMonth(1);return}
  if(a==='months'){showModal('월 선택','<label for="monthValue">연월</label><input id="monthValue" type="month" max="'+now().slice(0,7)+'" value="'+month+'"><p class="summary">선택하면 바로 반영됩니다.</p>','months');return}
@@ -6640,8 +6811,8 @@ document.addEventListener('click',async e=>{
  if(a==='backup'){exportBackup();return}
  if(a==='restore'){$('restoreFile').click();return}
  if(a==='treeUnlockTest'){addTreeUnlockTestData();return}
- if(a==='nextDay'){state.offset++;persist();render();toast('체험 날짜를 '+now()+'로 바꿨어요.');return}
- if(a==='realDay'){state.offset=0;persist();render();toast('실제 날짜로 돌아왔어요.');return}
+ if(a==='nextDay'){state.offset++;if(!persist())return;render();toast('체험 날짜를 '+now()+'로 바꿨어요.');return}
+ if(a==='realDay'){state.offset=0;if(!persist())return;render();toast('실제 날짜로 돌아왔어요.');return}
  if(a==='clear'){confirmBox('모든 데이터를 삭제할까요?','이 브라우저의 송림 스크랩·경험·완료·테마·프로필이 모두 초기화됩니다.',resetAll,'전체 삭제');return}
 
 });
@@ -6785,23 +6956,23 @@ document.addEventListener('submit',async e=>{
    if(old){
     const duplicate=state.items.find(c=>c.id!==old.id&&c.type===data.type&&Model.norm(c.title)===Model.norm(data.title)&&Model.norm(c.creator)===Model.norm(data.creator));
     if(duplicate){$('formError').textContent='같은 작품이 이미 있어요. 중복된 정보로 바꾸지 않았습니다.';submit.disabled=false;return}
-    Object.assign(old,data);if(Number.isFinite(data.scrapCount)){while(old.saves.length<data.scrapCount)old.saves.push({id:Model.uid(),at:Date.now(),source:'직접 수정'});if(old.saves.length>data.scrapCount)old.saves=old.saves.slice(0,data.scrapCount)}delete old.scrapCount;closeModal();commit();toast('기본 정보를 저장했어요.');
+    Object.assign(old,data);if(Number.isFinite(data.scrapCount)){while(old.saves.length<data.scrapCount)old.saves.push({id:Model.uid(),at:Date.now(),source:'직접 수정'});if(old.saves.length>data.scrapCount)old.saves=old.saves.slice(0,data.scrapCount)}delete old.scrapCount;if(!commit(true))return;toast('기본 정보를 저장했어요.');
    }else{const event=Model.uid(),c=Model.add(state,data,event);saved(c,event)}
   }catch(err){if($('formError'))$('formError').textContent=err.message;submit.disabled=false}
  }
  
- if(f.id==='filterForm'){state.filters.sort=$('filterSort').value;closeModal();commit()}
+ if(f.id==='filterForm'){state.filters.sort=$('filterSort').value;if(!commit(true))return}
  if(f.id==='profileForm'){saveProfile(f);return}
- if(f.id==='tasteForm'){state.profile.tastes=[...f.querySelectorAll('input:checked')].map(x=>x.value);closeModal();commit();toast('취향을 저장했어요.')}
- if(f.id==='memoForm'){const l=get(f.dataset.id)?.logs.find(l=>l.id===f.dataset.log);if(l){l.memo=$('todayMemo').value.trim();closeModal();commit();toast('메모를 저장했어요.')}return}
+ if(f.id==='tasteForm'){state.profile.tastes=[...f.querySelectorAll('input:checked')].map(x=>x.value);if(!commit(true))return;toast('취향을 저장했어요.')}
+ if(f.id==='memoForm'){const l=get(f.dataset.id)?.logs.find(l=>l.id===f.dataset.log);if(l){l.memo=$('todayMemo').value.trim();if(!commit(true))return;toast('메모를 저장했어요.')}return}
  if(f.id==='logForm'){
   const c=get(f.dataset.id),l=c.logs.find(l=>l.id===f.dataset.log),date=$('logDate').value,page=$('logPage')?.value||'',memo=$('logMemo').value;
   if(!Model.validDate(date)||date>now()){$('formError').textContent='오늘 또는 과거 날짜를 선택해주세요.';return}
   const duplicate=c.logs.find(x=>x.date===date&&x.id!==l.id);
-  const apply=()=>{if(duplicate){duplicate.page=page||duplicate.page;duplicate.memo=[duplicate.memo,memo].filter(Boolean).filter((x,i,a)=>a.indexOf(x)===i).join('\n');c.logs=c.logs.filter(x=>x.id!==l.id)}else Object.assign(l,{date,page,memo});closeModal();commit();toast('기록을 수정했어요.')};
+  const apply=()=>{if(duplicate){duplicate.page=page||duplicate.page;duplicate.memo=[duplicate.memo,memo].filter(Boolean).filter((x,i,a)=>a.indexOf(x)===i).join('\n');c.logs=c.logs.filter(x=>x.id!==l.id)}else Object.assign(l,{date,page,memo});if(!commit(true))return;toast('기록을 수정했어요.')};
   if(duplicate)confirmBox('같은 날짜에 기록이 있어요','입력한 메모를 기존 기록과 합칩니다. 페이지를 입력했다면 해당 값으로 바꿉니다.',apply,'기록 합치기');else apply();
  }
- if(f.id==='completionForm'){const date=$('completionDate').value;if(!Model.validDate(date)||date>now()){$('formError').textContent='오늘 또는 과거 날짜를 선택해주세요.';return}const item=get(f.dataset.id);item.completed=date;item.completedAt=item.completedAt||Date.now();assignAutoSpecies(item);closeModal();commit();toast('완료일과 숲·달력을 갱신했어요.')}
+ if(f.id==='completionForm'){const date=$('completionDate').value;if(!Model.validDate(date)||date>now()){$('formError').textContent='오늘 또는 과거 날짜를 선택해주세요.';return}const item=get(f.dataset.id);item.completed=date;item.completedAt=item.completedAt||Date.now();assignAutoSpecies(item);if(!commit(true))return;toast('완료일과 숲·달력을 갱신했어요.')}
  if(f.id==='ratingForm'){
   const c=get(f.dataset.id);if(!c)return;
   const returnView=view,returnScroll=window.scrollY;
@@ -6812,7 +6983,7 @@ document.addEventListener('submit',async e=>{
    const next=state.items.filter(item=>!item.completed).sort((a,b)=>b.saves.length-a.saves.length||(b.saves.at(-1)?.at||0)-(a.saves.at(-1)?.at||0))[0];
    state.selected=next?.id||null;picking=false;sessionStorageSafe('candidate','0');
   }
-  closeModal();commit();
+  if(!commit(true))return;
   if(advance){showModal('나무가 심어졌어요','<div class="center completion-tree">'+growth(3,c)+'<p>'+esc(c.title)+'</p></div>'+button('내 숲 보기','completionForest','primary',attr(c.id))+button('다음 선택','completionNext','textbtn'),'completion-celebration');return}
   toast(advance?(returnView==='today'&&state.selected?'나무가 심어졌어요. 다음 콘텐츠를 준비했어요.':state.selected?'나무가 심어졌어요.':'나무가 심어졌어요. 모아둔 콘텐츠를 모두 경험했어요.'):'평점과 감상을 저장했어요.');
  }
@@ -6832,7 +7003,9 @@ let lastKnownDate=now();
 function refreshDateIfNeeded(){const d=now();if(d!==lastKnownDate&&refreshWhenIdle())lastKnownDate=d}
 document.addEventListener('visibilitychange',()=>{$('forestViewport')?.classList.toggle('paused',document.hidden);if(!document.hidden)refreshDateIfNeeded()});
 setInterval(refreshDateIfNeeded,60000);
-window.addEventListener('storage',e=>{if(e.key===KEY&&e.newValue){try{state=Model.validate(JSON.parse(e.newValue));ensureCompletedSpeciesAssignments();render();toast('다른 창의 기록을 반영했어요.')}catch{}}});
+window.addEventListener('storage',e=>void handleCloudStorage(e));
+window.addEventListener('online',()=>{if(cloudSession?.access_token)void cloudUpsertState()});
+window.addEventListener('beforeunload',e=>{if(unsavedState){e.preventDefault();e.returnValue=''}});
 window.addEventListener('error',e=>{console.error('[Songrim runtime]',e.error||e.message);});
 load();
 window.Songrim={get state(){return state},get view(){return view},Model,go,render,replaceData,complete,record,makeShare};
@@ -6925,8 +7098,9 @@ function renderEntry(){
  if(authRoute==='login')h='<div class="entry-hero"><span class="section-eyebrow">WELCOME BACK</span><h1>다시 만나서<br>반가워요.</h1><p>당신의 숲이 기다리고 있어요.</p></div><form id="flowLoginForm">'+loginFields()+'<div id="flowError" class="entry-error" role="alert"></div><button class="primary ink-button" type="submit">로그인</button></form>'+button('비밀번호를 잊으셨나요?','flowRecover','textbtn')+'<p class="entry-login-link">아직 계정이 없나요? '+button('회원가입','flowSignup','textbtn')+'</p>'+entryNote();
  if(authRoute==='social')h='<div class="entry-hero"><h1>함께할 준비 중이에요</h1><p>지금은 이메일로 송림을 시작할 수 있어요.</p></div>'+button('이메일로 가입하기','flowEmailSignup');
  if(authRoute==='signup')h=entrySteps(1)+'<div class="entry-hero"><h1>이메일로<br>가입하기.</h1><p>나만의 취향을 차곡차곡 쌓아보세요.</p></div><form id="flowSignupForm">'+loginFields().replace('autocomplete="current-password"','autocomplete="new-password"')+'<label for="flowPasswordConfirm">비밀번호 확인</label><input id="flowPasswordConfirm" required type="password" minlength="6" autocomplete="new-password" placeholder="비밀번호를 한 번 더 입력해주세요"><label class="checkrow"><input id="flowTerms" type="checkbox" required><span>이용약관 및 개인정보 안내에 동의합니다</span></label>'+button('이용 안내 보기','terms','terms-link')+'<div id="flowError" class="entry-error" role="alert"></div><button class="primary ink-button" type="submit">가입하기</button></form>'+entryNote();
- if(authRoute==='recover')h='<div class="entry-hero"><h1>비밀번호를<br>잊으셨나요?</h1><p>가입한 이메일로 재설정 안내를 보내드려요.</p></div><form id="flowRecoverForm"><label for="recoveryEmail">이메일</label><input id="recoveryEmail" type="email" required autocomplete="email" placeholder="you@example.com"><div id="flowError" class="entry-error" role="alert"></div><button class="primary" type="submit">재설정 안내 받기</button></form>'+entryNote();
- if(authRoute==='recoverSent')h='<div class="entry-hero"><h1>메일을<br>확인해주세요.</h1><p>비밀번호 재설정 안내를 보냈어요.</p></div>'+button('로그인으로 돌아가기','flowEmailLogin');
+ if(authRoute==='recover')h='<div class="entry-hero"><h1>비밀번호를<br>잊으셨나요?</h1><p>가입한 이메일로 재설정 안내를 보내드려요.</p><p class="entry-error">'+esc(passwordRecoveryError)+'</p></div><form id="flowRecoverForm"><label for="recoveryEmail">이메일</label><input id="recoveryEmail" type="email" required autocomplete="email" placeholder="you@example.com"><div id="flowError" class="entry-error" role="alert"></div><button class="primary" type="submit">재설정 안내 받기</button></form>'+entryNote();
+ if(authRoute==='recoverSent')h='<div class="entry-hero"><h1>메일을<br>확인해주세요.</h1><p>메일에서 재설정 링크를 확인해주세요. 로컬 파일에서는 링크를 열기 전에 주소를 복사해 아래에 붙여넣어주세요.</p></div><form id="flowRecoveryLinkForm"><label for="recoveryLink">재설정 메일의 링크</label><input id="recoveryLink" type="password" autocomplete="off" required><div id="flowError" class="entry-error" role="alert"></div><button class="primary" type="submit">재설정 계속하기</button></form>'+button('새 메일 받기','flowRecover','textbtn')+button('로그인으로 돌아가기','flowEmailLogin','textbtn');
+ if(authRoute==='resetPassword')h='<div class="entry-hero"><h1>새 비밀번호를<br>정해주세요.</h1><p>'+esc(passwordRecoveryEmail)+'</p></div><form id="flowResetPasswordForm"><label for="newPassword">새 비밀번호</label><input id="newPassword" type="password" required minlength="6" autocomplete="new-password"><label for="newPasswordConfirm">새 비밀번호 확인</label><input id="newPasswordConfirm" type="password" required minlength="6" autocomplete="new-password"><div id="flowError" class="entry-error" role="alert"></div><button class="primary ink-button" type="submit">비밀번호 변경</button></form>'+button('새 메일 받기','flowRecover','textbtn');
  if(authRoute==='profile')h=entrySteps(2)+'<div class="entry-hero"><h1>숲의 주인은<br>누구인가요?</h1><p>송림에서 사용할 이름을 알려주세요.</p></div><div class="profile-onboard-art">'+icon('my')+'</div><form id="flowProfileForm"><label for="flowProfileName">이름 또는 별명</label><input id="flowProfileName" maxlength="30" value="'+esc(authSession.name||(state.profile.name==='나'?'':state.profile.name))+'" placeholder="어떻게 불러드릴까요?"><p class="creator">이름은 나중에도 바꿀 수 있어요.</p><button class="primary ink-button" type="submit">다음</button></form>';
  if(authRoute==='start')h=entrySteps(3)+'<div class="entry-hero"><h1>어떤 작품부터<br>담아볼까요?</h1><p>작은 관심 하나로 시작하면 돼요.</p></div><div class="start-options">'+button(icon('plus')+'<span class="option-arrow" aria-hidden="true">↗</span><strong>직접 스크랩하기</strong><small>찾고, 공유하고, 사진으로 가져와요.</small>','flowFirstScrap','start-option')+button(icon('book')+'<span class="option-arrow" aria-hidden="true">↗</span><strong>추천으로 시작하기</strong><small>작품 5개를 살펴보며 취향을 찾아요.</small>','flowOptionalTaste','start-option')+'</div>';
  if(authRoute==='tasteType'){const adding=tasteMode==='add';h=(adding?'':entrySteps(3))+'<div class="entry-hero"><h1>지금 마음이 가는<br>분야는 뭔가요?</h1><p>선택한 분야의 작품을 보여드릴게요.</p></div><div class="taste-type-grid">'+[['book','책','새로운 페이지를 넘기는 시간'],['album','음악','하나의 앨범에 머무는 시간'],['movie','영화','또 다른 세계를 만나는 시간']].map(([type,label,desc])=>button(icon(type)+'<span class="grow">'+label+'<small>'+desc+'</small></span><span aria-hidden="true">↗</span>','chooseTasteType','taste-type-option','data-type="'+type+'"')).join('')+'</div>';}
@@ -7799,9 +7973,9 @@ function renderTastePage(){
  return (tasteNotice?'<p class="note" role="status">'+esc(tasteNotice)+'</p>':'')+heading+'<div class="onboard-card"><div class="taste-cover-stage">'+cover(c)+'</div><small>'+typeName[c.type]+'</small><h2 title="'+esc(c.title)+'">'+esc(c.title)+'</h2><p class="creator" title="'+esc(c.creator)+'">'+esc(c.creator)+'</p>'+button('상세보기','tasteDetail','textbtn taste-detail-link')+'</div><div class="taste-actions">'+button('보고 싶어요','flowInterested')+button('이미 경험했어요','flowExperienced','secondary')+button('넘기기','flowSkip','textbtn')+'</div>'
 }
 
-function response(type){const c=window.tasteCandidate;state.profile.responses??={};state.profile.responses[c.type+':'+c.title]=type;persist()}
+function response(type){const c=window.tasteCandidate;state.profile.responses??={};state.profile.responses[c.type+':'+c.title]=type;return persist()}
 function nextTaste(){if(!tastePool[tasteIndex])return;tasteIndex++;tasteReviewed++;if(tasteMode==='initial'&&tasteReviewed>=INITIAL_TASTE_TARGET){flowTo('ready');return}flowTo('taste');if(authRoute==='taste'&&tastePool.length-tasteIndex<=8)loadTasteCandidates()}
-function finishEntry(){authSession.finished=true;state.onboarded=true;saveSession();persist();view='today';flowTo('app')}
+function finishEntry(){state.onboarded=true;if(!persist())return false;authSession.finished=true;saveSession();view='today';flowTo('app');return true}
 document.addEventListener('click',async e=>{
  const b=e.target.closest('[data-action]');if(!b||b.disabled)return;const a=b.dataset.action;
  if(['flowInterested','flowExperienced','flowSkip','tasteDetail'].includes(a)&&(authRoute!=='taste'||!window.tasteCandidate))return;
@@ -7815,23 +7989,45 @@ document.addEventListener('click',async e=>{
  }
  if(a==='flowOptionalTaste'){tasteMode='initial';tastePreferredType='';flowTo('tasteType');}
  if(a==='chooseTasteType'){const chosen=b.dataset.type;if(['book','album','movie'].includes(chosen))startTaste(tasteMode==='add'?'add':'initial',chosen);}
- if(a==='flowFirstScrap'){finishEntry();addMenu()}
+ if(a==='flowFirstScrap'){if(finishEntry())addMenu()}
  if(a==='flowWelcome')flowTo('welcome');
  if(a==='flowBack')flowTo(authRoute==='start'?'profile':authRoute==='recover'?'login':authRoute==='signup'?'signupOptions':'welcome');
- if(a==='flowEmailLogin')flowTo('login');
+ if(a==='flowEmailLogin'){passwordRecoveryToken='';flowTo('login');}
+ if(a==='retryCloudSync'){void cloudUpsertState();return}
+ if(a==='backupUnsaved'){const snapshot=JSON.parse(JSON.stringify(unsavedState||state));snapshot._unsavedForm=[...document.querySelectorAll('#overlay input:not([type=password]):not([type=file]),#overlay textarea,#overlay select')].map(el=>({id:el.id,value:el.value,checked:el.checked}));downloadStateSnapshot(snapshot,'unsaved');return}
+ if(a==='reloadAccountData'){confirmBox('최신 기록을 불러올까요?','작성 중인 내용을 백업한 뒤 진행해주세요.',()=>{activateDataOwner(dataOwner);closeModal();render();showStorageStatus()},'불러오기');return}
+ if(a==='resolveCloudConflict'){showCloudConflict();return}
+ if(a==='backupRemoteConflict'&&dataEnvelope?.conflict){downloadStateSnapshot(dataEnvelope.conflict.state,'cloud-conflict');return}
+ if(a==='useRemoteConflict'||a==='useLocalConflict'){void resolveCloudConflict(a==='useLocalConflict');return}
+ if(a==='reviewLegacy'){
+  if(!legacyReviewPending())return;try{const previous=Model.validate(JSON.parse(localStorage.getItem(KEY)));showModal('계정 분리 전의 기록','<p>현재 '+state.items.length+'개 · 이전 '+previous.items.length+'개</p><p>이전 기록은 자동으로 업로드하지 않았어요. 내 기록인지 확인한 뒤 복원할 수 있어요. 현재 기록도 먼저 보관합니다.</p>'+button('이전 기록 내려받기','legacyBackup','secondary')+button('이전 기록으로 복원','restoreLegacy','secondary')+button('현재 기록으로 계속','keepCurrentLegacy','primary'),'legacy-review')}catch{toast('이전 기록을 읽지 못했어요.')}return;
+ }
+ if(a==='keepCurrentLegacy'){try{localStorage.setItem(KEY+'.legacy-reviewed','true');closeModal();showStorageStatus()}catch{toast('확인 상태를 저장하지 못했어요.')}return}
+ if(a==='restoreLegacy'){
+  if(!legacyReviewPending())return;try{const previous=Model.validate(JSON.parse(localStorage.getItem(KEY)));localStorage.setItem(accountDataKey(dataOwner)+':archive:'+revisionID(),JSON.stringify({owner:dataOwner,state:JSON.parse(JSON.stringify(state))}));state=previous;if(!commit(true))return;localStorage.setItem(KEY+'.legacy-reviewed','true');showStorageStatus();toast('이전 기록을 복원했어요. 바꾸기 전 기록도 보관했어요.')}catch{toast('복원하지 못했어요. 기존 기록은 보관되어 있어요.')}return;
+ }
+ if(a==='legacyBackup'){try{const raw=localStorage.getItem(KEY);if(raw&&localStorage.getItem(KEY+'.legacy-owner')===dataOwner)downloadStateSnapshot(JSON.parse(raw),'legacy')}catch{toast('이전 백업을 읽지 못했어요.')}return}
+ if(a==='syncArchives'){
+  const keys=Object.keys(localStorage).filter(key=>key.startsWith(accountDataKey(dataOwner)+':archive:')).reverse();
+  if(!keys.length){toast('보관된 충돌 기록이 없어요.');return}
+  showModal('보관한 충돌 기록',keys.map((key,index)=>{const archive=JSON.parse(localStorage.getItem(key));return '<section><h3>보관 기록 '+(index+1)+'</h3><p>이 기기 '+archive.state.items.length+'개 · 클라우드 '+(archive.conflict?.state.items.length||0)+'개</p>'+button('이 기기 기록 내려받기','downloadArchive','secondary','data-key="'+esc(key)+'" data-side="local"')+(archive.conflict?button('클라우드 기록 내려받기','downloadArchive','secondary','data-key="'+esc(key)+'" data-side="remote"'):'')+'</section>'}).join(''),'sync-archives');return;
+ }
+ if(a==='downloadArchive'){const key=b.dataset.key;if(!key?.startsWith(accountDataKey(dataOwner)+':archive:'))return;try{const archive=JSON.parse(localStorage.getItem(key));downloadStateSnapshot(b.dataset.side==='remote'?archive.conflict.state:archive.state,'archived')}catch{toast('보관 기록을 읽지 못했어요.')}return}
+
+
  if(a==='flowSignup'){flowCodeSent=false;flowTo('signupOptions')}
  if(a==='cloudSetup'){cloudSetupModal()}
- if(a==='flowRecover')flowTo('recover');
+ if(a==='flowRecover'){passwordRecoveryToken='';passwordRecoveryError='';flowTo('recover');}
  if(['flowKakao','flowApple','flowGoogle'].includes(a)){toast('소셜 로그인은 다음 단계에서 연결할게요. 지금은 이메일 로그인을 사용해주세요.')}
  if(a==='flowSocialConfirm')flowTo('welcome');
  if(a==='flowTaste')startTaste('initial',tastePreferredType||'book');
  if(a==='tasteClose'){closeAdditionalTaste();return}
  if(a==='flowReady')flowTo('ready');
  if(a==='flowFinish')finishEntry();
- if(a==='flowInterested'){Model.add(state,window.tasteCandidate);tasteSeen++;response('interested');nextTaste()}
- if(a==='flowSkip'){response('skipped');nextTaste()}
- if(a==='flowExperienced'){const c=Model.add(state,window.tasteCandidate);if(!c.completed){c.completed='unknown';c.completedAt=Date.now()}response('experienced');nextTaste()}
- if(a==='flowLogout'){confirmBox('로그아웃할까요?','클라우드 기록은 유지되고 이 기기의 로그인 상태만 해제됩니다.',async()=>{await cloudLogout();authSession={signedIn:false,finished:false};saveSession();state=Model.empty();try{localStorage.removeItem(KEY)}catch{}authRoute='welcome';view='today';render()},'로그아웃')}
+ if(a==='flowInterested'){Model.add(state,window.tasteCandidate);tasteSeen++;if(response('interested'))nextTaste()}
+ if(a==='flowSkip'){if(response('skipped'))nextTaste()}
+ if(a==='flowExperienced'){const c=Model.add(state,window.tasteCandidate);if(!c.completed){c.completed='unknown';c.completedAt=Date.now()}if(response('experienced'))nextTaste()}
+ if(a==='flowLogout'){confirmBox('로그아웃할까요?','기록과 미전송 변경은 이 기기에 보관되며, 같은 계정으로 로그인하면 이어서 전송합니다.',async()=>{await cloudLogout();authSession={signedIn:false,finished:false};saveSession();state=Model.empty();/* Account snapshots, including pending uploads, survive logout. */authRoute='welcome';view='today';render()},'로그아웃')}
  if(a==='deleteAccount'){
   if(!cloudSession?.access_token){toast('다시 로그인한 뒤 회원탈퇴를 진행해주세요.');return}
   showModal(
@@ -7911,15 +8107,22 @@ document.addEventListener('submit',async e=>{
   finally{if(f.isConnected)submit.disabled=false}
   return;
  }
- if(f.id==='flowProfileForm'){e.preventDefault();const name=$('flowProfileName').value.trim()||'나';authSession.name=name;state.profile.name=name;saveSession();persist();flowTo('start')}
- if(f.id==='flowRecoverForm'){e.preventDefault();try{if(!cloudPublicKey())throw Error('Supabase 연결 설정이 필요해요.');await cloudRecover($('recoveryEmail').value.trim().toLowerCase());flowTo('recoverSent')}catch(err){$('flowError').textContent=err.message||'재설정 안내를 보내지 못했어요.'}}
- if(f.id==='flowTasteDateForm'){e.preventDefault();const date=$('flowTasteDate').value;if(date&&(!Model.validDate(date)||date>now())){$('flowError').textContent='오늘 또는 과거 날짜를 선택해주세요.';return}const c=Model.add(state,window.tasteCandidate);if(!c.completed){c.completed=date||'unknown';c.completedAt=Date.now()}response('experienced');nextTaste()}
+ if(f.id==='flowProfileForm'){e.preventDefault();const name=$('flowProfileName').value.trim()||'나';authSession.name=name;state.profile.name=name;if(!persist())return;saveSession();flowTo('start')}
+ if(f.id==='flowRecoverForm'){e.preventDefault();const submit=f.querySelector('[type=submit]');submit.disabled=true;try{if(!cloudPublicKey())throw Error('Supabase 연결 설정이 필요해요.');await cloudRecover($('recoveryEmail').value.trim().toLowerCase());flowTo('recoverSent')}catch(err){$('flowError').textContent=err.message||'재설정 안내를 보내지 못했어요.'}finally{if(f.isConnected)submit.disabled=false}}
+ if(f.id==='flowRecoveryLinkForm'||f.id==='flowResetPasswordForm'){
+  e.preventDefault();const submit=f.querySelector('[type=submit]');submit.disabled=true;
+  try{if(f.id==='flowRecoveryLinkForm'){await readRecoveryLink($('recoveryLink').value.trim());flowTo('resetPassword')}
+   else{await updateRecoveredPassword($('newPassword').value,$('newPasswordConfirm').value);flowTo('login');toast('비밀번호를 변경했어요. 새 비밀번호로 로그인해주세요.')}}
+  catch(err){if(f.isConnected)$('flowError').textContent=err.status===401||err.status===403?'재설정 링크가 만료됐어요. 새 메일을 받아주세요.':err.message}
+  finally{if(f.isConnected)submit.disabled=false}return;
+ }
+ if(f.id==='flowTasteDateForm'){e.preventDefault();const date=$('flowTasteDate').value;if(date&&(!Model.validDate(date)||date>now())){$('flowError').textContent='오늘 또는 과거 날짜를 선택해주세요.';return}const c=Model.add(state,window.tasteCandidate);if(!c.completed){c.completed=date||'unknown';c.completedAt=Date.now()}if(response('experienced'))nextTaste()}
 });
 document.addEventListener('input',e=>{if(e.target.id==='flowProfileName')e.target.setCustomValidity('')});
-window.addEventListener('storage',e=>{if(e.key===AUTH_KEY){try{const a=JSON.parse(e.newValue||'null');authSession=a||{signedIn:false,finished:false};flowTo(authSession.signedIn?(authSession.finished?'app':'onboard'):'welcome')}catch{}}});
+// CLOUD_SESSION_STORAGE alone drives cross-tab account changes.
 authRoute='welcome';
 render();
-cloudBootstrap().then(()=>render());
+cloudBootstrap().then(()=>render()).catch(()=>{cloudSyncStatus='error';showStorageStatus()});
 </script>
 
 </body></html>
