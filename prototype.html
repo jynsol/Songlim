@@ -79,6 +79,9 @@ window.initRatingPicker=function(){
   --accent-end: #47733b;
   --accent-ink: #354b29;
   --accent-soft: #eaf2d9;
+  --forest-stat-book: #eaf0e2;
+  --forest-stat-album: #eee6f3;
+  --forest-stat-movie: #f3efdb;
   --accent-line: #c9dca6;
   --action: #c3e878;
   --action-ink: #1b2415;
@@ -1166,6 +1169,7 @@ label { font-size:var(--font-12);font-weight:600;margin:18px 0 7px; }
 .more-menu, .inline-picker-panel { border-radius:17px;background:#fff;border:1px solid var(--line);box-shadow:0 8px 30px #141a1412;padding:6px; }
 .inline-picker-panel button[aria-pressed=true] { color:var(--accent-ink);background:var(--accent-soft); }
 .scrap-fixed-search { top:0;padding:0 0 12px;margin:0;background:var(--surface);box-shadow:none; }
+.page-heading+.scrap-fixed-search { margin-top:20px; }
 .scrap-fixed-search input[type=search], .scrap-search-block input[type=search] { border:1px solid #d9dcd2;border-radius:var(--radius-pill);background:transparent;min-height:48px;padding-left:44px;font-size:var(--font-16); }
 .scrap-fixed-search>svg { position:absolute;left:16px;top:14px;width:19px;height:19px;color:var(--ink);pointer-events:none; }
 .scrap-fixed-search input:focus { border-color:var(--accent);box-shadow:none; }
@@ -1178,7 +1182,7 @@ label { font-size:var(--font-12);font-weight:600;margin:18px 0 7px; }
 .chip.active, .status-filter .chip.active { background:var(--lime);color:var(--ink);font-weight:650; }
 .status-filter .chip.active[data-status=active] { background:var(--lavender);color:#35283e; }
 .status-filter .chip.active[data-status=done] { background:var(--lemon);color:#48451d; }
-.scrap-list-tools { min-height:54px; }
+.scrap-list-tools { min-height:var(--touch-target);gap:12px;margin:8px 0 12px; }
 .sort-button { font-size:var(--font-caption);color:var(--muted); }
 .content-list { gap:12px; }
 .content-row { border:1px solid var(--line);gap:12px;background:#fff;box-shadow:none;min-height:104px; }
@@ -1193,6 +1197,23 @@ label { font-size:var(--font-12);font-weight:600;margin:18px 0 7px; }
 .record-status.done { background:var(--lemon);color:#46421d; }
 .row-rating { font-size:var(--font-caption);color:#555b4c; }
 .rating-star { color:var(--brand-star); }
+.scrap-result-count { color:var(--muted);font-size:var(--font-caption); }
+.scrap-filter-trigger { display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:var(--touch-target);padding:8px 0 8px 10px;font-size:var(--font-13);color:var(--ink);background:transparent; }
+.scrap-filter-trigger>svg { width:17px;height:17px; }
+.scrap-filter-count { min-width:18px;line-height:18px;border-radius:var(--radius-pill);font-size:var(--font-caption);background:var(--accent-soft);color:var(--accent-ink); }
+.scrap-applied-filters { display:flex;flex-wrap:wrap;gap:8px;margin:-4px 0 12px; }
+.scrap-applied-filter { display:inline-flex;align-items:center;gap:6px;min-height:var(--touch-target);padding:8px 12px;background:var(--accent-soft);color:var(--accent-ink);border-radius:var(--radius-pill);font-size:var(--font-caption); }
+.scrap-applied-filter svg { width:13px;height:13px; }
+.scrap-filter-group { margin:0 0 24px;padding:0;border:0;min-width:0; }
+.scrap-filter-group legend { font-size:var(--font-body);font-weight:650;margin:0 0 12px;padding:0; }
+.scrap-filter-options { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px; }
+.scrap-filter-option { display:flex;align-items:center;gap:8px;min-height:48px;margin:0;padding:10px 12px;border:1px solid var(--line);border-radius:var(--radius-input);font-size:var(--font-13);font-weight:500;cursor:pointer; }
+.scrap-filter-option:has(input:checked) { background:var(--accent-soft);border-color:var(--accent);color:var(--accent-ink); }
+.scrap-filter-option input { flex:0 0 18px;width:18px;height:18px;min-height:18px;margin:0;padding:0; }
+.scrap-filter-option:focus-within { outline:2px solid var(--accent);outline-offset:2px; }
+.scrap-filter-footer { display:flex;align-items:center;gap:12px; }
+.scrap-filter-footer .textbtn { padding:12px; }
+.scrap-filter-footer .primary { flex:1; }
 .scrap-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px; }
 .scrap-grid>.empty { grid-column:1/-1; }
 .scrap-card { display:flex;flex-direction:column;align-items:stretch;text-align:left;border:0;border-radius:19px;padding:0;overflow:hidden;min-width:0;background:#fff; }
@@ -1266,13 +1287,13 @@ label { font-size:var(--font-12);font-weight:600;margin:18px 0 7px; }
 .forest-total h2>span { font-size:var(--font-13);font-weight:500;margin-left:5px;letter-spacing:0; }
 .forest-total .forest-area { font-size:var(--font-caption);max-width:58%;line-height:1.6;color:var(--muted);font-weight:450; }
 .forest-metrics { display:flex;gap:8px;padding:0;background:none;margin-top:19px;border:0; }
-.forest-metric { flex:1;display:flex;align-items:center;justify-content:space-between;flex-direction:row;background:var(--lime);border-radius:14px;padding:12px 11px;gap:4px;color:var(--ink); }
-.forest-metric:nth-child(2) { background:var(--lavender); }
-.forest-metric:nth-child(3) { background:var(--lemon); }
+.forest-metric { flex:1;display:flex;align-items:center;justify-content:space-between;flex-direction:row;background:var(--forest-stat-book);border-radius:14px;padding:11px;gap:4px;color:var(--ink); }
+.forest-metric:nth-child(2) { background:var(--forest-stat-album); }
+.forest-metric:nth-child(3) { background:var(--forest-stat-movie); }
 .forest-metric+.forest-metric { border:0; }
 .forest-metric>span { display:flex;align-items:center;gap:4px;font-size:var(--font-caption);color:var(--ink); }
 .forest-metric svg { width:13px;height:13px; }
-.forest-metric strong { font-size:var(--font-21);line-height:1;font-weight:600;letter-spacing:-.7px; }
+.forest-metric strong { font-size:var(--font-19);line-height:1.2;font-weight:600;letter-spacing:-.4px; }
 .forest-next { margin-top:10px; }
 .forest-next p { font-size:var(--font-caption);color:var(--muted); }
 .forest-records { padding:0;background:transparent;border:0;border-radius:0; }
@@ -3397,6 +3418,7 @@ forest:'<path d="m12 2-6 8h3l-5 7h6v5h4v-5h6l-5-7h3z"/>',
 my:'<circle cx="12" cy="7" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3z"/>',
 plus:'<path d="M12 4v16M4 12h16"/>',
 search:'<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/>',
+filter:'<path d="M4 7h5m4 0h7M4 17h9m4 0h3"/><circle cx="11" cy="7" r="2"/><circle cx="15" cy="17" r="2"/>',
 back:'<path d="m14 5-7 7 7 7"/>',
 close:'<path d="m5 5 14 14M5 19 19 5"/>',
 book:'<path d="M3 4h6l3 3 3-3h6v16h-6l-3 2-3-2H3zM12 7v15"/>',
@@ -4686,7 +4708,7 @@ function toast(message,undo){$('toast').classList.remove('planted');clearTimeout
 function dismissToast(){$('toast').classList.remove('planted');clearTimeout(toastTimer);$('toast').innerHTML='';undoAction=null}
 function commit(close=false){if(!persist())return false;if(close)closeModal();render();return true}
 function focusPageHeading(){requestAnimationFrame(()=>{if(modal)return;const heading=$('page').querySelector('h1');if(heading){heading.setAttribute('tabindex','-1');heading.focus({preventScroll:true})}})}
-function go(next){if(view==='detail'&&next!=='detail')candidatePreview=null;closeModal();if(next!=='forest')forestEditMode=false;if(view==='calendar')sessionStorageSafe('calendarScroll',String(window.scrollY));if(view==='scrap')sessionStorageSafe('scroll',String(window.scrollY));view=next;picking=false;render();window.scrollTo(0,0);if(next==='scrap')window.scrollTo(0,Number(sessionStorageSafe('scroll'))||0);if(next==='calendar')window.scrollTo(0,Number(sessionStorageSafe('calendarScroll'))||0);focusPageHeading()}
+function go(next){clearTimeout(mainSearchRenderTimer);mainSearchRenderTimer=null;if(view==='detail'&&next!=='detail')candidatePreview=null;closeModal();if(next!=='forest')forestEditMode=false;if(view==='calendar')sessionStorageSafe('calendarScroll',String(window.scrollY));if(view==='scrap')sessionStorageSafe('scroll',String(window.scrollY));view=next;picking=false;render();window.scrollTo(0,0);if(next==='scrap')window.scrollTo(0,Number(sessionStorageSafe('scroll'))||0);if(next==='calendar')window.scrollTo(0,Number(sessionStorageSafe('calendarScroll'))||0);focusPageHeading()}
 function sessionStorageSafe(k,v){try{if(v!==undefined)sessionStorage.setItem('sr3-'+k,v);return sessionStorage.getItem('sr3-'+k)}catch{return null}}
 function openDetail(id,origin=view){candidatePreview=null;detailId=id;detailOrigin=origin==='detail'?detailOrigin:origin;go('detail');const c=get(id);if(c?.type==='book'&&!cleanGenreValue(c.genre)&&c.genreSource!=='user'){enrichBookGenre(c).then(()=>{if(c.genre&&get(c.id)===c){ensureCompletedSpeciesAssignments();persist();if(view==='detail'&&detailId===id)render()}}).catch(()=>{})}}
 function openCandidateDetail(c){
@@ -4758,7 +4780,7 @@ function renderTodayBase(){
 
  const logs=[...c.logs].sort((a,b)=>b.date.localeCompare(a.date));
  const track=c.type==='album'&&c.tracks.length?'<div class="row between"><span class="small-link">오늘의 곡 · '+esc(c.tracks[c.trackIndex%c.tracks.length])+'</span>'+button('듣기 ↗','external','textbtn',attr(c.id))+'</div><details class="collapse"><summary>다른 곡 선택</summary>'+c.tracks.map((t,i)=>button(esc(t),'track','textbtn','data-index="'+i+'" '+attr(c.id))).join('')+'</details>':'';
- return '<section>'+todayHeading('오늘의 '+typeName[c.type],menu(c))+'<p class="page-caption">작은 경험이 차곡차곡, 나만의 숲으로.</p><div class="today-hero"><div class="today-work">'+cover(c)+'<button type="button" class="grow" data-action="detail" '+attr(c.id)+' style="text-align:left"> <div class="title">'+esc(c.title)+'</div><p class="creator">'+esc(c.creator||'제작자 미확인')+'</p>'+(c.type==='book'&&logs.find(l=>l.page)?'<p class="bookpage">마지막 기록 · '+esc(logs.find(l=>l.page).page)+'쪽</p>':(logs.length?'<p class="bookpage">최근 기록 · '+esc(logs[0].date)+'</p>':''))+'</button></div><div class="center">'+growth(Model.stage(c),c)+todayGrowthCaption(c)+'</div>'+track+recordActions(c)+(c.type==='movie'?button('보러 가기 ↗','external','textbtn',attr(c.id)):'')+'</div>'+(state.items.some(item=>!item.completed&&item.id!==c.id)?button('다른 작품 고르기 <span aria-hidden="true">›</span>','nextCandidate','textbtn today-switch',attr(c.id)):'')+resumeExperiences(c)+todayHistory(c)+'</section>';
+ return '<section>'+todayHeading('오늘의 '+typeName[c.type],menu(c))+'<div class="today-hero"><div class="today-work">'+cover(c)+'<button type="button" class="grow" data-action="detail" '+attr(c.id)+' style="text-align:left"> <div class="title">'+esc(c.title)+'</div><p class="creator">'+esc(c.creator||'제작자 미확인')+'</p>'+(c.type==='book'&&logs.find(l=>l.page)?'<p class="bookpage">마지막 기록 · '+esc(logs.find(l=>l.page).page)+'쪽</p>':(logs.length?'<p class="bookpage">최근 기록 · '+esc(logs[0].date)+'</p>':''))+'</button></div><div class="center">'+growth(Model.stage(c),c)+todayGrowthCaption(c)+'</div>'+track+recordActions(c)+(c.type==='movie'?button('보러 가기 ↗','external','textbtn',attr(c.id)):'')+'</div>'+(state.items.some(item=>!item.completed&&item.id!==c.id)?button('다른 작품 고르기 <span aria-hidden="true">›</span>','pick','textbtn today-switch'):'')+resumeExperiences(c)+todayHistory(c)+'</section>';
 }
 function resumeExperiences(current){
  const active=state.items.filter(c=>c.id!==current.id&&!c.completed&&(c.logs.length||c.importedProgress));
@@ -4776,17 +4798,38 @@ function scrapCard(c,choose=false){
  const status=Model.status(c),labels={book:'BOOK',album:'ALBUM',movie:'MOVIE'};
  return '<button type="button" class="scrap-card" data-type="'+c.type+'" data-action="'+(choose?'choose':'detail')+'" '+attr(c.id)+' aria-label="'+esc(c.title)+' · '+statusName[status]+'">'+
  '<div class="scrap-card-visual"><span class="scrap-card-index">'+labels[c.type]+'</span><span class="scrap-card-mark" aria-hidden="true">'+icon('scrap')+'</span>'+cover(c)+'</div>'+
- '<div class="scrap-card-body"><div class="title">'+esc(c.title)+'</div><p class="creator">'+esc(c.creator||'제작자 미확인')+'</p><div class="scrap-card-bottom"><span class="record-status '+status+'">'+statusName[status]+'</span>'+(validRating(c.rating)?'<span class="row-rating"><span class="rating-star">★</span> '+c.rating+'</span>':'<span aria-hidden="true">↗</span>')+'</div></div></button>';
+ '<div class="scrap-card-body"><div class="title">'+esc(c.title)+'</div><p class="creator">'+esc(c.creator||'제작자 미확인')+'</p><div class="scrap-card-bottom"><span class="record-status '+status+'">'+statusName[status]+'</span>'+(validRating(c.rating)?'<span class="row-rating"><span class="rating-star">★</span> '+c.rating+'</span>':'')+'</div></div></button>';
 }
 
+let pickingFilters={q:'',type:'all',status:'all',sort:'recent'};
+const SCRAP_SORT_LABELS={recent:'최근 담은 순',many:'많이 담은 순',old:'오래된 순',rating:'별점 높은 순'};
+function activeScrapFilters(){return picking?pickingFilters:state.filters}
+function updateScrapFilters(values,close=false){
+ clearTimeout(mainSearchRenderTimer);mainSearchRenderTimer=null;
+ Object.assign(activeScrapFilters(),values);
+ if(!picking&&!persist())return false;
+ if(close)closeModal();render();return true;
+}
+function openScrapFilters(){
+ clearTimeout(mainSearchRenderTimer);mainSearchRenderTimer=null;
+ const f=activeScrapFilters();
+ const option=(name,value,label,selected)=>'<label class="scrap-filter-option"><input type="radio" name="'+name+'" value="'+esc(value)+'" '+(selected?'checked':'')+'><span>'+esc(label)+'</span></label>';
+ const status=picking?'':'<fieldset class="scrap-filter-group"><legend>경험 상태</legend><div class="scrap-filter-options">'+['all','saved','active','done'].map(value=>option('status',value,statusName[value],f.status===value)).join('')+'</div></fieldset>';
+ const sort='<fieldset class="scrap-filter-group"><legend>정렬</legend><div class="scrap-filter-options">'+Object.entries(SCRAP_SORT_LABELS).map(([value,label])=>option('sort',value,label,f.sort===value)).join('')+'</div></fieldset>';
+ showModal('필터·정렬','<form id="scrapFilterForm">'+status+sort+'<div id="formError" class="form-error" role="alert"></div><div class="scrap-filter-footer">'+button('초기화','scrapFilterDraftReset','textbtn')+'<button type="submit" class="primary">적용하기</button></div></form>','scrap-filters');
+}
 function renderScrap(){
- const f=state.filters;
+ const f=activeScrapFilters();
  const list=state.items.filter(c=>(!picking||!c.completed)&&(picking||f.status==='all'||Model.status(c)===f.status)&&(f.type==='all'||c.type===f.type)&&Model.norm(c.title+' '+c.creator).includes(Model.norm(f.q)));
  list.sort((a,b)=>f.sort==='rating'?(validRating(b.rating)??-1)-(validRating(a.rating)??-1)||(b.saves.at(-1)?.at||0)-(a.saves.at(-1)?.at||0):f.sort==='many'?b.saves.length-a.saves.length||(b.saves.at(-1)?.at||0)-(a.saves.at(-1)?.at||0):f.sort==='old'?(a.saves[0]?.at||0)-(b.saves[0]?.at||0):(b.saves.at(-1)?.at||0)-(a.saves.at(-1)?.at||0));
  const typeTabs='<div class="type-tabs" role="group" aria-label="콘텐츠 유형">'+['all','book','movie','album'].map(t=>button(t==='all'?'전체':typeName[t],'filterType','type-tab '+(f.type===t?'active':''),'data-type="'+t+'" aria-pressed="'+(f.type===t)+'"')).join('')+'</div>';
- const statusChips=!picking?'<div class="status-filter" role="group" aria-label="경험 상태">'+['all','saved','active','done'].map(t=>button(statusName[t],'filterStatus','chip '+(f.status===t?'active':''),'data-status="'+t+'" aria-pressed="'+(f.status===t)+'"')).join('')+'</div>':'';
- const sortLabel={recent:'최근 스크랩순',many:'많이 스크랩한 순',old:'오래 스크랩한 순',rating:'별점 높은 순'}[f.sort];
- return '<section><div class="page-heading"><h1 class="page-title">'+ (picking?'오늘 경험할 작품':'나의 스크랩')+'</h1>'+(picking?button('취소','cancelPick','textbtn'):'')+'</div><p class="page-caption">언젠가 만나고 싶은 작품을 모아두세요.</p><div class="scrap-fixed-search">'+icon('search')+'<input id="search" type="search" placeholder="제목·제작자 검색" aria-label="스크랩 검색" value="'+esc(f.q)+'"></div>'+typeTabs+statusChips+'<div class="scrap-list-tools"><span class="muted">'+list.length+'개</span>'+inlinePicker(sortLabel,'sort',Object.entries({recent:'최근 스크랩순',many:'많이 스크랩한 순',old:'오래 스크랩한 순',rating:'별점 높은 순'}),f.sort)+'</div><div class="content-list scrap-grid">'+(list.length?list.map(c=>scrapCard(c,picking)).join(''):(state.items.length?'<div class="empty"><span class="empty-icon" aria-hidden="true">'+icon('search')+'</span><h3>일치하는 작품이 없어요</h3><p>다른 제목이나 제작자로 검색하거나<br>선택한 필터를 초기화해보세요.</p>'+button('검색·필터 초기화','resetFilters','secondary')+'</div>':'<div class="empty"><span class="empty-icon" aria-hidden="true">'+icon('scrap')+'</span><h3>첫 작품을 담아보세요</h3><p>읽고 싶은 책, 듣고 싶은 음반,<br>보고 싶은 영화를 모아보세요.</p>'+button('작품 추가하기','add','primary')+'</div>'))+'</div><div class="list-footer"></div></section>'+(!picking&&state.items.length?button(icon('plus')+'스크랩 추가','add','fab'):'');
+ const applied=[];
+ if(!picking&&f.status!=='all')applied.push(button(esc(statusName[f.status])+' '+icon('close'),'clearScrapStatus','scrap-applied-filter','aria-label="경험 상태 필터 해제"'));
+ if(f.sort!=='recent')applied.push(button(esc(SCRAP_SORT_LABELS[f.sort])+' '+icon('close'),'clearScrapSort','scrap-applied-filter','aria-label="최근 담은 순으로 초기화"'));
+ const count='<span class="scrap-result-count" role="status" aria-live="polite">'+list.length+'개'+(picking?' · 미완료 작품':'')+'</span>';
+ const filterLabel=icon('filter')+'필터·정렬'+(applied.length?'<span class="scrap-filter-count">'+applied.length+'</span>':'');
+ const tools='<div class="scrap-list-tools">'+count+button(filterLabel,'scrapFilters','scrap-filter-trigger','aria-haspopup="dialog" aria-label="필터와 정렬'+(applied.length?' · '+applied.length+'개 적용':'')+'"')+'</div>'+(applied.length?'<div class="scrap-applied-filters" aria-label="적용한 필터">'+applied.join('')+'</div>':'');
+ return '<section><div class="page-heading"><h1 class="page-title">'+ (picking?'오늘 경험할 작품':'나의 스크랩')+'</h1>'+(picking?button('취소','cancelPick','textbtn'):'')+'</div><div class="scrap-fixed-search">'+icon('search')+'<input id="search" type="search" placeholder="제목·제작자 검색" aria-label="스크랩 검색" value="'+esc(f.q)+'"></div>'+typeTabs+tools+'<div class="content-list scrap-grid">'+(list.length?list.map(c=>scrapCard(c,picking)).join(''):(state.items.length?'<div class="empty"><span class="empty-icon" aria-hidden="true">'+icon('search')+'</span><h3>일치하는 작품이 없어요</h3><p>다른 제목이나 제작자로 검색하거나<br>선택한 필터를 초기화해보세요.</p>'+button('검색·필터 초기화','resetFilters','secondary')+'</div>':'<div class="empty"><span class="empty-icon" aria-hidden="true">'+icon('scrap')+'</span><h3>첫 작품을 담아보세요</h3><p>읽고 싶은 책, 듣고 싶은 음반,<br>보고 싶은 영화를 모아보세요.</p>'+button('작품 추가하기','add','primary')+'</div>'))+'</div><div class="list-footer"></div></section>'+(!picking&&state.items.length?button(icon('plus')+'스크랩 추가','add','fab'):'');
 }
 function contentIntroText(c){
  // 상세 화면 전용: tasteIntroText()와 달리 절대 자르지 않고 원본 필드를 그대로 반환한다.
@@ -4822,7 +4865,7 @@ function renderForest(){
  const types='<div class="forest-metrics">'+[['book','책'],['album','음반'],['movie','영화']].map(([type,label])=>'<div class="forest-metric"><span>'+icon(type)+label+'</span><strong>'+stats[type]+'</strong></div>').join('')+'</div>';
  const total='<div class="forest-total"><h2>'+stats.n.toLocaleString()+'<span>그루</span></h2>'+(stats.n?'<p class="forest-area">'+esc(forestGrowthLabel(stats))+'</p>':'')+'</div>';
  const next=stats.n&&expansion.nextAt?'<div class="forest-next"><p>다음 확장까지 '+expansion.remaining+'그루</p></div>':'';
- const controls='<div class="forest-header-actions page-heading-actions">'+periodPicker+scrapAddButton()+'</div>';
+ const controls='<div class="forest-header-actions page-heading-actions">'+periodPicker+'</div>';
  const toolbar='<div class="forest-tools">'+button((snow?'설산':'기본 숲')+' <span aria-hidden="true">⌄</span>','themes','forest-season-button','aria-label="숲 테마 변경"')+(stats.n?button(forestEditMode?'완료':'꾸미기','forestEdit','forest-edit-control','aria-pressed="'+forestEditMode+'"'):'')+'</div>';
  return '<section class="forest-page-section"><div class="page-heading forest-heading"><h1 class="page-title">나의 숲</h1>'+controls+'</div>'+
  '<div class="forest-garden '+(snow?'is-snow':'')+'">'+toolbar+'<div class="forest-scene"><div class="forest-viewport '+(forestEditMode?'editing':'')+'" id="forestViewport" data-theme="'+(snow?'snow':'basic')+'" tabindex="0" aria-label="'+(forestEditMode?'꾸미기 중. 바꿀 나무를 선택하세요.':stats.n+'그루의 숲. 나무를 선택해 기록을 볼 수 있습니다.')+'">'+forestSVG(items,theme)+'</div></div></div>'+
@@ -4940,7 +4983,7 @@ function showModal(title,html,kind='generic'){
 }
 function closeModal(){if(modal==='link')cancelLinkImport();if(modal==='profile'&&profileEdit){profileEdit.request++;profileEdit=null}clearTimeout(modalFocusTimer);document.querySelector('.app').inert=false;if(ocrBusy){ocrGeneration++;ocrBusy=false}if(modal==='scrap-composer')scrapFlowActive=false;modal=null;$('overlay').innerHTML='';document.body.style.overflow='';if(modalReturnFocus?.isConnected)modalReturnFocus.focus({preventScroll:true});modalReturnFocus=null;}
 function confirmBox(title,text,onConfirm,label='확인',danger=false){window.pendingConfirm=onConfirm;showModal(title,'<p>'+esc(text)+'</p>'+button(label,'confirm',danger?'primary danger':'primary')+button('취소','close','textbtn'),'confirm')}
-function pick(){picking=true;view='scrap';closeModal();render();window.scrollTo(0,0)}
+function pick(){clearTimeout(mainSearchRenderTimer);pickingFilters={q:'',type:'all',status:'all',sort:'recent'};picking=true;view='scrap';closeModal();render();window.scrollTo(0,0);focusPageHeading()}
 let scrapFlowActive=false;
 const scrapSessionAdds=new Map();
 let scrapComposerState={type:'book',queries:{book:'',album:'',movie:''},count:0};
@@ -6654,7 +6697,7 @@ async function runOCR(){
   const auto=candidates.filter(c=>c.selected&&c.confidenceLevel==='high').length,review=candidates.filter(c=>c.selected&&c.confidenceLevel==='medium').length;
   const contextLabel=preferredType==='book'?'책 관련 문맥을 검색 결과 비교에 참고했어요.':preferredType==='album'?'음악 관련 문맥을 검색 결과 비교에 참고했어요.':preferredType==='movie'?'영화 관련 문맥을 검색 결과 비교에 참고했어요.':'';
   const used=queries.map(q=>q.creator?q.title+' — '+q.creator:q.title);
-  showModal('사진에서 찾은 콘텐츠','<div class="ocr-scan-status"><strong>'+candidates.length+'개를 찾았어요</strong><span>자동 선택 '+(auto+review)+'개</span></div>'+(failures||searchFailures?'<div class="ocr-review-note">일부 인식·검색 요청이 실패했어요. 결과에 누락이 있을 수 있으니 다시 시도해주세요.</div>':'')+(contextLabel?'<div class="ocr-review-note">'+contextLabel+'</div>':'')+'<div class="ocr-review-note">사진을 여러 영역과 크기로 반복 인식한 뒤, 좌표가 가까운 제목·제작자를 묶어 검색해요. 리커버·개정판 같은 판형은 유지하고, 같은 작품은 가장 가능성 높은 1개만 보여드려요.</div><div id="candidateRows"></div><details class="collapse"><summary>인식한 제목·제작자 보기</summary><p class="muted">'+esc(used.join(' · '))+'</p></details><details class="collapse"><summary>전체 OCR 글자 보기</summary><p style="white-space:pre-wrap;overflow-wrap:anywhere">'+esc(text||'글자를 찾지 못했어요.')+'</p></details><details class="collapse ocr-unmatched"><summary>직접 추가하기</summary><label for="ocrTitle">작품 제목</label><input id="ocrTitle" placeholder="제목 입력"><label for="ocrCreator">제작자 · 선택</label><input id="ocrCreator"><select id="ocrType" aria-label="콘텐츠 유형"><option value="book">책</option><option value="album">음반</option><option value="movie">영화</option></select>'+button('후보에 추가','candidateManual','secondary')+'</details>'+button('선택한 콘텐츠 한 번에 스크랩','saveCandidates','primary','id="saveCandidates"'),'review');renderCandidates();
+  showModal('사진에서 찾은 작품','<div class="ocr-scan-status"><strong>'+candidates.length+'개를 찾았어요</strong><span>자동 선택 '+(auto+review)+'개</span></div>'+(failures||searchFailures?'<div class="ocr-review-note">일부 인식·검색 요청이 실패했어요. 결과에 누락이 있을 수 있으니 다시 시도해주세요.</div>':'')+'<div class="ocr-review-note">제목과 제작자를 확인하고, 저장할 작품을 골라주세요.</div><div id="candidateRows"></div><details class="collapse"><summary>인식한 제목·제작자 보기</summary><p class="muted">'+esc(used.join(' · '))+'</p></details><details class="collapse"><summary>사진에서 읽은 글자 보기</summary><p style="white-space:pre-wrap;overflow-wrap:anywhere">'+esc(text||'글자를 찾지 못했어요.')+'</p></details><details class="collapse ocr-unmatched"><summary>직접 추가하기</summary><label for="ocrTitle">작품 제목</label><input id="ocrTitle" placeholder="제목 입력"><label for="ocrCreator">제작자 · 선택</label><input id="ocrCreator"><select id="ocrType" aria-label="콘텐츠 유형"><option value="book">책</option><option value="album">음반</option><option value="movie">영화</option></select>'+button('후보에 추가','candidateManual','secondary')+'</details>'+button('선택한 작품 저장','saveCandidates','primary','id="saveCandidates"'),'review');renderCandidates();
  }catch(e){if(ticket===ocrGeneration){$('ocrProgress').textContent=e?.message||'사진을 읽지 못했어요. 다시 시도하거나 직접 입력해주세요.';$('ocrButton').disabled=false}}finally{searchSession.stop();if(ticket===ocrGeneration)ocrBusy=false}
 }
 function renderCandidates(){
@@ -6857,11 +6900,15 @@ document.addEventListener('click',async e=>{
  if(a==='toToday'){go('today');return}
  if(a==='toScrap'){go('scrap');return}
  if(a==='calendar'){go('calendar');return}
- if(a==='filterType'){state.filters.type=b.dataset.type;if(!commit())return;return}
- if(a==='filterStatus'){state.filters.status=b.dataset.status;if(!commit())return;return}
- if(a==='resetFilters'){state.filters={q:'',status:'all',type:'all',sort:'recent'};if(!commit())return;return}
+ if(a==='scrapFilters'){openScrapFilters();return}
+ if(a==='scrapFilterDraftReset'){const form=$('scrapFilterForm');if(form){const status=form.querySelector('input[name="status"][value="all"]');if(status)status.checked=true;form.querySelector('input[name="sort"][value="recent"]').checked=true}return}
+ if(a==='clearScrapStatus'){if(updateScrapFilters({status:'all'}))document.querySelector('[data-action="scrapFilters"]')?.focus();return}
+ if(a==='clearScrapSort'){if(updateScrapFilters({sort:'recent'}))document.querySelector('[data-action="scrapFilters"]')?.focus();return}
+ if(a==='filterType'){if(['all','book','album','movie'].includes(b.dataset.type)&&updateScrapFilters({type:b.dataset.type}))document.querySelector('.type-tab.active')?.focus();return}
+ if(a==='filterStatus'){if(['all','saved','active','done'].includes(b.dataset.status))updateScrapFilters({status:b.dataset.status});return}
+ if(a==='resetFilters'){updateScrapFilters({q:'',status:'all',type:'all',sort:'recent'});return}
  if(a==='inlinePicker'){toggleInlinePicker(b);return}
- if(a==='inlineSort'){if(['recent','many','old','rating'].includes(b.dataset.value)){state.filters.sort=b.dataset.value;if(!commit())return;document.querySelector('[data-picker=sort]')?.focus()}return}
+ if(a==='inlineSort'){if(['recent','many','old','rating'].includes(b.dataset.value)){if(!updateScrapFilters({sort:b.dataset.value}))return;document.querySelector('[data-picker=sort]')?.focus()}return}
  if(a==='startExperience'){startExperience(id);return}
  if(a==='record'){record(id);return}
  if(a==='complete'){complete(id);return}
@@ -6971,13 +7018,14 @@ function scheduleCatalogSearchFromLiveInput(input,delay=460){
 
 function scheduleMainSearchRender(input){
  const q=input.value,position=input.selectionStart??q.length;
- state.filters.q=q;persist();
+ activeScrapFilters().q=q;if(!picking)persist();
  clearTimeout(mainSearchRenderTimer);
  mainSearchRenderTimer=setTimeout(()=>{
   mainSearchRenderTimer=null;
   if(imeComposingIds.has('search'))return;
   const current=$('search');
   if(current&&document.activeElement===current&&current.value!==q)return;
+  if(view!=='scrap'||modal)return;
   const scroll=window.scrollY;
   render();
   const next=$('search');
@@ -7023,7 +7071,7 @@ document.addEventListener('input',e=>{
  if(!['search','catalogSearch','musicCatalogSearch','movieCatalogSearch'].includes(id))return;
 
  if(id==='search'){
-  state.filters.q=input.value;persist();
+  activeScrapFilters().q=input.value;if(!picking)persist();
   if(e.isComposing||imeComposingIds.has(id))return;
   scheduleMainSearchRender(input);
   return;
@@ -7070,7 +7118,12 @@ document.addEventListener('submit',async e=>{
   }catch(err){if($('formError'))$('formError').textContent=err.message;submit.disabled=false}
  }
  
- if(f.id==='filterForm'){state.filters.sort=$('filterSort').value;if(!commit(true))return}
+ if(f.id==='scrapFilterForm'){
+  const values=new FormData(f),status=picking?'all':values.get('status'),sort=values.get('sort');
+  if(!['all','saved','active','done'].includes(status)||!Object.hasOwn(SCRAP_SORT_LABELS,sort))return;
+  if(updateScrapFilters({status,sort},true))document.querySelector('[data-action="scrapFilters"]')?.focus();return;
+ }
+ if(f.id==='filterForm'){updateScrapFilters({sort:$('filterSort').value},true);return}
  if(f.id==='profileForm'){saveProfile(f);return}
  if(f.id==='tasteForm'){state.profile.tastes=[...f.querySelectorAll('input:checked')].map(x=>x.value);if(!commit(true))return;toast('취향을 저장했어요.')}
  if(f.id==='memoForm'){const l=get(f.dataset.id)?.logs.find(l=>l.id===f.dataset.log);if(l){l.memo=$('todayMemo').value.trim();if(!commit(true))return;toast('메모를 저장했어요.')}return}
